@@ -81,5 +81,8 @@ export default {
     extra: {
         STAGE: process.env.STAGE
     },
-    // plugins: ['sentry-expo']
+    plugins: [
+        'expo-community-flipper'
+        // 'sentry-expo'
+    ]
 };
