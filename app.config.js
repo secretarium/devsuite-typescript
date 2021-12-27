@@ -81,8 +81,22 @@ export default {
     extra: {
         STAGE: process.env.STAGE
     },
+    hooks: {
+        "postPublish": [
+            {
+                "file": "sentry-expo/upload-sourcemaps",
+                "config": {
+                    "setCommits": true,
+                    "organization": "secretarium",
+                    "project": "cryptx",
+                    "authToken": "af3941e8c4a9454ead4aed02fc6081e6b7b719218d28454a91a067e1e3ab5ee9",
+                    "url": "https://sentry.secretarium.org/"
+                }
+            }
+        ]
+    },
     plugins: [
-        'expo-community-flipper'
-        // 'sentry-expo'
+        'expo-community-flipper',
+        'sentry-expo'
     ]
 };
