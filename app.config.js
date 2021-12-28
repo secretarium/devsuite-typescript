@@ -9,6 +9,7 @@ const envConfig = {
         icon: './assets/icon.development.png',
         adaptiveIcon: './assets/adaptive-icon.development.png',
         adaptiveIconBackgroundColor: '#FF0000'
+        // notificationIcon: './assets/notification-icon.png'
     },
     staging: {
         name: 'Cryptx Staging',
@@ -78,6 +79,9 @@ export default {
     //     en: './ios/infoPlist/en.json',
     //     fr: './ios/infoPlist/fr.json'
     // },
+    experiments: {
+        turboModules: true
+    },
     extra: {
         STAGE: process.env.STAGE
     },
@@ -96,6 +100,17 @@ export default {
         ]
     },
     plugins: [
+        [
+            "expo-notifications",
+            {
+                "color": "#ffffff",
+                "icon": config.notificationIcon,
+                // "sounds": [
+                //     "./assets/notification-sound.wav",
+                //     "./assets/notification-sound-other.wav"
+                // ]
+            }
+        ],
         'expo-community-flipper',
         'sentry-expo'
     ]
