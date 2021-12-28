@@ -26,13 +26,17 @@
     "react-native": "0.66.4",
     "react-native-flipper": "^0.127.0",
     "react-native-web": "0.17.5",
-    "sentry-expo": "^4.0.0"
+    "sentry-expo": "^4.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
     "@types/react": "~17.0.38",
     "@types/react-native": "~0.66.10",
     "typescript": "~4.5.4"
+  },
+  "resolutions": {
+    "fbjs": "^3.0.0",
+    "promise": "^8.0.3"
   },
   "private": true
 }

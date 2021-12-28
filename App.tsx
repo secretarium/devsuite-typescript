@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { StrictMode, useState, useEffect, useRef } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import type { Subscription } from 'expo-modules-core';
@@ -25,7 +25,7 @@ export const App = () => {
     registerForPushNotificationsAsync().then(token => {
       setExpoPushToken(token);
       // dispatch(registerNotificationToken(token, encryptionKey, i18n.locale));
-    });
+    }).catch(console.error);
 
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
       setNotification(notification);
@@ -39,16 +39,17 @@ export const App = () => {
     });
   }, []);
 
-  return (
+  return <StrictMode>
     <View style={styles.container}>
       <Text>Open up App.tsx to start working on your app!</Text>
       <StatusBar style="auto" />
       <Button title='Send Notification' onPress={() => {
+        console.log('Allo', expoToken);
         if (expoToken)
           sendPushNotification("Coucou !", expoToken)
       }} />
     </View>
-  );
+  </StrictMode>
 }
 
 export default App;

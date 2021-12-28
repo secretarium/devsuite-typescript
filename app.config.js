@@ -35,7 +35,7 @@ const config = envConfig[STAGE || 'development'];
 export default {
     name: config.name,
     description: 'Secretarium CryptX Wallet',
-    slug: 'cryptx',
+    slug: config.scheme,
     scheme: config.scheme,
     owner: 'secretarium',
     icon: config.icon,
