@@ -13,6 +13,7 @@
     "@sentry/react-native": "^3.2.10",
     "expo": "~44.0.0",
     "expo-application": "~4.0.1",
+    "expo-camera": "~12.1.0",
     "expo-community-flipper": "43.0.5",
     "expo-constants": "~13.0.0",
     "expo-dev-client": "~0.8.0",
