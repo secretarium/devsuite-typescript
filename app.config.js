@@ -12,14 +12,14 @@ const envConfig = {
     },
     staging: {
         name: 'Cryptx Staging',
-        scheme: 'com.secretarium.austin.staging',
+        scheme: 'com.secretarium.cryptx.staging',
         icon: './assets/icon.staging.png',
         adaptiveIcon: './assets/adaptive-icon.staging.png',
         adaptiveIconBackgroundColor: '#00FFFF'
     },
     production: {
         name: 'Secretarium Cryptx',
-        scheme: 'com.secretarium.austin',
+        scheme: 'com.secretarium.cryptx',
         icon: './assets/icon.png',
         adaptiveIcon: './assets/adaptive-icon.png',
         adaptiveIconBackgroundColor: '#FFFFFF'
