@@ -10,18 +10,24 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@sentry/react-native": "^3.2.10",
     "expo": "~44.0.0",
+    "expo-application": "~4.0.1",
     "expo-community-flipper": "43.0.5",
     "expo-camera": "~12.1.0",
+    "expo-constants": "~13.0.0",
     "expo-dev-client": "~0.8.0",
+    "expo-device": "~4.1.0",
     "expo-status-bar": "~1.2.0",
+    "expo-updates": "~0.11.3",
     "react": "17.0.2",
     "react-devtools-core": "^4.22.1",
     "react-dom": "17.0.2",
     "react-native": "0.66.4",
     "react-native-flipper": "^0.127.0",
     "react-native-reanimated": "~2.3.1",
-    "react-native-web": "0.17.5"
+    "react-native-web": "0.17.5",
+    "sentry-expo": "^4.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
