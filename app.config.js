@@ -78,6 +78,9 @@ export default {
     //     en: './ios/infoPlist/en.json',
     //     fr: './ios/infoPlist/fr.json'
     // },
+    experiments: {
+        turboModules: true
+    },
     extra: {
         STAGE: process.env.STAGE
     },
