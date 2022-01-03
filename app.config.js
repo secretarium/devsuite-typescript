@@ -5,21 +5,21 @@ const BUILD_NUMBER = parseInt(process.env.GITHUB_RUN_ID || process.env.CI_JOB_ID
 const envConfig = {
     development: {
         name: 'Cryptx Dev',
-        scheme: 'com.secretarium.cryptx.development',
+        bundle: 'com.secretarium.cryptx.development',
         icon: './assets/icon.development.png',
         adaptiveIcon: './assets/adaptive-icon.development.png',
         adaptiveIconBackgroundColor: '#FF0000'
     },
     staging: {
         name: 'Cryptx Staging',
-        scheme: 'com.secretarium.cryptx.staging',
+        bundle: 'com.secretarium.cryptx.staging',
         icon: './assets/icon.staging.png',
         adaptiveIcon: './assets/adaptive-icon.staging.png',
         adaptiveIconBackgroundColor: '#00FFFF'
     },
     production: {
         name: 'Secretarium Cryptx',
-        scheme: 'com.secretarium.cryptx',
+        bundle: 'com.secretarium.cryptx',
         icon: './assets/icon.png',
         adaptiveIcon: './assets/adaptive-icon.png',
         adaptiveIconBackgroundColor: '#FFFFFF'
@@ -47,7 +47,7 @@ export default {
         fallbackToCacheTimeout: 0
     },
     ios: {
-        bundleIdentifier: config.scheme,
+        bundleIdentifier: config.bundle,
         supportsTablet: true,
         buildNumber: `${BUILD_NUMBER}`,
         infoPlist: {
@@ -58,7 +58,7 @@ export default {
         jsEngine: 'hermes'
     },
     android: {
-        package: config.scheme,
+        package: config.bundle,
         versionCode: BUILD_NUMBER,
         adaptiveIcon: {
             foregroundImage: config.adaptiveIcon,
