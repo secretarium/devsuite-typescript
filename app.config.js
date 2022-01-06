@@ -5,16 +5,13 @@ const BUILD_NUMBER = parseInt(process.env.GITHUB_RUN_ID || process.env.CI_JOB_ID
 const envConfig = {
     development: {
         name: 'Cryptx Dev',
-        scheme: 'cryptx-dev',
         bundle: 'com.secretarium.cryptx.development',
         icon: './assets/icon.development.png',
         adaptiveIcon: './assets/adaptive-icon.development.png',
         adaptiveIconBackgroundColor: '#FF0000'
-        // notificationIcon: './assets/notification-icon.png'
     },
     staging: {
         name: 'Cryptx Staging',
-        scheme: 'cryptx-staging',
         bundle: 'com.secretarium.cryptx.staging',
         icon: './assets/icon.staging.png',
         adaptiveIcon: './assets/adaptive-icon.staging.png',
@@ -22,7 +19,6 @@ const envConfig = {
     },
     production: {
         name: 'Secretarium Cryptx',
-        scheme: 'cryptx',
         bundle: 'com.secretarium.cryptx',
         icon: './assets/icon.png',
         adaptiveIcon: './assets/adaptive-icon.png',
@@ -36,7 +32,7 @@ export default {
     name: config.name,
     description: 'Secretarium CryptX Wallet',
     slug: 'cryptx',
-    scheme: config.scheme,
+    scheme: 'cryptx',
     owner: 'secretarium',
     icon: config.icon,
     version: version,

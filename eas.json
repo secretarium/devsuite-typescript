@@ -4,7 +4,10 @@
     },
     "build": {
         "base": {
-            "env": {}
+            "env": {
+                "STAGE": "production",
+                "NODE_ENV": "production"
+            }
         },
         "development": {
             "extends": "base",
@@ -16,6 +19,10 @@
             },
             "ios": {
                 "simulator": true
+            },
+            "env": {
+                "STAGE": "development",
+                "NODE_ENV": "development"
             }
         },
         "preview": {
@@ -24,6 +31,9 @@
             "releaseChannel": "staging",
             "android": {
                 "buildType": "apk"
+            },
+            "env": {
+                "STAGE": "staging"
             }
         },
         "production": {
