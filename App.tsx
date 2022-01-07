@@ -1,8 +1,9 @@
 import { StrictMode, useState, useEffect, useRef } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { Text, View, Button } from 'react-native';
 import type { Subscription } from 'expo-modules-core';
 import * as Notifications from 'expo-notifications';
+import tw from 'twrnc';
 import { registerForPushNotificationsAsync, sendPushNotification /*, createPushNotifEncryptionKey, decryptPushNotification */ } from './services/notifications';
 
 export const App = () => {
@@ -14,7 +15,7 @@ export const App = () => {
 
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
-      shouldShowAlert: location.pathname !== '/chat',
+      shouldShowAlert: true,
       shouldPlaySound: false,
       shouldSetBadge: false
     })
@@ -40,7 +41,7 @@ export const App = () => {
   }, []);
 
   return <StrictMode>
-    <View style={styles.container}>
+    <View style={tw`flex justify-center align-center h-full p-4 android:pt-2 bg-white dark:bg-black`}>
       <Text>Open up App.tsx to start working on your app!</Text>
       <StatusBar style="auto" />
       <Button title='Send Notification' onPress={() => {
@@ -53,12 +54,3 @@ export const App = () => {
 }
 
 export default App;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

@@ -28,7 +28,8 @@
     "react-native-flipper": "^0.127.0",
     "react-native-reanimated": "~2.3.1",
     "react-native-web": "0.17.5",
-    "sentry-expo": "^4.0.5"
+    "sentry-expo": "^4.0.5",
+    "twrnc": "2.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

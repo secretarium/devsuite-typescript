@@ -57,7 +57,9 @@ export const registerForPushNotificationsAsync = async (): Promise<string | unde
             alert('Failed to get push token for push notification!');
             return;
         }
-        token = (await Notifications.getExpoPushTokenAsync()).data;
+        token = (await Notifications.getExpoPushTokenAsync({
+            experienceId: '@secretarium/cryptx'
+        })).data;
     } else {
         alert('Must use physical device for Push Notifications');
     }

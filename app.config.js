@@ -1,5 +1,7 @@
+const fs = require('fs');
+const path = require('path');
 const { version } = require('./package.json');
-const STAGE = process.env.STAGE;
+const STAGE = process.env.STAGE || 'development';
 const BUILD_NUMBER = parseInt(process.env.GITHUB_RUN_ID || process.env.CI_JOB_ID || process.env.BUILD_NUMBER || 1);
 
 const envConfig = {
@@ -26,7 +28,38 @@ const envConfig = {
     }
 };
 
-const config = envConfig[STAGE || 'development'];
+const config = envConfig[STAGE];
+
+let googleServicesFile = path.join(__dirname, 'google-services.json');
+const googleEnvProvenance = `GOOGLE_FCM_CONFIG_${STAGE}`.toUpperCase();
+
+if (process.env.CI && process.env[googleEnvProvenance]) {
+
+    const googleServicesEnv = process.env[googleEnvProvenance].split(',').reduce((prev, current) => {
+        const entry = current.split('=');
+        return {
+            ...prev,
+            [`<${entry[0]}>`]: entry[1]
+        };
+    }, {
+        '<package_name>': config.bundle
+    });
+
+    const googleServicesFileContent = fs.readFileSync(path.join(__dirname, 'google-services.base.json'), 'utf-8');
+    const googleServicesFileTransform = googleServicesFileContent.replace(/(<.*?>)/g, match => {
+        return googleServicesEnv[match]
+    });
+
+    fs.writeFileSync(googleServicesFile, googleServicesFileTransform, { encoding: 'utf-8' });
+
+} else if (fs.existsSync(path.join(__dirname, 'google-services.local.json'))) {
+
+    const googleServicesFileContent = fs.readFileSync(path.join(__dirname, 'google-services.local.json'), 'utf-8');
+
+    fs.writeFileSync(googleServicesFile, googleServicesFileContent, { encoding: 'utf-8' });
+
+} else
+    googleServicesFile = undefined;
 
 export default {
     name: config.name,
@@ -64,6 +97,7 @@ export default {
             foregroundImage: config.adaptiveIcon,
             backgroundColor: config.adaptiveIconBackgroundColor
         },
+        googleServicesFile,
         permissions: ['CAMERA', 'USE_FINGERPRINT', 'USE_BIOMETRIC', 'BLUETOOTH', 'BLUETOOTH_ADMIN'],
         jsEngine: 'hermes'
     },
@@ -82,7 +116,8 @@ export default {
         turboModules: true
     },
     extra: {
-        STAGE: process.env.STAGE
+        STAGE,
+        BUILD_NUMBER
     },
     hooks: {
         "postPublish": [
@@ -92,8 +127,8 @@ export default {
                     "setCommits": true,
                     "organization": "secretarium",
                     "project": "cryptx",
-                    "authToken": "af3941e8c4a9454ead4aed02fc6081e6b7b719218d28454a91a067e1e3ab5ee9",
                     "url": "https://sentry.secretarium.org/"
+                    // "authToken": via SENTRY_AUTH_TOKEN
                 }
             }
         ]
