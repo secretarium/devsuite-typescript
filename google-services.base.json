@@ -9,7 +9,8 @@
       "client_info": {
         "mobilesdk_app_id": "<mobilesdk_app_id>",
         "android_client_info": {
-          "package_name": "<package_name>"
+          "package_name": "<package_name>",
+          "certificate_hash": "<certificate_hash>"
         }
       },
       "oauth_client": [
