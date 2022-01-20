@@ -3,6 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { Text, View, Button } from 'react-native';
 import type { Subscription } from 'expo-modules-core';
 import * as Notifications from 'expo-notifications';
+import Animated, { useSharedValue, withTiming, useAnimatedStyle, Easing, } from 'react-native-reanimated';
 import tw from 'twrnc';
 import { registerForPushNotificationsAsync, sendPushNotification /*, createPushNotifEncryptionKey, decryptPushNotification */ } from './services/notifications';
 
@@ -12,6 +13,19 @@ export const App = () => {
   const [notification, setNotification] = useState<Notifications.Notification>();
   const notificationListener = useRef<Subscription>();
   const responseListener = useRef<Subscription>();
+
+  const randomWidth = useSharedValue(10);
+
+  const config = {
+    duration: 500,
+    easing: Easing.bezier(0.5, 0.01, 0, 1),
+  };
+
+  const style = useAnimatedStyle(() => {
+    return {
+      width: withTiming(randomWidth.value, config),
+    };
+  });
 
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -44,8 +58,12 @@ export const App = () => {
     <View style={tw`flex justify-center align-center h-full p-4 android:pt-2 bg-white dark:bg-black`}>
       <Text>Open up App.tsx to start working on your app!</Text>
       <StatusBar style="auto" />
+      <Animated.View
+        style={[{ width: 100, height: 80, backgroundColor: 'black', margin: 30 }, style]}
+      />
       <Button title='Send Notification' onPress={() => {
         console.log('Allo', expoToken);
+        randomWidth.value = Math.random() * 350;
         if (expoToken)
           sendPushNotification("Coucou !", expoToken)
       }} />
