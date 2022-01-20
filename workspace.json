@@ -1,6 +1,8 @@
 {
     "version": 2,
     "projects": {
-        "connector": "packages/connector"
+        "connector": "packages/connector",
+        "crate": "packages/crate",
+        "crate-e2e": "packages/crate-e2e"
     }
 }
