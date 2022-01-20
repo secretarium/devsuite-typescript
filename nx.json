@@ -1,24 +1,19 @@
 {
-  "extends": "@nrwl/workspace/presets/core.json",
-  "npmScope": "secretarium",
-  "affected": {
-    "defaultBase": "main"
-  },
-  "cli": {
-    "defaultCollection": "@nrwl/workspace"
-  },
-  "tasksRunnerOptions": {
-    "default": {
-      "runner": "@nrwl/nx-cloud",
-      "options": {
-        "cacheableOperations": [
-          "build",
-          "lint",
-          "test",
-          "e2e"
-        ],
-        "accessToken": "ZTM5YThjMTctZDdiMS00ZjU1LThjN2ItNTk5ODUxODU0YzllfHJlYWQtd3JpdGU="
-      }
+    "extends": "@nrwl/workspace/presets/core.json",
+    "npmScope": "secretarium",
+    "affected": {
+        "defaultBase": "main"
+    },
+    "cli": {
+        "defaultCollection": "@nrwl/workspace"
+    },
+    "tasksRunnerOptions": {
+        "default": {
+            "runner": "@nrwl/nx-cloud",
+            "options": {
+                "cacheableOperations": ["build", "lint", "test", "e2e"],
+                "accessToken": "ZTM5YThjMTctZDdiMS00ZjU1LThjN2ItNTk5ODUxODU0YzllfHJlYWQtd3JpdGU="
+            }
+        }
     }
-  }
 }
