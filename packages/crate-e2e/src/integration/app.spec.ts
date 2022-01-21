@@ -1,13 +1,13 @@
-import { getGreeting } from '../support/app.po';
+import { getGreeting } from '../../../endoscope-e2e/src/support/app.po';
 
-describe('crate', () => {
+describe('endoscope', () => {
     beforeEach(() => cy.visit('/'));
 
     it('should display welcome message', () => {
         // Custom command example, see `../support/commands.ts` file
-        cy.login('my-email@something.com', 'myPassword');
+        cy.inspect();
 
         // Function helper example, see `../support/app.po.ts` file
-        getGreeting().contains('Connect with Secretarium');
+        getGreeting().contains('Inspect Secretarium connection');
     });
 });
