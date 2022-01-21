@@ -4,6 +4,8 @@
     "license": "MIT",
     "scripts": {
         "nx": "nx",
+        "build": "nx run-many --all --target=build",
+        "test": "nx run-many --all --target=test",
         "lint-check": "nx format:check --all",
         "lint-fix": "nx format --all",
         "preinstall": "node ./scripts/hintYarn.js",
