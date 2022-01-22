@@ -6,6 +6,7 @@
         "nx": "nx",
         "build": "nx run-many --all --target=build",
         "test": "nx run-many --all --target=test",
+        "e2e": "nx run-many --all --target=e2e",
         "lint-check": "nx format:check --all",
         "lint-fix": "nx format --all",
         "preinstall": "node ./scripts/hintYarn.js",
