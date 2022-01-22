@@ -6,8 +6,11 @@
         "nx": "nx",
         "build": "nx run-many --all --target=build",
         "test": "nx run-many --all --target=test",
-        "lint-check": "nx format:check --all",
-        "lint-fix": "nx format --all",
+        "e2e": "nx run-many --all --target=e2e",
+        "lint-check": "nx run-many --all --target=lint",
+        "lint-fix": "nx run-many --all --target=lint --fix",
+        "format-check": "nx workspace-lint && nx format:check --all",
+        "format-fix": "nx workspace-lint && nx format --all",
         "preinstall": "node ./scripts/hintYarn.js",
         "prepare": "is-ci || husky install"
     },

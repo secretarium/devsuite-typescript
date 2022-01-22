@@ -41,7 +41,8 @@
             "executor": "@nrwl/web:dev-server",
             "options": {
                 "buildTarget": "crate:build",
-                "hmr": true
+                "hmr": true,
+                "port": 4200
             },
             "configurations": {
                 "production": {
