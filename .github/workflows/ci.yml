@@ -18,6 +18,13 @@ jobs:
         steps:
             - uses: actions/checkout@v2
 
+            - name: Derive appropriate SHAs for base and head for `nx affected` commands
+              uses: nrwl/nx-set-shas@v2
+          
+            - run: |
+                echo "Nx base: ${{ env.NX_BASE }}"
+                echo "Git head: ${{ env.NX_HEAD }}"
+
             - name: Use Node.js ${{ matrix.node }}
               uses: actions/setup-node@v2
               with:
@@ -44,16 +51,16 @@ jobs:
 
             - name: Check for lint
               run: |
-                  yarn run lint-check
+                  yarn run lint-check --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
 
             - name: Build the Dev Suite
               run: |
-                  yarn run build
+                  yarn run build --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
 
             - name: Unit test the Dev Suite
               run: |
-                  yarn run test
+                  yarn run test --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
 
             - name: Execute end-to-end tests
               run: |
-                  yarn run e2e
+                  yarn run e2e --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}

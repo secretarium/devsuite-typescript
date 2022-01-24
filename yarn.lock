@@ -2091,9 +2091,9 @@
     ts-node "^9.1.1"
     tsconfig-paths "^3.9.0"
 
-"@nrwl/expo@https://gitpkg.now.sh/nrwl/nx/packages/expo?feat%2Fadd-expo":
+"@nrwl/expo@https://gitpkg.now.sh/nrwl/nx-expo/packages/expo?main":
   version "0.0.1"
-  resolved "https://gitpkg.now.sh/nrwl/nx/packages/expo?feat%2Fadd-expo#5b1ad743393e9cb0cfabc03c18eba182a06cd804"
+  resolved "https://gitpkg.now.sh/nrwl/nx-expo/packages/expo?main#82d4248ad80a4cb528343ffdb45a0f74b719d973"
   dependencies:
     "@nrwl/detox" "*"
     "@nrwl/devkit" "*"
