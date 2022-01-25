@@ -29,6 +29,7 @@ jobs:
               uses: actions/setup-node@v2
               with:
                   node: ${{ matrix.node }}
+                  cache: yarn
 
             - name: Disable TCP/UDP Offloading
               shell: bash
