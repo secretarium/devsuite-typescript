@@ -5,7 +5,7 @@ import { Route, Routes, Link } from 'react-router-dom';
 
 export function App() {
     useEffect(() => {
-        chrome.devtools.panels.create('Secretarium', '', 'panel.html', function (panel) {
+        chrome.devtools?.panels.create('Secretarium', '', 'panel.html', function (panel) {
             // code invoked on panel creation
             console.log('Welcome to Secretarium Endoscope');
         });
@@ -23,7 +23,7 @@ export function App() {
                 </ul>
             </div>
             <Routes>
-                <Route path="/" element={<h1>Inspect Secretarium connection</h1>} />
+                <Route path="/" element={<h1>Inspect Secretarium Connection</h1>} />
             </Routes>
         </>
     );
