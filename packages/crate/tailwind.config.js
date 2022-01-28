@@ -5,10 +5,10 @@ module.exports = {
     content: [...createGlobPatternsForDependencies(__dirname), join(__dirname, 'src/**/*.{js,ts,jsx,tsx}')],
     darkMode: 'media',
     theme: {
-        extend: {},
+        extend: {}
     },
     variants: {
-        extend: {},
+        extend: {}
     },
-    plugins: [],
+    plugins: []
 };

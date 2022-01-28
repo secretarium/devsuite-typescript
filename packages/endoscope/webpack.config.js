@@ -21,7 +21,7 @@ const getWebpackConfig = (config, { buildOptions, options }) => {
             title: 'Endoscope Panel',
             filename: 'panel.html',
             chunks: ['panel'],
-            template: path.resolve(buildOptions?.root || options?.root, buildOptions?.index || options?.index),
+            template: path.resolve(buildOptions?.root || options?.root, buildOptions?.index || options?.index)
         })
     );
 

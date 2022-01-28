@@ -4,21 +4,22 @@
     "projectType": "library",
     "targets": {
         "build": {
-            "executor": "@nrwl/js:tsc",
+            "executor": "@nrwl/node:package",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/packages/connector",
-                "main": "packages/connector/src/index.ts",
                 "tsConfig": "packages/connector/tsconfig.lib.json",
+                "packageJson": "packages/connector/package.json",
+                "main": "packages/connector/src/index.ts",
                 "assets": ["packages/connector/*.md"]
             }
         },
         "lint": {
             "executor": "@nrwl/linter:eslint",
-            "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": ["packages/connector/**/*.ts"]
-            }
+            },
+            "outputs": ["{options.outputFile}"]
         },
         "test": {
             "executor": "@nrwl/jest:jest",
@@ -29,5 +30,5 @@
             }
         }
     },
-    "tags": ["scope:shared"]
+    "tags": []
 }

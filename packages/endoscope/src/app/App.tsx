@@ -7,7 +7,7 @@ export function App() {
     useEffect(() => {
         chrome.devtools?.panels.create('Secretarium', '', 'panel.html', function (panel) {
             // code invoked on panel creation
-            console.log('Welcome to Secretarium Endoscope');
+            console.log('Welcome to Secretarium Endoscope', panel);
         });
     });
 
