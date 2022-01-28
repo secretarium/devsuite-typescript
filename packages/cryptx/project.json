@@ -5,12 +5,16 @@
     "targets": {
         "build": {
             "executor": "@nrwl/node:build",
-            "outputs": ["{options.outputPath}"],
+            "outputs": [
+                "{options.outputPath}"
+            ],
             "options": {
                 "outputPath": "dist/packages/cryptx",
                 "main": "packages/cryptx/src/main.ts",
                 "tsConfig": "packages/cryptx/tsconfig.app.json",
-                "assets": ["packages/cryptx/src/assets"]
+                "assets": [
+                    "packages/cryptx/src/assets"
+                ]
             },
             "configurations": {
                 "production": {
@@ -34,19 +38,28 @@
         },
         "lint": {
             "executor": "@nrwl/linter:eslint",
-            "outputs": ["{options.outputFile}"],
+            "outputs": [
+                "{options.outputFile}"
+            ],
             "options": {
-                "lintFilePatterns": ["packages/cryptx/**/*.ts"]
+                "lintFilePatterns": [
+                    "packages/cryptx/**/*.{ts,tsx,js,jsx,json}"
+                ]
             }
         },
         "test": {
             "executor": "@nrwl/jest:jest",
-            "outputs": ["coverage/packages/cryptx"],
+            "outputs": [
+                "coverage/packages/cryptx"
+            ],
             "options": {
                 "jestConfig": "packages/cryptx/jest.config.js",
                 "passWithNoTests": true
             }
         }
     },
-    "tags": ["scope:ui", "scope:mobile"]
+    "tags": [
+        "scope:ui",
+        "scope:mobile"
+    ]
 }

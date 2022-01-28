@@ -41,8 +41,8 @@ const typescriptRules = {
 
 module.exports = {
     root: true,
-    ignorePatterns: ['**/*', '!*.js', '!*.json'],
-    plugins: ['@nrwl/nx'],
+    ignorePatterns: ['**/*', '!**/*.js', '!**/*.json', '!scripts', '!tools', '!.vscode'],
+    plugins: ['@nrwl/nx', 'json'],
     overrides: [
         {
             files: ['*.ts', '*.tsx'],
@@ -56,7 +56,7 @@ module.exports = {
         },
         {
             files: ['*.json'],
-            extends: ['plugin:@nrwl/nx/javascript'],
+            extends: ['plugin:json/recommended'],
             rules: jsonRules
         }
     ]

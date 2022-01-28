@@ -5,7 +5,16 @@
         "esModuleInterop": true,
         "outDir": "../../dist/out-tsc",
         "module": "commonjs",
-        "types": ["jest", "node"]
+        "types": [
+            "jest",
+            "node"
+        ]
     },
-    "include": ["**/*.spec.ts", "**/*.spec.tsx", "**/*.spec.js", "**/*.spec.jsx", "**/*.d.ts"]
+    "include": [
+        "**/*.spec.ts",
+        "**/*.spec.tsx",
+        "**/*.spec.js",
+        "**/*.spec.jsx",
+        "**/*.d.ts"
+    ]
 }

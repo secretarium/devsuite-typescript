@@ -5,25 +5,35 @@
     "targets": {
         "build": {
             "executor": "@nrwl/node:package",
-            "outputs": ["{options.outputPath}"],
+            "outputs": [
+                "{options.outputPath}"
+            ],
             "options": {
                 "outputPath": "dist/packages/connector",
                 "tsConfig": "packages/connector/tsconfig.lib.json",
                 "packageJson": "packages/connector/package.json",
                 "main": "packages/connector/src/index.ts",
-                "assets": ["packages/connector/*.md"]
+                "assets": [
+                    "packages/connector/*.md"
+                ]
             }
         },
         "lint": {
             "executor": "@nrwl/linter:eslint",
             "options": {
-                "lintFilePatterns": ["packages/connector/**/*.ts"]
+                "lintFilePatterns": [
+                    "packages/connector/**/*.{ts,tsx,js,jsx,json}"
+                ]
             },
-            "outputs": ["{options.outputFile}"]
+            "outputs": [
+                "{options.outputFile}"
+            ]
         },
         "test": {
             "executor": "@nrwl/jest:jest",
-            "outputs": ["coverage/packages/connector"],
+            "outputs": [
+                "coverage/packages/connector"
+            ],
             "options": {
                 "jestConfig": "packages/connector/jest.config.js",
                 "passWithNoTests": true
