@@ -7,9 +7,10 @@
         "crate-bed-e2e": "packages/crate-bed-e2e",
         "crate-e2e": "packages/crate-e2e",
         "crypto": "packages/crypto",
-        "cryptx": "packages/cryptx",
         "endoscope": "packages/endoscope",
         "endoscope-e2e": "packages/endoscope-e2e",
-        "react": "packages/react"
+        "react": "packages/react",
+        "susi": "packages/susi",
+        "susi-e2e": "packages/susi-e2e"
     }
 }
