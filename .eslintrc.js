@@ -3,7 +3,8 @@ const jsonRules = {
         'error',
         4,
         {
-            SwitchCase: 1
+            SwitchCase: 1,
+            ignoredNodes: ['VariableDeclaration[declarations.length=0]']
         }
     ]
 };
