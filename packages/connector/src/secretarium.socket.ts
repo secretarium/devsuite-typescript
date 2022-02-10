@@ -1,8 +1,7 @@
-import ws from 'ws';
+import { WebSocket } from '@d-fischer/isomorphic-ws';
 
 const selectSocket = () => {
-    const nativeSocket = typeof WebSocket !== 'undefined' ? WebSocket : undefined;
-    return nativeSocket || ws;
+    return WebSocket;
 };
 
 export default selectSocket();

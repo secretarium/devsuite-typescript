@@ -24,13 +24,13 @@ type SCPOptions = {
     };
 };
 
-type ErrorHandler = (error: string, requestId: string) => void;
-type ResultHandler = (result: Record<string, unknown> | string | void, requestId: string) => void;
+type ErrorHandler<TData = any> = (error: TData, requestId: string) => void;
+type ResultHandler<TData = any> = (result: TData, requestId: string) => void;
 type NaiveHandler = (requestId: string) => void;
 
 interface QueryHandlers {
-    onError: (handler: ErrorHandler) => this;
-    onResult: (handler: ResultHandler) => this;
+    onError: <TData>(handler: ErrorHandler<TData>) => this;
+    onResult: <TData>(handler: ResultHandler<TData>) => this;
 }
 
 interface TransactionHandlers extends QueryHandlers {
@@ -177,7 +177,7 @@ export class SCP {
     }
 
     connect(url: string, userKey: Key, knownTrustedKey: Uint8Array | string, protocol: NNG.Protocol = NNG.Protocol.pair1): Promise<void> {
-        if (this._socket && this._socket.state > ConnectionState.closing) this._socket.close();
+        // if (this._socket && this._socket.state < ConnectionState.closing) this._socket.close();
 
         this._updateState(ConnectionState.connecting);
         const trustedKey = typeof knownTrustedKey === 'string' ? Uint8Array.from(Utils.fromBase64(knownTrustedKey)) : knownTrustedKey;
@@ -196,7 +196,9 @@ export class SCP {
                         clearTimeout(tId);
                         resolve(x);
                     })
+                    // This sometimes swallows `onclose` events containing the error code
                     .onerror(reject)
+                    // This sometimes gets swallowed by `onerror`
                     .onclose(reject)
                     .connect(url, protocol);
             })

@@ -25,6 +25,9 @@
             ],
             "@secretarium/crypto": [
                 "packages/crypto/src/index.ts"
+            ],
+            "@secretarium/react": [
+                "packages/react/src/index.ts"
             ]
         }
     },

@@ -3,7 +3,8 @@ import styles from './App.module.css';
 import { useEffect } from 'react';
 import { Route, Routes, Link } from 'react-router-dom';
 
-export function App() {
+export const App = () => {
+
     useEffect(() => {
         chrome.devtools?.panels.create('Secretarium', '', 'panel.html', function (panel) {
             // code invoked on panel creation
@@ -27,6 +28,6 @@ export function App() {
             </Routes>
         </>
     );
-}
+};
 
 export default App;

@@ -1,17 +1,21 @@
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
-import { RecoilRoot } from 'recoil';
 
 import App from './app/App';
+import Providers from './app/Providers';
 
-ReactDOM.render(
+const containerElement = document.getElementById('root');
+const applicationElement = (
     <StrictMode>
-        <RecoilRoot>
-            <BrowserRouter>
-                <App />
-            </BrowserRouter>
-        </RecoilRoot>
-    </StrictMode>,
-    document.getElementById('root')
+        <Providers>
+            <App />
+        </Providers>
+    </StrictMode>
 );
+
+// We check for React 18 first
+if ((ReactDOM as any).createRoot) {
+    const container = (ReactDOM as any).createRoot(containerElement);
+    container.render(applicationElement);
+} else
+    ReactDOM.render(applicationElement, containerElement);

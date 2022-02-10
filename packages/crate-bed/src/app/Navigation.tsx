@@ -1,24 +1,8 @@
-import styles from './App.module.css';
-
-import { Route, Routes, Link } from 'react-router-dom';
-
 export const Navigation = () => {
-    return (
-        <>
-            <div role="navigation">
-                <ul>
-                    <li className={styles['home']}>
-                        <Link to="/" className="inline text-blue-600">
-                            Crate
-                        </Link>
-                    </li>
-                </ul>
-            </div>
-            <Routes>
-                <Route path="/" element={<h1>Connect with Secretarium</h1>} />
-            </Routes>
-        </>
-    );
+    return <div className='flex flex-col h-full'>
+        <iframe title='A' src='//localhost:4200/auth?r=A' className='h-full bg-slate-100' />
+        <iframe title='B' src='//localhost:4200/auth?r=B' className='h-full bg-slate-200' />
+    </div>;
 };
 
 export default Navigation;

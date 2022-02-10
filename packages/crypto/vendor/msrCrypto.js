@@ -422,7 +422,7 @@ var msrCrypto = function () {
 
             textBytes = toArray(textBytes);
 
-            for (var i = 0; i < textBytes.length; ) {
+            for (var i = 0; i < textBytes.length;) {
                 var encodedChar = textBytes[i++];
 
                 if (encodedChar < 128) {
@@ -1658,7 +1658,7 @@ var msrCrypto = function () {
                 while (i < s) {
                     rounds = Math.min(s, rounds + 16);
 
-                    for (; i < rounds; ) {
+                    for (; i < rounds;) {
                         rightI = ~~multiplier[i];
 
                         r0 = temp[0] + multiplicand[0] * rightI;
@@ -4509,16 +4509,16 @@ var msrCrypto = function () {
 
         k512 = upd(
             'QoovmNcoriJxN0SRI+9lzbXA+8/sTTsv6bXbpYGJ27w5VsJb80i1OFnxEfG2BdAZkj+CpK8ZT5urHF7' +
-                'V2m2BGNgHqpijAwJCEoNbAUVwb74kMYW+TuSyjFUMfcPV/7Ticr5ddPJ7iW+A3rH+OxaWsZvcBqclxx' +
-                'I1wZvxdM9pJpTkm2nBnvFK0u++R4Y4TyXjD8GdxouM1bUkDKHMd6ycZS3pLG9ZKwJ1SnSEqm6m5INcs' +
-                'KncvUH71Hb5iNqDEVO1mD5RUu5m36uoMcZtLbQyELADJ8iY+yE/v1l/x77vDuTG4AvzPaiPwtWnkUeT' +
-                'CqclBspjUeADgm8UKSlnCg5ucCe3CoVG0i/8LhshOFwmySZNLG38WsQq7VM4DROdlbPfZQpzVIuvY95' +
-                '2agq7PHeyqIHCyS5H7a7mknIshRSCNTuiv+ihTPEDZKgaZku8QjABwkuLcND4l5HHbFGjBlS+MNGS6B' +
-                'nW71IY1pkGJFVlqRD0DjWFV3EgKhBqoHAyu9G4GaTBFrjS0MgeN2wIUUGrUydId0zfjuuZNLC8teGbS' +
-                'Kg5HAyzxclaY07YqkrjQYrLW5zKT3dj43NoLm/z1rK4o3SPgu5d77L8eKVjb0MXL2CEyHgUofCrcozH' +
-                'AggaZDnskL7/+iNjHiikUGzr3oK96b75o/eyxnkVxnF48uNyUyvKJz7O6iZhnNGGuMchwMIH6tp91s3' +
-                'g6x71fU9/7m7ReAbwZ6pyF2+6CmN9xaLImKYRP5gEvvkNrhtxCzUTHEcbKNt39SMEfYQyyqt7QMckkz' +
-                'yevgoVyb68Qx1nxJwQDUxMxdS+yz5Ctll/KZz8ZX4qX8tvqzrW+uxsRBmMSkdYFw==',
+            'V2m2BGNgHqpijAwJCEoNbAUVwb74kMYW+TuSyjFUMfcPV/7Ticr5ddPJ7iW+A3rH+OxaWsZvcBqclxx' +
+            'I1wZvxdM9pJpTkm2nBnvFK0u++R4Y4TyXjD8GdxouM1bUkDKHMd6ycZS3pLG9ZKwJ1SnSEqm6m5INcs' +
+            'KncvUH71Hb5iNqDEVO1mD5RUu5m36uoMcZtLbQyELADJ8iY+yE/v1l/x77vDuTG4AvzPaiPwtWnkUeT' +
+            'CqclBspjUeADgm8UKSlnCg5ucCe3CoVG0i/8LhshOFwmySZNLG38WsQq7VM4DROdlbPfZQpzVIuvY95' +
+            '2agq7PHeyqIHCyS5H7a7mknIshRSCNTuiv+ihTPEDZKgaZku8QjABwkuLcND4l5HHbFGjBlS+MNGS6B' +
+            'nW71IY1pkGJFVlqRD0DjWFV3EgKhBqoHAyu9G4GaTBFrjS0MgeN2wIUUGrUydId0zfjuuZNLC8teGbS' +
+            'Kg5HAyzxclaY07YqkrjQYrLW5zKT3dj43NoLm/z1rK4o3SPgu5d77L8eKVjb0MXL2CEyHgUofCrcozH' +
+            'AggaZDnskL7/+iNjHiikUGzr3oK96b75o/eyxnkVxnF48uNyUyvKJz7O6iZhnNGGuMchwMIH6tp91s3' +
+            'g6x71fU9/7m7ReAbwZ6pyF2+6CmN9xaLImKYRP5gEvvkNrhtxCzUTHEcbKNt39SMEfYQyyqt7QMckkz' +
+            'yevgoVyb68Qx1nxJwQDUxMxdS+yz5Ctll/KZz8ZX4qX8tvqzrW+uxsRBmMSkdYFw==',
             4,
             1
         );
@@ -5088,7 +5088,7 @@ var msrCrypto = function () {
                         return state;
                     },
 
-                    clear: function () {},
+                    clear: function () { },
 
                     keyLength: keyLength,
 
@@ -5995,7 +5995,7 @@ var msrCrypto = function () {
                             var arr = msrcryptoUtilities.stringToBytes(header);
                             pool = pool.concat(arr);
                         }
-                    } catch (err) {}
+                    } catch (err) { }
                 }
             }
             if (!cryptographicPRNGPresent && canCollect) {
@@ -6071,7 +6071,7 @@ var msrCrypto = function () {
                 if (!cryptographicPRNGPresent && !collectorsRegistered && canCollect) {
                     try {
                         collectors.startCollectors();
-                    } catch (e) {}
+                    } catch (e) { }
                 }
             },
 
@@ -6183,8 +6183,8 @@ var msrCrypto = function () {
             if (cryptoMath.isZero(number)) {
                 return 0;
             }
-            for (k = 0; number[k] === 0; k++) {}
-            for (i = 0, j = 2; number[k] % j === 0; j *= 2, i++) {}
+            for (k = 0; number[k] === 0; k++) { }
+            for (i = 0, j = 2; number[k] % j === 0; j *= 2, i++) { }
             return k * cryptoMath.DIGIT_BITS + i;
         }
 
@@ -6195,7 +6195,7 @@ var msrCrypto = function () {
             if (cryptoMath.isZero(digits)) {
                 return 0;
             }
-            for (k = digits.length - 1; digits[k] === 0; k--) {}
+            for (k = digits.length - 1; digits[k] === 0; k--) { }
             for (i = cryptoMath.DIGIT_BITS - 1, j = 1 << i; i > 0; j = j >>> 1, i--) {
                 if ((digits[k] & j) !== 0) {
                     break;
@@ -6485,7 +6485,7 @@ var msrCrypto = function () {
 
             db = db.slice(lHash.length);
 
-            while (!db[i++]) {}
+            while (!db[i++]) { }
 
             return {
                 valid: valid,
@@ -7961,7 +7961,7 @@ var msrCrypto = function () {
                 postMessage: postMessage,
                 onmessage: null,
                 onerror: null,
-                terminate: function () {},
+                terminate: function () { },
             };
         }
 
@@ -8592,8 +8592,8 @@ var msrCrypto = function () {
 
         function buildParameterCollection(operationName, parameterSet) {
             var parameterCollection = {
-                    operationType: operationName,
-                },
+                operationType: operationName,
+            },
                 operationParameterSet,
                 expectedParam,
                 actualParam,
@@ -8758,9 +8758,9 @@ var msrCrypto = function () {
                         .then(function (key) {
                             resolve(key);
                         })
-                        ['catch'](function (err) {
-                            reject(err);
-                        });
+                    ['catch'](function (err) {
+                        reject(err);
+                    });
                 });
             },
 
@@ -8795,9 +8795,9 @@ var msrCrypto = function () {
                             resolve(cipherArrayBuffer);
                         })
 
-                        ['catch'](function (err) {
-                            reject(err);
-                        });
+                    ['catch'](function (err) {
+                        reject(err);
+                    });
                 });
             },
 
@@ -8820,9 +8820,9 @@ var msrCrypto = function () {
                             resolve(key);
                         })
 
-                        ['catch'](function (err) {
-                            reject(err);
-                        });
+                    ['catch'](function (err) {
+                        reject(err);
+                    });
                 });
             },
         };
@@ -9005,4 +9005,4 @@ var msrCrypto = function () {
     return publicMethods;
 };
 
-export default msrCrypto();
+module.exports = msrCrypto();

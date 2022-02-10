@@ -1,21 +1,21 @@
 import styles from './App.module.css';
 
 import { Route, Routes } from 'react-router';
-import { Nav, Alert } from './_components';
-import { Home, Users, Account } from './_pages';
+import { Alert } from './_components';
+import { Home, CodeAuth } from './_pages';
 
-export { App };
+export const App = () => {
 
-function App() {
     return <div role="navigation" className={styles['home']}>
-        <Nav />
+        {/* <Nav /> */}
         <Alert />
         <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="users" element={<Users />} />
-            <Route path="account" element={<Account />} />
+            <Route path="/auth" element={<CodeAuth />} />
+            {/* <Route path="users" element={<Users />} />
+            <Route path="account" element={<Account />} /> */}
         </Routes>
     </div>;
-}
+};
 
 export default App;

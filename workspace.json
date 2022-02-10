@@ -9,6 +9,7 @@
         "crypto": "packages/crypto",
         "cryptx": "packages/cryptx",
         "endoscope": "packages/endoscope",
-        "endoscope-e2e": "packages/endoscope-e2e"
+        "endoscope-e2e": "packages/endoscope-e2e",
+        "react": "packages/react"
     }
 }

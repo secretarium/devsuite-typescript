@@ -1,6 +1,7 @@
 import * as Constants from './secretarium.constant';
 import * as TC from './secretarium.connector';
 import * as TK from './secretarium.key';
+// import './devtools';
 
 export type Query = TC.Query;
 export type Transaction = TC.Transaction;
@@ -14,5 +15,8 @@ export { Constants };
 export { Key } from './secretarium.key';
 
 export { SCP } from './secretarium.connector';
+
+export { SecretariumConnector } from './secretariumConnector';
+export * from './types';
 
 export { default as crypto, Utils } from '@secretarium/crypto';
