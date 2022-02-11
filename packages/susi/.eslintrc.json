@@ -8,6 +8,9 @@
         ".expo",
         "node_modules"
     ],
+    "globals": {
+        "__DEV__": "readonly"
+    },
     "overrides": [
         {
             "files": [

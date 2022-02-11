@@ -1,18 +1,46 @@
 {
+    "cli": {
+        "version": ">= 0.42.0"
+    },
     "build": {
-        "production": {
-            "android": {
-                "buildType": "app-bundle"
+        "base": {
+            "env": {
+                "STAGE": "production",
+                "NODE_ENV": "production",
+                "GOOGLE_SERVICES_FILE": "_"
             }
         },
         "development": {
+            "extends": "base",
+            "developmentClient": true,
+            "distribution": "internal",
+            "releaseChannel": "default",
             "android": {
-                "developmentClient": true,
-                "distribution": "internal"
+                "buildType": "apk"
+            },
+            "env": {
+                "STAGE": "development",
+                "NODE_ENV": "development"
+            }
+        },
+        "preview": {
+            "extends": "base",
+            "distribution": "internal",
+            "releaseChannel": "staging",
+            "android": {
+                "buildType": "apk"
+            },
+            "env": {
+                "STAGE": "staging"
+            }
+        },
+        "production": {
+            "extends": "base",
+            "distribution": "store",
+            "releaseChannel": "stable",
+            "android": {
+                "buildType": "app-bundle"
             }
         }
-    },
-    "cli": {
-        "version": ">= 0.38.1"
     }
 }

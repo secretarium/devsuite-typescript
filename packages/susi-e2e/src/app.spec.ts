@@ -6,6 +6,6 @@ describe('Susi', () => {
     });
 
     it('should display welcome message', async () => {
-        await expect(element(by.id('heading'))).toHaveText('Welcome Susi 👋');
+        await expect(element(by.id('heading'))).toHaveText('Welcome Secretarium Wallet 👋');
     });
 });
