@@ -8,6 +8,7 @@ Sentry.init({
     tracesSampleRate: __DEV__ ? 1 : undefined,
     integrations: [
         new Sentry.Native.ReactNativeTracing({
+            enableAppStartTracking: false,
             tracingOrigins: ['localhost', 'secretarium.io', 'secretarium.com', 'secretarium.org', /^\//]
         })
     ]
