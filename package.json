@@ -109,6 +109,7 @@
         "@typescript-eslint/eslint-plugin": "~5.11.0",
         "@typescript-eslint/parser": "~5.11.0",
         "babel-jest": "27.5.1",
+        "babel-plugin-inline-dotenv": "1.6.0",
         "commitlint": "^16.1.0",
         "cross-env": "7.0.3",
         "cypress": "^9.4.1",

@@ -1,10 +1,11 @@
-import { StrictMode, useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Text, View, Button } from 'react-native';
 import type { Subscription } from 'expo-modules-core';
 import * as Notifications from 'expo-notifications';
 import Animated, { useSharedValue, withTiming, useAnimatedStyle, Easing } from 'react-native-reanimated';
 import tw from 'twrnc';
+import { CachePolicies, useQuery } from '@secretarium/react';
 import { registerForPushNotificationsAsync, sendPushNotification /*, createPushNotifEncryptionKey, decryptPushNotification */ } from './services/notifications';
 
 export const App = () => {
@@ -13,6 +14,13 @@ export const App = () => {
     const [, setNotification] = useState<Notifications.Notification>();
     const notificationListener = useRef<Subscription>();
     const responseListener = useRef<Subscription>();
+
+    const [data, loading /*, error*/] = useQuery<string, string>({
+        app: 'sfx',
+        route: 'version'
+    }, {
+        cachePolicy: CachePolicies.CACHE_AND_NETWORK
+    }, []);
 
     const randomWidth = useSharedValue(10);
 
@@ -54,22 +62,22 @@ export const App = () => {
         });
     }, []);
 
-    return <StrictMode>
-        <View style={tw`flex justify-center h-full p-4 android:pt-2 bg-white dark:bg-black`}>
-            <Text>Welcome!</Text>
-            <Text>Open up App.tsx to start working on your app!</Text>
-            <StatusBar style="auto" />
-            <Animated.View
-                style={[{ width: 100, height: 80, backgroundColor: 'black', margin: 30 }, style]}
-            />
-            <Button title='Send Notification' onPress={() => {
-                console.log('Allo', expoToken);
-                randomWidth.value = Math.random() * 350;
-                if (expoToken)
-                    sendPushNotification('Coucou !', expoToken);
-            }} />
-        </View>
-    </StrictMode>;
+    console.log(process.env);
+    return <View style={tw`flex justify-center h-full p-4 android:pt-2 bg-white dark:bg-black`}>
+        <Text>Welcome to {loading ? 'loading' : data}!</Text>
+        <Text>Open up App.tsx to start working on your app!</Text>
+        <Text>{process.env.SENTRY_DSN}</Text>
+        <StatusBar style="auto" />
+        <Animated.View
+            style={[{ width: 100, height: 80, backgroundColor: 'black', margin: 30 }, style]}
+        />
+        <Button title='Send Notification' onPress={() => {
+            console.log('Allo', expoToken);
+            randomWidth.value = Math.random() * 350;
+            if (expoToken)
+                sendPushNotification('Coucou !', expoToken);
+        }} />
+    </View>;
 };
 
 export default App;

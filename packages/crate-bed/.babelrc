@@ -7,5 +7,7 @@
             }
         ]
     ],
-    "plugins": []
+    "plugins": [
+        "inline-dotenv"
+    ]
 }

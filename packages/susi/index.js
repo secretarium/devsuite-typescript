@@ -11,7 +11,8 @@ import { App } from './src/SentryApp';
 if (__DEV__) {
     LogBox.ignoreLogs([
         'Overwriting fontFamily style attribute preprocessor',
-        /findNodeHandle/
+        /findNodeHandle/,
+        /findHostInstance_DEPRECATED/
     ]);
     activateKeepAwake();
     connectToDevTools({
