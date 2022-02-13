@@ -1,5 +1,3 @@
-'use strict';
-
 const fs = require('fs');
 const pathResolve = require('path').resolve;
 const dotenvParse = require('dotenv').parse;
@@ -70,7 +68,7 @@ function getValue(dotenvContent, systemContent, opts, name) {
     }
 }
 
-module.exports = function (options) {
+function dotenvInject(options) {
     var t = options.types;
 
     return {
@@ -105,4 +103,6 @@ module.exports = function (options) {
             }
         }
     };
-};
+}
+
+module.exports = dotenvInject;

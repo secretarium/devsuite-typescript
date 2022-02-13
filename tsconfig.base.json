@@ -20,9 +20,6 @@
         "strict": true,
         "baseUrl": ".",
         "paths": {
-            "@secretarium/babel-plugin-dotenv-inject": [
-                "packages/babel-plugin-dotenv-inject/src/index.js"
-            ],
             "@secretarium/connector": [
                 "packages/connector/src/index.ts"
             ],
