@@ -62,11 +62,11 @@ export const App = () => {
         });
     }, []);
 
-    console.log(process.env);
     return <View style={tw`flex justify-center h-full p-4 android:pt-2 bg-white dark:bg-black`}>
         <Text>Welcome to {loading ? 'loading' : data}!</Text>
-        <Text>Open up App.tsx to start working on your app!</Text>
-        <Text>{process.env.SENTRY_DSN}</Text>
+        <Text>Open up App.tsx to start working on your app,</Text>
+        <Text>{process.env.NX_SENTRY_DSN}</Text>
+        <Text>{process.env.NX_SECRETARIUM_GATEWAYS}</Text>
         <StatusBar style="auto" />
         <Animated.View
             style={[{ width: 100, height: 80, backgroundColor: 'black', margin: 30 }, style]}

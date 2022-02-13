@@ -8,7 +8,5 @@
             }
         ]
     ],
-    "plugins": [
-        "inline-dotenv"
-    ]
+    "plugins": []
 }

@@ -13,7 +13,7 @@ export const Home = () => {
         route: 'version'
     }, {
         cachePolicy: CachePolicies.CACHE_AND_NETWORK
-    }, []);
+    }, [connector]);
 
     // const { data, loading, error } = useQuery({
     //     app: 'sfx',

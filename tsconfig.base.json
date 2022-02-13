@@ -10,17 +10,32 @@
         "importHelpers": true,
         "target": "es2015",
         "module": "esnext",
-        "lib": ["es2017", "dom"],
+        "lib": [
+            "es2017",
+            "dom"
+        ],
         "skipLibCheck": true,
         "skipDefaultLibCheck": true,
         "forceConsistentCasingInFileNames": true,
         "strict": true,
         "baseUrl": ".",
         "paths": {
-            "@secretarium/connector": ["packages/connector/src/index.ts"],
-            "@secretarium/crypto": ["packages/crypto/src/index.ts"],
-            "@secretarium/react": ["packages/react/src/index.ts"]
+            "@secretarium/babel-plugin-dotenv-inject": [
+                "packages/babel-plugin-dotenv-inject/src/index.js"
+            ],
+            "@secretarium/connector": [
+                "packages/connector/src/index.ts"
+            ],
+            "@secretarium/crypto": [
+                "packages/crypto/src/index.ts"
+            ],
+            "@secretarium/react": [
+                "packages/react/src/index.ts"
+            ]
         }
     },
-    "exclude": ["node_modules", "tmp"]
+    "exclude": [
+        "node_modules",
+        "tmp"
+    ]
 }

@@ -4,10 +4,7 @@ import { SecretariumConnector } from '@secretarium/connector';
 import { SecretariumProvider } from '@secretarium/react';
 
 const connector = new SecretariumConnector({
-    connections: {
-        url: 'wss://swisscom-ch-zhh-2288-8.node.secretarium.org:443',
-        trustKey: 'rliD_CISqPEeYKbWYdwa-L-8oytAPvdGmbLC0KdvsH-OVMraarm1eo-q4fte0cWJ7-kmsq8wekFIJK0a83_yCg=='
-    }
+    connections: process.env['NX_SECRETARIUM_GATEWAYS']
 });
 
 export const Providers: React.FC = ({ children }) => {

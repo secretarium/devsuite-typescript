@@ -1,0 +1,43 @@
+{
+    "root": "packages/babel-plugin-dotenv-inject",
+    "sourceRoot": "packages/babel-plugin-dotenv-inject/src",
+    "projectType": "library",
+    "targets": {
+        "build": {
+            "executor": "@nrwl/js:tsc",
+            "outputs": [
+                "{options.outputPath}"
+            ],
+            "options": {
+                "outputPath": "dist/packages/babel-plugin-dotenv-inject",
+                "main": "packages/babel-plugin-dotenv-inject/src/index.js",
+                "tsConfig": "packages/babel-plugin-dotenv-inject/tsconfig.lib.json",
+                "assets": [
+                    "packages/babel-plugin-dotenv-inject/*.md"
+                ]
+            }
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "outputs": [
+                "{options.outputFile}"
+            ],
+            "options": {
+                "lintFilePatterns": [
+                    "packages/babel-plugin-dotenv-inject/**/*.js"
+                ]
+            }
+        },
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "outputs": [
+                "coverage/packages/babel-plugin-dotenv-inject"
+            ],
+            "options": {
+                "jestConfig": "packages/babel-plugin-dotenv-inject/jest.config.js",
+                "passWithNoTests": true
+            }
+        }
+    },
+    "tags": []
+}

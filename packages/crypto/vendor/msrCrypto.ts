@@ -1,3 +1,4 @@
+// @ts-nocheck
 //*******************************************************************************
 //
 //    Copyright 2020 Microsoft
@@ -23,7 +24,7 @@ var global = {};
 var msrCrypto = function () {
     var operations = {};
 
-    operations.register = function (operationType, algorithmName, functionToCall) {
+    operations.register = function (operationType: string | number, algorithmName: string | number, functionToCall: any) {
         if (!operations[operationType]) {
             operations[operationType] = {};
         }
@@ -35,7 +36,7 @@ var msrCrypto = function () {
         }
     };
 
-    operations.exists = function (operationType, algorithmName) {
+    operations.exists = function (operationType: string | number, algorithmName: string | number) {
         if (!operations[operationType]) {
             return false;
         }
@@ -81,7 +82,7 @@ var msrCrypto = function () {
 
     var asyncMode = false;
 
-    var createProperty = function (parentObject, propertyName, initialValue, getterFunction, setterFunction) {
+    var createProperty = function (parentObject: { [x: string]: any; equals?: (ellipticCurvePointFp: any) => boolean; copy?: (destination: any) => void; clone?: () => { equals: (ellipticCurvePointFp: any) => boolean; copy: (destination: any) => void; clone: any; }; }, propertyName: PropertyKey, initialValue: boolean, getterFunction: { (): any; (): any; (): any; (): any; (): any; (): any; (): boolean; }, setterFunction: { (val: any): void; (val: any): void; (val: any): void; (val: any): void; (val: any): void; (val: any): void; } | undefined) {
         if (!setterSupport) {
             parentObject[propertyName] = initialValue;
             return;
@@ -100,13 +101,13 @@ var msrCrypto = function () {
     var msrcryptoUtilities = (function () {
         var encodingChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
 
-        function consoleLog(text) {
+        function consoleLog(text: any) {
             if ('console' in self && 'log' in console) {
                 console.log(text);
             }
         }
 
-        function toBase64(data, base64Url) {
+        function toBase64(data: any, base64Url: boolean) {
             var dataType = getObjectType(data);
 
             if (dataType !== 'Array' && dataType !== 'Uint8Array' && dataType !== 'ArrayBuffer') {
@@ -149,7 +150,7 @@ var msrCrypto = function () {
             return output;
         }
 
-        function base64ToBytes(encodedString) {
+        function base64ToBytes(encodedString: string) {
             encodedString = encodedString.replace(/-/g, '+').replace(/_/g, '/');
 
             while (encodedString.length % 4 !== 0) {
@@ -187,11 +188,11 @@ var msrCrypto = function () {
             return output;
         }
 
-        function getObjectType(object) {
+        function getObjectType(object: any) {
             return Object.prototype.toString.call(object).slice(8, -1);
         }
 
-        function bytesToHexString(bytes, separate) {
+        function bytesToHexString(bytes: string | any[], separate: boolean) {
             var result = '';
             if (typeof separate === 'undefined') {
                 separate = false;
@@ -213,13 +214,13 @@ var msrCrypto = function () {
             return result;
         }
 
-        function bytesToInt32(bytes, index) {
+        function bytesToInt32(bytes: { [x: string]: number; }, index: number) {
             index = index || 0;
 
             return (bytes[index] << 24) | (bytes[index + 1] << 16) | (bytes[index + 2] << 8) | bytes[index + 3];
         }
 
-        function hexToBytesArray(hexString) {
+        function hexToBytesArray(hexString: string) {
             hexString = hexString.replace(/\-/g, '');
 
             var result = [];
@@ -231,7 +232,7 @@ var msrCrypto = function () {
             return result;
         }
 
-        function clone(object) {
+        function clone(object: { [x: string]: any; hasOwnProperty: (arg0: string) => any; }) {
             var newObject = {};
             for (var propertyName in object) {
                 if (object.hasOwnProperty(propertyName)) {
@@ -241,7 +242,7 @@ var msrCrypto = function () {
             return newObject;
         }
 
-        function unpackData(base64String, arraySize, toUint32s) {
+        function unpackData(base64String: any, arraySize: number, toUint32s: any) {
             var bytes = base64ToBytes(base64String),
                 data = [],
                 i;
@@ -263,19 +264,19 @@ var msrCrypto = function () {
             return data;
         }
 
-        function int32ToBytes(int32) {
+        function int32ToBytes(int32: number) {
             return [(int32 >>> 24) & 255, (int32 >>> 16) & 255, (int32 >>> 8) & 255, int32 & 255];
         }
 
-        function int32ArrayToBytes(int32Array) {
-            var result = [];
+        function int32ArrayToBytes(int32Array: string | any[]) {
+            var result: any[] = [];
             for (var i = 0; i < int32Array.length; i++) {
                 result = result.concat(int32ToBytes(int32Array[i]));
             }
             return result;
         }
 
-        function xorVectors(a, b, res) {
+        function xorVectors(a: string | any[], b: string | any[], res: any[]) {
             var length = Math.min(a.length, b.length),
                 res = res || new Array(length);
             for (var i = 0; i < length; i += 1) {
@@ -284,7 +285,7 @@ var msrCrypto = function () {
             return res;
         }
 
-        function getVector(length, fillValue) {
+        function getVector(length: number, fillValue: number) {
             if (isNaN(fillValue)) {
                 fillValue = 0;
             }
@@ -296,7 +297,7 @@ var msrCrypto = function () {
             return res;
         }
 
-        function toArray(typedArray) {
+        function toArray(typedArray: any[] | Iterable<number>) {
             if (!typedArray) {
                 return [];
             }
@@ -327,7 +328,7 @@ var msrCrypto = function () {
             return returnArray;
         }
 
-        function padEnd(array, value, finalLength) {
+        function padEnd(array: any[], value: any, finalLength: number) {
             while (array.length < finalLength) {
                 array.push(value);
             }
@@ -335,7 +336,7 @@ var msrCrypto = function () {
             return array;
         }
 
-        function padFront(array, value, finalLength) {
+        function padFront(array: any[], value: any, finalLength: number) {
             while (array.length < finalLength) {
                 array.unshift(value);
             }
@@ -343,7 +344,7 @@ var msrCrypto = function () {
             return array;
         }
 
-        function arraysEqual(array1, array2) {
+        function arraysEqual(array1: string | any[], array2: string | any[]) {
             var result = true;
 
             if (array1.length !== array2.length) {
@@ -359,7 +360,7 @@ var msrCrypto = function () {
             return result;
         }
 
-        function verifyByteArray(array) {
+        function verifyByteArray(array: string | any[]) {
             if (getObjectType(array) !== 'Array') {
                 return false;
             }
@@ -377,7 +378,7 @@ var msrCrypto = function () {
             return true;
         }
 
-        function checkParam(param, type, errorMessage) {
+        function checkParam(param: any, type: string, errorMessage: string | undefined) {
             if (!param) {
                 throw new Error(errorMessage);
             }
@@ -389,7 +390,7 @@ var msrCrypto = function () {
             return true;
         }
 
-        function stringToBytes(text) {
+        function stringToBytes(text: string) {
             var encodedBytes = [];
 
             for (var i = 0, j = 0; i < text.length; i++) {
@@ -416,7 +417,7 @@ var msrCrypto = function () {
             return encodedBytes;
         }
 
-        function bytesToString(textBytes) {
+        function bytesToString(textBytes: string | any[]) {
             var result = '',
                 charCode;
 
@@ -495,7 +496,7 @@ var msrCrypto = function () {
             0x03: 'PRIVATE',
         };
 
-        function parse(bytes, force) {
+        function parse(bytes: string | any[], force: boolean | undefined) {
             force = !!force;
 
             var type = asn1Types[bytes[0] & 0x1f],
@@ -540,11 +541,11 @@ var msrCrypto = function () {
             return obj;
         }
 
-        function encode(asn1tree) {
+        function encode(asn1tree: any) {
             throw new Error('not implemented');
         }
 
-        function toString(objTree, indent) {
+        function toString(objTree: { type: string; length: string; data: any; children: string | any[]; }, indent: number) {
             var output = new Array(indent + 1).join(' ') + objTree.type + ' (' + objTree.length + ') ' + bytesToHexString(objTree.data).substring(0, 16) + '\n';
 
             if (!objTree.children) {
@@ -561,14 +562,14 @@ var msrCrypto = function () {
         return {
             parse: parse,
             encode: encode,
-            toString: function (objTree) {
+            toString: function (objTree: any) {
                 return toString(objTree, 0);
             },
         };
     })();
 
     var msrcryptoWorker = (function () {
-        function returnResult(result) {
+        function returnResult(result: { type: any; result: any; }) {
             if (workerInitialized && runningInWorkerInstance) {
                 self.postMessage(result);
             }
@@ -578,7 +579,7 @@ var msrCrypto = function () {
         var workerId, operationType, operationSubType;
 
         return {
-            jsCryptoRunner: function (e) {
+            jsCryptoRunner: function (e: { data: { workerid: any; operationType: any; operationSubType: any; algorithm: { name: string | number; }; }; }) {
                 workerId = e.data.workerid;
                 operationType = e.data.operationType;
                 operationSubType = e.data.operationSubType;
@@ -628,7 +629,7 @@ var msrCrypto = function () {
     var msrcryptoJwk = (function () {
         var utils = msrcryptoUtilities;
 
-        function stringToArray(stringData) {
+        function stringToArray(stringData: string) {
             var result = [];
 
             for (var i = 0; i < stringData.length; i++) {
@@ -642,7 +643,7 @@ var msrCrypto = function () {
             return result;
         }
 
-        function getKeyType(keyHandle) {
+        function getKeyType(keyHandle: { algorithm: { name: string; }; }) {
             var algType = keyHandle.algorithm.name.slice(0, 3).toUpperCase();
 
             if (algType === 'RSA') {
@@ -656,48 +657,48 @@ var msrCrypto = function () {
             return 'oct';
         }
 
-        function hashSize(algorithm) {
+        function hashSize(algorithm: { hash: { name: string; }; }) {
             return algorithm.hash.name.substring(algorithm.hash.name.indexOf('-') + 1);
         }
 
         var algorithmMap = {
-            HMAC: function (algorithm) {
+            HMAC: function (algorithm: any) {
                 return 'HS' + hashSize(algorithm);
             },
 
-            'AES-CBC': function (algorithm) {
+            'AES-CBC': function (algorithm: string | any[]) {
                 return 'A' + algorithm.length.toString() + 'CBC';
             },
 
-            'AES-GCM': function (algorithm) {
+            'AES-GCM': function (algorithm: string | any[]) {
                 return 'A' + algorithm.length.toString() + 'GCM';
             },
 
-            'RSAES-PKCS1-V1_5': function (algorithm) {
+            'RSAES-PKCS1-V1_5': function (algorithm: any) {
                 return 'RSA1_5';
             },
 
-            'RSASSA-PKCS1-V1_5': function (algorithm) {
+            'RSASSA-PKCS1-V1_5': function (algorithm: any) {
                 return 'RS' + hashSize(algorithm);
             },
 
-            'RSA-OAEP': function (algorithm) {
+            'RSA-OAEP': function (algorithm: { hash: { name: string; }; }) {
                 if (algorithm.hash.name.toUpperCase() === 'SHA-1') {
                     return 'RSA-OAEP';
                 }
                 return 'RSA-OAEP-' + hashSize(algorithm);
             },
 
-            'RSA-PSS': function (algorithm) {
+            'RSA-PSS': function (algorithm: any) {
                 return 'PS' + hashSize(algorithm);
             },
 
-            ECDSA: function (algorithm) {
+            ECDSA: function (algorithm: { namedCurve: string; }) {
                 return 'EC-' + algorithm.namedCurve.substring(algorithm.namedCurve.indexOf('-') + 1);
             },
         };
 
-        function keyToJwk(keyHandle, keyData) {
+        function keyToJwk(keyHandle: { extractable: any; algorithm: { name: string; namedCurve: any; }; usages: any; }, keyData: any[]) {
             var key = {};
 
             key.kty = getKeyType(keyHandle);
@@ -723,7 +724,7 @@ var msrCrypto = function () {
             return key;
         }
 
-        function findUsage(usage, usages) {
+        function findUsage(usage: string, usages: string | any[]) {
             for (var i = 0; i < usages.length; i++) {
                 if (usage.toUpperCase() === usages[i].toUpperCase()) {
                     return true;
@@ -732,7 +733,7 @@ var msrCrypto = function () {
             return false;
         }
 
-        function keyToJwkOld(keyHandle, keyData) {
+        function keyToJwkOld(keyHandle: { extractable: any; algorithm: { namedCurve: any; }; }, keyData: any[]) {
             var key = {};
 
             key.kty = getKeyType(keyHandle);
@@ -757,7 +758,7 @@ var msrCrypto = function () {
             return stringToArray(stringData);
         }
 
-        function jwkToKey(keyData, algorithm, propsToArray) {
+        function jwkToKey(keyData: any, algorithm: any, propsToArray: string | any[]) {
             var jsonKeyObject = JSON.parse(JSON.stringify(keyData));
 
             for (var i = 0; i < propsToArray.length; i += 1) {
@@ -794,7 +795,7 @@ var msrCrypto = function () {
         var Zero = [0];
         var One = [1];
 
-        function createArray(parameter) {
+        function createArray(parameter: string | number | any[]) {
             var i,
                 array = null;
             if (!arguments.length || typeof arguments[0] === 'number') {
@@ -811,7 +812,7 @@ var msrCrypto = function () {
             return array;
         }
 
-        function stringToDigits(numberStr, radix) {
+        function stringToDigits(numberStr: string | string[], radix: number | undefined) {
             numberStr = numberStr.replace(/^\s+|\s+$/g, '');
             var num = [0];
             var buffer = [0];
@@ -831,7 +832,7 @@ var msrCrypto = function () {
             return num;
         }
 
-        function digitsToString(digits, radix) {
+        function digitsToString(digits: string | any[], radix: number) {
             radix = radix || 10;
             if (DIGIT_BASE <= radix) {
                 throw new Error('DIGIT_BASE is smaller than RADIX; cannot convert.');
@@ -839,9 +840,9 @@ var msrCrypto = function () {
 
             var wordLength = digits.length;
             var quotient = [];
-            var remainder = [];
-            var temp1 = [];
-            var temp2 = [];
+            var remainder: { toString: (arg0: any) => any; }[] = [];
+            var temp1: never[] = [];
+            var temp2: never[] = [];
             var divisor = [];
             var a = [];
             var i;
@@ -893,7 +894,7 @@ var msrCrypto = function () {
             return sb;
         }
 
-        function computeBitArray(bytes) {
+        function computeBitArray(bytes: string | any[]) {
             var out = createArray(bytes.length * 8);
             var bitLength = 0;
             var i = bytes.length - 1;
@@ -918,7 +919,7 @@ var msrCrypto = function () {
             return out.slice(0, bitLength);
         }
 
-        function bitScanForward(digit) {
+        function bitScanForward(digit: number) {
             var index = 0;
 
             for (var i = 0; i < DIGIT_BITS; i++) {
@@ -928,7 +929,7 @@ var msrCrypto = function () {
             return index;
         }
 
-        function highestSetBit(bytes) {
+        function highestSetBit(bytes: string | any[]) {
             var i = 0;
             var bitLength = 0;
 
@@ -953,7 +954,7 @@ var msrCrypto = function () {
             return bitLength;
         }
 
-        function fixedWindowRecode(digits, windowSize, t) {
+        function fixedWindowRecode(digits: string | any[], windowSize: number, t: number) {
             digits = digits.slice();
 
             var recodedDigits = [],
@@ -973,7 +974,7 @@ var msrCrypto = function () {
             return recodedDigits;
         }
 
-        function fixedWindowRecode2(digits, windowSize) {
+        function fixedWindowRecode2(digits: string | any[], windowSize: number) {
             var digLen = digits.length,
                 bits = new Array(digLen * DIGIT_BITS),
                 i = 0,
@@ -996,7 +997,7 @@ var msrCrypto = function () {
             return result;
         }
 
-        function fetchBits(digits, startBit, count) {
+        function fetchBits(digits: number[], startBit: number, count: number) {
             var startDigit = Math.floor(startBit / cryptoMath.DIGIT_BITS);
             var endDigit = startDigit + 1;
 
@@ -1008,20 +1009,20 @@ var msrCrypto = function () {
             return bits & (cryptoMath.DIGIT_MASK >>> (cryptoMath.DIGIT_BITS - count));
         }
 
-        function fetchBits2(digits, startBit, count) {
+        function fetchBits2(digits: number[], startBit: number, count: number) {
             var startDigit = Math.floor(startBit / DIGIT_BITS),
                 shiftRight = startBit % DIGIT_BITS;
 
             return (digits[startDigit] >>> shiftRight) | ((digits[startDigit + 1] << (DIGIT_BITS - shiftRight)) & (DIGIT_MASK >>> (DIGIT_BITS - count)));
         }
 
-        function copyArray(source, sourceIndex, destination, destIndex, length) {
+        function copyArray(source: any[], sourceIndex: number, destination: { [x: string]: any; }, destIndex: number, length: number) {
             while (length-- > 0) {
                 destination[destIndex + length] = source[sourceIndex + length];
             }
         }
 
-        function isZero(array) {
+        function isZero(array: string | any[]) {
             var i,
                 result = 0;
 
@@ -1031,11 +1032,11 @@ var msrCrypto = function () {
             return !result;
         }
 
-        function isEven(array) {
+        function isEven(array: number[]) {
             return (array[0] & 0x1) === 0x0;
         }
 
-        function sequenceEqual(left, right) {
+        function sequenceEqual(left: string | any[], right: string | any[]) {
             var equal = left.length === right.length;
 
             for (var i = 0; i < Math.min(left.length, right.length); i += 1) {
@@ -1047,7 +1048,7 @@ var msrCrypto = function () {
             return equal;
         }
 
-        function bytesToDigits(bytes) {
+        function bytesToDigits(bytes: string | any[]) {
             var arrayLength = Math.floor((bytes.length + DIGIT_NUM_BYTES - 1) / DIGIT_NUM_BYTES);
             var array = new Array(arrayLength);
             array[0] = 0;
@@ -1074,7 +1075,7 @@ var msrCrypto = function () {
             return array;
         }
 
-        function digitsToBytes(digits, trim, minTrimLength) {
+        function digitsToBytes(digits: string | any[], trim: boolean, minTrimLength: number | undefined) {
             var i, j, byte1;
             var bytes = [0];
 
@@ -1104,7 +1105,7 @@ var msrCrypto = function () {
             return bytes;
         }
 
-        function intToDigits(value, numDigits) {
+        function intToDigits(value: number, numDigits: number) {
             if (typeof numDigits === 'undefined') {
                 if (value <= 1) {
                     numDigits = 1;
@@ -1127,7 +1128,7 @@ var msrCrypto = function () {
             return digitRepresentation;
         }
 
-        function mswIndex(digits) {
+        function mswIndex(digits: string | any[]) {
             for (var i = digits.length - 1; i >= 0; i--) {
                 if (digits[i] !== undefined && digits[i] !== 0) {
                     return i;
@@ -1137,7 +1138,7 @@ var msrCrypto = function () {
             return digits[0] === 0 ? -1 : 0;
         }
 
-        function compareDigits(left, right) {
+        function compareDigits(left: string | any[], right: string | any[]) {
             var result = 0,
                 val,
                 i;
@@ -1150,7 +1151,7 @@ var msrCrypto = function () {
             return result;
         }
 
-        function normalizeDigitArray(digits, length, pad) {
+        function normalizeDigitArray(digits: string | any[] | null, length: number | undefined, pad: boolean | undefined) {
             var i = mswIndex(digits);
 
             digits.length = length || i + 1;
@@ -1169,7 +1170,7 @@ var msrCrypto = function () {
             return digits;
         }
 
-        function shiftRight(source, destination, bits, length) {
+        function shiftRight(source: string | any[], destination: number[], bits: number | undefined, length: number | undefined) {
             if (bits === undefined) {
                 bits = 1;
             } else if (bits >= DIGIT_BITS || bits < 0) {
@@ -1188,7 +1189,7 @@ var msrCrypto = function () {
             destination[n] = source[n] >>> bits;
         }
 
-        function shiftLeft(source, destination, bits, length) {
+        function shiftLeft(source: string | any[], destination: number[], bits: number | undefined, length: number | undefined) {
             if (bits === undefined) {
                 bits = 1;
             } else if (bits >= DIGIT_BITS || bits < 0) {
@@ -1207,7 +1208,7 @@ var msrCrypto = function () {
             destination[0] = (source[0] << bits) & DIGIT_MASK;
         }
 
-        function add(addend1, addend2, sum) {
+        function add(addend1: string | any[], addend2: string | any[], sum: string | any[]) {
             var shortArray = addend1;
             var longArray = addend2;
             if (addend2.length < addend1.length) {
@@ -1240,7 +1241,7 @@ var msrCrypto = function () {
             return carry;
         }
 
-        function subtract(minuend, subtrahend, difference) {
+        function subtract(minuend: string | any[], subtrahend: string | any[], difference: any[]) {
             var s = subtrahend.length;
             if (minuend.length < subtrahend.length) {
                 s = mswIndex(subtrahend) + 1;
@@ -1265,7 +1266,7 @@ var msrCrypto = function () {
             return carry;
         }
 
-        function multiply(a, b, p) {
+        function multiply(a: string | any[], b: string | any[] | undefined, p: string | any[]) {
             b = typeof b === 'number' ? [b] : b;
 
             var i,
@@ -1316,7 +1317,7 @@ var msrCrypto = function () {
             return p;
         }
 
-        function divRem(dividend, divisor, quotient, remainder, temp1, temp2) {
+        function divRem(dividend: string | any[] | null, divisor: any[], quotient: string | any[] | null, remainder: string | any[] | null, temp1: any[] | null | undefined, temp2: any[] | null | undefined) {
             var m = mswIndex(dividend) + 1;
             var n = mswIndex(divisor) + 1;
             var qhat, rhat, carry, p, t, i, j;
@@ -1407,22 +1408,22 @@ var msrCrypto = function () {
             normalizeDigitArray(remainder);
         }
 
-        function reduce(number, modulus, remainder, temp1, temp2) {
-            var quotient = [];
+        function reduce(number: any, modulus: any, remainder: any, temp1: any, temp2: any) {
+            var quotient: never[] = [];
             divRem(number, modulus, quotient, remainder, temp1, temp2);
 
             return remainder;
         }
 
-        function modMul(multiplicand, multiplier, modulus, product, temp1, temp2) {
-            var quotient = [];
+        function modMul(multiplicand: any, multiplier: any, modulus: any, product: any, temp1: any, temp2: any) {
+            var quotient: never[] = [];
             multiply(multiplicand, multiplier, quotient);
             divRem(quotient, modulus, quotient, product, temp1, temp2);
 
             return product;
         }
 
-        function eea(a, b, upp, vpp, rpp) {
+        function eea(a: string | any[], b: string | any[], upp: string | any[] | undefined, vpp: string | any[] | undefined, rpp: string | any[]) {
             var rp;
             if (isZero(a)) {
                 copyArray(b, 0, rpp, 0, b.length);
@@ -1521,7 +1522,7 @@ var msrCrypto = function () {
             return k;
         }
 
-        function gcd(a, b, output) {
+        function gcd(a: any, b: any, output: any) {
             var aa = a;
             var bb = b;
             if (compareDigits(a, b) > 0) {
@@ -1533,7 +1534,7 @@ var msrCrypto = function () {
             return normalizeDigitArray(output);
         }
 
-        function modInv(a, n, aInv, pad) {
+        function modInv(a: any, n: string | any[], aInv: string | any[], pad: any) {
             var upp = new Array(n.length);
             var vpp = new Array(n.length);
             var rpp = new Array(n.length);
@@ -1560,8 +1561,8 @@ var msrCrypto = function () {
             return aInv;
         }
 
-        function modInvCT(a, n, aInv, pad) {
-            var nMinus2 = [];
+        function modInvCT(a: any, n: any, aInv: never[], pad: any) {
+            var nMinus2: never[] = [];
             aInv = aInv || [];
             subtract(n, [2], nMinus2);
             modExp(a, nMinus2, n, aInv);
@@ -1569,7 +1570,7 @@ var msrCrypto = function () {
             return aInv;
         }
 
-        function modExp(base, exponent, modulus, result) {
+        function modExp(base: string | any[], exponent: any[], modulus: string | any[], result: string | any[]) {
             result = result || [];
 
             if (compareDigits(exponent, Zero) === 0) {
@@ -1587,8 +1588,8 @@ var msrCrypto = function () {
             return result;
         }
 
-        function MontgomeryMultiplier(modulus, context) {
-            function computeM0Prime(m0) {
+        function MontgomeryMultiplier(modulus: any[], context: { m: any; mu?: any; m0: any; mPrime: any; rModM?: any; rSquaredModm?: any; rCubedModm?: any; temp1?: any[] | null; temp2?: any[] | null; } | undefined) {
+            function computeM0Prime(m0: number) {
                 var m0Pr = 1;
                 var a = 2;
                 var b = 3;
@@ -1608,14 +1609,14 @@ var msrCrypto = function () {
                 return result;
             }
 
-            function montgomeryReduction(t, m, result) {
+            function montgomeryReduction(t: string | any[], m: string | any[], result: any[]) {
                 var m0 = m[0];
                 var mPrime = computeM0Prime(m0);
                 var n = m.length;
                 var A = t.slice(0);
                 var ui = [];
-                var uimbi = [];
-                var uim = [];
+                var uimbi: never[] = [];
+                var uim: never[] = [];
                 var bi = [1];
 
                 for (var i = 0; i < n; i++) {
@@ -1635,7 +1636,7 @@ var msrCrypto = function () {
                 }
             }
 
-            function montgomeryMultiply(multiplicand, multiplier, result, ctx) {
+            function montgomeryMultiply(multiplicand: any[] | null, multiplier: any[] | null, result: string | any[], ctx: { m: any; mPrime: any; m0: any; temp1?: any[] | null; temp2: any; }) {
                 ctx = ctx || this;
 
                 var m = ctx.m,
@@ -1699,7 +1700,7 @@ var msrCrypto = function () {
                 return;
             }
 
-            function convertToMontgomeryForm(digits) {
+            function convertToMontgomeryForm(digits: string | any[]) {
                 if (digits.length < this.s) {
                     digits.length = this.s;
                     for (var i = 0; i < this.s; i++) {
@@ -1715,14 +1716,14 @@ var msrCrypto = function () {
                 }
             }
 
-            function convertToStandardForm(digits) {
+            function convertToStandardForm(digits: any[]) {
                 this.montgomeryMultiply(digits, this.one, this.temp1);
                 for (var i = 0; i < this.s; i += 1) {
                     digits[i] = this.temp1[i];
                 }
             }
 
-            function optimalWindowSize(length) {
+            function optimalWindowSize(length: number) {
                 var i = 2,
                     t1,
                     t0,
@@ -1738,7 +1739,7 @@ var msrCrypto = function () {
                 return i - 1;
             }
 
-            function modExp(base, exponent, result, skipSideChannel) {
+            function modExp(base: any, exponent: string | any[], result: any, skipSideChannel: boolean) {
                 skipSideChannel = !!skipSideChannel;
 
                 var windowBits = optimalWindowSize(exponent.length);
@@ -1778,7 +1779,7 @@ var msrCrypto = function () {
                 return result;
             }
 
-            function getTableEntry(bt, exp, tableVal) {
+            function getTableEntry(bt: string | any[], exp: number, tableVal: number[]) {
                 var z, t, mask, tableEntry, k;
                 for (z = 0; z < bt[0].length; z++) {
                     tableVal[z] = 0;
@@ -1792,7 +1793,7 @@ var msrCrypto = function () {
                 }
             }
 
-            function ctSetArray(condition, a, b) {
+            function ctSetArray(condition: number, a: string | any[], b: any[]) {
                 var bMask = -condition;
                 var aMask = ~bMask;
 
@@ -1801,16 +1802,16 @@ var msrCrypto = function () {
                 }
             }
 
-            function reduce(x, result) {
+            function reduce(x: string | any[], result: string | any[]) {
                 var k = this.m.length,
                     q1,
-                    q2,
+                    q2: string | any[],
                     q3,
                     r1,
-                    r2,
+                    r2: string | any[],
                     i,
                     needSubtract,
-                    temp = [];
+                    temp: never[] = [];
 
                 result = result || x;
 
@@ -1840,7 +1841,7 @@ var msrCrypto = function () {
                 return;
             }
 
-            function computeContext(modulus) {
+            function computeContext(modulus: string | any[]) {
                 var s = modulus.length;
 
                 var m0 = modulus[0];
@@ -1937,7 +1938,7 @@ var msrCrypto = function () {
             };
         }
 
-        function IntegerGroup(modulusBytes) {
+        function IntegerGroup(modulusBytes: any) {
             var m_modulus = bytesToDigits(modulusBytes);
 
             var m_digitWidth = m_modulus.length;
@@ -1950,7 +1951,7 @@ var msrCrypto = function () {
 
             var montmul = new MontgomeryMultiplier(m_modulus);
 
-            function createElementFromBytes(bytes) {
+            function createElementFromBytes(bytes: any) {
                 var digits = bytesToDigits(bytes);
 
                 if (cryptoMath.compareDigits(digits, this.m_modulus) >= 0) {
@@ -1961,21 +1962,21 @@ var msrCrypto = function () {
                 return integerGroupElement(digits, this);
             }
 
-            function createElementFromInteger(integer) {
+            function createElementFromInteger(integer: any) {
                 var digits = intToDigits(integer, this.m_digitWidth);
                 return integerGroupElement(digits, this);
             }
 
-            function createElementFromDigits(digits) {
+            function createElementFromDigits(digits: any) {
                 cryptoMath.normalizeDigitArray(digits, this.m_digitWidth, true);
                 return integerGroupElement(digits, this);
             }
 
-            function equals(otherGroup) {
+            function equals(otherGroup: { m_modulus: any; }) {
                 return compareDigits(this.m_modulus, otherGroup.m_modulus) === 0;
             }
 
-            function add(addend1, addend2, sum) {
+            function add(addend1: { m_digits: any; }, addend2: { m_digits: any; }, sum: { m_digits: any; }) {
                 var i;
                 var s = this.m_digitWidth;
                 var result = sum.m_digits;
@@ -1992,7 +1993,7 @@ var msrCrypto = function () {
                 result.length = s;
             }
 
-            function subtract(leftElement, rightElement, outputElement) {
+            function subtract(leftElement: { m_digits: any; }, rightElement: { m_digits: any; }, outputElement: { m_digits: any; }) {
                 var i,
                     s = this.m_digitWidth;
                 var result = outputElement.m_digits;
@@ -2008,15 +2009,15 @@ var msrCrypto = function () {
                 }
             }
 
-            function inverse(element, outputElement) {
+            function inverse(element: { m_digits: any; }, outputElement: { m_digits: any; }) {
                 cryptoMath.modInv(element.m_digits, this.m_modulus, outputElement.m_digits);
             }
 
-            function multiply(multiplicand, multiplier, product) {
+            function multiply(multiplicand: { m_digits: any; }, multiplier: { m_digits: any; }, product: { m_digits: any; }) {
                 return cryptoMath.modMul(multiplicand.m_digits, multiplier.m_digits, this.m_modulus, product.m_digits, temp0, temp1);
             }
 
-            function modexp(valueElement, exponent, outputElement) {
+            function modexp(valueElement: { m_digits: string | any[]; }, exponent: any, outputElement: { m_digits: any; m_group?: any; equals?: (element: any) => any; }) {
                 outputElement = outputElement || integerGroupElement([], this);
 
                 if (compareDigits(exponent, m_zero) === 0) {
@@ -2034,12 +2035,12 @@ var msrCrypto = function () {
                 return outputElement;
             }
 
-            function integerGroupElement(digits, group) {
+            function integerGroupElement(digits: any[], group: any) {
                 return {
                     m_digits: digits,
                     m_group: group,
 
-                    equals: function (element) {
+                    equals: function (element: { m_digits: any; m_group: any; }) {
                         return compareDigits(this.m_digits, element.m_digits) === 0 && this.m_group.equals(this.m_group, element.m_group);
                     },
                 };
@@ -2100,7 +2101,7 @@ var msrCrypto = function () {
             MontgomeryMultiplier: MontgomeryMultiplier,
             gcd: gcd,
             sequenceEqual: sequenceEqual,
-            swapEndianness: function (bytes) {
+            swapEndianness: function (bytes: any[]) {
                 return bytes.reverse();
             },
             computeBitArray: computeBitArray,
@@ -2112,7 +2113,7 @@ var msrCrypto = function () {
     function MsrcryptoECC() {
         var btd = cryptoMath.bytesToDigits;
 
-        function createArray(parameter) {
+        function createArray(parameter: string | number | any[]) {
             var i,
                 array = null;
             if (!arguments.length || typeof arguments[0] === 'number') {
@@ -2129,7 +2130,7 @@ var msrCrypto = function () {
             return array;
         }
 
-        var EllipticCurveFp = function (p1, a1, b1, order, gx, gy) {
+        var EllipticCurveFp = function (p1: string | any[], a1: any, b1: any, order: any, gx: any, gy: any) {
             var fieldStorageBitLength = p1.length;
 
             var generator = EllipticCurvePointFp(this, false, gx, gy, null, false);
@@ -2149,7 +2150,7 @@ var msrCrypto = function () {
             };
         };
 
-        var createWeierstrassCurve = function (curveData) {
+        var createWeierstrassCurve = function (curveData: { p: any; a: any; b: any; order: any; gx: any; gy: any; type: any; name: any; }) {
             var newCurve = new EllipticCurveFp(btd(curveData.p), btd(curveData.a), btd(curveData.b), btd(curveData.order), btd(curveData.gx), btd(curveData.gy));
 
             newCurve.type = curveData.type;
@@ -2159,7 +2160,7 @@ var msrCrypto = function () {
             return newCurve;
         };
 
-        var createTedCurve = function (curveData) {
+        var createTedCurve = function (curveData: { p: any; a: any; d: any; order: any; gx: any; gy: any; type: any; info: any[]; name: any; }) {
             var newCurve = new EllipticCurveFp(btd(curveData.p), btd(curveData.a), btd(curveData.d), btd(curveData.order), btd(curveData.gx), btd(curveData.gy));
 
             newCurve.type = curveData.type;
@@ -2176,8 +2177,8 @@ var msrCrypto = function () {
             return newCurve;
         };
 
-        var EllipticCurvePointFp = function (curve, isInfinity, x, y, z, isInMontgomeryForm) {
-            var returnObj;
+        var EllipticCurvePointFp = function (curve: { p: any; a: any; b: any; order: any; generator: { equals: (ellipticCurvePointFp: any) => boolean; copy: (destination: any) => void; clone: () => any; }; allocatePointStorage: () => { equals: (ellipticCurvePointFp: any) => boolean; copy: (destination: any) => void; clone: () => any; }; createPointAtInfinity: () => { equals: (ellipticCurvePointFp: any) => boolean; copy: (destination: any) => void; clone: () => any; }; }, isInfinity: boolean, x: any[] | null, y: any[] | null, z: any[] | null | undefined, isInMontgomeryForm: boolean | undefined) {
+            var returnObj: { isInfinity?: any; z?: any; x?: any; y?: any; isInMontgomeryForm?: any; curve?: any; ta?: any; tb?: any; equals?: (ellipticCurvePointFp: any) => boolean; copy?: (destination: any) => void; clone?: () => { equals: (ellipticCurvePointFp: any) => boolean; copy: (destination: any) => void; clone: any; }; };
 
             if (typeof z === 'undefined') {
                 z = null;
@@ -2187,7 +2188,7 @@ var msrCrypto = function () {
                 isInMontgomeryForm = false;
             }
 
-            function equals(ellipticCurvePointFp) {
+            function equals(ellipticCurvePointFp: { isInfinity: any; z: null; x: any; y: any; isInMontgomeryForm: any; }) {
                 if (!ellipticCurvePointFp) {
                     return false;
                 }
@@ -2220,7 +2221,7 @@ var msrCrypto = function () {
                 );
             }
 
-            function copyTo(source, destination) {
+            function copyTo(source: { curve: any; x: string | any[]; y: string | any[]; z: string | any[] | null; isAffine: any; isInMontgomeryForm: any; isInfinity: any; }, destination: { curve: any; x: any; y: any; z: null; isAffine: any; isInMontgomeryForm: any; isInfinity: any; equals: (arg0: any) => any; }) {
                 destination.curve = source.curve;
                 destination.x = source.x.slice();
                 destination.y = source.y.slice();
@@ -2257,10 +2258,10 @@ var msrCrypto = function () {
             }
 
             returnObj = {
-                equals: function (ellipticCurvePointFp) {
+                equals: function (ellipticCurvePointFp: any) {
                     return equals(ellipticCurvePointFp);
                 },
-                copy: function (destination) {
+                copy: function (destination: any) {
                     copyTo(this, destination);
                     return;
                 },
@@ -2276,7 +2277,7 @@ var msrCrypto = function () {
                 function () {
                     return curve;
                 },
-                function (val) {
+                function (val: any) {
                     curve = val;
                 }
             );
@@ -2288,7 +2289,7 @@ var msrCrypto = function () {
                 function () {
                     return x;
                 },
-                function (val) {
+                function (val: any) {
                     x = val;
                 }
             );
@@ -2299,7 +2300,7 @@ var msrCrypto = function () {
                 function () {
                     return y;
                 },
-                function (val) {
+                function (val: any) {
                     y = val;
                 }
             );
@@ -2310,7 +2311,7 @@ var msrCrypto = function () {
                 function () {
                     return z;
                 },
-                function (val) {
+                function (val: any) {
                     z = val;
                 }
             );
@@ -2322,7 +2323,7 @@ var msrCrypto = function () {
                 function () {
                     return isInMontgomeryForm;
                 },
-                function (val) {
+                function (val: any) {
                     isInMontgomeryForm = val;
                 }
             );
@@ -2333,7 +2334,7 @@ var msrCrypto = function () {
                 function () {
                     return isInfinity;
                 },
-                function (val) {
+                function (val: any) {
                     isInfinity = val;
                 }
             );
@@ -2344,7 +2345,7 @@ var msrCrypto = function () {
             return returnObj;
         };
 
-        var EllipticCurveOperatorFp = function (curve) {
+        var EllipticCurveOperatorFp = function (curve: { type: number; p: string | any[]; a: string | any[]; order: any; }) {
             var m_curve = curve;
 
             var tedCurve = curve.type === 1;
@@ -2380,23 +2381,23 @@ var msrCrypto = function () {
             var conversionTemp1 = createArray(fieldElementWidth);
             var conversionTemp2 = createArray(fieldElementWidth);
 
-            function modSub(left, right, result) {
+            function modSub(left: any[] | null, right: any[] | null, result: any[] | null) {
                 var resultElement = group.createElementFromInteger(0);
                 resultElement.m_digits = result;
                 group.subtract(group.createElementFromDigits(left), group.createElementFromDigits(right), resultElement);
             }
 
-            function modAdd(left, right, result) {
+            function modAdd(left: any[] | null, right: any[] | null, result: any[] | null) {
                 var resultElement = group.createElementFromInteger(0);
                 resultElement.m_digits = result;
                 group.add(group.createElementFromDigits(left), group.createElementFromDigits(right), resultElement);
             }
 
-            function modInv(number, result) {
+            function modInv(number: any, result: any) {
                 cryptoMath.modInv(number, m_curve.p, result);
             }
 
-            function modDivByTwo(dividend, result) {
+            function modDivByTwo(dividend: string | any[] | null, result: any[] | null) {
                 var s = dividend.length;
 
                 var modulus = curve.p;
@@ -2420,15 +2421,15 @@ var msrCrypto = function () {
                 }
             }
 
-            function montgomeryMultiply(left, right, result) {
+            function montgomeryMultiply(left: any[] | null, right: any[] | null, result: any[] | null) {
                 montgomeryMultiplier.montgomeryMultiply(left, right, result);
             }
 
-            function montgomerySquare(left, result) {
+            function montgomerySquare(left: any[] | null, result: any[] | null) {
                 montgomeryMultiplier.montgomeryMultiply(left, left, result);
             }
 
-            function correctInversion(digits) {
+            function correctInversion(digits: string | any[]) {
                 var results = createArray(digits.length);
                 montgomeryMultiply(digits, montgomeryMultiplier.rCubedModm, results);
                 for (var i = 0; i < results.length; i += 1) {
@@ -2436,7 +2437,7 @@ var msrCrypto = function () {
                 }
             }
 
-            function doubleAequalsNeg3(point, outputPoint) {
+            function doubleAequalsNeg3(point: { isInfinity: any; z: any; y: any; x: any; }, outputPoint: { isInfinity: boolean; z: any[]; x: any; y: any; isInMontgomeryForm: boolean; }) {
                 if (point.isInfinity) {
                     outputPoint.isInfinity = true;
                     return;
@@ -2480,7 +2481,7 @@ var msrCrypto = function () {
                 outputPoint.isInMontgomeryForm = true;
             }
 
-            function doubleAequals0(point, outputPoint) {
+            function doubleAequals0(point: { isInfinity: any; y: any; x: any; z: any; }, outputPoint: { isInfinity: boolean; z: any[]; x: any; y: any; isInMontgomeryForm: boolean; }) {
                 if (point.isInfinity) {
                     outputPoint.isInfinity = true;
                     return;
@@ -2519,7 +2520,7 @@ var msrCrypto = function () {
                 outputPoint.isInMontgomeryForm = true;
             }
 
-            function generatePrecomputationTable(w, generatorPoint) {
+            function generatePrecomputationTable(w: number, generatorPoint: { clone: () => any; }) {
                 var validationPoint = generatorPoint.clone();
                 convertToStandardForm(validationPoint);
                 if (!validatePoint(validationPoint)) {
@@ -2551,7 +2552,7 @@ var msrCrypto = function () {
                 return tablePos;
             }
 
-            function double(point, outputPoint) {
+            function double(point: { isAffine: any; isInMontgomeryForm: any; }, outputPoint: any) {
                 if (typeof point === 'undefined') {
                     throw new Error('point undefined');
                 }
@@ -2573,7 +2574,7 @@ var msrCrypto = function () {
                 }
             }
 
-            function mixedDoubleAdd(jacobianPoint, affinePoint, outputPoint) {
+            function mixedDoubleAdd(jacobianPoint: { isInfinity: any; copy: (arg0: any) => void; z: string | any[]; x: string | any[]; y: string | any[]; }, affinePoint: { copy: (arg0: any) => void; isInfinity: any; x: any; y: any; }, outputPoint: { x: string | any[]; y: number[]; z: { [x: string]: number; }; isInfinity: boolean; isInMontgomeryForm: boolean; }) {
                 if (jacobianPoint.isInfinity) {
                     affinePoint.copy(outputPoint);
                     this.convertToJacobianForm(outputPoint);
@@ -2672,7 +2673,7 @@ var msrCrypto = function () {
                 outputPoint.isInMontgomeryForm = true;
             }
 
-            function mixedAdd(jacobianPoint, affinePoint, outputPoint) {
+            function mixedAdd(jacobianPoint: { curve: any; isAffine: any; isInMontgomeryForm: any; isInfinity: any; copy: (arg0: any) => void; z: any; x: any; y: any; } | null, affinePoint: { curve: any; isAffine: any; isInMontgomeryForm: any; copy: (arg0: any) => void; isInfinity: any; x: any; y: any; } | null, outputPoint: { curve: any; isAffine: any; z: any[]; x: any; y: any; isInfinity: boolean; isInMontgomeryForm: boolean; } | null) {
                 if (jacobianPoint === null) {
                     throw new Error('jacobianPoint');
                 }
@@ -2785,7 +2786,7 @@ var msrCrypto = function () {
                 outputPoint.isInMontgomeryForm = true;
             }
 
-            function scalarMultiply(k, point, outputPoint, multiplyBy4) {
+            function scalarMultiply(k: string | any[], point: { isInfinity: any; curve: { type: number; }; ta: any; isInMontgomeryForm: any; }, outputPoint: { isInfinity: boolean; isInMontgomeryForm: any; isAffine: any; }, multiplyBy4: any) {
                 if (point.isInfinity || cryptoMath.isZero(k)) {
                     outputPoint.isInfinity = true;
                     return;
@@ -2840,7 +2841,7 @@ var msrCrypto = function () {
                 return;
             }
 
-            function scalarMultiplyW(k, point, outputPoint) {
+            function scalarMultiplyW(k: string | any[], point: { clone: () => any; curve: { order: any; p: string | any[]; }; }, outputPoint: any) {
                 var validationPoint = point.clone();
                 convertToStandardForm(validationPoint);
 
@@ -2849,7 +2850,7 @@ var msrCrypto = function () {
                 }
 
                 var odd = k[0] & 1,
-                    tempk = [];
+                    tempk: number[] = [];
 
                 modSub(point.curve.order, k, tempk);
                 for (i = 0; i < k.length; i++) {
@@ -2897,7 +2898,7 @@ var msrCrypto = function () {
                 return;
             }
 
-            function tableLookupW(table, index) {
+            function tableLookupW(table: string | any[], index: number) {
                 var mask, L;
 
                 for (var i = 0; i < table.length; i++) {
@@ -2908,7 +2909,7 @@ var msrCrypto = function () {
                 return L;
             }
 
-            function tableLookupW0(table, index) {
+            function tableLookupW0(table: string | any[], index: number) {
                 var pos = (index + 1) % table.length;
 
                 for (var i = 0; i < table.length; i++) {
@@ -2919,14 +2920,14 @@ var msrCrypto = function () {
                 return L;
             }
 
-            function negate(point, outputPoint) {
+            function negate(point: { copy: (arg0: any) => void; curve: { p: any; }; y: any; }, outputPoint: { y: any; }) {
                 if (point !== outputPoint) {
                     point.copy(outputPoint);
                 }
                 modSub(point.curve.p, point.y, outputPoint.y);
             }
 
-            function convertToMontgomeryForm(point) {
+            function convertToMontgomeryForm(point: { isInMontgomeryForm: boolean; isInfinity: any; x: any; y: any; z: null; ta: any; tb: any; }) {
                 if (point.isInMontgomeryForm) {
                     throw new Error('The given point is already in Montgomery form.');
                 }
@@ -2948,7 +2949,7 @@ var msrCrypto = function () {
                 point.isInMontgomeryForm = true;
             }
 
-            function convertToStandardForm(point) {
+            function convertToStandardForm(point: { isInMontgomeryForm: boolean; isInfinity: any; x: any; y: any; z: null; ta: any; tb: any; }) {
                 if (!point.isInMontgomeryForm) {
                     throw new Error('The given point is not in montgomery form.');
                 }
@@ -2968,7 +2969,7 @@ var msrCrypto = function () {
                 point.isInMontgomeryForm = false;
             }
 
-            function convertToAffineForm(point) {
+            function convertToAffineForm(point: { isInfinity: any; z: null; isAffine: boolean; isInMontgomeryForm: any; x: any[]; y: any; ta: any; tb: any; }) {
                 if (point.isInfinity) {
                     point.z = null;
                     setterSupport || (point.isAffine = true);
@@ -3002,7 +3003,7 @@ var msrCrypto = function () {
                 setterSupport || (point.isAffine = true);
             }
 
-            function convertToJacobianForm(point) {
+            function convertToJacobianForm(point: { isAffine: boolean; isInMontgomeryForm: any; z: any[] | null; }) {
                 if (!point.isAffine) {
                     throw new Error('The given point is not in Affine form.');
                 }
@@ -3023,7 +3024,7 @@ var msrCrypto = function () {
                 return;
             }
 
-            function validatePoint(point) {
+            function validatePoint(point: { isInfinity: any; y: any; curve: { p: any; b: any; a: any; }; x: any; }) {
                 if (point.isInfinity) {
                     return false;
                 }
@@ -3044,7 +3045,7 @@ var msrCrypto = function () {
                 return true;
             }
 
-            function validatePointTed(point) {
+            function validatePointTed(point: { ta: any; clone: () => any; y: any; curve: { p: any; d: any; }; x: any; }) {
                 if (point.ta) {
                     point = point.clone();
                     normalizeTed(point);
@@ -3074,7 +3075,7 @@ var msrCrypto = function () {
                 return true;
             }
 
-            function generatePrecomputationTableTed(npoints, point) {
+            function generatePrecomputationTableTed(npoints: number, point: { clone: () => any; }) {
                 var Q = point.clone(),
                     P2 = Q.clone(),
                     T = [];
@@ -3092,13 +3093,13 @@ var msrCrypto = function () {
                 return T;
             }
 
-            function convertToExtendedProjective(affinePoint) {
+            function convertToExtendedProjective(affinePoint: { ta: any; x: string | any[]; tb: any; y: string | any[]; z: number[]; }) {
                 affinePoint.ta = affinePoint.x.slice();
                 affinePoint.tb = affinePoint.y.slice();
                 affinePoint.z = [1];
             }
 
-            function scalarMultiplyTed(k, point, outputPoint, multiplyBy4) {
+            function scalarMultiplyTed(k: string | any[], point: { curve: { rbits: any; order: any; p: any; }; clone: () => any; }, outputPoint: { x: any; y: any; }, multiplyBy4: any) {
                 if (!validatePointTed(point)) {
                     throw new Error('Invalid Parameter');
                 }
@@ -3125,7 +3126,7 @@ var msrCrypto = function () {
                 var precomputationTable = generatePrecomputationTableTed(1 << (w - 2), T);
 
                 var odd = k[0] & 1,
-                    tempk = [],
+                    tempk: number[] = [],
                     kisNeg;
 
                 modSub(point.curve.order, k, tempk);
@@ -3180,7 +3181,7 @@ var msrCrypto = function () {
                 return;
             }
 
-            function tableLookupTed(table, index) {
+            function tableLookupTed(table: string | any[], index: number) {
                 var pos = (index + 1) % table.length;
 
                 for (var i = 0; i < table.length; i++) {
@@ -3196,7 +3197,7 @@ var msrCrypto = function () {
                 return L;
             }
 
-            function normalizeTed(point) {
+            function normalizeTed(point: { z: null; x: any; y: any; ta: any; tb: any; }) {
                 cryptoMath.modInv(point.z, curve.p, conversionTemp2, true);
 
                 cryptoMath.modMul(point.x, conversionTemp2, curve.p, point.x);
@@ -3211,7 +3212,7 @@ var msrCrypto = function () {
                 return;
             }
 
-            function doubleTed(point, outputPoint) {
+            function doubleTed(point: { ta: any; x: any; curve: { p: any; }; y: any; z: any; }, outputPoint: { tb: any; ta: any; y: any; x: any; z: any; }) {
                 if (typeof point.ta === 'undefined') {
                     throw new Error('Point should be in Extended Projective form.');
                 }
@@ -3241,7 +3242,7 @@ var msrCrypto = function () {
                 return;
             }
 
-            function addTed(point1, point2, outputPoint) {
+            function addTed(point1: { ta: any; }, point2: { ta: any; }, outputPoint: any) {
                 var cm = cryptoMath;
 
                 if (typeof point1.ta === 'undefined') {
@@ -3258,7 +3259,7 @@ var msrCrypto = function () {
                 return;
             }
 
-            function convert_R1_to_R2(point) {
+            function convert_R1_to_R2(point: { curve: any; x: string | any[]; y: string | any[]; z: string | any[]; ta: any; tb: any; }) {
                 var curve = point.curve,
                     modulus = curve.p,
                     qq = {
@@ -3276,7 +3277,7 @@ var msrCrypto = function () {
                 return qq;
             }
 
-            function addTedExtended(qq, point2, outputPoint) {
+            function addTedExtended(qq: { x: any; y: any; z: any; td: any; curve?: any; }, point2: { curve: { p: any; }; z: any; ta: any; tb: any; x: any; y: any; }, outputPoint: { ta: any; tb: any; y: any; x: any; z: any; }) {
                 var cm = cryptoMath;
                 var modulus = point2.curve.p;
 
@@ -3319,7 +3320,7 @@ var msrCrypto = function () {
                 return;
             }
 
-            function convertTedToWeierstrass(tedPoint, wPoint) {
+            function convertTedToWeierstrass(tedPoint: { curve: { a: string | any[]; d: string | any[]; p: any; }; y: any; x: any; }, wPoint: { x: any; y: any; }) {
                 var a = tedPoint.curve.a.slice(),
                     d = tedPoint.curve.d.slice(),
                     p = tedPoint.curve.p,
@@ -3373,7 +3374,7 @@ var msrCrypto = function () {
                 return;
             }
 
-            function convertWeierstrassToTed(wPoint, tedPoint) {
+            function convertWeierstrassToTed(wPoint: { x: any; y: any; }, tedPoint: { curve: { a: string | any[]; d: string | any[]; p: any; }; x: any; y: any; }) {
                 var a = tedPoint.curve.a.slice(),
                     d = tedPoint.curve.d.slice(),
                     p = tedPoint.curve.p,
@@ -3438,7 +3439,7 @@ var msrCrypto = function () {
 
                 convertToJacobianForm: convertToJacobianForm,
 
-                generatePrecomputationTable: function (w, generatorPoint) {
+                generatePrecomputationTable: function (w: any, generatorPoint: any) {
                     return generatePrecomputationTable(w, generatorPoint);
                 },
             };
@@ -3469,7 +3470,7 @@ var msrCrypto = function () {
 
         var sec1EncodingFp = function () {
             return {
-                encodePoint: function (point) {
+                encodePoint: function (point: { isAffine: any; isInMontgomeryForm: any; isInfinity: any; x: any; y: any; curve: { p: any; }; }) {
                     if (!point) {
                         throw new Error('point');
                     }
@@ -3507,7 +3508,7 @@ var msrCrypto = function () {
                         return output;
                     }
                 },
-                decodePoint: function (encoded, curve) {
+                decodePoint: function (encoded: string | any[], curve: { p: any; createPointAtInfinity: () => any; }) {
                     if (encoded.length < 1) {
                         throw new Error('Byte array must have non-zero length');
                     }
@@ -3537,10 +3538,10 @@ var msrCrypto = function () {
             };
         };
 
-        var ModularSquareRootSolver = function (modulus) {
+        var ModularSquareRootSolver = function (modulus: any) {
             var p = modulus;
 
-            var specialK = [];
+            var specialK: never[] | null = [];
 
             if (typeof modulus === 'undefined') {
                 throw new Error('modulus');
@@ -3562,7 +3563,7 @@ var msrCrypto = function () {
             var temp0 = new Array(p.length);
             var temp1 = new Array(p.length);
 
-            function squareRootNistCurves(a) {
+            function squareRootNistCurves(a: any) {
                 var beta = cryptoMath.intToDigits(0, 16);
                 mul.modExp(a, specialK, beta);
 
@@ -3577,7 +3578,7 @@ var msrCrypto = function () {
             }
 
             var publicMethods = {
-                squareRoot: function (a) {
+                squareRoot: function (a: any) {
                     if (specialK !== null) {
                         return squareRootNistCurves(a);
                     } else {
@@ -3585,7 +3586,7 @@ var msrCrypto = function () {
                     }
                 },
 
-                jacobiSymbol: function (a) {
+                jacobiSymbol: function (a: string | any[]) {
                     var modEightMask = 0x7,
                         modFourMask = 0x3,
                         aPrime,
@@ -3634,7 +3635,7 @@ var msrCrypto = function () {
 
         var curvesInternal = {};
 
-        var createCurve = function (curveName) {
+        var createCurve = function (curveName: string) {
             var curveData = curvesInternal[curveName.toUpperCase()];
 
             if (!curveData) {
@@ -3652,7 +3653,7 @@ var msrCrypto = function () {
             throw new Error(curveName + ' Unsupported curve type.');
         };
 
-        var validateEccPoint = function (curveName, x, y, z) {
+        var validateEccPoint = function (curveName: any, x: any, y: any, z: any) {
             var curve = createCurve(curveName);
             var point = new EllipticCurvePointFp(curve, false, btd(x), btd(y), z && btd(z), false);
             var opp = new EllipticCurveOperatorFp(curve);
@@ -3988,15 +3989,15 @@ var msrCrypto = function () {
         cryptoECC.curves.NUMSP512T1 = curve_numsp512t1;
     }
 
-    var msrcryptoSha = function (name, der, h, k, blockBytes, blockFunction, truncateTo) {
+    var msrcryptoSha = function (name: string, der: (number | number[])[], h: string | any[], k: (number | number[])[], blockBytes: number, blockFunction: { (message: any, blockIndex: any, hv: any, k: any, w: any): any; (message: any, blockIndex: any, hv: any, k: any, w: any): any; (message: any, blockIndex: any, hv: any, k: any, w: any): any; (message: any, blockIndex: any, hv: any, k: any, w: any): any; (message: any, blockIndex: any, hv: any, k: any, w: any): any; (message: any, blockIndex: any, hv: any, k: any, w: any): any; (message: any, blockIndex: any, hv: any, k: any, w: any): any; (arg0: any, arg1: number, arg2: any, arg3: any, arg4: any[]): void; }, truncateTo: number) {
         var utils = msrcryptoUtilities;
 
         var hv = h.slice(),
             w = new Array(blockBytes),
-            buffer = [],
+            buffer: any[] = [],
             blocksProcessed = 0;
 
-        function hashBlocks(message) {
+        function hashBlocks(message: string | any[]) {
             var blockCount = Math.floor(message.length / blockBytes);
 
             for (var block = 0; block < blockCount; block++) {
@@ -4009,7 +4010,7 @@ var msrCrypto = function () {
         }
 
         function hashToBytes() {
-            var hash = [];
+            var hash: any[] = [];
 
             for (var i = 0; i < hv.length; i++) {
                 hash = hash.concat(utils.int32ToBytes(hv[i]));
@@ -4020,7 +4021,7 @@ var msrCrypto = function () {
             return hash;
         }
 
-        function addPadding(messageBytes) {
+        function addPadding(messageBytes: any[]) {
             var padLen = blockBytes - (messageBytes.length % blockBytes);
 
             padLen <= blockBytes / 8 && (padLen += blockBytes);
@@ -4038,13 +4039,13 @@ var msrCrypto = function () {
             return messageBytes.concat(padding);
         }
 
-        function computeHash(messageBytes) {
+        function computeHash(messageBytes: any) {
             buffer = hashBlocks(messageBytes);
 
             return finish();
         }
 
-        function process(messageBytes) {
+        function process(messageBytes: any) {
             buffer = buffer.concat(messageBytes);
 
             if (buffer.length >= blockBytes) {
@@ -4082,7 +4083,7 @@ var msrCrypto = function () {
     };
 
     var msrcryptoSha1 = (function () {
-        function hashBlock(message, blockIndex, hv, k, w) {
+        function hashBlock(message: any, blockIndex: number, hv: number[], k: any[], w: any[]) {
             var t,
                 i,
                 temp,
@@ -4148,16 +4149,16 @@ var msrCrypto = function () {
     if (typeof operations !== 'undefined') {
         msrcryptoSha1.instances = {};
 
-        msrcryptoSha1.getInstance = function (id) {
+        msrcryptoSha1.getInstance = function (id: string | number) {
             return msrcryptoSha1.instances[id] || (msrcryptoSha1.instances[id] = msrcryptoSha1.sha1());
         };
 
-        msrcryptoSha1.deleteInstance = function (id) {
+        msrcryptoSha1.deleteInstance = function (id: string | number) {
             msrcryptoSha1.instances[id] = null;
             delete msrcryptoSha1.instances[id];
         };
 
-        msrcryptoSha1.hash = function (p) {
+        msrcryptoSha1.hash = function (p: { operationSubType: string; buffer: any; }) {
             if (p.operationSubType === 'process') {
                 msrcryptoSha1.sha1.process(p.buffer);
                 return;
@@ -4178,7 +4179,7 @@ var msrCrypto = function () {
     var msrcryptoSha256 = (function () {
         var utils = msrcryptoUtilities;
 
-        function hashBlock(message, blockIndex, hv, k, w) {
+        function hashBlock(message: any, blockIndex: number, hv: any[], k: any[], w: any[]) {
             var t,
                 i,
                 temp,
@@ -4238,11 +4239,11 @@ var msrCrypto = function () {
             return hv;
         }
 
-        var k256,
-            h224,
-            h256,
-            der224,
-            der256,
+        var k256: (number | number[])[],
+            h224: (number | number[])[],
+            h256: (number | number[])[],
+            der224: (number | number[])[],
+            der256: (number | number[])[],
             upd = utils.unpackData;
 
         h224 = upd('wQWe2DZ81QcwcN0X9w5ZOf/ACzFoWBURZPmPp776T6Q', 4, 1);
@@ -4275,20 +4276,20 @@ var msrCrypto = function () {
 
         msrcryptoSha256.instances = {};
 
-        msrcryptoSha256.getInstance224 = function (id) {
+        msrcryptoSha256.getInstance224 = function (id: string | number) {
             return msrcryptoSha256.instances[id] || (msrcryptoSha256.instances[id] = msrcryptoSha256.sha224());
         };
 
-        msrcryptoSha256.getInstance256 = function (id) {
+        msrcryptoSha256.getInstance256 = function (id: string | number) {
             return msrcryptoSha256.instances[id] || (msrcryptoSha256.instances[id] = msrcryptoSha256.sha256());
         };
 
-        msrcryptoSha256.deleteInstance = function (id) {
+        msrcryptoSha256.deleteInstance = function (id: string | number) {
             msrcryptoSha256.instances[id] = null;
             delete msrcryptoSha256.instances[id];
         };
 
-        msrcryptoSha256.hash256 = function (p) {
+        msrcryptoSha256.hash256 = function (p: { operationSubType: string; workerid: any; buffer: any; }) {
             if (p.operationSubType === 'process') {
                 msrcryptoSha256.getInstance256(p.workerid).process(p.buffer);
                 return null;
@@ -4308,7 +4309,7 @@ var msrCrypto = function () {
             return msrcryptoSha256.instance256.computeHash(p.buffer);
         };
 
-        msrcryptoSha256.hash224 = function (p) {
+        msrcryptoSha256.hash224 = function (p: { operationSubType: string; workerid: any; buffer: any; }) {
             if (p.operationSubType === 'process') {
                 msrcryptoSha256.getInstance224(p.workerid).process(p.buffer);
                 return;
@@ -4336,7 +4337,7 @@ var msrCrypto = function () {
     var msrcryptoSha512 = (function () {
         var utils = msrcryptoUtilities;
 
-        function add(x0, x1, y0, y1, resultArray) {
+        function add(x0: number, x1: number, y0: number, y1: number, resultArray: any[]) {
             var lowSum = (x1 + y1) | 0;
 
             var carry = lowSum >>> 0 < y1 >>> 0;
@@ -4347,7 +4348,7 @@ var msrCrypto = function () {
             return;
         }
 
-        function hashBlock(message, blockIndex, hv, k, w) {
+        function hashBlock(message: string | any[], blockIndex: number, hv: any[], k: any[], w: any[]) {
             var t,
                 i,
                 blockBytes = 128,
@@ -4357,9 +4358,9 @@ var msrCrypto = function () {
                 tbl,
                 xh,
                 xl,
-                tc = [],
-                td = [],
-                te = [],
+                tc: any[] = [],
+                td: any[] = [],
+                te: any[] = [],
                 index;
 
             var ah = hv[0],
@@ -4494,13 +4495,13 @@ var msrCrypto = function () {
             return hv;
         }
 
-        var h384,
-            h512,
-            k512,
-            der384,
-            der512,
-            der512_224,
-            der512_256,
+        var h384: (number | number[])[],
+            h512: (number | number[])[],
+            k512: (number | number[])[],
+            der384: (number | number[])[],
+            der512: (number | number[])[],
+            der512_224: (number | number[])[],
+            der512_256: (number | number[])[],
             upd = utils.unpackData;
 
         h384 = upd('y7udXcEFnthimikqNnzVB5FZAVowcN0XFS/s2PcOWTlnMyZn/8ALMY60SodoWBUR2wwuDWT5j6dHtUgdvvpPpA==', 4, 1);
@@ -4547,20 +4548,20 @@ var msrCrypto = function () {
     if (typeof operations !== 'undefined') {
         msrcryptoSha512.instances = {};
 
-        msrcryptoSha512.getInstance384 = function (id) {
+        msrcryptoSha512.getInstance384 = function (id: string | number) {
             return msrcryptoSha512.instances[id] || (msrcryptoSha512.instances[id] = msrcryptoSha512.sha384());
         };
 
-        msrcryptoSha512.getInstance512 = function (id) {
+        msrcryptoSha512.getInstance512 = function (id: string | number) {
             return msrcryptoSha512.instances[id] || (msrcryptoSha512.instances[id] = msrcryptoSha512.sha512());
         };
 
-        msrcryptoSha512.deleteInstance = function (id) {
+        msrcryptoSha512.deleteInstance = function (id: string | number) {
             msrcryptoSha512.instances[id] = null;
             delete msrcryptoSha512.instances[id];
         };
 
-        msrcryptoSha512.hash384 = function (p) {
+        msrcryptoSha512.hash384 = function (p: { operationSubType: string; buffer: any; }) {
             if (p.operationSubType === 'process') {
                 msrcryptoSha512.sha384.process(p.buffer);
                 return;
@@ -4573,7 +4574,7 @@ var msrCrypto = function () {
             return msrcryptoSha512.sha384().computeHash(p.buffer);
         };
 
-        msrcryptoSha512.hash512 = function (p) {
+        msrcryptoSha512.hash512 = function (p: { operationSubType: string; buffer: any; }) {
             if (p.operationSubType === 'process') {
                 msrcryptoSha512.sha512.process(p.buffer);
                 return;
@@ -4593,7 +4594,7 @@ var msrCrypto = function () {
     msrcryptoHashFunctions['SHA-384'] = msrcryptoSha512.sha384;
     msrcryptoHashFunctions['SHA-512'] = msrcryptoSha512.sha512;
 
-    var msrcryptoHmac = function (keyBytes, hashFunction) {
+    var msrcryptoHmac = function (keyBytes: string | any[] | null, hashFunction: { name: string; computeHash: (arg0: any) => any; process: (arg0: any) => void; finish: () => any; } | null) {
         var blockSize =
             {
                 384: 128,
@@ -4602,11 +4603,11 @@ var msrCrypto = function () {
         var ipad;
         var opad;
         var paddedKey = padKey();
-        var keyXorOpad;
-        var keyXorIpad;
-        var k0IpadText;
+        var keyXorOpad: string | any[];
+        var keyXorIpad: string | any[];
+        var k0IpadText: any;
 
-        function xorArrays(array1, array2) {
+        function xorArrays(array1: string | any[], array2: any[]) {
             var newArray = new Array(array1);
             for (var j = 0; j < array1.length; j++) {
                 newArray[j] = array1[j] ^ array2[j];
@@ -4614,7 +4615,7 @@ var msrCrypto = function () {
             return newArray;
         }
 
-        function padZeros(bytes, paddedLength) {
+        function padZeros(bytes: string | any[], paddedLength: number) {
             var paddedArray = bytes.slice();
             for (var j = bytes.length; j < paddedLength; j++) {
                 paddedArray.push(0);
@@ -4634,7 +4635,7 @@ var msrCrypto = function () {
             return padZeros(keyBytes, blockSize);
         }
 
-        function processHmac(messageBytes) {
+        function processHmac(messageBytes: any) {
             if (!k0IpadText) {
                 k0IpadText = keyXorIpad.concat(messageBytes);
                 hashFunction.process(k0IpadText);
@@ -4667,19 +4668,19 @@ var msrCrypto = function () {
         keyXorIpad = xorArrays(paddedKey, ipad);
         keyXorOpad = xorArrays(paddedKey, opad);
         return {
-            computeHmac: function (dataBytes, key, hashAlgorithm) {
+            computeHmac: function (dataBytes: any, key: any, hashAlgorithm: any) {
                 processHmac(dataBytes);
                 var result = finishHmac();
                 clearState();
                 return result;
             },
 
-            process: function (dataBytes, key, hashAlgorithm) {
+            process: function (dataBytes: any, key: any, hashAlgorithm: any) {
                 processHmac(dataBytes);
                 return null;
             },
 
-            finish: function (key, hashAlgorithm) {
+            finish: function (key: any, hashAlgorithm: any) {
                 var result = finishHmac();
                 clearState();
                 return result;
@@ -4690,7 +4691,7 @@ var msrCrypto = function () {
     if (typeof operations !== 'undefined') {
         var hmacInstances = {};
 
-        msrcryptoHmac.signHmac = function (p) {
+        msrcryptoHmac.signHmac = function (p: { keyHandle: { algorithm: { hash: { name: string; }; }; }; workerid: any; keyData: any; operationSubType: string; buffer: any; }) {
             var hashName = p.keyHandle.algorithm.hash.name.toUpperCase(),
                 hashAlg = msrcryptoHashFunctions[hashName](),
                 result,
@@ -4716,7 +4717,7 @@ var msrCrypto = function () {
             return result;
         };
 
-        msrcryptoHmac.verifyHmac = function (p) {
+        msrcryptoHmac.verifyHmac = function (p: { keyHandle: { algorithm: { hash: { name: string; }; }; }; workerid: any; keyData: any; operationSubType: string; buffer: any; signature: any; }) {
             var hashName = p.keyHandle.algorithm.hash.name.toUpperCase(),
                 hashAlg = msrcryptoHashFunctions[hashName](),
                 result,
@@ -4744,7 +4745,7 @@ var msrCrypto = function () {
             return result;
         };
 
-        msrcryptoHmac.generateKey = function (p) {
+        msrcryptoHmac.generateKey = function (p: { algorithm: { length: any; hash: { name: string; }; }; extractable: any; usages: any; }) {
             var defaultKeyLengths = {
                 'SHA-1': 64,
                 'SHA-224': 64,
@@ -4771,7 +4772,7 @@ var msrCrypto = function () {
             };
         };
 
-        msrcryptoHmac.importKey = function (p) {
+        msrcryptoHmac.importKey = function (p: { keyData: string | any[]; format: string; algorithm: { hash: { name: any; }; }; extractable: any; usages: any; }) {
             var keyObject,
                 keyBits = p.keyData.length * 8;
 
@@ -4803,7 +4804,7 @@ var msrCrypto = function () {
             };
         };
 
-        msrcryptoHmac.exportKey = function (p) {
+        msrcryptoHmac.exportKey = function (p: { format: string; keyHandle: any; keyData: any; }) {
             if (p.format === 'jwk') {
                 return {
                     type: 'keyExport',
@@ -4829,10 +4830,10 @@ var msrCrypto = function () {
     }
 
     var msrcryptoBlockCipher = (function () {
-        var aesConstants, x2, x3, x14, x13, x11, x9, sBoxTable, invSBoxTable, rConTable;
+        var aesConstants: any[], x2: number | number[], x3: number | number[], x14: number | number[], x13: number | number[], x11: number | number[], x9: number | number[], sBoxTable: number | number[], invSBoxTable: number | number[], rConTable: number | any[];
 
         return {
-            aes: function (keyBytes) {
+            aes: function (keyBytes: string | any[]) {
                 if (!aesConstants) {
                     aesConstants = msrcryptoUtilities.unpackData(
                         'AAIEBggKDA4QEhQWGBocHiAiJCYoKiwuMDI0Njg6PD5AQkRGSEpMTlBSVFZYWlxeYGJkZmhqbG5wcnR2eHp8foCChIaIioyOkJKUlpianJ6goqSmqKqsrrCytLa4ury+wMLExsjKzM7Q0tTW2Nrc3uDi5Obo6uzu8PL09vj6/P4bGR8dExEXFQsJDw0DAQcFOzk/PTMxNzUrKS8tIyEnJVtZX11TUVdVS0lPTUNBR0V7eX99c3F3dWtpb21jYWdlm5mfnZORl5WLiY+Ng4GHhbu5v72zsbe1q6mvraOhp6Xb2d/d09HX1cvJz83DwcfF+/n//fPx9/Xr6e/t4+Hn5QADBgUMDwoJGBseHRQXEhEwMzY1PD86OSgrLi0kJyIhYGNmZWxvaml4e359dHdycVBTVlVcX1pZSEtOTURHQkHAw8bFzM/Kydjb3t3U19LR8PP29fz/+vno6+7t5Ofi4aCjpqWsr6qpuLu+vbS3srGQk5aVnJ+amYiLjo2Eh4KBm5idnpeUkZKDgIWGj4yJiquora6npKGis7C1tr+8ubr7+P3+9/Tx8uPg5ebv7Onqy8jNzsfEwcLT0NXW39zZ2ltYXV5XVFFSQ0BFRk9MSUpraG1uZ2RhYnNwdXZ/fHl6Ozg9Pjc0MTIjICUmLywpKgsIDQ4HBAECExAVFh8cGRoADhwSODYkKnB+bGJIRlRa4O788tjWxMqQnoyCqKa0utvVx8nj7f/xq6W3uZOdj4E7NScpAw0fEUtFV1lzfW9hraOxv5WbiYfd08HP5ev5901DUV91e2lnPTMhLwULGRd2eGpkTkBSXAYIGhQ+MCIslpiKhK6gsrzm6Pr03tDCzEFPXVN5d2VrMT8tIwkHFRuhr72zmZeFi9HfzcPp5/X7mpSGiKKsvrDq5Pb40tzOwHp0ZmhCTF5QCgQWGDI8LiDs4vD+1NrIxpySgI6kqri2DAIQHjQ6KCZ8cmBuREpYVjc5KyUPARMdR0lbVX9xY23X2cvF7+Hz/aepu7WfkYONAA0aFzQ5LiNoZXJ/XFFGS9Ddysfk6f7zuLWir4yBlpu7tqGsj4KVmNPeycTn6v3wa2ZxfF9SRUgDDhkUNzotIG1gd3pZVENOBQgfEjE8Kya9sKeqiYSTntXYz8Lh7Pv21tvMweLv+PW+s6SpioeQnQYLHBEyPyglbmN0eVpXQE3a18DN7uP0+bK/qKWGi5yRCgcQHT4zJClib3h1VltMQWFse3ZVWE9CCQQTHj0wJyqxvKumhYifktnUw87t4Pf6t7qtoIOOmZTf0sXI6+bx/GdqfXBTXklEDwIVGDs2ISwMARYbODUiL2RpfnNQXUpH3NHGy+jl8v+0ua6jgI2alwALFh0sJzoxWFNORXR/Ymmwu6atnJeKgejj/vXEz9LZe3BtZldcQUojKDU+DwQZEsvA3dbn7PH6k5iFjr+0qaL2/eDr2tHMx66luLOCiZSfRk1QW2phfHceFQgDMjkkL42Gm5Chqre81d7DyPny7+Q9NisgERoHDGVuc3hJQl9U9/zh6tvQzcavpLmyg4iVnkdMUVprYH12HxQJAjM4JS6Mh5qRoKu2vdTfwsn48+7lPDcqIRAbBg1kb3J5SENeVQEKFxwtJjswWVJPRHV+Y2ixuqesnZaLgOni//TFztPYenFsZ1ZdQEsiKTQ/DgUYE8rB3Nfm7fD7kpmEj761qKMACRIbJC02P0hBWlNsZX53kJmCi7S9pq/Y0crD/PXu5zsyKSAfFg0Ec3phaFdeRUyrormwj4adlOPq8fjHztXcdn9kbVJbQEk+NywlGhMIAebv9P3Cy9DZrqe8tYqDmJFNRF9WaWB7cgUMFx4hKDM63dTPxvnw6+KVnIeOsbijquzl/vfIwdrTpK22v4CJkpt8dW5nWFFKQzQ9Ji8QGQIL197FzPP64eiflo2Eu7KpoEdOVVxjanF4DwYdFCsiOTCak4iBvrespdLbwMn2/+TtCgMYES4nPDVCS1BZZm90faGos7qFjJee6eD78s3E39YxOCMqFRwHDnlwa2JdVE9GY3x3e/Jrb8UwAWcr/terdsqCyX36WUfwrdSir5ykcsC3/ZMmNj/3zDSl5fFx2DEVBMcjwxiWBZoHEoDi6yeydQmDLBobblqgUjvWsynjL4RT0QDtIPyxW2rLvjlKTFjP0O+q+0NNM4VF+QJ/UDyfqFGjQI+SnTj1vLbaIRD/89LNDBPsX5dEF8Snfj1kXRlzYIFP3CIqkIhG7rgU3l4L2+AyOgpJBiRcwtOsYpGV5HnnyDdtjdVOqWxW9Opleq4IunglLhymtMbo3XQfS72LinA+tWZIA/YOYTVXuYbBHZ7h+JgRadmOlJseh+nOVSjfjKGJDb/mQmhBmS0PsFS7FlIJatUwNqU4v0CjnoHz1/t84zmCmy//hzSOQ0TE3unLVHuUMqbCIz3uTJULQvrDTgguoWYo2SSydluiSW2L0SVy+PZkhmiYFtSkXMxdZbaSbHBIUP3tudpeFUZXp42dhJDYqwCMvNMK9+RYBbizRQbQLB6Pyj8PAsGvvQMBE4prOpERQU9n3OqX8s/O8LTmc5asdCLnrTWF4vk36Bx1325H8RpxHSnFiW+3Yg6qGL4b/FY+S8bSeSCa28D+eM1a9B/dqDOIB8cxsRIQWSeA7F9gUX+pGbVKDS3lep+TyZzvoOA7Ta4q9bDI67s8g1OZYRcrBH66d9Ym4WkUY1UhDH2NAQIECBAgQIAbNmzYq02aL168Y8aXNWrUs33678WROXLk071hwp8lSpQzZsyDHTp06MuNAQIECBAgQIAbNmzYq02aL168Y8aXNWrUs33678WROXLk071hwp8lSpQzZsyDHTp06MuNAQIECBAgQIAbNmzYq02aL168Y8aXNWrUs33678WROXLk071hwp8lSpQzZsyDHTp06MuNAQIECBAgQIAbNmzYq02aL168Y8aXNWrUs33678WROXLk071hwp8lSpQzZsyDHTp06MuNAQIECBAgQIAbNmzYq02aL168Y8aXNWrUs33678WROXLk071hwp8lSpQzZsyDHTp06MuN',
@@ -4852,10 +4853,10 @@ var msrCrypto = function () {
 
                 var blockSize = 128,
                     keyLength,
-                    nK,
+                    nK: number,
                     nB = 4,
-                    nR,
-                    key;
+                    nR: number,
+                    key: any[];
 
                 keyLength = keyBytes.length * 8;
 
@@ -4871,7 +4872,7 @@ var msrCrypto = function () {
                 nK = keyLength / 32;
                 nR = nK + 6;
 
-                var shiftRows = function (a) {
+                var shiftRows = function (a: any[]) {
                     var tmp = a[1];
                     a[1] = a[5];
                     a[5] = a[9];
@@ -4890,7 +4891,7 @@ var msrCrypto = function () {
                     a[3] = tmp;
                 };
 
-                var invShiftRows = function (a) {
+                var invShiftRows = function (a: any[]) {
                     var tmp = a[13];
                     a[13] = a[9];
                     a[9] = a[5];
@@ -4909,7 +4910,7 @@ var msrCrypto = function () {
                     a[15] = tmp;
                 };
 
-                var mixColumns = function (state) {
+                var mixColumns = function (state: number[]) {
                     var a = state[0],
                         b = state[1],
                         c = state[2],
@@ -4945,7 +4946,7 @@ var msrCrypto = function () {
                     state[15] = x3[m] ^ n ^ o ^ x2[p];
                 };
 
-                var invMixColumns = function (state) {
+                var invMixColumns = function (state: number[]) {
                     var a = state[0],
                         b = state[1],
                         c = state[2],
@@ -4981,17 +4982,17 @@ var msrCrypto = function () {
                     state[15] = x11[m] ^ x13[n] ^ x9[o] ^ x14[p];
                 };
 
-                var xorWord = function (a, b) {
+                var xorWord = function (a: any[], b: any[]) {
                     return [a[0] ^ b[0], a[1] ^ b[1], a[2] ^ b[2], a[3] ^ b[3]];
                 };
 
-                var addRoundKey = function (state, keySchedule, offset) {
+                var addRoundKey = function (state: string | any[], keySchedule: { [x: string]: number; }, offset: number) {
                     for (var i = 0; i < state.length; i += 1) {
                         state[i] ^= keySchedule[i + offset];
                     }
                 };
 
-                var rotWord = function (word) {
+                var rotWord = function (word: any[]) {
                     var a = word[0];
                     word[0] = word[1];
                     word[1] = word[2];
@@ -4999,30 +5000,30 @@ var msrCrypto = function () {
                     word[3] = a;
                 };
 
-                var subWord = function (word) {
+                var subWord = function (word: string | any[]) {
                     for (var i = 0; i < word.length; i += 1) {
                         word[i] = sBoxTable[word[i]];
                     }
                 };
 
-                var invSubWord = function (word) {
+                var invSubWord = function (word: string | any[]) {
                     for (var i = 0; i < word.length; i += 1) {
                         word[i] = invSBoxTable[word[i]];
                     }
                 };
 
-                var getWord = function (tab, i) {
+                var getWord = function (tab: any[], i: number) {
                     return [tab[4 * i], tab[4 * i + 1], tab[4 * i + 2], tab[4 * i + 3]];
                 };
 
-                var setWord = function (left, right, indexL, indexR) {
+                var setWord = function (left: any[], right: any[], indexL: number, indexR: number) {
                     left[4 * indexL] = right[4 * indexR];
                     left[4 * indexL + 1] = right[4 * indexR + 1];
                     left[4 * indexL + 2] = right[4 * indexR + 2];
                     left[4 * indexL + 3] = right[4 * indexR + 3];
                 };
 
-                var expandKey = function (keyIn) {
+                var expandKey = function (keyIn: any[]) {
                     var temp,
                         res = [],
                         i = 0;
@@ -5052,7 +5053,7 @@ var msrCrypto = function () {
                 key = expandKey(keyBytes);
 
                 return {
-                    encrypt: function (dataBytes) {
+                    encrypt: function (dataBytes: any) {
                         var state = dataBytes,
                             round;
 
@@ -5070,7 +5071,7 @@ var msrCrypto = function () {
                         return state;
                     },
 
-                    decrypt: function (dataBytes) {
+                    decrypt: function (dataBytes: any) {
                         var state = dataBytes,
                             round;
 
@@ -5100,8 +5101,8 @@ var msrCrypto = function () {
 
     var msrcryptoPadding = msrcryptoPadding || {};
 
-    msrcryptoPadding.pkcsv7 = function (blockSize) {
-        function pad(messageBlocks) {
+    msrcryptoPadding.pkcsv7 = function (blockSize: number) {
+        function pad(messageBlocks: any[]) {
             var lastIndex = messageBlocks.length - 1 >= 0 ? messageBlocks.length - 1 : 0;
             var lastBlock = messageBlocks[lastIndex];
             var lastBlockLength = lastBlock.length;
@@ -5122,7 +5123,7 @@ var msrCrypto = function () {
             }
         }
 
-        function unpad(messageBytes) {
+        function unpad(messageBytes: string | any[]) {
             var verified = true;
 
             if (messageBytes.length % blockSize !== 0) {
@@ -5152,12 +5153,12 @@ var msrCrypto = function () {
         };
     };
 
-    var msrcryptoCbc = function (blockCipher) {
+    var msrcryptoCbc = function (blockCipher: { encrypt: any; decrypt: any; clear?: () => void; keyLength?: 256 | 128 | 192; blockSize: any; }) {
         var blockSize = blockCipher.blockSize / 8;
 
         var paddingScheme = msrcryptoPadding.pkcsv7(blockSize);
 
-        var mergeBlocks = function (tab) {
+        var mergeBlocks = function (tab: string | any[]) {
             var res = [],
                 i,
                 j;
@@ -5170,7 +5171,7 @@ var msrCrypto = function () {
             return res;
         };
 
-        function getBlocks(dataBytes) {
+        function getBlocks(dataBytes: any) {
             var blocks = [];
 
             mBuffer = mBuffer.concat(dataBytes);
@@ -5186,7 +5187,7 @@ var msrCrypto = function () {
             return blocks;
         }
 
-        function encryptBlocks(blocks) {
+        function encryptBlocks(blocks: string | any[]) {
             var result = [],
                 toEncrypt;
 
@@ -5199,7 +5200,7 @@ var msrCrypto = function () {
             return result;
         }
 
-        function decryptBlocks(blocks) {
+        function decryptBlocks(blocks: string | any[]) {
             var result = [],
                 toDecrypt,
                 decrypted;
@@ -5220,12 +5221,12 @@ var msrCrypto = function () {
             mIvBytes = null;
         }
 
-        var mBuffer = [],
-            mResultBuffer = [],
-            mIvBytes;
+        var mBuffer: any[] = [],
+            mResultBuffer: any[] = [],
+            mIvBytes: null;
 
         return {
-            init: function (ivBytes) {
+            init: function (ivBytes: string | any[]) {
                 if (ivBytes.length !== blockSize) {
                     throw new Error('Invalid iv size');
                 }
@@ -5233,14 +5234,14 @@ var msrCrypto = function () {
                 mIvBytes = ivBytes.slice();
             },
 
-            encrypt: function (plainBytes) {
+            encrypt: function (plainBytes: any) {
                 var result = encryptBlocks(getBlocks(plainBytes));
                 mResultBuffer = mResultBuffer.concat(mergeBlocks(result));
 
                 return this.finishEncrypt();
             },
 
-            processEncrypt: function (plainBytes) {
+            processEncrypt: function (plainBytes: any) {
                 var result = mergeBlocks(encryptBlocks(getBlocks(plainBytes)));
 
                 return result;
@@ -5258,13 +5259,13 @@ var msrCrypto = function () {
                 return result;
             },
 
-            decrypt: function (cipherBytes) {
+            decrypt: function (cipherBytes: any) {
                 this.processDecrypt(cipherBytes);
 
                 return this.finishDecrypt();
             },
 
-            processDecrypt: function (cipherBytes) {
+            processDecrypt: function (cipherBytes: any) {
                 var result = decryptBlocks(getBlocks(cipherBytes));
 
                 mResultBuffer = mResultBuffer.concat(mergeBlocks(result));
@@ -5287,7 +5288,7 @@ var msrCrypto = function () {
     if (typeof operations !== 'undefined') {
         var cbcInstances = {};
 
-        msrcryptoCbc.workerEncrypt = function (p) {
+        msrcryptoCbc.workerEncrypt = function (p: { workerid: any; keyData: any; algorithm: { iv: any; }; operationSubType: string; buffer: any; }) {
             var result,
                 id = p.workerid;
 
@@ -5311,7 +5312,7 @@ var msrCrypto = function () {
             return result;
         };
 
-        msrcryptoCbc.workerDecrypt = function (p) {
+        msrcryptoCbc.workerDecrypt = function (p: { workerid: any; keyData: any; algorithm: { iv: any; }; operationSubType: string; buffer: any; }) {
             var result,
                 id = p.workerid;
 
@@ -5336,7 +5337,7 @@ var msrCrypto = function () {
             return result;
         };
 
-        msrcryptoCbc.generateKey = function (p) {
+        msrcryptoCbc.generateKey = function (p: { algorithm: string | any[]; extractable: any; usages: any; }) {
             if (p.algorithm.length % 8 !== 0) {
                 throw new Error();
             }
@@ -5353,7 +5354,7 @@ var msrCrypto = function () {
             };
         };
 
-        msrcryptoCbc.importKey = function (p) {
+        msrcryptoCbc.importKey = function (p: { keyData: string | any[]; format: string; algorithm: string | any[]; extractable: any; usages: any; }) {
             var keyObject;
             var keyBits = p.keyData.length * 8;
 
@@ -5384,7 +5385,7 @@ var msrCrypto = function () {
             };
         };
 
-        msrcryptoCbc.exportKey = function (p) {
+        msrcryptoCbc.exportKey = function (p: { format: string; keyHandle: any; keyData: any; }) {
             if (p.format === 'jwk') {
                 return {
                     type: 'keyExport',
@@ -5409,23 +5410,23 @@ var msrCrypto = function () {
         operations.register('decrypt', 'AES-CBC', msrcryptoCbc.workerDecrypt);
     }
 
-    var msrcryptoGcm = function (blockCipher) {
+    var msrcryptoGcm = function (blockCipher: { encrypt: any; decrypt?: (dataBytes: any) => any; clear?: () => void; keyLength?: 256 | 128 | 192; blockSize?: number; }) {
         var utils = msrcryptoUtilities;
 
-        var mBuffer = [],
+        var mBuffer: any[] = [],
             mIvBytes,
             mAdditionalBytes,
-            mTagLength,
-            mJ0,
-            mJ0inc,
+            mTagLength: number,
+            mJ0: string | any[],
+            mJ0inc: any,
             mH = blockCipher.encrypt(utils.getVector(16)),
             mGHashState = utils.getVector(16),
-            mGHashBuffer = [],
-            mCipherText = [],
-            mGctrCb,
+            mGHashBuffer: any[] = [],
+            mCipherText: any[] = [],
+            mGctrCb: string | any[] | null,
             mBytesProcessed = 0;
 
-        function ghash(hashSubkey, dataBytes) {
+        function ghash(hashSubkey: any, dataBytes: any[]) {
             var blockCount = Math.floor(dataBytes.length / 16),
                 dataBlock;
 
@@ -5450,7 +5451,7 @@ var msrCrypto = function () {
             return ghash(mH, p);
         }
 
-        function blockMultiplication(blockX, blockY) {
+        function blockMultiplication(blockX: any, blockY: string | any[]) {
             var z = utils.getVector(16),
                 v = blockY.slice(0),
                 mask,
@@ -5474,7 +5475,7 @@ var msrCrypto = function () {
             return z;
         }
 
-        function shiftRight(dataBytes) {
+        function shiftRight(dataBytes: string | any[]) {
             for (var i = dataBytes.length - 1; i > 0; i--) {
                 dataBytes[i] = ((dataBytes[i - 1] & 1) << 7) | (dataBytes[i] >>> 1);
             }
@@ -5483,12 +5484,12 @@ var msrCrypto = function () {
             return dataBytes;
         }
 
-        function getBit(byteArray, bitNumber) {
+        function getBit(byteArray: number[], bitNumber: number) {
             var byteIndex = Math.floor(bitNumber / 8);
             return (byteArray[byteIndex] >> (7 - (bitNumber % 8))) & 1;
         }
 
-        function inc(dataBytes) {
+        function inc(dataBytes: string | any[]) {
             var carry = 256;
             for (var i = 1; i <= 4; i++) {
                 carry = (carry >>> 8) + dataBytes[dataBytes.length - i];
@@ -5498,10 +5499,10 @@ var msrCrypto = function () {
             return dataBytes;
         }
 
-        function gctr(icb, dataBytes) {
+        function gctr(icb: string | any[], dataBytes: string | any[]) {
             var blockCount = Math.ceil(dataBytes.length / 16),
                 dataBlock,
-                result = [];
+                result: any[] = [];
 
             if (mGctrCb !== icb) {
                 mGctrCb = icb.slice();
@@ -5520,11 +5521,11 @@ var msrCrypto = function () {
             return result;
         }
 
-        function numberTo8Bytes(integer) {
+        function numberTo8Bytes(integer: number) {
             return [0, 0, 0, 0, (integer >>> 24) & 255, (integer >>> 16) & 255, (integer >>> 8) & 255, integer & 255];
         }
 
-        function padBlocks(dataBytes) {
+        function padBlocks(dataBytes: any[]) {
             var padLen = 16 * Math.ceil(mAdditionalBytes.length / 16) - mAdditionalBytes.length;
             return dataBytes.concat(utils.getVector(padLen));
         }
@@ -5538,7 +5539,7 @@ var msrCrypto = function () {
             mGctrCb = mIvBytes = mAdditionalBytes = null;
         }
 
-        function init(ivBytes, additionalBytes, tagLength) {
+        function init(ivBytes: any, additionalBytes: never[], tagLength: number) {
             mAdditionalBytes = additionalBytes || [];
 
             mTagLength = isNaN(tagLength) ? 128 : tagLength;
@@ -5563,7 +5564,7 @@ var msrCrypto = function () {
             ghash(mH, padBlocks(mAdditionalBytes));
         }
 
-        function encrypt(plainBytes) {
+        function encrypt(plainBytes: string | any[]) {
             mBytesProcessed = plainBytes.length;
 
             var c = gctr(mJ0inc, plainBytes);
@@ -5579,7 +5580,7 @@ var msrCrypto = function () {
             return c.slice().concat(t);
         }
 
-        function decrypt(cipherBytes, tagBytes) {
+        function decrypt(cipherBytes: string | any[], tagBytes: any) {
             mBytesProcessed = cipherBytes.length;
 
             var p = gctr(mJ0inc, cipherBytes);
@@ -5599,7 +5600,7 @@ var msrCrypto = function () {
             }
         }
 
-        function processEncrypt(plainBytes) {
+        function processEncrypt(plainBytes: any) {
             mBuffer = mBuffer.concat(plainBytes);
 
             var fullBlocks = mBuffer.slice(0, Math.floor(mBuffer.length / 16) * 16);
@@ -5615,7 +5616,7 @@ var msrCrypto = function () {
             ghash(mH, c);
         }
 
-        function processDecrypt(cipherBytes) {
+        function processDecrypt(cipherBytes: any) {
             mBuffer = mBuffer.concat(cipherBytes);
 
             var fullBlocks = mBuffer.slice(0, Math.floor((mBuffer.length - mTagLength / 8) / 16) * 16);
@@ -5691,7 +5692,7 @@ var msrCrypto = function () {
     if (typeof operations !== 'undefined') {
         var gcmInstances = {};
 
-        msrcryptoGcm.encrypt = function (p) {
+        msrcryptoGcm.encrypt = function (p: { workerid: any; keyData: any; algorithm: { iv: any; additionalData: any; tagLength: any; }; operationSubType: string; buffer: any; }) {
             var result,
                 id = p.workerid;
 
@@ -5716,7 +5717,7 @@ var msrCrypto = function () {
             return result;
         };
 
-        msrcryptoGcm.decrypt = function (p) {
+        msrcryptoGcm.decrypt = function (p: { workerid: any; keyData: any; algorithm: { iv: any; additionalData: any; tagLength: number; }; operationSubType: string; buffer: string | any[]; }) {
             var result,
                 id = p.workerid;
 
@@ -5753,7 +5754,7 @@ var msrCrypto = function () {
             return result;
         };
 
-        msrcryptoGcm.generateKey = function (p) {
+        msrcryptoGcm.generateKey = function (p: { algorithm: string | any[]; extractable: any; usages: any; }) {
             if (p.algorithm.length % 8 !== 0) {
                 throw new Error();
             }
@@ -5770,7 +5771,7 @@ var msrCrypto = function () {
             };
         };
 
-        msrcryptoGcm.importKey = function (p) {
+        msrcryptoGcm.importKey = function (p: { keyData: string | any[]; format: string; algorithm: any; extractable: any; usages: any; }) {
             var keyObject,
                 keyBits = p.keyData.length * 8;
 
@@ -5799,7 +5800,7 @@ var msrCrypto = function () {
             };
         };
 
-        msrcryptoGcm.exportKey = function (p) {
+        msrcryptoGcm.exportKey = function (p: { format: string; keyHandle: any; keyData: any; }) {
             if (p.format === 'jwk') {
                 return {
                     type: 'keyExport',
@@ -5824,23 +5825,23 @@ var msrCrypto = function () {
         operations.register('decrypt', 'AES-GCM', msrcryptoGcm.decrypt);
     }
 
-    function MsrcryptoPrng() {
+    function MsrcryptoPrng(this: any) {
         if (!(this instanceof MsrcryptoPrng)) {
             throw new Error('create MsrcryptoPrng object with new keyword');
         }
 
         var initialized = false;
 
-        var key;
-        var v;
-        var keyLen;
-        var seedLen;
+        var key: any[];
+        var v: string | any[];
+        var keyLen: number;
+        var seedLen: number;
         var reseedCounter = 1;
         var reseedInterval = Math.pow(2, 48);
 
         initialize();
 
-        function addOne(counter) {
+        function addOne(counter: string | any[]) {
             var i;
             for (i = counter.length - 1; i >= 0; i -= 1) {
                 counter[i] += 1;
@@ -5861,7 +5862,7 @@ var msrCrypto = function () {
             reseedCounter = 1;
         }
 
-        function reseed(entropy, additionalEntropy) {
+        function reseed(entropy: any[], additionalEntropy: any[]) {
             additionalEntropy = additionalEntropy || [0];
             if (additionalEntropy.length > seedLen) {
                 throw new Error('Incorrect entropy or additionalEntropy length');
@@ -5876,8 +5877,8 @@ var msrCrypto = function () {
             reseedCounter = 1;
         }
 
-        function update(providedData) {
-            var temp = [];
+        function update(providedData: any) {
+            var temp: any[] = [];
             var blockCipher = new msrcryptoBlockCipher.aes(key);
             while (temp.length < seedLen) {
                 addOne(v);
@@ -5890,7 +5891,7 @@ var msrCrypto = function () {
             v = temp.slice(keyLen);
         }
 
-        function generate(requestedBytes, additionalInput) {
+        function generate(requestedBytes: number | undefined, additionalInput: any[]) {
             if (requestedBytes >= 65536) {
                 throw new Error('too much random requested');
             }
@@ -5905,7 +5906,7 @@ var msrCrypto = function () {
             } else {
                 additionalInput = msrcryptoUtilities.getVector(seedLen);
             }
-            var temp = [];
+            var temp: any[] = [];
             var blockCipher = new msrcryptoBlockCipher.aes(key);
             while (temp.length < requestedBytes) {
                 addOne(v);
@@ -5921,13 +5922,13 @@ var msrCrypto = function () {
 
         return {
             reseed: reseed,
-            getBytes: function (length, additionalInput) {
+            getBytes: function (length: any, additionalInput: any) {
                 if (!initialized) {
                     throw new Error("can't get randomness before initialization");
                 }
                 return generate(length, additionalInput);
             },
-            getNonZeroBytes: function (length, additionalInput) {
+            getNonZeroBytes: function (length: number | undefined, additionalInput: any) {
                 if (!initialized) {
                     throw new Error("can't get randomness before initialization");
                 }
@@ -5943,7 +5944,7 @@ var msrCrypto = function () {
                 }
                 return result.slice(0, length);
             },
-            init: function (entropy, personalization) {
+            init: function (entropy: string | any[], personalization: any) {
                 if (entropy.length < seedLen) {
                     throw new Error('Initial entropy length too short');
                 }
@@ -5956,9 +5957,9 @@ var msrCrypto = function () {
 
     var msrcryptoPseudoRandom = new MsrcryptoPrng();
 
-    function MsrcryptoEntropy(global) {
+    function MsrcryptoEntropy(global: { Uint8Array?: any; addEventListener?: any; removeEventListener?: any; detachEvent?: any; }) {
         var poolLength = 48;
-        var collectorPool = [];
+        var collectorPool: any[] = [];
         var collectorPoolLength = 128;
         var collectorsRegistered = 0;
         var entropyPoolPrng = new MsrcryptoPrng();
@@ -6007,7 +6008,7 @@ var msrCrypto = function () {
             initialized = true;
         }
 
-        function updatePool(entropyData) {
+        function updatePool(entropyData: string | any[]) {
             for (var i = 0; i < entropyData.length; ++i) {
                 collectorPool.push(entropyData[i]);
             }
@@ -6047,7 +6048,7 @@ var msrCrypto = function () {
                         this.collectorsRegistered = 0;
                     }
                 },
-                MouseEventCallBack: function (eventData) {
+                MouseEventCallBack: function (eventData: { x: any; clientX: any; offsetX: any; y: any; clientY: any; offsetY: any; }) {
                     var d = new Date().valueOf();
                     var x = eventData.x || eventData.clientX || eventData.offsetX || 0;
                     var y = eventData.y || eventData.clientY || eventData.offsetY || 0;
@@ -6075,11 +6076,11 @@ var msrCrypto = function () {
                 }
             },
 
-            reseed: function (entropy) {
+            reseed: function (entropy: any) {
                 entropyPoolPrng.reseed(entropy);
             },
 
-            read: function (length) {
+            read: function (length: any) {
                 if (!initialized) {
                     throw new Error('Entropy pool is not initialized.');
                 }
@@ -6094,13 +6095,13 @@ var msrCrypto = function () {
     }
 
     var prime = (function () {
-        var smallPrimes = [];
+        var smallPrimes: string | any[] = [];
 
-        var trialValues = [];
+        var trialValues: string | any[] = [];
 
         var MAX_SMALL_PRIMES = 4096 * 4;
 
-        function primeSieve(max) {
+        function primeSieve(max: number) {
             var numbers = new Array(max + 1),
                 results = [],
                 i,
@@ -6122,7 +6123,7 @@ var msrCrypto = function () {
             return results;
         }
 
-        function incrementalTrialDivision(increment) {
+        function incrementalTrialDivision(increment: number) {
             var i,
                 len = trialValues.length;
 
@@ -6135,7 +6136,7 @@ var msrCrypto = function () {
             return true;
         }
 
-        function setupIncrementalTrialDivision(candidate) {
+        function setupIncrementalTrialDivision(candidate: string | any[]) {
             var i,
                 j,
                 r,
@@ -6175,7 +6176,7 @@ var msrCrypto = function () {
             return;
         }
 
-        function largestDivisibleByPowerOfTwo(number) {
+        function largestDivisibleByPowerOfTwo(number: any[]) {
             var k = 0,
                 i = 0,
                 s = 0,
@@ -6188,7 +6189,7 @@ var msrCrypto = function () {
             return k * cryptoMath.DIGIT_BITS + i;
         }
 
-        function sizeInBits(digits) {
+        function sizeInBits(digits: string | any[]) {
             var k = 0,
                 i = 0,
                 j = 0;
@@ -6204,14 +6205,14 @@ var msrCrypto = function () {
             return k * cryptoMath.DIGIT_BITS + i;
         }
 
-        function millerRabin(number, iterations) {
+        function millerRabin(number: any[], iterations: number) {
             var w = number;
-            var wminus1 = [];
+            var wminus1: never[] = [];
             cryptoMath.subtract(w, [1], wminus1);
 
             var a = largestDivisibleByPowerOfTwo(wminus1);
 
-            var m = [];
+            var m: never[] = [];
             cryptoMath.shiftRight(wminus1, m, a);
 
             var wlen = sizeInBits(w);
@@ -6225,7 +6226,7 @@ var msrCrypto = function () {
                     b = getRandomOddNumber(wlen);
                 } while (cryptoMath.compareDigits(b, wminus1) >= 0);
 
-                var z = [];
+                var z: never[] = [];
 
                 montmul.modExp(b, m, z, true);
 
@@ -6254,12 +6255,12 @@ var msrCrypto = function () {
             return true;
         }
 
-        function generatePrime(bits) {
+        function generatePrime(bits: any) {
             var candidate = getRandomOddNumber(bits),
                 inc = 0,
                 possiblePrime,
                 isPrime = false,
-                candidatePlusInc = [];
+                candidatePlusInc: never[] = [];
 
             setupIncrementalTrialDivision(candidate);
 
@@ -6277,7 +6278,7 @@ var msrCrypto = function () {
             }
         }
 
-        function getRandomOddNumber(bits) {
+        function getRandomOddNumber(bits: number) {
             var numBytes = Math.ceil(bits / 8),
                 bytes = msrcryptoPseudoRandom.getBytes(numBytes),
                 digits;
@@ -6293,13 +6294,13 @@ var msrCrypto = function () {
         };
     })();
 
-    var msrcryptoRsaBase = function (keyStruct) {
+    var msrcryptoRsaBase = function (keyStruct: { hasOwnProperty: (arg0: string) => any; n: string | any[]; d: any; p: any; q: any; dp: any; dq: any; qi: any; ctxp: any; ctxq: any; e: any; }) {
         var utils = msrcryptoUtilities,
             keyIsPrivate = keyStruct.hasOwnProperty('n') && keyStruct.hasOwnProperty('d'),
             keyIsCrt = keyStruct.hasOwnProperty('p') && keyStruct.hasOwnProperty('q'),
             modulusLength = keyStruct.n.length;
 
-        function toBytes(digits) {
+        function toBytes(digits: any[]) {
             var bytes = cryptoMath.digitsToBytes(digits);
 
             utils.padFront(bytes, 0, modulusLength);
@@ -6307,7 +6308,7 @@ var msrCrypto = function () {
             return bytes;
         }
 
-        function modExp(dataBytes, expBytes, modulusBytes) {
+        function modExp(dataBytes: any, expBytes: any, modulusBytes: any) {
             var exponent = cryptoMath.bytesToDigits(expBytes);
 
             var group = cryptoMath.IntegerGroup(modulusBytes);
@@ -6317,13 +6318,13 @@ var msrCrypto = function () {
             return result.m_digits;
         }
 
-        function decryptModExp(cipherBytes) {
+        function decryptModExp(cipherBytes: any) {
             var resultElement = modExp(cipherBytes, keyStruct.d, keyStruct.n);
 
             return toBytes(resultElement);
         }
 
-        function decryptCrt(cipherBytes) {
+        function decryptCrt(cipherBytes: any) {
             var b2d = cryptoMath.bytesToDigits,
                 p = keyStruct.p,
                 q = keyStruct.q,
@@ -6363,12 +6364,12 @@ var msrCrypto = function () {
         }
 
         return {
-            encrypt: function (messageBytes) {
+            encrypt: function (messageBytes: any) {
                 var bytes = toBytes(modExp(messageBytes, keyStruct.e, keyStruct.n, true));
                 return bytes;
             },
 
-            decrypt: function (cipherBytes) {
+            decrypt: function (cipherBytes: any) {
                 if (keyIsCrt) {
                     return decryptCrt(cipherBytes);
                 }
@@ -6383,8 +6384,8 @@ var msrCrypto = function () {
     };
 
     var rsaShared = {
-        mgf1: function (seedBytes, maskLen, hashFunction) {
-            var t = [],
+        mgf1: function (seedBytes: any[], maskLen: number | undefined, hashFunction: { hashLen: number; computeHash: (arg0: any) => any; }) {
+            var t: any[] = [],
                 bytes,
                 hash,
                 counter,
@@ -6400,7 +6401,7 @@ var msrCrypto = function () {
             return t.slice(0, maskLen);
         },
 
-        checkMessageVsMaxHash: function (messageBytes, hashFunction) {
+        checkMessageVsMaxHash: function (messageBytes: string | any[], hashFunction: { maxMessageSize: any; }) {
             if (messageBytes.length > (hashFunction.maxMessageSize || 0xffffffff)) {
                 throw new Error('message too long');
             }
@@ -6411,7 +6412,7 @@ var msrCrypto = function () {
 
     var rsaMode = rsaMode || {};
 
-    rsaMode.oaep = function (keyStruct, hashFunction) {
+    rsaMode.oaep = function (keyStruct: { n: string | any[]; }, hashFunction: { hashLen: number; computeHash: (arg0: any) => any; } | null) {
         var utils = msrcryptoUtilities,
             random = msrcryptoPseudoRandom,
             size = keyStruct.n.length;
@@ -6420,7 +6421,7 @@ var msrCrypto = function () {
             throw new Error('must supply hashFunction');
         }
 
-        function pad(message, label) {
+        function pad(message: string | any[], label: never[] | null) {
             var lHash, psLen, psArray, i, db, seed;
             var dbMask, maskeddb, seedMask, maskedSeed;
             var encodedMessage;
@@ -6457,7 +6458,7 @@ var msrCrypto = function () {
             return message;
         }
 
-        function unpad(encodedBytes, labelBytes) {
+        function unpad(encodedBytes: string | any[], labelBytes: never[]) {
             var lHash, maskedSeed, maskeddb, seedMask;
             var seed, dbMask, db;
             var lHashp,
@@ -6494,11 +6495,11 @@ var msrCrypto = function () {
         }
 
         return {
-            pad: function (messageBytes, labelBytes) {
+            pad: function (messageBytes: any, labelBytes: any) {
                 return pad(messageBytes, labelBytes);
             },
 
-            unpad: function (encodedBytes, labelBytes) {
+            unpad: function (encodedBytes: any, labelBytes: any) {
                 return unpad(encodedBytes, labelBytes);
             },
         };
@@ -6506,11 +6507,11 @@ var msrCrypto = function () {
 
     var rsaMode = rsaMode || {};
 
-    rsaMode.pkcs1Encrypt = function (keyStruct) {
+    rsaMode.pkcs1Encrypt = function (keyStruct: { n: string | any[]; }) {
         var random = msrcryptoPseudoRandom,
             size = keyStruct.n.length;
 
-        function pad(data) {
+        function pad(data: string | any[] | ConcatArray<number>) {
             var randomness;
 
             if (data.length > size - 11) {
@@ -6522,7 +6523,7 @@ var msrCrypto = function () {
             return [0, 2].concat(randomness, [0], data);
         }
 
-        function validatePadding(paddedData) {
+        function validatePadding(paddedData: any[]) {
             var paddingValid = paddedData[0] === 0 && paddedData[1] === 2;
 
             for (var i = 2; i < 10; i++) {
@@ -6532,7 +6533,7 @@ var msrCrypto = function () {
             return paddingValid;
         }
 
-        function unpad(paddedData) {
+        function unpad(paddedData: string | any[]) {
             var i,
                 paddingIsValid = validatePadding(paddedData),
                 startOfData = 0;
@@ -6550,21 +6551,21 @@ var msrCrypto = function () {
         }
 
         return {
-            pad: function (messageBytes) {
+            pad: function (messageBytes: any) {
                 return pad(messageBytes);
             },
 
-            unpad: function (encodedBytes) {
+            unpad: function (encodedBytes: any) {
                 return unpad(encodedBytes);
             },
         };
     };
 
-    rsaMode.pkcs1Sign = function (keyStruct, hashFunction) {
+    rsaMode.pkcs1Sign = function (keyStruct: { n: string | any[]; }, hashFunction: { computeHash: (arg0: any) => any; der: string | any[]; }) {
         var utils = msrcryptoUtilities,
             size = keyStruct.n.length;
 
-        function emsa_pkcs1_v15_encode(messageBytes) {
+        function emsa_pkcs1_v15_encode(messageBytes: string | any[]) {
             var paddedData, hash, tlen;
 
             hash = hashFunction.computeHash(messageBytes.slice());
@@ -6581,11 +6582,11 @@ var msrCrypto = function () {
         }
 
         return {
-            sign: function (messageBytes) {
+            sign: function (messageBytes: any) {
                 return emsa_pkcs1_v15_encode(messageBytes);
             },
 
-            verify: function (signatureBytes, messageBytes) {
+            verify: function (signatureBytes: any, messageBytes: any) {
                 var emp = emsa_pkcs1_v15_encode(messageBytes);
 
                 return utils.arraysEqual(signatureBytes, emp);
@@ -6595,11 +6596,11 @@ var msrCrypto = function () {
 
     var rsaMode = rsaMode || {};
 
-    rsaMode.pss = function (keyStruct, hashFunction) {
+    rsaMode.pss = function (keyStruct: { n: any; }, hashFunction: { computeHash: (arg0: number[]) => any; }) {
         var utils = msrcryptoUtilities,
             random = msrcryptoPseudoRandom;
 
-        function emsa_pss_encode(messageBytes, saltLength, salt) {
+        function emsa_pss_encode(messageBytes: any, saltLength: null, salt: string | any[] | ConcatArray<number>) {
             var modulusBits = cryptoMath.bitLength(keyStruct.n),
                 emBits = modulusBits - 1,
                 emLen = Math.ceil(emBits / 8),
@@ -6636,7 +6637,7 @@ var msrCrypto = function () {
             return em;
         }
 
-        function emsa_pss_verify(signatureBytes, messageBytes, saltLength) {
+        function emsa_pss_verify(signatureBytes: string | any[], messageBytes: any, saltLength: number | null) {
             var modulusBits = cryptoMath.bitLength(keyStruct.n);
 
             var emBits = modulusBits - 1;
@@ -6683,17 +6684,17 @@ var msrCrypto = function () {
         }
 
         return {
-            sign: function (messageBytes, saltLength, salt) {
+            sign: function (messageBytes: any, saltLength: any, salt: any) {
                 return emsa_pss_encode(messageBytes, saltLength, salt);
             },
 
-            verify: function (signatureBytes, messageBytes, saltLength) {
+            verify: function (signatureBytes: any, messageBytes: any, saltLength: any) {
                 return emsa_pss_verify(signatureBytes, messageBytes, saltLength);
             },
         };
     };
 
-    var msrcryptoRsa = function (keyStruct, mode, hashFunction) {
+    var msrcryptoRsa = function (keyStruct: any, mode: any, hashFunction: { computeHash: any; } | undefined) {
         var rsaBase = msrcryptoRsaBase(keyStruct);
 
         if (!mode) {
@@ -6706,8 +6707,8 @@ var msrCrypto = function () {
             }
         }
 
-        var paddingFunction = null,
-            unPaddingFunction = null;
+        var paddingFunction: ((arg0: any, arg1: any, arg2: undefined) => any) | null = null,
+            unPaddingFunction: ((arg0: any, arg1: any, arg2: undefined) => any) | null = null;
 
         var padding;
 
@@ -6733,10 +6734,10 @@ var msrCrypto = function () {
 
             case 'raw':
                 padding = {
-                    pad: function (mb) {
+                    pad: function (mb: any) {
                         return mb;
                     },
-                    unpad: function (eb) {
+                    unpad: function (eb: any) {
                         return eb;
                     },
                 };
@@ -6752,7 +6753,7 @@ var msrCrypto = function () {
         }
 
         var returnObj = {
-            encrypt: function (dataBytes, labelBytes) {
+            encrypt: function (dataBytes: string | any[], labelBytes: any) {
                 var paddedData;
                 var encryptedData;
 
@@ -6767,7 +6768,7 @@ var msrCrypto = function () {
                 return encryptedData;
             },
 
-            decrypt: function (cipherBytes, labelBytes) {
+            decrypt: function (cipherBytes: any, labelBytes: any) {
                 var decryptedData = rsaBase.decrypt(cipherBytes);
 
                 if (unPaddingFunction !== null) {
@@ -6784,17 +6785,17 @@ var msrCrypto = function () {
                 return decryptedData;
             },
 
-            signData: function (messageBytes, saltLength, salt) {
+            signData: function (messageBytes: any, saltLength: any, salt: any) {
                 return rsaBase.decrypt(paddingFunction(messageBytes, saltLength, salt));
             },
 
-            verifySignature: function (signature, messageBytes, saltLength) {
+            verifySignature: function (signature: any, messageBytes: any, saltLength: any) {
                 var decryptedSig = rsaBase.encrypt(signature);
 
                 return unPaddingFunction(decryptedSig, messageBytes, saltLength);
             },
 
-            generateKeyPair: function (bits) {
+            generateKeyPair: function (bits: any) {
                 var keyPair = genRsaKeyFromRandom(bits);
             },
 
@@ -6805,7 +6806,7 @@ var msrCrypto = function () {
     };
 
     if (typeof operations !== 'undefined') {
-        msrcryptoRsa.sign = function (p) {
+        msrcryptoRsa.sign = function (p: { keyHandle: { algorithm: { hash: { name: any; }; }; }; algorithm: { saltLength: any; salt: any; name: any; }; keyData: any; buffer: any; }) {
             var rsaObj,
                 hashName = p.keyHandle.algorithm.hash.name,
                 hashFunc = msrcryptoHashFunctions[hashName.toUpperCase()](),
@@ -6817,7 +6818,7 @@ var msrCrypto = function () {
             return rsaObj.signData(p.buffer, saltLength, salt);
         };
 
-        msrcryptoRsa.verify = function (p) {
+        msrcryptoRsa.verify = function (p: { keyHandle: { algorithm: { hash: { name: any; }; }; }; algorithm: { saltLength: any; name: any; }; keyData: any; signature: any; buffer: any; }) {
             var hashName = p.keyHandle.algorithm.hash.name,
                 hashFunc = msrcryptoHashFunctions[hashName.toUpperCase()](),
                 rsaObj,
@@ -6828,7 +6829,7 @@ var msrCrypto = function () {
             return rsaObj.verifySignature(p.signature, p.buffer, saltLength);
         };
 
-        msrcryptoRsa.workerEncrypt = function (p) {
+        msrcryptoRsa.workerEncrypt = function (p: { algorithm: { name: any; }; keyData: any; buffer: any; keyHandle: { algorithm: { hash: { name: any; }; }; }; }) {
             var result, rsaObj, hashFunc, hashName;
 
             switch (p.algorithm.name) {
@@ -6854,7 +6855,7 @@ var msrCrypto = function () {
             return result;
         };
 
-        msrcryptoRsa.workerDecrypt = function (p) {
+        msrcryptoRsa.workerDecrypt = function (p: { algorithm: { name: any; }; keyData: any; buffer: any; keyHandle: { algorithm: { hash: { name: any; }; }; }; }) {
             var result, rsaObj, hashFunc;
 
             switch (p.algorithm.name) {
@@ -6880,7 +6881,7 @@ var msrCrypto = function () {
             return result;
         };
 
-        msrcryptoRsa.importKey = function (p) {
+        msrcryptoRsa.importKey = function (p: { format: string; keyData: any; algorithm: any; extractable: any; usages: any; }) {
             var keyObject;
 
             if (p.format === 'jwk') {
@@ -6941,7 +6942,7 @@ var msrCrypto = function () {
             };
         };
 
-        msrcryptoRsa.exportKey = function (p) {
+        msrcryptoRsa.exportKey = function (p: { keyHandle: any; keyData: any; }) {
             var jsonKeyStringArray = msrcryptoJwk.keyToJwk(p.keyHandle, p.keyData);
 
             return {
@@ -6950,7 +6951,7 @@ var msrCrypto = function () {
             };
         };
 
-        msrcryptoRsa.genRsaKeyFromRandom = function (bits, e) {
+        msrcryptoRsa.genRsaKeyFromRandom = function (bits: number, e: any) {
             var exp = e ? cryptoMath.bytesToDigits(e) : [65537];
 
             do {
@@ -6964,34 +6965,34 @@ var msrCrypto = function () {
                     q = t;
                 }
 
-                var n = [];
+                var n: never[] = [];
                 cryptoMath.multiply(p, q, n);
 
-                var p_1 = [];
+                var p_1: never[] = [];
                 cryptoMath.subtract(p, [1], p_1);
 
-                var q_1 = [];
+                var q_1: never[] = [];
                 cryptoMath.subtract(q, [1], q_1);
 
-                var p_1q_1 = [];
+                var p_1q_1: never[] = [];
                 cryptoMath.multiply(p_1, q_1, p_1q_1);
 
-                var gcd = [];
+                var gcd: never[] = [];
                 cryptoMath.gcd(exp, p_1q_1, gcd);
 
                 var gcdEqual1 = cryptoMath.compareDigits(gcd, cryptoMath.One) === 0;
             } while (!gcdEqual1);
 
-            var d = [];
+            var d: never[] = [];
             cryptoMath.modInv(exp, p_1q_1, d);
 
-            var dp = [];
+            var dp: never[] = [];
             cryptoMath.reduce(d, p_1, dp);
 
-            var dq = [];
+            var dq: never[] = [];
             cryptoMath.reduce(d, q_1, dq);
 
-            var qi = [];
+            var qi: never[] = [];
             cryptoMath.modInv(q, p, qi);
 
             var d2b = cryptoMath.digitsToBytes;
@@ -7014,7 +7015,7 @@ var msrCrypto = function () {
             };
         };
 
-        msrcryptoRsa.generateKeyPair = function (p) {
+        msrcryptoRsa.generateKeyPair = function (p: { algorithm: { modulusLength: any; publicExponent: any; name: any; }; extractable: any; }) {
             if (typeof p.algorithm.modulusLength === 'undefined') {
                 throw new Error('missing modulusLength');
             }
@@ -7101,14 +7102,14 @@ var msrCrypto = function () {
         operations.register('generateKey', 'RSA-PSS', msrcryptoRsa.generateKeyPair);
     }
 
-    var msrcryptoKdf = function (hashFunction) {
+    var msrcryptoKdf = function (hashFunction: { hashLen: number; computeHash: (arg0: number[]) => any; }) {
         var utils = msrcryptoUtilities;
 
-        function deriveKey(secretBytes, otherInfo, keyOutputLength) {
+        function deriveKey(secretBytes: string | any[], otherInfo: any, keyOutputLength: number | undefined) {
             var reps = Math.ceil(keyOutputLength / (hashFunction.hashLen / 8)),
                 counter = 1,
                 digest = secretBytes.concat(otherInfo),
-                output = [];
+                output: any[] = [];
 
             for (var i = 0; i < reps; i++) {
                 var data = utils.int32ToBytes(counter++).concat(digest);
@@ -7129,7 +7130,7 @@ var msrCrypto = function () {
     var msrcryptoKdfInstance = null;
 
     if (typeof operations !== 'undefined') {
-        msrcryptoKdf.deriveKey = function (p) {
+        msrcryptoKdf.deriveKey = function (p: { algorithm: { hash: { name: any; }; }; keyData: any; derivedKeyType: string | any[]; extractable: any; usages: any; }) {
             var utils = msrcryptoUtilities;
 
             var hashName = p.algorithm.hash.name;
@@ -7158,7 +7159,7 @@ var msrCrypto = function () {
             };
         };
 
-        msrcryptoKdf.deriveBits = function (p) {
+        msrcryptoKdf.deriveBits = function (p: { algorithm: { hash: { name: any; }; }; keyData: any; length: any; }) {
             var hashName = p.algorithm.hash.name;
 
             var hashFunction = msrcryptoHashFunctions[hashName.toUpperCase()]();
@@ -7181,16 +7182,16 @@ var msrCrypto = function () {
     }
 
     var msrcryptoPbkdf2 = (function () {
-        function deriveBits(p) {
+        function deriveBits(p: { algorithm: any; keyData: any; length: any; }) {
             var algorithm = p.algorithm,
                 keyBytes = p.keyData,
                 bits = p.length,
                 iterations = algorithm.iterations,
                 saltBytes = Array.apply(null, algorithm.salt),
                 byteLen = Math.ceil(bits / 8),
-                hLen,
+                hLen: number,
                 blockCount,
-                output = [];
+                output: any[] = [];
 
             switch (algorithm.hash.name.toUpperCase()) {
                 case 'SHA-1':
@@ -7228,8 +7229,8 @@ var msrCrypto = function () {
                 buffer: null,
             };
 
-            function F(S, c, i) {
-                var result = [],
+            function F(S: any[], c: number, i: number) {
+                var result: number[] = [],
                     u = S.concat([(i >>> 24) & 0xff, (i >>> 16) & 0xff, (i >>> 8) & 0xff, i & 0xff]);
 
                 for (var j = 0; j < c; j++) {
@@ -7260,7 +7261,7 @@ var msrCrypto = function () {
     var msrcryptoKdfInstance = null;
 
     if (typeof operations !== 'undefined') {
-        msrcryptoPbkdf2.importKey = function (p) {
+        msrcryptoPbkdf2.importKey = function (p: { format: string; keyData: any; extractable: boolean; usages: any; }) {
             var keyData;
 
             if (p.format === 'raw') {
@@ -7292,14 +7293,14 @@ var msrCrypto = function () {
     }
 
     var msrcryptoHkdf = (function () {
-        function deriveBits(p) {
+        function deriveBits(p: { algorithm: any; keyData: any; length: any; }) {
             var algorithm = p.algorithm,
                 keyBytes = p.keyData,
                 bits = p.length,
                 saltBytes = algorithm.salt,
                 byteLen = Math.ceil(bits / 8),
                 hLen,
-                output = [],
+                output: any[] = [],
                 infoBytes = msrcryptoUtilities.toArray(algorithm.info),
                 t = [],
                 i,
@@ -7370,7 +7371,7 @@ var msrCrypto = function () {
     var msrcryptoKdfInstance = null;
 
     if (typeof operations !== 'undefined') {
-        msrcryptoHkdf.importKey = function (p) {
+        msrcryptoHkdf.importKey = function (p: { format: string; keyData: any; extractable: boolean; usages: any; }) {
             var keyData;
 
             if (p.format === 'raw') {
@@ -7401,14 +7402,14 @@ var msrCrypto = function () {
         operations.register('importKey', 'HKDF', msrcryptoHkdf.importKey);
     }
 
-    var msrcryptoEcdh = function (curve) {
+    var msrcryptoEcdh = function (curve: { order: string | any[]; }) {
         var btd = cryptoMath.bytesToDigits,
             dtb = cryptoMath.digitsToBytes,
             e = curve,
             ecop = new cryptoECC.EllipticCurveOperatorFp(curve);
 
-        function generateKey(privateKeyBytes) {
-            var privateKey = [],
+        function generateKey(privateKeyBytes: any) {
+            var privateKey: never[] = [],
                 randomBytes = msrcryptoPseudoRandom.getBytes(curve.order.length * cryptoMath.DIGIT_NUM_BYTES);
 
             cryptoMath.reduce(cryptoMath.bytesToDigits(randomBytes), e.order, privateKey);
@@ -7430,7 +7431,7 @@ var msrCrypto = function () {
             };
         }
 
-        function deriveBits(privateKey, publicKey, length) {
+        function deriveBits(privateKey: { d: any; }, publicKey: { x: string | any[]; y: any; }, length: number) {
             var publicPoint = new cryptoECC.EllipticCurvePointFp(e, false, btd(publicKey.x), btd(publicKey.y), null, false);
 
             var sharedSecretPoint = e.allocatePointStorage();
@@ -7457,7 +7458,7 @@ var msrCrypto = function () {
             return secretBytes;
         }
 
-        function computePublicKey(privateKeyBytes) {
+        function computePublicKey(privateKeyBytes: any) {
             if (!e.generator.isInMontgomeryForm) {
                 ecop.convertToMontgomeryForm(e.generator);
             }
@@ -7483,7 +7484,7 @@ var msrCrypto = function () {
     var ecdhInstance = null;
 
     if (typeof operations !== 'undefined') {
-        msrcryptoEcdh.deriveBits = function (p) {
+        msrcryptoEcdh.deriveBits = function (p: { algorithm: { namedCurve: string; }; keyData: any; additionalKeyData: any; length: any; }) {
             var curve = cryptoECC.createCurve(p.algorithm.namedCurve.toUpperCase());
 
             var privateKey = p.keyData;
@@ -7497,13 +7498,13 @@ var msrCrypto = function () {
             return secretBytes;
         };
 
-        msrcryptoEcdh.deriveKey = function (p) {
+        msrcryptoEcdh.deriveKey = function (p: any) {
             throw new Error('not supported');
 
             return secretBytes;
         };
 
-        msrcryptoEcdh.generateKey = function (p) {
+        msrcryptoEcdh.generateKey = function (p: { algorithm: { namedCurve: string; }; extractable: any; usages: any; }) {
             var curve = cryptoECC.createCurve(p.algorithm.namedCurve.toUpperCase());
 
             ecdhInstance = msrcryptoEcdh(curve);
@@ -7535,7 +7536,7 @@ var msrCrypto = function () {
             };
         };
 
-        msrcryptoEcdh.importKey = function (p) {
+        msrcryptoEcdh.importKey = function (p: { format: string; keyData: any; algorithm: { namedCurve: string; }; extractable: any; usages: any; }) {
             if (p.format === 'raw') {
                 var keyData = p.keyData;
 
@@ -7600,7 +7601,7 @@ var msrCrypto = function () {
             }
         };
 
-        msrcryptoEcdh.exportKey = function (p) {
+        msrcryptoEcdh.exportKey = function (p: { format: string; keyHandle: { type: string; }; keyData: { x: ConcatArray<number>; y: ConcatArray<number>; }; }) {
             if (p.format === 'raw' && p.keyHandle.type === 'public') {
                 var keyData = [4].concat(p.keyData.x, p.keyData.y);
 
@@ -7628,18 +7629,18 @@ var msrCrypto = function () {
         operations.register('deriveKey', 'ECDH', msrcryptoEcdh.deriveKey);
     }
 
-    var msrcryptoEcdsa = function (curve) {
+    var msrcryptoEcdsa = function (curve: { order: string | any[]; type: number; allocatePointStorage: () => any; generator: any; rbits: number; }) {
         var btd = cryptoMath.bytesToDigits,
             dtb = cryptoMath.digitsToBytes,
             ecop = new cryptoECC.EllipticCurveOperatorFp(curve),
             orderByteLength = dtb(curve.order).length,
             tedCurve = curve.type === 1;
 
-        function createKey(privateKeyBytes) {
+        function createKey(privateKeyBytes: any) {
             return createKeyInternal(btd(privateKeyBytes));
         }
 
-        function createKeyInternal(privateKeyDigits) {
+        function createKeyInternal(privateKeyDigits: any[]) {
             var publicKey = curve.allocatePointStorage();
 
             ecop.scalarMultiply(privateKeyDigits, curve.generator, publicKey);
@@ -7650,8 +7651,8 @@ var msrCrypto = function () {
             };
         }
 
-        function generateKey(randomBytes) {
-            var privateKey = [];
+        function generateKey(randomBytes: undefined) {
+            var privateKey: never[] = [];
 
             if (!randomBytes) {
                 randomBytes = msrcryptoPseudoRandom.getBytes(curve.order.length * cryptoMath.DIGIT_NUM_BYTES);
@@ -7662,7 +7663,7 @@ var msrCrypto = function () {
             return createKeyInternal(privateKey);
         }
 
-        function getDigest(messageBytes) {
+        function getDigest(messageBytes: string | any[]) {
             if (messageBytes.length > orderByteLength) {
                 messageBytes.length = orderByteLength;
             }
@@ -7679,7 +7680,7 @@ var msrCrypto = function () {
             return digest;
         }
 
-        function sign(privateKey, messageBytes, ephemeralKey) {
+        function sign(privateKey: { d: any; }, messageBytes: string | any[], ephemeralKey: { publicKey: any; privateKey: any; }) {
             if (!ephemeralKey) {
                 ephemeralKey = generateKey();
             }
@@ -7688,8 +7689,8 @@ var msrCrypto = function () {
                 k = ephemeralKey.privateKey,
                 d = btd(privateKey.d),
                 digest = getDigest(messageBytes.slice()),
-                s = [],
-                tmp = [],
+                s: never[] = [],
+                tmp: never[] = [],
                 signature = null;
 
             cryptoMath.reduce(r, curve.order, r);
@@ -7707,13 +7708,13 @@ var msrCrypto = function () {
             return signature;
         }
 
-        function verify(publicKey, signatureBytes, messageBytes) {
+        function verify(publicKey: { x: any; y: any; }, signatureBytes: string | any[], messageBytes: string | any[]) {
             var split = Math.floor(signatureBytes.length / 2),
                 r = btd(signatureBytes.slice(0, split)),
                 s = btd(signatureBytes.slice(split)),
                 digest = getDigest(messageBytes.slice()),
-                u1 = [],
-                u2 = [];
+                u1: never[] = [],
+                u2: never[] = [];
 
             var publicPoint = new cryptoECC.EllipticCurvePointFp(curve, false, btd(publicKey.x), btd(publicKey.y), null, false);
 
@@ -7763,7 +7764,7 @@ var msrCrypto = function () {
     };
 
     if (typeof operations !== 'undefined') {
-        msrcryptoEcdsa.sign = function (p) {
+        msrcryptoEcdsa.sign = function (p: { algorithm: { hash: { name: any; }; }; keyHandle: { algorithm: { namedCurve: string; }; }; buffer: any; keyData: any; }) {
             msrcryptoUtilities.checkParam(p.algorithm.hash, 'Object', 'algorithm.hash');
             msrcryptoUtilities.checkParam(p.algorithm.hash.name, 'String', 'algorithm.hash.name');
             msrcryptoUtilities.checkParam(p.keyHandle.algorithm.namedCurve, 'String', 'p.keyHandle.algorithm.namedCurve');
@@ -7778,7 +7779,7 @@ var msrCrypto = function () {
             return ecdsa.sign(p.keyData, digest);
         };
 
-        msrcryptoEcdsa.verify = function (p) {
+        msrcryptoEcdsa.verify = function (p: { algorithm: { hash: { name: any; }; }; keyHandle: { algorithm: { namedCurve: string; }; }; buffer: any; keyData: any; signature: any; }) {
             var hashName = p.algorithm.hash.name,
                 curve = cryptoECC.createCurve(p.keyHandle.algorithm.namedCurve.toUpperCase()),
                 hashFunc = msrcryptoHashFunctions[hashName.toUpperCase()](),
@@ -7789,7 +7790,7 @@ var msrCrypto = function () {
             return ecdsa.verify(p.keyData, p.signature, digest);
         };
 
-        msrcryptoEcdsa.generateKey = function (p) {
+        msrcryptoEcdsa.generateKey = function (p: { algorithm: { namedCurve: string; }; extractable: any; }) {
             var curve = cryptoECC.createCurve(p.algorithm.namedCurve.toUpperCase());
 
             var ecdsa = msrcryptoEcdsa(curve);
@@ -7798,7 +7799,7 @@ var msrCrypto = function () {
 
             var dtb = cryptoMath.digitsToBytes;
 
-            function padTo8BytesIncrement(array) {
+            function padTo8BytesIncrement(array: string | any[]) {
                 return msrcryptoUtilities.padFront(array, 0, Math.ceil(array.length / 8) * 8);
             }
             var x = padTo8BytesIncrement(dtb(keyPairData.publicKey.x));
@@ -7837,7 +7838,7 @@ var msrCrypto = function () {
             };
         };
 
-        msrcryptoEcdsa.importKey = function (p) {
+        msrcryptoEcdsa.importKey = function (p: { format: string; keyData: any; algorithm: { namedCurve: string; }; extractable: any; usages: any; }) {
             if (p.format === 'raw') {
                 var keyData = p.keyData;
 
@@ -7902,7 +7903,7 @@ var msrCrypto = function () {
             }
         };
 
-        msrcryptoEcdsa.exportKey = function (p) {
+        msrcryptoEcdsa.exportKey = function (p: { format: string; keyHandle: { type: string; }; keyData: { x: ConcatArray<number>; y: ConcatArray<number>; }; }) {
             if (p.format === 'raw' && p.keyHandle.type === 'public') {
                 var keyData = [4].concat(p.keyData.x, p.keyData.y);
 
@@ -7930,7 +7931,7 @@ var msrCrypto = function () {
         operations.register('exportKey', 'ECDSA', msrcryptoEcdsa.exportKey);
     }
 
-    var msrcryptoSubtle;
+    var msrcryptoSubtle: { publicMethods: any; internalMethods: any; };
 
     var utils = msrcryptoUtilities;
 
@@ -7938,7 +7939,7 @@ var msrCrypto = function () {
         function syncWorker() {
             var result;
 
-            function postMessage(data) {
+            function postMessage(data: { workerid: any; }) {
                 try {
                     data.workerid = this.id;
                     result = msrcryptoWorker.jsCryptoRunner({
@@ -7965,9 +7966,9 @@ var msrCrypto = function () {
             };
         }
 
-        var streamObject = function (op) {
+        var streamObject = function (op: { dispatchEvent?: (e: any) => void; promise?: Promise<unknown>; result?: null; process?: any; finish?: any; abort?: any; }) {
             return {
-                process: function (buffer) {
+                process: function (buffer: any) {
                     return op.process(buffer);
                 },
                 finish: function () {
@@ -7979,21 +7980,21 @@ var msrCrypto = function () {
             };
         };
 
-        function baseOperation(processResults) {
+        function baseOperation(processResults: { (result: any): any; (result: any, isProcessCall: any): any; (arg0: any, arg1: boolean | undefined): void; }) {
             var result = null,
                 oncompleteCallback = null,
                 onerrorCallback = null,
                 retObj,
-                promise,
-                resolveFunc,
-                rejectFunc;
+                promise: Promise<unknown>,
+                resolveFunc: { (value: unknown): void; apply?: any; },
+                rejectFunc: { (reason?: any): void; apply?: any; };
 
             promise = new Promise(function (resolve, reject) {
                 resolveFunc = resolve;
                 rejectFunc = reject;
             });
 
-            function opDispatchEvent(e) {
+            function opDispatchEvent(e: { type: string; data: { type: string; result: any; }; }) {
                 if (e.type === 'error') {
                     if (rejectFunc) {
                         rejectFunc.apply(promise, [e]);
@@ -8027,7 +8028,7 @@ var msrCrypto = function () {
         }
 
         function keyOperation() {
-            function processResult(result) {
+            function processResult(result: { type: any; keyPair: { publicKey: { keyHandle: any; keyData: any; }; privateKey: { keyHandle: any; keyData: any; }; }; keyHandle: any; keyData: any; }) {
                 var publicKey, privateKey;
 
                 switch (result.type) {
@@ -8067,7 +8068,7 @@ var msrCrypto = function () {
             return baseOperation(processResult);
         }
 
-        function toArrayBufferIfSupported(dataArray) {
+        function toArrayBufferIfSupported(dataArray: any[] | Iterable<number>) {
             if (typedArraySupport && dataArray.pop) {
                 return new Uint8Array(dataArray).buffer;
             }
@@ -8075,8 +8076,8 @@ var msrCrypto = function () {
             return dataArray;
         }
 
-        function cryptoOperation(cryptoContext) {
-            function processResult(result, isProcessCall) {
+        function cryptoOperation(cryptoContext: { operationType?: any; algorithm?: any; operationSubType?: any; buffer?: any; keyHandle?: any; }) {
+            function processResult(result: any, isProcessCall: any) {
                 result = result && toArrayBufferIfSupported(result);
 
                 if (isProcessCall) {
@@ -8087,12 +8088,12 @@ var msrCrypto = function () {
                 return result;
             }
 
-            var promiseQueue = [],
+            var promiseQueue: never[] = [],
                 op = baseOperation(processResult);
 
             op.stream = cryptoContext.algorithm.stream;
 
-            promiseQueue.add = function (label) {
+            promiseQueue.add = function (label: any) {
                 var resolveFunc,
                     rejectFunc,
                     promise = new Promise(function (resolve, reject) {
@@ -8111,12 +8112,12 @@ var msrCrypto = function () {
                 return promise;
             };
 
-            promiseQueue.resolve = function (result) {
+            promiseQueue.resolve = function (result: any) {
                 var queueItem = promiseQueue.shift();
                 queueItem.resolve.apply(queueItem.promise, [result]);
             };
 
-            op.process = function (buffer) {
+            op.process = function (buffer: any) {
                 cryptoContext.operationSubType = 'process';
                 cryptoContext.buffer = utils.toArray(buffer);
                 workerManager.continueJob(this, utils.clone(cryptoContext));
@@ -8141,16 +8142,16 @@ var msrCrypto = function () {
             return op;
         }
 
-        var keys = [];
+        var keys: any[] = [];
 
-        keys.add = function (keyHandle, keyData) {
+        keys.add = function (keyHandle: any, keyData: any) {
             keys.push({
                 keyHandle: keyHandle,
                 keyData: keyData,
             });
         };
 
-        keys.remove = function (keyHandle) {
+        keys.remove = function (keyHandle: any) {
             for (var i = 0; i < keys.length; i += 1) {
                 if (keys[i].keyHandle === keyHandle) {
                     keys = keys.splice(i, 1);
@@ -8159,7 +8160,7 @@ var msrCrypto = function () {
             }
         };
 
-        keys.lookup = function (keyHandle) {
+        keys.lookup = function (keyHandle: any) {
             for (var i = 0; i < keys.length; i += 1) {
                 if (keys[i].keyHandle === keyHandle) {
                     return keys[i].keyData;
@@ -8173,15 +8174,15 @@ var msrCrypto = function () {
 
             var maxFreeWorkers = 2;
 
-            var workerPool = [];
+            var workerPool: any[] = [];
 
-            var jobQueue = [];
+            var jobQueue: any[] = [];
 
             var jobId = 0;
 
             var workerId = 0;
 
-            var callbackQueue = [];
+            var callbackQueue: { (): void; new(): any; }[] = [];
 
             var setFunction = typeof setImmediate === 'undefined' ? setTimeout : setImmediate;
 
@@ -8189,7 +8190,7 @@ var msrCrypto = function () {
                 callbackQueue.shift()();
             }
 
-            function queueCallback(callback) {
+            function queueCallback(callback: () => any) {
                 callbackQueue.push(callback);
                 setFunction(executeNextCallback, 0);
             }
@@ -8208,7 +8209,7 @@ var msrCrypto = function () {
                 return null;
             }
 
-            function purgeWorkerType(webWorker) {
+            function purgeWorkerType(webWorker: boolean) {
                 for (var i = workerPool.length - 1; i >= 0; i -= 1) {
                     if (workerPool[i].isWebWorker === webWorker) {
                         workerPool[i].terminate();
@@ -8227,11 +8228,11 @@ var msrCrypto = function () {
                 return freeWorkers;
             }
 
-            function addWorkerToPool(worker) {
+            function addWorkerToPool(worker: Worker | { postMessage: (data: any) => void; onmessage: null; onerror: null; terminate: () => void; }) {
                 workerPool.push(worker);
             }
 
-            function removeWorkerFromPool(worker) {
+            function removeWorkerFromPool(worker: { terminate: () => void; }) {
                 for (var i = 0; i < workerPool.length; i++) {
                     if (workerPool[i] === worker) {
                         worker.terminate();
@@ -8241,7 +8242,7 @@ var msrCrypto = function () {
                 }
             }
 
-            function lookupWorkerByOperation(operation) {
+            function lookupWorkerByOperation(operation: any) {
                 for (var i = 0; i < workerPool.length; i++) {
                     if (workerPool[i].operation === operation) {
                         return workerPool[i];
@@ -8250,7 +8251,7 @@ var msrCrypto = function () {
                 return null;
             }
 
-            function queueJob(operation, data) {
+            function queueJob(operation: any, data: any) {
                 jobQueue.push({
                     operation: operation,
                     data: data,
@@ -8258,7 +8259,7 @@ var msrCrypto = function () {
                 });
             }
 
-            function jobCompleted(worker) {
+            function jobCompleted(worker: { busy: boolean; }) {
                 worker.busy = false;
 
                 if (asyncMode) {
@@ -8286,8 +8287,8 @@ var msrCrypto = function () {
                 }
             }
 
-            function createNewWorker(operation) {
-                var worker;
+            function createNewWorker(operation: any) {
+                var worker: Worker;
 
                 if (workerStatus === 'pending') {
                     throw new Error('Creating new worker while workerstatus=pending');
@@ -8359,7 +8360,7 @@ var msrCrypto = function () {
                 return worker;
             }
 
-            function useWebWorkers(enable) {
+            function useWebWorkers(enable: boolean) {
                 if (workerStatus === 'unavailable') {
                     utils.consoleLog('web workers not available in this browser.');
                     return;
@@ -8388,7 +8389,7 @@ var msrCrypto = function () {
 
                 var worker = new Worker(scriptUrl);
 
-                function setWorkerStatus(e) {
+                function setWorkerStatus(e: { data: { initialized: boolean; }; message: any; }) {
                     var succeeded = !!(e.data && e.data.initialized === true);
                     worker.removeEventListener('message', setWorkerStatus, false);
                     worker.removeEventListener('error', setWorkerStatus, false);
@@ -8413,14 +8414,14 @@ var msrCrypto = function () {
                 return;
             }
 
-            function abortJob(cryptoOperationObject) {
+            function abortJob(cryptoOperationObject: any) {
                 var worker = lookupWorkerByOperation(cryptoOperationObject);
                 if (worker) {
                     removeWorkerFromPool(worker);
                 }
             }
 
-            function runJob(operation, data) {
+            function runJob(operation: any, data: { workerid: any; }) {
                 var worker = null;
 
                 if (workerStatus === 'pending') {
@@ -8453,7 +8454,7 @@ var msrCrypto = function () {
                 postMessageToWorker(worker, data);
             }
 
-            function continueJob(operation, data) {
+            function continueJob(operation: any, data: any) {
                 var worker = lookupWorkerByOperation(operation);
 
                 if (worker) {
@@ -8464,7 +8465,7 @@ var msrCrypto = function () {
                 runJob(operation, data);
             }
 
-            function postMessageToWorker(worker, data) {
+            function postMessageToWorker(worker: { id: any; postMessage: (arg0: any) => void; }, data: { workerid: any; }) {
                 data.workerid = worker.id;
 
                 if (asyncMode) {
@@ -8490,7 +8491,7 @@ var msrCrypto = function () {
             };
         })();
 
-        function checkOperation(operationType, algorithmName) {
+        function checkOperation(operationType: any, algorithmName: any) {
             if (!operations.exists(operationType, algorithmName)) {
                 throw new Error('unsupported algorithm');
             }
@@ -8580,7 +8581,7 @@ var msrCrypto = function () {
             unwrapKey: [2, 0, 1, 6, 7],
         };
 
-        function lookupKeyData(handle) {
+        function lookupKeyData(handle: any) {
             var data = keys.lookup(handle);
 
             if (!data) {
@@ -8590,7 +8591,7 @@ var msrCrypto = function () {
             return data;
         }
 
-        function buildParameterCollection(operationName, parameterSet) {
+        function buildParameterCollection(operationName: string, parameterSet: any[]) {
             var parameterCollection = {
                 operationType: operationName,
             },
@@ -8669,7 +8670,7 @@ var msrCrypto = function () {
             return parameterCollection;
         }
 
-        function executeOperation(operationName, parameterSet, keyFunc) {
+        function executeOperation(operationName: string, parameterSet: IArguments | any[], keyFunc: number) {
             var pc = buildParameterCollection(operationName, parameterSet);
 
             checkOperation(operationName, pc.algorithm.name);
@@ -8699,31 +8700,31 @@ var msrCrypto = function () {
             return op.promise;
         }
         var publicMethods = {
-            encrypt: function (algorithm, keyHandle, buffer) {
+            encrypt: function (algorithm: any, keyHandle: any, buffer: any) {
                 return executeOperation('encrypt', arguments, 0);
             },
 
-            decrypt: function (algorithm, keyHandle, buffer) {
+            decrypt: function (algorithm: any, keyHandle: any, buffer: any) {
                 return executeOperation('decrypt', arguments, 0);
             },
 
-            sign: function (algorithm, keyHandle, buffer) {
+            sign: function (algorithm: any, keyHandle: any, buffer: any) {
                 return executeOperation('sign', arguments, 0);
             },
 
-            verify: function (algorithm, keyHandle, signature, buffer) {
+            verify: function (algorithm: any, keyHandle: any, signature: any, buffer: any) {
                 return executeOperation('verify', arguments, 0);
             },
 
-            digest: function (algorithm, buffer) {
+            digest: function (algorithm: any, buffer: any) {
                 return executeOperation('digest', arguments, 0);
             },
 
-            generateKey: function (algorithm, extractable, keyUsage) {
+            generateKey: function (algorithm: any, extractable: any, keyUsage: any) {
                 return executeOperation('generateKey', arguments, 1);
             },
 
-            deriveKey: function (algorithm, baseKey, derivedKeyType, extractable, keyUsage) {
+            deriveKey: function (algorithm: any, baseKey: any, derivedKeyType: { name: string; length: any; hash: { name: string; }; }, extractable: any, keyUsage: any) {
                 var deriveBits = this.deriveBits,
                     importKey = this.importKey;
 
@@ -8764,19 +8765,19 @@ var msrCrypto = function () {
                 });
             },
 
-            deriveBits: function (algorithm, baseKey, length) {
+            deriveBits: function (algorithm: any, baseKey: any, length: any) {
                 return executeOperation('deriveBits', arguments, 0);
             },
 
-            importKey: function (format, keyData, algorithm, extractable, keyUsage) {
+            importKey: function (format: any, keyData: any, algorithm: any, extractable: any, keyUsage: any) {
                 return executeOperation('importKey', arguments, 1);
             },
 
-            exportKey: function (format, keyHandle) {
+            exportKey: function (format: any, keyHandle: { algorithm: any; }) {
                 return executeOperation('exportKey', [keyHandle.algorithm, format, keyHandle], 1);
             },
 
-            wrapKey: function (format, key, wrappingKey, wrappingKeyAlgorithm) {
+            wrapKey: function (format: string, key: { extractable: boolean; usages: string | string[]; }, wrappingKey: { algorithm: { name: string; }; }, wrappingKeyAlgorithm: { name: any; }) {
                 var encrypt = this.encrypt,
                     exportKey = this.exportKey;
 
@@ -8801,7 +8802,7 @@ var msrCrypto = function () {
                 });
             },
 
-            unwrapKey: function (format, wrappedKey, unwrappingKey, unwrapAlgorithm, unwrappedKeyAlgorithm, extractable, keyUsages) {
+            unwrapKey: function (format: string, wrappedKey: any, unwrappingKey: { usages: string | string[]; algorithm: { name: string; }; }, unwrapAlgorithm: { name: any; }, unwrappedKeyAlgorithm: any, extractable: any, keyUsages: any) {
                 var decrypt = this.decrypt,
                     importKey = this.importKey;
 
@@ -8840,7 +8841,7 @@ var msrCrypto = function () {
     var msrcryptoWrapKey = (function () {
         var utils = msrcryptoUtilities;
 
-        function wrapKey(params) {
+        function wrapKey(params: { keyData1: any; keyHandle1: { algorithm: { name: string; }; }; keyHandle: any; keyData: any; }) {
             var rsaObj = msrcryptoRsa(params.keyData1, params.keyHandle1.algorithm.name, msrcryptoHashFunctions['SHA-1'])();
 
             var tagLength = 128;
@@ -8892,7 +8893,7 @@ var msrCrypto = function () {
             return utils.stringToBytes(JSON.stringify(jwe));
         }
 
-        function unwrapKey(params) {
+        function unwrapKey(params: { buffer: number[]; keyData: any; keyHandle: { algorithm: { name: any; }; }; algorithm: { name: any; }; extractable: any; usages: any; }) {
             var b64Tobytes = utils.fromBase64;
 
             var keyDataJwk = JSON.parse(String.fromCharCode.apply(null, params.buffer));
@@ -8946,7 +8947,7 @@ var msrCrypto = function () {
     var publicMethods = {
         subtle: msrcryptoSubtle ? msrcryptoSubtle.publicMethods : null,
 
-        getRandomValues: function (array) {
+        getRandomValues: function (array: any) {
             var i;
             var randomValues = msrcryptoPseudoRandom.getBytes(array.length);
             for (i = 0; i < array.length; i += 1) {
@@ -8955,7 +8956,7 @@ var msrCrypto = function () {
             return array;
         },
 
-        initPrng: function (entropyData) {
+        initPrng: function (entropyData: any) {
             var entropyDataType = Object.prototype.toString.call(entropyData);
 
             if (entropyDataType !== '[object Array]' && entropyDataType !== '[object Uint8Array]') {
@@ -8968,19 +8969,19 @@ var msrCrypto = function () {
             fprngEntropyProvided = true;
         },
 
-        toBase64: function (data, base64Url) {
+        toBase64: function (data: any, base64Url: any) {
             return msrcryptoUtilities.toBase64(data, base64Url);
         },
 
-        fromBase64: function (base64String) {
+        fromBase64: function (base64String: any) {
             return msrcryptoUtilities.fromBase64(base64String);
         },
 
-        textToBytes: function (text) {
+        textToBytes: function (text: any) {
             return msrcryptoUtilities.stringToBytes(text);
         },
 
-        bytesToText: function (byteArray) {
+        bytesToText: function (byteArray: any) {
             return msrcryptoUtilities.bytesToString(byteArray);
         },
 
@@ -8990,12 +8991,12 @@ var msrCrypto = function () {
 
         version: msrCryptoVersion,
 
-        useWebWorkers: function (useWebWorkers) {
+        useWebWorkers: function (useWebWorkers: any) {
             return msrcryptoSubtle ? msrcryptoSubtle.internalMethods.useWebWorkers(useWebWorkers) : null;
         },
     };
 
-    var entropyPool;
+    var entropyPool: { reseed: (arg0: any) => any; read: (arg0: number) => any; init: () => void; };
 
     entropyPool = entropyPool || new MsrcryptoEntropy(global);
 
@@ -9005,4 +9006,4 @@ var msrCrypto = function () {
     return publicMethods;
 };
 
-module.exports = msrCrypto();
+export default msrCrypto();

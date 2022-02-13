@@ -4,7 +4,7 @@ import * as SentryReact from '@sentry/react';
 import { Integrations } from '@sentry/tracing';
 
 Sentry.init({
-    dsn: process.env.SENTRY_DSN,
+    dsn: process.env.NX_SENTRY_DSN,
     enableInExpoDevelopment: __DEV__,
     debug: __DEV__,
     tracesSampleRate: __DEV__ ? 1 : undefined,

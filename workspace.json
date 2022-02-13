@@ -1,6 +1,7 @@
 {
     "version": 2,
     "projects": {
+        "babel-plugin-dotenv-inject": "packages/babel-plugin-dotenv-inject",
         "connector": "packages/connector",
         "crate": "packages/crate",
         "crate-bed": "packages/crate-bed",

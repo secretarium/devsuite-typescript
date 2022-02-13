@@ -40,7 +40,7 @@ export const useQuery = <TData, TError>(query: Query, options?: QueryOptions, de
                     .onResult<TData>((result) => callback(undefined, result))
                     .onError<TError>((error) => callback(error))
                     .send();
-            }).catch(callback);
+            });
 
         return () => {
             console.log('useQuery:SWR: Closing subscription');

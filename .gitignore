@@ -42,6 +42,7 @@ testem.log
 *.mobileprovision
 *.orig.*
 web-build/
+.env.local*
 
 # System Files
 .DS_Store
@@ -59,6 +60,5 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
-
 
 packages/susi-e2e/artifacts

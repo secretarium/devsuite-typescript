@@ -19,7 +19,7 @@ export const SecretariumConnector: ConnectorConstructor = class SecretariumConne
     private _isConnecting = false;
     private devToolsSymbol = Symbol('__SECRETARIUM_CONNECTOR__');
     // private transport: ConnectorTransport;
-    private connections: Array<ServerObject>;
+    private connections: Array<ServerObject> = [];
     private scp: SCP;
     private currentServer = -1;
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -59,6 +59,10 @@ export const SecretariumConnector: ConnectorConstructor = class SecretariumConne
     }
 
     public async connect() {
+
+        if (this.connections.length <= 0)
+            throw 'There are no servers to choose from';
+
         if (this._isConnecting)
             // If we are currently connecting lets hold to know the outcome
             return new Promise((resolve) => {
@@ -92,6 +96,7 @@ export const SecretariumConnector: ConnectorConstructor = class SecretariumConne
         explicit: string
     }, args: Record<string, any> = {}, subscribe?: boolean): Promise<Transaction> {
 
+        console.log('request ...');
         if (!this.isConnected)
             await this.connect();
 
@@ -117,17 +122,23 @@ export const SecretariumConnector: ConnectorConstructor = class SecretariumConne
     }
 
     private static expandServers(connections: Server | Array<Server>): ServerObject[] {
-        return (connections instanceof Array ? connections : [connections]).map<ServerObject>(connection => {
-            if (typeof connection !== 'string')
-                return connection;
-            const [cluster, name, url, trustKey] = connection.split('#');
-            return {
-                cluster,
-                name,
-                url,
-                trustKey
-            };
+        const serverList: ServerObject[] = [];
+        (connections instanceof Array ? connections : [connections]).forEach(connection => {
+            if (typeof connection === 'string')
+                connection.split(',').forEach(subconnection => {
+                    const [cluster, name, url, trustKey] = subconnection.split('#');
+                    serverList.push({
+                        cluster,
+                        name,
+                        url,
+                        trustKey
+                    });
+                });
+            else
+                serverList.push(connection);
         });
+        console.log('expandServers', serverList);
+        return serverList;
     }
 
     private rotateServer() {

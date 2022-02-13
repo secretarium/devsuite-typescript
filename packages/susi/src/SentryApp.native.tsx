@@ -1,11 +1,8 @@
 import { Shell as BaseApp } from './Shell';
 import * as Sentry from 'sentry-expo';
 
-console.log('BOOOOOOOOYAAAAAAAA ##########', process.env.SENTRY_DSN);
-console.log('BOOOOOOOOYAAAAAAAA ##########', process.env);
-
 Sentry.init({
-    dsn: process.env.SENTRY_DSN,
+    dsn: process.env.NX_SENTRY_DSN,
     enableInExpoDevelopment: __DEV__,
     debug: __DEV__,
     tracesSampleRate: __DEV__ ? 1 : undefined,
