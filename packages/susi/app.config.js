@@ -113,7 +113,7 @@ export default {
     //     fr: './ios/infoPlist/fr.json'
     // },
     experiments: {
-        turboModules: true
+        turboModules: true     // Set to 'false' for iOS
     },
     extra: {
         STAGE,
