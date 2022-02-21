@@ -88,7 +88,10 @@ export default {
             NSBluetoothPeripheralUsageDescription: true,
             NSBluetoothAlwaysUsageDescription: true
         },
-        jsEngine: 'hermes'
+        jsEngine: 'hermes',
+        experiments: {
+            turboModules: false
+        }
     },
     android: {
         package: config.bundle,
@@ -99,7 +102,10 @@ export default {
         },
         googleServicesFile,
         permissions: ['CAMERA', 'USE_FINGERPRINT', 'USE_BIOMETRIC', 'BLUETOOTH', 'BLUETOOTH_ADMIN'],
-        jsEngine: 'hermes'
+        jsEngine: 'hermes',
+        experiments: {
+            turboModules: true
+        }
     },
     androidNavigationBar: {
         barStyle: 'dark-content',
@@ -112,9 +118,6 @@ export default {
     //     en: './ios/infoPlist/en.json',
     //     fr: './ios/infoPlist/fr.json'
     // },
-    experiments: {
-        turboModules: true     // Set to 'false' for iOS
-    },
     extra: {
         STAGE,
         BUILD_NUMBER
