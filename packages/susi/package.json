@@ -5,9 +5,6 @@
     "dependencies": {
         "@testing-library/jest-native": "*",
         "@testing-library/react-native": "*",
-        "@react-navigation/native": "*",
-        "@react-navigation/native-stack": "*",
-        "@react-navigation/bottom-tabs": "*",
         "react-native": "*",
         "expo": "*",
         "expo-camera": "*",
