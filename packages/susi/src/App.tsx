@@ -1,15 +1,16 @@
 import React from 'react';
-// import { SafeAreaProvider } from 'react-native-safe-area-context';
-import Settings from './components/Settings';
-import Root from './components/Root';
 import { Route, Routes } from './router/Router';
+import Settings from './components/Settings';
+import Home from './components/Home';
+import Scanner from './components/Scanner';
 
 export const App: React.FC = () => {
 
     return (
         <Routes>
-            <Route path="/" element={<Root />} />
+            <Route path="/" element={<Home />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/scanner" element={<Scanner />} />
         </Routes>
     );
 };

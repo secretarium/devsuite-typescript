@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
-import Container from '../Container';
+import Navigation from '../Navigation';
 import tw from 'twrnc';
 import { Camera } from 'expo-camera';
 import { BarCodeScanner } from 'expo-barcode-scanner';
@@ -17,7 +17,7 @@ const Scanner: React.FC = () => {
     }, []);
 
     return (
-        <Container>
+        <Navigation showBottomNav={false} showTopNav={true} goBackRoute="/">
             {hasPermission
                 ? <View style={tw`flex-1 px-4`}>
                     <Camera
@@ -27,7 +27,7 @@ const Scanner: React.FC = () => {
                     />
                 </View>
                 : <Text>No permission</Text>}
-        </Container>
+        </Navigation>
     );
 };
 
