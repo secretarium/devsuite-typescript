@@ -2,7 +2,7 @@ import { StrictMode } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { SecretariumConnector } from '@secretarium/connector';
 import { SecretariumProvider } from '@secretarium/react';
-import { Router } from './router/Router';
+import { Router } from './router/Router.native';
 import App from './App';
 
 const connector = new SecretariumConnector({

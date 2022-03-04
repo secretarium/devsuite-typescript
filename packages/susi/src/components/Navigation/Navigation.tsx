@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Link } from '../../router/Router';
+import { Link } from '../../router/Router.native';
 import Container from '../Container';
 import tw from 'twrnc';
 import { FontAwesome, FontAwesome5, Ionicons } from '@expo/vector-icons';
@@ -15,37 +15,41 @@ const Navigation: React.FC<NavigationProps> = ({
     showTopNav = false,
     showBottomNav = true,
     goBackRoute,
-    children }) => {
+    children
+}) => {
+
     return (
         <Container>
-            {showTopNav
-                ? <View style={tw`absolute inset-x-0 top-0`}>
-                    <View style={tw`flex-row justify-around pt-14 w-full`}>
-                        <Link to={`${goBackRoute}`} style={tw``}>
+            <View>
+                {showTopNav
+                    ?
+                    <View style={tw`flex-row justify-between mx-auto w-7/8`}>
+                        <Link to={`${goBackRoute}`} style={tw``} underlayColor="transparent">
                             <Ionicons name="arrow-back" size={32} color="black" />
                         </Link>
-                        <Link to={'/'} style={tw``}>
+                        <Link to={'..'} style={tw``} underlayColor="transparent">
                             <FontAwesome5 name="key" size={24} color="black" />
                         </Link>
-                        <Link to={'/settings'} style={tw``}>
+                        <Link to={'../settings'} style={tw``} underlayColor="transparent">
                             <Ionicons name="settings" size={32} color="black" />
                         </Link>
                     </View>
-                </View>
-                : null}
-            {children}
-            {showBottomNav
-                ? <View style={tw`absolute inset-x-0 bottom-0`}>
-                    <View style={tw`flex-row justify-around pb-8 w-full`}>
-                        <Link to={'/scanner'} style={tw``}>
+                    : null}
+            </View>
+            <View style={tw`flex-1 justify-center`}>{children}</View>
+            <View>
+                {showBottomNav
+                    ?
+                    <View style={tw`flex-row justify-around w-full`}>
+                        <Link to={'scanner'} style={tw``} underlayColor="transparent">
                             <FontAwesome name="qrcode" size={32} color="black" />
                         </Link>
-                        <Link to={'/settings'} style={tw``}>
+                        <Link to={'settings'} style={tw``} underlayColor="transparent">
                             <Ionicons name="settings" size={32} color="black" />
                         </Link>
                     </View>
-                </View>
-                : null}
+                    : null}
+            </View>
         </Container>
     );
 };

@@ -17,11 +17,11 @@ const Scanner: React.FC = () => {
     }, []);
 
     return (
-        <Navigation showBottomNav={false} showTopNav={true} goBackRoute="/">
+        <Navigation showBottomNav={false} showTopNav={true} goBackRoute="..">
             {hasPermission
-                ? <View style={tw`flex-1 px-4`}>
+                ? <View style={tw`flex-1 px-4 py-24`}>
                     <Camera
-                        style={tw`flex-1 my-24`}
+                        style={tw`flex-1`}
                         barCodeScannerSettings={{ barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr] }}
                         type={'back'}
                     />
