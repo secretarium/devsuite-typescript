@@ -30,6 +30,7 @@
         "expo-community-flipper": "44.0.1",
         "expo-dev-client": "0.8.4",
         "expo-device": "~4.1.1",
+        "expo-local-authentication": "12.1.1",
         "expo-notifications": "~0.14.1",
         "expo-splash-screen": "0.14.2",
         "expo-status-bar": "1.2.0",
