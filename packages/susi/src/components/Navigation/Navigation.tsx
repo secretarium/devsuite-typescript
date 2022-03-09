@@ -40,7 +40,7 @@ const Navigation: React.FC<NavigationProps> = ({
             <View>
                 {showBottomNav
                     ?
-                    <View style={tw`flex-row justify-around w-full`}>
+                    <View style={tw`flex-row justify-around w-full bg-white p-4 rounded-3xl shadow-xl`}>
                         <Link to={'scanner'} style={tw``} underlayColor="transparent">
                             <FontAwesome name="qrcode" size={32} color="black" />
                         </Link>
