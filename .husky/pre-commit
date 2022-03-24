@@ -1,5 +1,6 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-yarn run lint-check
+# yarn run nx sync-deps susi
+yarn run lint-fix
 yarn run format-check
