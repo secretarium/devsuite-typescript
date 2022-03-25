@@ -60,6 +60,18 @@ jobs:
               run: |
                   yarn run nx affected --target=build --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
 
+            - name: Build the Mobile Dev Client
+              if: matrix.os == 'ubuntu-latest' && matrix.node == '16.x'
+              run: |
+                  yarn run nx affected --target=eas-build-download --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }} --profile=development
+
+            - name: Collect the Mobile App Artifacts
+              uses: actions/upload-artifact@v3
+              if: matrix.os == 'ubuntu-latest' && matrix.node == '16.x'
+              with:
+                name: mobile-dev-artifacts
+                path: ./dist/artifacts
+
             - name: Unit test the Dev Suite
               run: |
                   yarn run nx affected --target=test --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}

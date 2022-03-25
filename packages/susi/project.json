@@ -29,6 +29,12 @@
                 "command": "eas build --non-interactive --json"
             }
         },
+        "eas-build-download": {
+            "executor": "@nrwl/workspace:run-commands",
+            "options": {
+                "command": "node ./scripts/buildFetcher.js"
+            }
+        },
         "run-ios": {
             "executor": "@nrwl/expo:run",
             "options": {
