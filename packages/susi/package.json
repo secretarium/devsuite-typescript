@@ -11,7 +11,7 @@
         "@nrwl/expo": "*"
     },
     "scripts": {
-        "eas-build-pre-install": "cd ../../ && cp yarn.lock ./packages/susi/ && mv ./packages/susi/eas.js ./index.js",
+        "eas-build-pre-install": "cd ../../ && node ./scripts/listRootDependencies.js && cp yarn.lock ./packages/susi/ && mv ./packages/susi/eas.js ./index.js",
         "postinstall": "rm -r node_modules && cd ../../ && yarn install && npx nx sync-deps susi && npx nx ensure-symlink susi"
     }
 }
