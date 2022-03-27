@@ -32,7 +32,8 @@
         "eas-build-download": {
             "executor": "@nrwl/workspace:run-commands",
             "options": {
-                "command": "node ./scripts/buildFetcher.js"
+                "command": "node ./scripts/buildFetcher.js",
+                "outputPath": "dist/artifacts"
             }
         },
         "run-ios": {

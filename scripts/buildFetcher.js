@@ -1,5 +1,5 @@
 const path = require('path');
-const { mkdirSync } = require('fs');
+const { mkdirSync, rmSync } = require('fs');
 const { execSync, spawn } = require('child_process');
 
 const rootPath = path.resolve(__dirname, '..');
@@ -31,6 +31,7 @@ buildProcess.on('close', (code) => {
         process.stderr.write('An error occured while building mobile binaries\n');
         process.exit(code);
     }
+    rmSync('./dist/artifacts', { recursive: true, force: true });
     mkdirSync('./dist/artifacts', { recursive: true });
     if (!result) {
         process.stderr.write('Failed to obtain build output\n');
