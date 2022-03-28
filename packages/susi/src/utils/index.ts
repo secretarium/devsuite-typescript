@@ -1,1 +1,1 @@
-export * from './BiometricCheck';
+export * from './biometricCheck';

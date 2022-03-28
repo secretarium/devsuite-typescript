@@ -3,5 +3,6 @@ export {
     Routes,
     Route,
     Link,
-    useLocation
+    useLocation,
+    useParams
 } from 'react-router-native';

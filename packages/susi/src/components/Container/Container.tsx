@@ -4,7 +4,7 @@ import tw from 'twrnc';
 
 const Container: React.FC = ({ children }) => {
     return (
-        <SafeAreaView style={tw`flex-1 bg-[#E6224F] px-4`}>
+        <SafeAreaView style={tw`flex-1 bg-[#E6224F]`}>
             {children}
         </SafeAreaView>
     );
