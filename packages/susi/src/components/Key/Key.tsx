@@ -1,18 +1,26 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+import { useParams } from 'react-router';
 import Container from '../Container';
 import tw from 'twrnc';
 
-const Accounts: React.FC = () => {
+type KeyParams = {
+    id: string;
+};
+
+const Key: React.FC = () => {
+
+    const params = useParams<KeyParams>();
+
     return (
         <Container>
             <View style={tw`px-4`}>
                 <Text style={tw`text-center text-black`}>
-                    My Accounts
+                    My Key {params.id}
                 </Text>
             </View>
         </Container>
     );
 };
 
-export default Accounts;
+export default Key;

@@ -1,7 +1,1 @@
-export {
-    BrowserRouter as Router,
-    Routes,
-    Route,
-    Link,
-    useLocation
-} from 'react-router-dom';
+export { Link, BrowserRouter as Router } from 'react-router-dom';

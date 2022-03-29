@@ -6,7 +6,7 @@ import tw from 'twrnc';
 const Settings: React.FC = () => {
     return (
         <Navigation showBottomNav={false} showTopNav={true} goBackRoute="..">
-            <Text style={tw`text-center text-white`}>
+            <Text style={tw`text-center text-black`}>
                 Settings
             </Text>
         </Navigation>
