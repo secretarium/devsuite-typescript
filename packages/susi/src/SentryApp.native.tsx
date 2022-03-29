@@ -4,6 +4,7 @@ import * as Sentry from 'sentry-expo';
 Sentry.init({
     dsn: process.env.NX_SENTRY_DSN,
     enableInExpoDevelopment: __DEV__,
+    enableNative: process.env.JEST ? false : true,
     debug: __DEV__,
     tracesSampleRate: __DEV__ ? 1 : undefined,
     integrations: [

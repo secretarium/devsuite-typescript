@@ -87,8 +87,7 @@ export default {
             CFBundleAllowMixedLocalizations: true,
             NSBluetoothPeripheralUsageDescription: true,
             NSBluetoothAlwaysUsageDescription: true
-        },
-        jsEngine: 'hermes'
+        }
     },
     android: {
         package: config.bundle,
@@ -98,8 +97,7 @@ export default {
             backgroundColor: config.adaptiveIconBackgroundColor
         },
         googleServicesFile,
-        permissions: ['CAMERA', 'USE_FINGERPRINT', 'USE_BIOMETRIC', 'BLUETOOTH', 'BLUETOOTH_ADMIN'],
-        jsEngine: 'hermes'
+        permissions: ['CAMERA', 'USE_FINGERPRINT', 'USE_BIOMETRIC', 'BLUETOOTH', 'BLUETOOTH_ADMIN']
     },
     androidNavigationBar: {
         barStyle: 'dark-content',
@@ -112,6 +110,7 @@ export default {
     //     en: './ios/infoPlist/en.json',
     //     fr: './ios/infoPlist/fr.json'
     // },
+    jsEngine: 'hermes',
     experiments: {
         turboModules: true
     },
