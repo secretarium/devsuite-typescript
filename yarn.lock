@@ -2954,7 +2954,7 @@
     "@sentry/utils" "6.17.9"
     tslib "^1.9.3"
 
-"@sentry/browser@6.19.2", "@sentry/browser@^6.12.0":
+"@sentry/browser@^6.12.0":
   version "6.19.2"
   resolved "https://registry.yarnpkg.com/@sentry/browser/-/browser-6.19.2.tgz#c0f6df07584f3b36fa037067aea20b2c8c2095a3"
   integrity sha512-5VC44p5Vu2eJhVT39nLAJFgha5MjHDYCyZRR1ieeZt3a++otojPGBBAKNAtrEMGV+A2Z9AoneD6ZnDVlyb3GKg==
@@ -3055,7 +3055,7 @@
     "@sentry/types" "6.19.2"
     tslib "^1.9.3"
 
-"@sentry/react-native@3.3.5", "@sentry/react-native@^3.1.1":
+"@sentry/react-native@^3.1.1":
   version "3.3.5"
   resolved "https://registry.yarnpkg.com/@sentry/react-native/-/react-native-3.3.5.tgz#55b20d05c19a8b7947b8f5b70982622a529c0db9"
   integrity sha512-DDpn3931a4+RGLbRBC3x3CDJJKBqksHo5kGf1P9Dk8piUtGfFvQFbe+mq0QI23YVidw68Tbj35kzevv70vCinQ==
@@ -3080,18 +3080,6 @@
     "@sentry/minimal" "6.17.9"
     "@sentry/types" "6.17.9"
     "@sentry/utils" "6.17.9"
-    hoist-non-react-statics "^3.3.2"
-    tslib "^1.9.3"
-
-"@sentry/react@6.19.2":
-  version "6.19.2"
-  resolved "https://registry.yarnpkg.com/@sentry/react/-/react-6.19.2.tgz#67760aed06d7e54a2e117cd9048ad19d573c78f1"
-  integrity sha512-6ffifcUWJegvC5iYJlXL3zBirR05F/i5nA7QaYSMERJqZpXuYhwNPySbuiNTajm64+HA1RbdQkiwrHE/Ur3f1w==
-  dependencies:
-    "@sentry/browser" "6.19.2"
-    "@sentry/minimal" "6.19.2"
-    "@sentry/types" "6.19.2"
-    "@sentry/utils" "6.19.2"
     hoist-non-react-statics "^3.3.2"
     tslib "^1.9.3"
 
