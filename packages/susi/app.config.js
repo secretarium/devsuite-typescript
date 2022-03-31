@@ -75,6 +75,7 @@ export default {
     owner: 'secretarium',
     icon: config.icon,
     version: version,
+    privacy: STAGE === 'production' ? 'public' : 'hidden',
     splash: {
         image: config.splash,
         resizeMode: 'contain',
