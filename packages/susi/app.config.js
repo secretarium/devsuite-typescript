@@ -8,23 +8,29 @@ const envConfig = {
     development: {
         name: 'Cryptx Dev',
         bundle: 'com.secretarium.cryptx.development',
+        splash: './assets/splash.development.png',
         icon: './assets/icon.development.png',
+        favicon: './assets/favicon.development.png',
         adaptiveIcon: './assets/adaptive-icon.development.png',
-        adaptiveIconBackgroundColor: '#FF0000'
+        adaptiveIconBackgroundColor: '#FFFFFF'
     },
     staging: {
         name: 'Cryptx Staging',
         bundle: 'com.secretarium.cryptx.staging',
+        splash: './assets/splash.staging.png',
         icon: './assets/icon.staging.png',
+        favicon: './assets/favicon.staging.png',
         adaptiveIcon: './assets/adaptive-icon.staging.png',
-        adaptiveIconBackgroundColor: '#00FFFF'
+        adaptiveIconBackgroundColor: '#FFFFFF'
     },
     production: {
         name: 'Secretarium Cryptx',
         bundle: 'com.secretarium.cryptx',
+        splash: './assets/splash.png',
         icon: './assets/icon.png',
+        favicon: './assets/favicon.png',
         adaptiveIcon: './assets/adaptive-icon.png',
-        adaptiveIconBackgroundColor: '#FFFFFF'
+        adaptiveIconBackgroundColor: '#B21D36'
     }
 };
 
@@ -70,9 +76,9 @@ export default {
     icon: config.icon,
     version: version,
     splash: {
-        image: './assets/splash.png',
+        image: config.splash,
         resizeMode: 'contain',
-        backgroundColor: '#FFFFFF'
+        backgroundColor: config.adaptiveIconBackgroundColor
     },
     assetBundlePatterns: ['**/*'],
     orientation: 'portrait',
@@ -104,7 +110,7 @@ export default {
         backgroundColor: '#0C0D3D'
     },
     web: {
-        favicon: './assets/favicon.png'
+        favicon: config.favicon
     },
     locales: {
         en: './ios/infoPlist/en.json',
