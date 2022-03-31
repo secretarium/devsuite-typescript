@@ -106,10 +106,10 @@ export default {
     web: {
         favicon: './assets/favicon.png'
     },
-    // locales: {
-    //     en: './ios/infoPlist/en.json',
-    //     fr: './ios/infoPlist/fr.json'
-    // },
+    locales: {
+        en: './ios/infoPlist/en.json',
+        fr: './ios/infoPlist/fr.json'
+    },
     jsEngine: 'hermes',
     experiments: {
         turboModules: true
