@@ -6,7 +6,7 @@
         "base": {
             "env": {
                 "STAGE": "production",
-                "NODE_ENV": "production",
+                "NODE_ENV": "development",
                 "GOOGLE_SERVICES_FILE": "_"
             }
         },
@@ -19,11 +19,10 @@
                 "buildType": "apk"
             },
             "env": {
-                "STAGE": "development",
-                "NODE_ENV": "development"
+                "STAGE": "development"
             }
         },
-        "preview": {
+        "staging": {
             "extends": "base",
             "distribution": "internal",
             "releaseChannel": "staging",
@@ -32,6 +31,14 @@
             },
             "env": {
                 "STAGE": "staging"
+            }
+        },
+        "preview": {
+            "extends": "base",
+            "distribution": "store",
+            "releaseChannel": "preview",
+            "android": {
+                "buildType": "apk"
             }
         },
         "production": {
