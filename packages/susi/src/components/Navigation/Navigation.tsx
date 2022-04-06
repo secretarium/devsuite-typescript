@@ -37,7 +37,7 @@ const Navigation: React.FC<NavigationProps> = ({
                     : null}
             </View>
             <View style={tw`flex-1 justify-center`}>{children}</View>
-            <View>
+            <View style={tw`px-4`}>
                 {showBottomNav
                     ?
                     <View style={tw`flex-row justify-around w-full bg-white p-4 rounded-3xl shadow-xl`}>
