@@ -2,7 +2,7 @@ import React from 'react';
 import { Entypo, FontAwesome5 } from '@expo/vector-icons';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { Link } from '../../router/Router';
-import Navigation from '../Navigation';
+import { Navigation } from '../../components';
 import tw from 'twrnc';
 
 const DATA = [

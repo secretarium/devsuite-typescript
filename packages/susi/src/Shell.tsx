@@ -1,4 +1,5 @@
 import { StrictMode } from 'react';
+import { RecoilRoot } from 'recoil';
 import { StatusBar } from 'expo-status-bar';
 import { SecretariumConnector } from '@secretarium/connector';
 import { SecretariumProvider } from '@secretarium/react';
@@ -12,12 +13,14 @@ const connector = new SecretariumConnector({
 export const Shell = () => {
 
     return <StrictMode>
-        <StatusBar style="auto" />
-        <SecretariumProvider connector={connector}>
-            <Router>
-                <App />
-            </Router>
-        </SecretariumProvider>
+        <RecoilRoot>
+            <StatusBar style="auto" />
+            <SecretariumProvider connector={connector}>
+                <Router>
+                    <App />
+                </Router>
+            </SecretariumProvider>
+        </RecoilRoot>
     </StrictMode>;
 };
 

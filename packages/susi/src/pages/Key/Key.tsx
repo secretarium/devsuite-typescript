@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import { useParams } from 'react-router';
-import Container from '../Container';
+import { Container } from '../../components';
 import tw from 'twrnc';
 
 type KeyParams = {

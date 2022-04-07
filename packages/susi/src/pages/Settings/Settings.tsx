@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text } from 'react-native';
-import Navigation from '../Navigation';
+import { Navigation } from '../../components';
 import tw from 'twrnc';
 
 const Settings: React.FC = () => {

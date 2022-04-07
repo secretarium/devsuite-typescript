@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import Container from '../Container';
+import { Container } from '../../components';
 import tw from 'twrnc';
 
 const Accounts: React.FC = () => {

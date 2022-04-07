@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Link } from '../../router/Router';
-import Container from '../Container';
+import { Link } from '../router/Router';
+import { Container } from './';
 import tw from 'twrnc';
 import { FontAwesome, FontAwesome5, Ionicons } from '@expo/vector-icons';
 
@@ -11,7 +11,7 @@ type NavigationProps = {
     goBackRoute?: string;
 };
 
-const Navigation: React.FC<NavigationProps> = ({
+export const Navigation: React.FC<NavigationProps> = ({
     showTopNav = false,
     showBottomNav = true,
     goBackRoute,
@@ -53,5 +53,3 @@ const Navigation: React.FC<NavigationProps> = ({
         </Container>
     );
 };
-
-export default Navigation;
