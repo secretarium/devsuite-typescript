@@ -29,7 +29,7 @@ const DATA = [
 const Home: React.FC = () => {
     return (
         <Navigation>
-            <View style={tw`flex justify-center content-center p-4 h-full`}>
+            <View style={tw`flex justify-center content-center px-4 h-full`}>
                 <FlatList
                     data={DATA}
                     renderItem={({ item }) => (
@@ -37,15 +37,15 @@ const Home: React.FC = () => {
                             <Link to={`/keys/${item.id}`} style={tw``} underlayColor="transparent">
                                 <View style={tw`px-2 py-4 flex-1 flex-row justify-between flex-wrap`}>
                                     <View style={tw`flex-row p-2`}>
-                                        <FontAwesome5 name="key" size={24} color="#404040" style={tw`pr-6`} />
+                                        <FontAwesome5 name="key" size={24} color="#404040" style={tw`pr-6 my-auto`} />
                                         <View>
-                                            <Text>{item.app}</Text>
-                                            <Text>{item.email}</Text>
+                                            <Text style={{ fontFamily: 'MuktaMaheeRegular' }}>{item.app}</Text>
+                                            <Text style={{ fontFamily: 'MuktaMaheeRegular' }}>{item.email}</Text>
                                         </View>
                                     </View>
                                     <Entypo
                                         name="chevron-right"
-                                        style={tw`self-center`}
+                                        style={tw`self-center pl-20`}
                                         color="#404040"
                                         size={24} />
                                 </View>

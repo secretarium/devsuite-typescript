@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import { Link } from '../router/Router';
 import { Container } from './';
 import tw from 'twrnc';
@@ -34,7 +34,10 @@ export const Navigation: React.FC<NavigationProps> = ({
                             <Ionicons name="settings" size={32} color="black" />
                         </Link>
                     </View>
-                    : null}
+                    :
+                    <View>
+                        <Text style={[tw`text-white text-3xl mx-auto`, { fontFamily: 'MuktaMaheeBold'}]}>Secretarium</Text>
+                    </View>}
             </View>
             <View style={tw`flex-1 justify-center`}>{children}</View>
             <View style={tw`px-4`}>
