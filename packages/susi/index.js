@@ -15,10 +15,7 @@ if (__DEV__) {
         /findHostInstance_DEPRECATED/
     ]);
     activateKeepAwake();
-    connectToDevTools({
-        host: '192.168.1.101',
-        port: 8097
-    });
+    connectToDevTools();
 }
 
 // registerRootComponent calls AppRegistry.registerComponent('main', () => App);
