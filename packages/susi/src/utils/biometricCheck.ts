@@ -1,22 +1,34 @@
-import * as LocalAuthentication from 'expo-local-authentication';
+import { /* getSupportedBiometryType, getSecurityLevel,*/ getInternetCredentials, setInternetCredentials, ACCESS_CONTROL, ACCESSIBLE, SECURITY_LEVEL, AUTHENTICATION_TYPE, SECURITY_RULES, STORAGE_TYPE } from 'react-native-keychain';
 
 export const biometricCheck = async () => {
     try {
-        // Check if device is compatible
-        const isCompatible = await LocalAuthentication.hasHardwareAsync();
+        const serverString = 'sfx.local.auth.v2';
+        // const biometryType = await getSupportedBiometryType();
+        // const securityLevel = await getSecurityLevel();
 
-        if (!isCompatible)
-            alert('Sorry! Your device is not compatible.');
+        const creds = await getInternetCredentials(serverString, {
+            authenticationPrompt: {
+                title: 'Secretarium Key',
+                subtitle: 'Opening your key wallet',
+                description: 'Secretarium Key uses biometrics to safeguard credential information',
+                cancel: 'Cancel'
+            }
+        });
 
-        // Check if device has biometric records
-        const isEnrolled = await LocalAuthentication.isEnrolledAsync();
+        console.log(creds);
 
-        if (!isEnrolled)
-            alert('No biometric records found.');
+        if (!creds)
+            await setInternetCredentials(serverString, 'boo', 'hoo', {
+                authenticationPrompt: 'We need this',
+                accessible: ACCESSIBLE.WHEN_PASSCODE_SET_THIS_DEVICE_ONLY,
+                accessControl: ACCESS_CONTROL.BIOMETRY_ANY,
+                authenticationType: AUTHENTICATION_TYPE.BIOMETRICS,
+                securityLevel: SECURITY_LEVEL.SECURE_HARDWARE,
+                storage: STORAGE_TYPE.RSA,
+                rules: SECURITY_RULES.AUTOMATIC_UPGRADE
+            });
 
-        // Authenticate user
-        await LocalAuthentication.authenticateAsync();
-        alert('Authenticated');
+        // alert(`Authenticated with ${biometryType}:${securityLevel}`);
     } catch (error) {
         alert(`An error as occured ${error}`);
     }
