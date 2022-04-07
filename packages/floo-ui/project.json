@@ -1,0 +1,6 @@
+{
+    "root": "packages/floo-ui",
+    "sourceRoot": "packages/floo-ui",
+    "projectType": "application",
+    "tags": []
+}

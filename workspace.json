@@ -9,6 +9,7 @@
         "crypto": "packages/crypto",
         "endoscope": "packages/endoscope",
         "endoscope-e2e": "packages/endoscope-e2e",
+        "floo-ui": "packages/floo-ui",
         "react": "packages/react",
         "susi": "packages/susi",
         "susi-e2e": "packages/susi-e2e"
