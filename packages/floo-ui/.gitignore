@@ -1,3 +1,6 @@
 node_modules/
 .cache
 **/build
+src/app/models/client/.schema
+src/app/styles/tailwind.css
+prisma/*.db*

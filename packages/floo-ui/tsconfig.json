@@ -9,12 +9,13 @@
         "esModuleInterop": true,
         "jsx": "react-jsx",
         "moduleResolution": "node",
+        "module": "CommonJS",
         "resolveJsonModule": true,
         "target": "ES2019",
         "strict": true,
         "paths": {
             "~/*": [
-                "./packages/floo-ui/app/*"
+                "./packages/floo-ui/src/app/*"
             ]
         },
         // Remix takes care of building everything in `remix build`.

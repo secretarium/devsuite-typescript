@@ -4,7 +4,8 @@
         "../../.eslintrc.json"
     ],
     "ignorePatterns": [
-        "!**/*"
+        "!**/*",
+        "src/app/models/client/.schema"
     ],
     "overrides": [
         {
@@ -14,6 +15,9 @@
                 "*.js",
                 "*.jsx"
             ],
+            "globals": {
+                "__db__": true
+            },
             "rules": {}
         },
         {

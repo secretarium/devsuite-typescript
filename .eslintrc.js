@@ -1,3 +1,5 @@
+const varsIgnorePattern = '^__unused__';
+
 const jsonRules = {
     indent: [
         'error',
@@ -30,14 +32,14 @@ const javascriptRules = {
     'comma-dangle': ['error', 'never'],
     'no-trailing-spaces': 'error',
     'no-extra-semi': 'error',
-    'no-unused-vars': ['error', { args: 'after-used' }],
+    'no-unused-vars': ['error', { args: 'after-used', varsIgnorePattern }],
     'semi': ['error', 'always']
 };
 
 const typescriptRules = {
     ...javascriptRules,
     'no-unused-vars': 'off',
-    '@typescript-eslint/no-unused-vars': ['error', { args: 'after-used' }]
+    '@typescript-eslint/no-unused-vars': ['error', { args: 'after-used', varsIgnorePattern }]
 };
 
 module.exports = {

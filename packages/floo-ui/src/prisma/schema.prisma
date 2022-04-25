@@ -1,0 +1,147 @@
+datasource db {
+    provider = "mongodb"
+    url      = env("DATABASE_URL")
+}
+
+generator client {
+    provider = "prisma-client-js"
+    output   = "../app/models/client/.schema"
+}
+
+model User {
+    id                               String                             @id @default(auto()) @map("_id") @db.ObjectId
+    email                            String                             @unique
+    createdAt                        DateTime                           @default(now())
+    updatedAt                        DateTime                           @updatedAt
+    password                         Credential?
+    projects                         Project[]
+    organisations                    Organisation[]
+    slug                             String                             @unique
+    deletedAt                        DateTime?
+    OrganisationPermissionAllocation OrganisationPermissionAllocation[]
+    ProjectPermissionAllocation      ProjectPermissionAllocation[]
+}
+
+model Organisation {
+    id          String                             @id @default(auto()) @map("_id") @db.ObjectId
+    slug        String                             @unique
+    name        String
+    createdAt   DateTime                           @default(now())
+    updatedAt   DateTime                           @updatedAt
+    deletedAt   DateTime?
+    permissions OrganisationPermissionAllocation[]
+    User        User?                              @relation(fields: [userId], references: [id])
+    userId      String?
+    Brand       Brand?                             @relation(fields: [brandId], references: [id])
+    brandId     String?
+}
+
+model Project {
+    id           String                        @id @default(auto()) @map("_id") @db.ObjectId
+    slug         String                        @unique
+    name         String
+    createdAt    DateTime                      @default(now())
+    updatedAt    DateTime                      @updatedAt
+    deletedAt    DateTime?
+    permissions  ProjectPermissionAllocation[]
+    applications Application[]
+    User         User?                         @relation(fields: [userId], references: [id])
+    userId       String?
+    Brand        Brand?                        @relation(fields: [brandId], references: [id])
+    brandId      String?
+}
+
+model Credential {
+    id     String @id @default(auto()) @map("_id") @db.ObjectId
+    hash   String
+    user   User   @relation(fields: [userId], references: [id])
+    userId String @unique
+}
+
+model OrganisationPermissionAllocation {
+    id             String                   @id @default(auto()) @map("_id") @db.ObjectId
+    user           User                     @relation(fields: [userId], references: [id])
+    permissions    OrganisationPermission[]
+    userId         String
+    Organisation   Organisation?            @relation(fields: [organisationId], references: [id])
+    organisationId String?
+}
+
+model ProjectPermissionAllocation {
+    id          String              @id @default(auto()) @map("_id") @db.ObjectId
+    user        User                @relation(fields: [userId], references: [id])
+    permissions ProjectPermission[]
+    userId      String
+    Project     Project?            @relation(fields: [projectId], references: [id])
+    projectId   String?
+}
+
+model Brand {
+    id               String         @id @default(auto()) @map("_id") @db.ObjectId
+    accentColour     String?
+    backgroundColour String?
+    logoImage        String?
+    organisations    Organisation[]
+    projects         Project[]
+}
+
+model Application {
+    id           String                 @id @default(auto()) @map("_id") @db.ObjectId
+    project      Project                @relation(fields: [projectId], references: [id])
+    name         String
+    slug         String
+    deployments  DeploymentAllocation[]
+    fileSystem   FileSystem             @relation(fields: [fileSystemId], references: [id])
+    projectId    String
+    fileSystemId String
+}
+
+model Deployment {
+    id                   String                 @id @default(auto()) @map("_id") @db.ObjectId
+    slug                 String                 @unique
+    name                 String
+    DeploymentAllocation DeploymentAllocation[]
+}
+
+model DeploymentAllocation {
+    id            String       @id @default(auto()) @map("_id") @db.ObjectId
+    deployment    Deployment   @relation(fields: [deploymentId], references: [id])
+    quantity      Int
+    regions       Region[]
+    Application   Application? @relation(fields: [applicationId], references: [id])
+    applicationId String?
+    deploymentId  String
+}
+
+model Region {
+    id                     String                @id @default(auto()) @map("_id") @db.ObjectId
+    name                   String
+    DeploymentAllocation   DeploymentAllocation? @relation(fields: [deploymentAllocationId], references: [id])
+    deploymentAllocationId String?
+}
+
+model FileSystem {
+    id          String        @id @default(auto()) @map("_id") @db.ObjectId
+    files       File[]
+    Application Application[]
+}
+
+model File {
+    id           String      @id @default(auto()) @map("_id") @db.ObjectId
+    path         String
+    filename     String
+    FileSystem   FileSystem? @relation(fields: [fileSystemId], references: [id])
+    fileSystemId String?
+}
+
+enum ProjectPermission {
+    READ
+    WRITE
+    ADMIN
+}
+
+enum OrganisationPermission {
+    READ
+    WRITE
+    ADMIN
+}

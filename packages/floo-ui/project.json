@@ -2,5 +2,25 @@
     "root": "packages/floo-ui",
     "sourceRoot": "packages/floo-ui",
     "projectType": "application",
-    "tags": []
+    "tags": [],
+    "targets": {
+        "start": {
+            "executor": "@nrwl/workspace:run-commands",
+            "options": {
+                "cwd": "packages/floo-ui",
+                "commands": [
+                    {
+                        "command": "yarn run tailwind-generate-watch"
+                    },
+                    {
+                        "command": "yarn run prisma-generate-watch"
+                    },
+                    {
+                        "command": "yarn run start"
+                    }
+                ],
+                "parallel": true
+            }
+        }
+    }
 }
