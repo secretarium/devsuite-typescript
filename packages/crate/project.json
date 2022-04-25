@@ -41,6 +41,12 @@
                     "namedChunks": false,
                     "extractLicenses": true,
                     "vendorChunk": false
+                },
+                "development": {
+                    "extractLicenses": false,
+                    "optimization": false,
+                    "sourceMap": true,
+                    "vendorChunk": true
                 }
             }
         },
@@ -55,8 +61,12 @@
                 "production": {
                     "buildTarget": "crate:build:production",
                     "hmr": false
+                },
+                "development": {
+                    "buildTarget": "crate:build:development"
                 }
-            }
+            },
+            "defaultConfiguration": "development"
         },
         "lint": {
             "executor": "@nrwl/linter:eslint",
@@ -75,7 +85,7 @@
                 "coverage/packages/crate"
             ],
             "options": {
-                "jestConfig": "packages/crate/jest.config.js",
+                "jestConfig": "packages/crate/jest.config.ts",
                 "passWithNoTests": true
             }
         }

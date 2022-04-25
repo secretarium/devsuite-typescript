@@ -46,6 +46,12 @@
                     "namedChunks": false,
                     "extractLicenses": true,
                     "vendorChunk": false
+                },
+                "development": {
+                    "extractLicenses": false,
+                    "optimization": false,
+                    "sourceMap": true,
+                    "vendorChunk": true
                 }
             }
         },
@@ -61,8 +67,12 @@
                     "buildTarget": "endoscope:build:production",
                     "hmr": false,
                     "port": 4210
+                },
+                "development": {
+                    "buildTarget": "endoscope:build:development"
                 }
-            }
+            },
+            "defaultConfiguration": "development"
         },
         "lint": {
             "executor": "@nrwl/linter:eslint",
@@ -81,7 +91,7 @@
                 "coverage/packages/endoscope"
             ],
             "options": {
-                "jestConfig": "packages/endoscope/jest.config.js",
+                "jestConfig": "packages/endoscope/jest.config.ts",
                 "passWithNoTests": true
             }
         }

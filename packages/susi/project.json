@@ -101,7 +101,7 @@
                 "coverage/packages/susi"
             ],
             "options": {
-                "jestConfig": "packages/susi/jest.config.js",
+                "jestConfig": "packages/susi/jest.config.ts",
                 "passWithNoTests": true
             }
         }

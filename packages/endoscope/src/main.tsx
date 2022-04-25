@@ -1,10 +1,11 @@
 import { StrictMode } from 'react';
-import * as ReactDOM from 'react-dom';
+import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 
 import App from './app/App';
 
-const containerElement = document.getElementById('root');
+const containerElement = document.getElementById('root') as HTMLElement;
 const applicationElement = (
     <StrictMode>
         <BrowserRouter>
@@ -14,8 +15,9 @@ const applicationElement = (
 );
 
 // We check for React 18 first
-if ((ReactDOM as any).createRoot) {
-    const container = (ReactDOM as any).createRoot(containerElement);
+if (createRoot) {
+    const container = createRoot(containerElement);
     container.render(applicationElement);
-} else
-    ReactDOM.render(applicationElement, containerElement);
+} else {
+    render(applicationElement, containerElement);
+}

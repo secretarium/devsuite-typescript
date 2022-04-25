@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import { View } from 'react-native';
 import { Link } from '../../router/Router';
 import Container from '../Container';
 import tw from 'twrnc';
 import { FontAwesome, FontAwesome5, Ionicons } from '@expo/vector-icons';
 
-type NavigationProps = {
+type NavigationProps = PropsWithChildren<{
     showBottomNav?: boolean;
     showTopNav?: boolean;
     goBackRoute?: string;
-};
+}>;
 
 const Navigation: React.FC<NavigationProps> = ({
     showTopNav = false,
