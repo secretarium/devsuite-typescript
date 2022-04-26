@@ -1,7 +1,9 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import { useParams } from 'react-router';
-import { Container } from '../../components';
+import { useRecoilValue } from 'recoil';
+import { useParams } from '../../router/Router';
+import { Navigation } from '../../components';
+import { themeState } from '../../state';
 import tw from 'twrnc';
 
 type KeyParams = {
@@ -11,15 +13,16 @@ type KeyParams = {
 const Key: React.FC = () => {
 
     const params = useParams<KeyParams>();
+    const { tertiaryColor } = useRecoilValue(themeState);
 
     return (
-        <Container>
+        <Navigation showBottomNav={false} showTopNav={true} goBackRoute="..">
             <View style={tw`px-4`}>
-                <Text style={tw`text-center text-black`}>
+                <Text style={tw`text-center text-[${tertiaryColor}]`}>
                     My Key {params.id}
                 </Text>
             </View>
-        </Container>
+        </Navigation>
     );
 };
 
