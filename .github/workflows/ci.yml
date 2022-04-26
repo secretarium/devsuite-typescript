@@ -65,7 +65,7 @@ jobs:
               env:
                 EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
               run: |
-                  yarn run nx affected --target=eas-build-download --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }} --profile=development
+                  yarn run nx affected --target=eas-build-download --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }} --profile=development --platform=all
 
             - name: Collect the Mobile App Artifacts
               uses: actions/upload-artifact@v3
