@@ -11,12 +11,12 @@ module.exports = (async () => {
         'react-native-svg-transformer'
     );
     defaultConfig.transformer.minifierConfig = merge(defaultConfig.transformer.minifierConfig, {
-	    keep_classnames: true,
-	    keep_fnames: true,
-	    mangle: {
-	        keep_classnames: true,
-	        keep_fnames: true
-	    }
+        keep_classnames: true,
+        keep_fnames: true,
+        mangle: {
+            keep_classnames: true,
+            keep_fnames: true
+        }
     });
     defaultConfig.resolver.assetExts = defaultConfig.resolver.assetExts.filter(
         (ext) => ext !== 'svg'

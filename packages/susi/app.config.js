@@ -126,18 +126,18 @@ export default {
         BUILD_NUMBER
     },
     hooks: {
-        postPublish: [
-            {
-                file: 'sentry-expo/upload-sourcemaps',
-                config: {
-                    setCommits: true,
-                    organization: 'secretarium',
-                    project: 'cryptx',
-                    url: 'https://sentry.secretarium.org/'
-                    // "authToken": via SENTRY_AUTH_TOKEN
-                }
-            }
-        ]
+        // postPublish: [
+        //     {
+        //         file: 'sentry-expo/upload-sourcemaps',
+        //         config: {
+        //             setCommits: true,
+        //             organization: 'secretarium',
+        //             project: 'cryptx',
+        //             url: 'https://sentry.secretarium.org/'
+        //             // "authToken": via SENTRY_AUTH_TOKEN
+        //         }
+        //     }
+        // ]
     },
     plugins: [
         [
