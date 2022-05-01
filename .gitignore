@@ -6,7 +6,7 @@
 /out-tsc
 
 # dependencies
-/node_modules
+node_modules
 
 # IDEs and editors
 /.idea
@@ -46,3 +46,6 @@ web-build/
 # System Files
 .DS_Store
 Thumbs.db
+
+# Locally scoped env
+.env*local
