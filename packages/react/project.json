@@ -3,7 +3,8 @@
     "sourceRoot": "packages/react/src",
     "projectType": "library",
     "tags": [
-        "scope:ui"
+        "scope:ui",
+        "scope:sdk"
     ],
     "targets": {
         "build": {
