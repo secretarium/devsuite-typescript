@@ -1,7 +1,6 @@
 {
     "version": 2,
     "projects": {
-        "backstore": "packages/backstore",
         "connector": "packages/connector",
         "crate": "packages/crate",
         "crate-bed": "packages/crate-bed",
