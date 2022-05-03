@@ -35,7 +35,7 @@
                 "coverage/packages/crypto"
             ],
             "options": {
-                "jestConfig": "packages/crypto/jest.config.js",
+                "jestConfig": "packages/crypto/jest.config.ts",
                 "passWithNoTests": true
             }
         }

@@ -48,7 +48,7 @@
                 "coverage/packages/react"
             ],
             "options": {
-                "jestConfig": "packages/react/jest.config.js",
+                "jestConfig": "packages/react/jest.config.ts",
                 "passWithNoTests": true
             }
         }

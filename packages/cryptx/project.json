@@ -53,7 +53,7 @@
                 "coverage/packages/cryptx"
             ],
             "options": {
-                "jestConfig": "packages/cryptx/jest.config.js",
+                "jestConfig": "packages/cryptx/jest.config.ts",
                 "passWithNoTests": true
             }
         }

@@ -1,5 +1,5 @@
 import { StrictMode } from 'react';
-import * as ReactDOM from 'react-dom';
+import * as ReactDOM from 'react-dom/client';
 
 import App from './app/App';
 import Providers from './app/Providers';
@@ -17,5 +17,7 @@ const applicationElement = (
 if ((ReactDOM as any).createRoot) {
     const container = (ReactDOM as any).createRoot(containerElement);
     container.render(applicationElement);
-} else
-    ReactDOM.render(applicationElement, containerElement);
+} else {
+    const root = ReactDOM.createRoot(containerElement as HTMLElement);
+    root.render(applicationElement);
+}
