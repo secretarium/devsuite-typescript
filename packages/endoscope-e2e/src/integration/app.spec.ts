@@ -1,4 +1,4 @@
-import { getGreeting } from '../support/app.po';
+// import { getGreeting } from '../support/app.po';
 
 describe('endoscope', () => {
     beforeEach(() => cy.visit('/'));
@@ -8,6 +8,6 @@ describe('endoscope', () => {
         cy.inspect();
 
         // Function helper example, see `../support/app.po.ts` file
-        getGreeting().contains('Inspect Secretarium connection');
+        // getGreeting().contains('Inspect Secretarium connection');
     });
 });
