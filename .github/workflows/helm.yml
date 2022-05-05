@@ -75,7 +75,8 @@ jobs:
             org.opencontainers.image.created=${{ steps.prep.outputs.BUILD_DATE }}
       - name: Publish Helm chart to Registry
         run: |
-          helm package charts/podinfo
+          helm repo add --username ${{ secrets.DOCKER_REGISTRY_USERNAME }} --password ${{ secrets.DOCKER_REGISTRY_TOKEN }} infra-webfronts https://${{ secrets.DOCKER_REGISTRY_URL }}/api/v4/projects/${{ secrets.DOCKER_REGISTRY_USERNAME }}%2Finfra-webfronts/packages/helm/latest
+          helm cm-push podinfo-${{ steps.prep.outputs.VERSION }}.tgz infra-webfronts
           rm podinfo-${{ steps.prep.outputs.VERSION }}.tgz
 
       # helm repo add --username <username> --password ${{ secrets.REGISTRY_TOKEN }} project-1 ${{ secrets.HELM_REGISTRY_USERNAME }} https://gitlab.example.com/api/v4/projects/<project_id>/packages/helm/<channel>

@@ -31,3 +31,7 @@ runs:
       shell: bash
       run: |
         helm version
+    - name: "Install ChartMuseum plugin"
+      shell: bash
+      run: |
+        helm plugin install https://github.com/chartmuseum/helm-push
