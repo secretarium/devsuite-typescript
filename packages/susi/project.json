@@ -1,5 +1,4 @@
 {
-    "root": "packages/susi",
     "sourceRoot": "packages/susi/src",
     "projectType": "application",
     "targets": {

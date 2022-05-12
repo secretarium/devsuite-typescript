@@ -1,5 +1,4 @@
 {
-    "root": "packages/connector",
     "sourceRoot": "packages/connector/src",
     "projectType": "library",
     "targets": {

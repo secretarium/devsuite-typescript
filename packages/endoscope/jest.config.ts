@@ -1,8 +1,5 @@
-import path from 'path';
-
-module.exports = {
+export default {
     displayName: 'endoscope',
-
     transform: {
         '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': '@nrwl/react/plugins/jest',
         '^.+\\.[tj]sx?$': [
@@ -12,6 +9,6 @@ module.exports = {
     },
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
     coverageDirectory: '../../coverage/packages/endoscope',
-    setupFiles: [path.resolve(__dirname, 'jest/setupFile')],
-    preset: '../../jest.preset.ts'
+    setupFiles: ['./jest/setupFile.ts'],
+    preset: '../../jest.preset.js'
 };

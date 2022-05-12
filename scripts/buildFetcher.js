@@ -4,9 +4,9 @@ const { execSync, spawn } = require('child_process');
 
 const rootPath = path.resolve(__dirname, '..');
 process.chdir(rootPath);
-process.stdout.write(`Build fetching from ${rootPath}\n`);
+process.stdout.write(`Build fetching from ${rootPath}...\n`);
 const [, , ...args] = process.argv;
-const buildProcess = spawn('yarn', ['nx', 'affected', '--target=eas-build', ...args], { shell: true });
+const buildProcess = spawn('yarn', ['nx', 'affected', '--output-style=stream', '--target=eas-build', ...args], { shell: true });
 let result = undefined;
 let expectingBuildOutput = false;
 buildProcess.stderr.on('data', (data) => {

@@ -1,6 +1,5 @@
-module.exports = {
+export default {
     displayName: 'crate',
-
     transform: {
         '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': '@nrwl/react/plugins/jest',
         '^.+\\.[tj]sx?$': [
@@ -10,5 +9,5 @@ module.exports = {
     },
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
     coverageDirectory: '../../coverage/packages/crate',
-    preset: '../../jest.preset.ts'
+    preset: '../../jest.preset.js'
 };

@@ -1,17 +1,20 @@
 {
-    "root": "packages/crypto",
     "sourceRoot": "packages/crypto/src",
     "projectType": "library",
     "targets": {
         "build": {
             "executor": "@nrwl/js:tsc",
-            "outputs": ["{options.outputPath}"],
+            "outputs": [
+                "{options.outputPath}"
+            ],
             "options": {
                 "outputPath": "dist/packages/crypto",
                 "tsConfig": "packages/crypto/tsconfig.lib.json",
                 "packageJson": "packages/crypto/package.json",
                 "main": "packages/crypto/src/index.ts",
-                "assets": ["packages/crypto/*.md"]
+                "assets": [
+                    "packages/crypto/*.md"
+                ]
             }
         },
         "lint": {
@@ -21,11 +24,15 @@
                     "packages/crypto/**/*.{ts,tsx,js,jsx,json}"
                 ]
             },
-            "outputs": ["{options.outputFile}"]
+            "outputs": [
+                "{options.outputFile}"
+            ]
         },
         "test": {
             "executor": "@nrwl/jest:jest",
-            "outputs": ["coverage/packages/crypto"],
+            "outputs": [
+                "coverage/packages/crypto"
+            ],
             "options": {
                 "jestConfig": "packages/crypto/jest.config.ts",
                 "passWithNoTests": true

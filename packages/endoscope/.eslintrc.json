@@ -11,7 +11,7 @@
         "webextensions": true
     },
     "globals": {
-        "chrome": false
+        "chrome": true
     },
     "overrides": [
         {

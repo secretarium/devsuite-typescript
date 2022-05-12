@@ -1,5 +1,4 @@
 {
-    "root": "packages/crate-bed",
     "sourceRoot": "packages/crate-bed/src",
     "projectType": "application",
     "targets": {

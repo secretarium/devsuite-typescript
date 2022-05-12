@@ -1,5 +1,4 @@
 {
-    "root": "packages/crate-e2e",
     "sourceRoot": "packages/crate-e2e/src",
     "projectType": "application",
     "targets": {

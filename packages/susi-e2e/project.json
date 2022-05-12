@@ -1,5 +1,4 @@
 {
-    "root": "packages/susi-e2e",
     "sourceRoot": "packages/susi-e2e/src",
     "projectType": "application",
     "targets": {
