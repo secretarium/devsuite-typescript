@@ -39,5 +39,7 @@
             }
         }
     },
-    "tags": []
+    "tags": [
+        "scope:sdk"
+    ]
 }

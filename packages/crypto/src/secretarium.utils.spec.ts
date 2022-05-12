@@ -33,9 +33,9 @@ describe('Connector Utils', () => {
         expect(Utils.decode(Utils.fromBase64(Utils.toBase64(token)))).toEqual(string);
     });
 
-    it('Offer pseudo random functions', async () => {
-        expect(Utils.getRandomBytes()).toBeInstanceOf(Uint8Array);
-        expect(Utils.getRandomBytes(42).length).toBe(42);
-        for (let i = 0; i < 42000; i++) expect(Utils.getRandomString()).toBeDefined();
-    });
+    // it('Offer pseudo random functions', async () => {
+    //     expect(Utils.getRandomBytes()).toBeInstanceOf(Uint8Array);
+    //     expect(Utils.getRandomBytes(42).length).toBe(42);
+    //     for (let i = 0; i < 42000; i++) expect(Utils.getRandomString()).toBeDefined();
+    // });
 });

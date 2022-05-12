@@ -6,7 +6,7 @@
 /out-tsc
 
 # dependencies
-/node_modules
+node_modules
 
 # IDEs and editors
 /.idea
@@ -29,30 +29,21 @@
 /connect.lock
 /coverage
 /libpeerconnection.log
-npm-debug.log
-yarn-error.log
+npm-debug.*
+yarn-error.*
 testem.log
 /typings
 /.swc
-.expo/
-*.jks
-*.p8
-*.p12
-*.key
-*.mobileprovision
-*.orig.*
-web-build/
 .env.local*
+packages/susi-e2e/artifacts
 
 # System Files
 .DS_Store
 Thumbs.db
 
 # Expo
-node_modules/
 .expo/
 dist/
-npm-debug.*
 *.jks
 *.p8
 *.p12
@@ -60,5 +51,3 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
-
-packages/susi-e2e/artifacts

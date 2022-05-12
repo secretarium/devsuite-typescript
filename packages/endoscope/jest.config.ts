@@ -1,5 +1,6 @@
 export default {
     displayName: 'endoscope',
+    preset: '../../jest.preset.js',
     transform: {
         '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': '@nrwl/react/plugins/jest',
         '^.+\\.[tj]sx?$': [
@@ -9,6 +10,5 @@ export default {
     },
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
     coverageDirectory: '../../coverage/packages/endoscope',
-    setupFiles: ['./jest/setupFile.ts'],
-    preset: '../../jest.preset.js'
+    setupFiles: ['./jest/setupFile.ts']
 };
