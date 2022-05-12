@@ -15,5 +15,6 @@ export default {
         '^.+\\.(bmp|gif|jpg|jpeg|mp4|png|psd|svg|webp|ttf)$': require.resolve(
             'react-native/jest/assetFileTransformer.js'
         )
-    }
+    },
+    coverageDirectory: '../../coverage/packages/susi'
 };
