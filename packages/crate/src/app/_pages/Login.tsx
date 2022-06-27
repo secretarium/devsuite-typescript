@@ -29,12 +29,12 @@ function Login() {
                     <div className="form-group">
                         <label>Username</label>
                         <input title="Username" type="text" {...register('username')} className={`form-control ${errors['username'] ? 'is-invalid' : ''}`} />
-                        <div className="invalid-feedback">{errors['username']?.message}</div>
+                        <div className="invalid-feedback">{errors['username']?.message?.toString()}</div>
                     </div>
                     <div className="form-group">
                         <label>Password</label>
                         <input title="Password" type="password" {...register('password')} className={`form-control ${errors['password'] ? 'is-invalid' : ''}`} />
-                        <div className="invalid-feedback">{errors['password']?.message}</div>
+                        <div className="invalid-feedback">{errors['password']?.message?.toString()}</div>
                     </div>
                     <button disabled={isSubmitting} className="btn btn-primary">
                         {isSubmitting && <span className="spinner-border spinner-border-sm mr-1"></span>}
