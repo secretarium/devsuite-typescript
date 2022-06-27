@@ -12,5 +12,6 @@
         "react": "packages/react",
         "susi": "packages/susi",
         "susi-e2e": "packages/susi-e2e"
-    }
+    },
+    "$schema": "./node_modules/nx/schemas/workspace-schema.json"
 }

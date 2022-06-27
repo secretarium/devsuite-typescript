@@ -41,5 +41,6 @@
     },
     "tags": [
         "scope:sdk"
-    ]
+    ],
+    "$schema": "..\\..\\node_modules\\nx\\schemas\\project-schema.json"
 }
