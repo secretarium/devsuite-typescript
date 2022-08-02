@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { version } = require('./package.json');
 const STAGE = process.env.STAGE || 'development';
+const NX_EXPO_PROJECT_ID = process.env.NX_EXPO_PROJECT_ID;
 const BUILD_NUMBER = parseInt(process.env.GITHUB_RUN_ID || process.env.CI_JOB_ID || process.env.BUILD_NUMBER || 1);
 
 const envConfig = {
@@ -123,7 +124,10 @@ export default {
     },
     extra: {
         STAGE,
-        BUILD_NUMBER
+        BUILD_NUMBER,
+        eas: {
+            projectId: NX_EXPO_PROJECT_ID
+        }
     },
     hooks: {
         // postPublish: [

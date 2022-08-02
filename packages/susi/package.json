@@ -3,16 +3,22 @@
     "version": "0.0.1",
     "private": true,
     "dependencies": {
-        "react-native": "*",
+        "@testing-library/jest-native": "*",
+        "@testing-library/react-native": "*",
         "expo": "*",
-        "expo-updates": "*"
-    },
-    "devDependencies": {
-        "@expo/webpack-config": "*",
-        "@nrwl/expo": "*"
+        "expo-dev-client": "*",
+        "expo-status-bar": "*",
+        "expo-splash-screen": "*",
+        "expo-structured-headers": "*",
+        "expo-updates": "*",
+        "react-native": "*",
+        "react-native-reanimated": "*",
+        "react-native-safe-area-context": "*",
+        "react-native-svg": "*",
+        "react-native-web": "*"
     },
     "scripts": {
-        "eas-build-pre-install": "cd ../../ && node ./scripts/listRootDependencies.js && cp yarn.lock ./packages/susi/ && mv ./packages/susi/eas.js ./index.js",
+        "eas-build-pre-install": "cd ../../ && node ./scripts/listRootDependencies.js && cp yarn.lock ./packages/susi/",
         "postinstall": "rm -r node_modules && cd ../../ && yarn install && npx nx sync-deps susi && npx nx ensure-symlink susi"
     }
 }
