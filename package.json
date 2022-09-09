@@ -67,7 +67,7 @@
         "@swc/cli": "~0.1.57",
         "@swc/core": "1.2.175",
         "@swc/helpers": "~0.3.13",
-        "@swc/jest": "0.2.20",
+        "@swc/jest": "0.2.22",
         "@testing-library/react": "13.1.1",
         "@types/chrome": "0.0.183",
         "@types/jest": "27.5.0",
