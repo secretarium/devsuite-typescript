@@ -284,4 +284,4 @@ export type UnionToIntersection<U> = (U extends any
     ? I
     : never
 
-export type Flatten<T> = Pick<T, NonObjectKeysOf<T>> & UnionToIntersection<ObjectValuesOf<T>>
+// export type Flatten<T> = Pick<T, NonObjectKeysOf<T>> & UnionToIntersection<ObjectValuesOf<T>>
