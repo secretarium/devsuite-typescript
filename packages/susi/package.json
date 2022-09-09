@@ -18,7 +18,7 @@
         "react-native-web": "*"
     },
     "scripts": {
-        "eas-build-pre-install": "cd ../../ && node ./scripts/listRootDependencies.js && cp yarn.lock ./packages/susi/",
+        "eas-build-pre-install": "cd ../../ && node ./scripts/listRootDependencies.js && cp yarn.lock ./packages/susi/ && (bash -c \"[ ! -z \\\"$EAS_BUILD_NPM_CACHE_URL\\\" ] && sed -i -e \\\"s#https://registry.yarnpkg.com#$EAS_BUILD_NPM_CACHE_URL#g\\\" yarn.lock\" || true)",
         "postinstall": "rm -r node_modules && cd ../../ && yarn install && npx nx sync-deps susi && npx nx ensure-symlink susi"
     }
 }

@@ -10142,12 +10142,13 @@ expo-cli@6.0.5, expo-cli@^6.0.1:
     wrap-ansi "^7.0.0"
     xdl "59.2.52"
 
-expo-community-flipper@46.0.1:
-  version "46.0.1"
-  resolved "https://registry.yarnpkg.com/expo-community-flipper/-/expo-community-flipper-46.0.1.tgz#69d5498e2c5059ec082fdc059a4e25138956db00"
-  integrity sha512-0MyNWHKCJ9OuKYUSOPwndUNHFYGNlT6ljfCr4T+tVDobbtUpAVmluSzsMY2xL8xm9JKaUxUHISVj9488kvtVmw==
+expo-community-flipper@46.0.0:
+  version "46.0.0"
+  resolved "https://registry.yarnpkg.com/expo-community-flipper/-/expo-community-flipper-46.0.0.tgz#266f9b7a1d3287740174c687b0f140efda93cee1"
+  integrity sha512-guzUavTn+5vLF95GG+UwoE63CXkqg7QVaY1YVGJc5CtT1ZVIIa0Fokyuc69D8Q7oMWb+P8LY76CaEGN+PPhJ1A==
   dependencies:
     "@expo/config-plugins" "^5.0.0"
+    resolve-from "^5.0.0"
     semver "^7.3.7"
 
 expo-constants@~13.2.0, expo-constants@~13.2.2, expo-constants@~13.2.4:

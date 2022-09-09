@@ -1,12 +1,17 @@
 {
     "cli": {
-        "version": ">= 1.0.0"
+        "version": ">= 2.1.0"
     },
     "submit": {
         "production": {}
     },
     "build": {
         "base": {
+            "ios": {
+                "cache": {
+                    "disabled": true
+                }
+            },
             "env": {
                 "STAGE": "production",
                 "NODE_ENV": "development",

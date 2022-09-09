@@ -26,7 +26,7 @@
         "expo": "^46.0.10",
         "expo-barcode-scanner": "~11.4.0",
         "expo-camera": "~12.3.0",
-        "expo-community-flipper": "46.0.1",
+        "expo-community-flipper": "46.0.0",
         "expo-dev-client": "~1.2.1",
         "expo-device": "~4.3.0",
         "expo-notifications": "~0.16.1",
