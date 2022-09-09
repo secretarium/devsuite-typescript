@@ -2104,10 +2104,10 @@
     chalk "4.1.0"
     confusing-browser-globals "^1.0.9"
 
-"@nrwl/expo@14.0.1":
-  version "14.0.1"
-  resolved "https://registry.yarnpkg.com/@nrwl/expo/-/expo-14.0.1.tgz#1d84885b3a4dd4691fbed36dc1e286a220d4c9ba"
-  integrity sha512-IPvY4W9CPOMCfXesljtwvjFOafIOswGP7tJj9/2Ozx55VeRDDuhuLUGzFi5dTrHMea+Ow/kgh7ux1jjZ40tYng==
+"@nrwl/expo@14.1.0":
+  version "14.1.0"
+  resolved "https://registry.yarnpkg.com/@nrwl/expo/-/expo-14.1.0.tgz#588f4e79348f0d74d927b922e640888e768da3b4"
+  integrity sha512-j3uTKtsJZgGMLF4eoU4/VRQT0bnNBZIPpPjKfBiGjvegcMzV5JHo1drSfEy6yoYH+6DMqRTSIGJHq9FzNgwjUQ==
   dependencies:
     "@nrwl/detox" "*"
     "@nrwl/devkit" "*"
@@ -2118,7 +2118,7 @@
     chalk "4.1.0"
     enhanced-resolve "^5.8.3"
     expo-cli "^5.4.3"
-    metro-resolver "^0.66.2"
+    metro-resolver "^0.70.2"
     tsconfig-paths "^3.9.0"
     tsconfig-paths-webpack-plugin "^3.5.2"
 
@@ -11476,10 +11476,10 @@ metro-react-native-babel-preset@~0.64.0:
     "@babel/template" "^7.0.0"
     react-refresh "^0.4.0"
 
-metro-resolver@^0.66.2:
-  version "0.66.2"
-  resolved "https://registry.yarnpkg.com/metro-resolver/-/metro-resolver-0.66.2.tgz#f743ddbe7a12dd137d1f7a555732cafcaea421f8"
-  integrity sha512-pXQAJR/xauRf4kWFj2/hN5a77B4jLl0Fom5I3PHp6Arw/KxSBp0cnguXpGLwNQ6zQC0nxKCoYGL9gQpzMnN7Hw==
+metro-resolver@^0.70.2:
+  version "0.70.3"
+  resolved "https://registry.yarnpkg.com/metro-resolver/-/metro-resolver-0.70.3.tgz#c64fdd6d0a88fa62f3f99f87e539b5f603bd47bf"
+  integrity sha512-5Pc5S/Gs4RlLbziuIWtvtFd9GRoILlaRC8RZDVq5JZWcWHywKy/PjNmOBNhpyvtRlzpJfy/ssIfLhu8zINt1Mw==
   dependencies:
     absolute-path "^0.0.0"
 

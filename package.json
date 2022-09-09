@@ -55,7 +55,7 @@
         "@commitlint/config-nx-scopes": "^16.2.1",
         "@nrwl/cypress": "14.0.5",
         "@nrwl/eslint-plugin-nx": "14.0.5",
-        "@nrwl/expo": "14.0.1",
+        "@nrwl/expo": "14.1.0",
         "@nrwl/jest": "14.0.5",
         "@nrwl/js": "14.0.5",
         "@nrwl/linter": "14.0.5",
