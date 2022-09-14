@@ -1,24 +1,24 @@
 {
     "manifest_version": 3,
     "name": "Secretarium Developer Tools",
-    "description": "Adds Secretarium debugging tools to the Chrome Developer Tools.",
+    "description": "Adds Secretarium debugging tools to the Developer Tools.",
     "version": "0.0.1",
     "version_name": "0.0.1",
     "minimum_chrome_version": "60",
-    "__icons": {
+    "icons": {
         "16": "icons/16-production.png",
         "32": "icons/32-production.png",
         "48": "icons/48-production.png",
         "128": "icons/128-production.png"
     },
-    "__browser_action": {
+    "browser_action": {
         "default_icon": {
             "16": "icons/16-disabled.png",
             "32": "icons/32-disabled.png",
             "48": "icons/48-disabled.png",
             "128": "icons/128-disabled.png"
         },
-        "default_popup": "popups/disabled.html"
+        "__default_popup": "popups/disabled.html"
     },
     "devtools_page": "index.html",
     "content_security_policy": {
@@ -26,18 +26,32 @@
     },
     "web_accessible_resources": [
         {
-            "resources": ["*"],
-            "matches": ["https://*.secretarium.com/*", "https://*.secretarium.org/*", "https://*.secretarium.tech/*"]
+            "resources": [
+                "*"
+            ],
+            "matches": [
+                "https://*.secretarium.com/*",
+                "https://*.secretarium.org/*",
+                "https://*.secretarium.tech/*"
+            ]
         }
     ],
     "__background": {
         "service_worker": "build/background.js"
     },
-    "host_permissions": ["file:///*", "http://*/*", "https://*/*"],
+    "host_permissions": [
+        "file:///*",
+        "http://*/*",
+        "https://*/*"
+    ],
     "__content_scripts": [
         {
-            "matches": ["<all_urls>"],
-            "js": ["build/injectGlobalHook.js"],
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "build/injectGlobalHook.js"
+            ],
             "run_at": "document_start"
         }
     ]
