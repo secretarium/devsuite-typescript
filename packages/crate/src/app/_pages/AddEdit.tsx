@@ -91,19 +91,19 @@ const AddEdit: React.FC<RouteProps> = () => {
                         <div className="form-group col">
                             <label>First Name</label>
                             <input title="firstName" type="text" {...register('firstName')} className={`form-control ${errors['firstName'] ? 'is-invalid' : ''}`} />
-                            <div className="invalid-feedback">{errors['firstName']?.message}</div>
+                            <div className="invalid-feedback">{errors['firstName']?.message?.toString()}</div>
                         </div>
                         <div className="form-group col">
                             <label>Last Name</label>
                             <input title="lastName" type="text" {...register('lastName')} className={`form-control ${errors['lastName'] ? 'is-invalid' : ''}`} />
-                            <div className="invalid-feedback">{errors['lastName']?.message}</div>
+                            <div className="invalid-feedback">{errors['lastName']?.message?.toString()}</div>
                         </div>
                     </div>
                     <div className="form-row">
                         <div className="form-group col">
                             <label>Username</label>
                             <input title="username" type="text" {...register('username')} className={`form-control ${errors['username'] ? 'is-invalid' : ''}`} />
-                            <div className="invalid-feedback">{errors['email']?.message}</div>
+                            <div className="invalid-feedback">{errors['email']?.message?.toString()}</div>
                         </div>
                         <div className="form-group col">
                             <label>
@@ -111,7 +111,7 @@ const AddEdit: React.FC<RouteProps> = () => {
                                 {mode.edit && <em className="ml-1">(Leave blank to keep the same password)</em>}
                             </label>
                             <input title="password" type="password" {...register('password')} className={`form-control ${errors['password'] ? 'is-invalid' : ''}`} />
-                            <div className="invalid-feedback">{errors['password']?.message}</div>
+                            <div className="invalid-feedback">{errors['password']?.message?.toString()}</div>
                         </div>
                     </div>
                     <div className="form-group">
