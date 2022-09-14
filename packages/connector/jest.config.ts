@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     displayName: 'connector',
     preset: '../../jest.preset.ts',
     globals: {

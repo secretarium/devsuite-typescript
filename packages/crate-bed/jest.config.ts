@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     displayName: 'crate-bed',
     preset: '../../jest.preset.ts',
     transform: {

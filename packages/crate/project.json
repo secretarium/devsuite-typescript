@@ -1,5 +1,4 @@
 {
-    "root": "packages/crate",
     "sourceRoot": "packages/crate/src",
     "projectType": "application",
     "targets": {

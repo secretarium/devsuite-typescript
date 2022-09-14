@@ -1,5 +1,4 @@
 {
-    "root": "packages/cryptx",
     "sourceRoot": "packages/cryptx/src",
     "projectType": "application",
     "targets": {

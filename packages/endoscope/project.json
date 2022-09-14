@@ -1,5 +1,4 @@
 {
-    "root": "packages/endoscope",
     "sourceRoot": "packages/endoscope/src",
     "projectType": "application",
     "targets": {

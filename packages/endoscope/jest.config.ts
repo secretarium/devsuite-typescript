@@ -1,7 +1,6 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const path = require('path');
+import path from 'path';
 
-module.exports = {
+export default {
     displayName: 'endoscope',
     preset: '../../jest.preset.ts',
     transform: {

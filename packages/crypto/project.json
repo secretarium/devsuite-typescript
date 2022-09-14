@@ -1,5 +1,4 @@
 {
-    "root": "packages/crypto",
     "sourceRoot": "packages/crypto/src",
     "projectType": "library",
     "targets": {

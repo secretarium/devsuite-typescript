@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     displayName: 'cryptx',
     preset: '../../jest.preset.ts',
     globals: {
