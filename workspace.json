@@ -7,7 +7,6 @@
         "crate-bed-e2e": "packages/crate-bed-e2e",
         "crate-e2e": "packages/crate-e2e",
         "crypto": "packages/crypto",
-        "cryptx": "packages/cryptx",
         "endoscope": "packages/endoscope",
         "endoscope-e2e": "packages/endoscope-e2e",
         "react": "packages/react"
