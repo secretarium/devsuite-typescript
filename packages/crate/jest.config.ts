@@ -1,6 +1,6 @@
 export default {
     displayName: 'crate',
-    preset: '../../jest.preset.ts',
+    preset: '../../jest.preset.js',
     transform: {
         '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': '@nrwl/react/plugins/jest',
         '^.+\\.[tj]sx?$': [

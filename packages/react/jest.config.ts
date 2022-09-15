@@ -1,6 +1,6 @@
 export default {
     displayName: 'react',
-    preset: '../../jest.preset.ts',
+    preset: '../../jest.preset.js',
     transform: {
         '^.+\\.[tj]sx?$': ['babel-jest', { presets: ['@nrwl/react/babel'] }]
     },
