@@ -11,15 +11,6 @@
         "48": "icons/48-production.png",
         "128": "icons/128-production.png"
     },
-    "browser_action": {
-        "default_icon": {
-            "16": "icons/16-disabled.png",
-            "32": "icons/32-disabled.png",
-            "48": "icons/48-disabled.png",
-            "128": "icons/128-disabled.png"
-        },
-        "__default_popup": "popups/disabled.html"
-    },
     "devtools_page": "index.html",
     "content_security_policy": {
         "extension_pages": "script-src 'self'; object-src 'self'"
