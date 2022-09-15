@@ -37,5 +37,15 @@
             }
         }
     },
-    "defaultProject": "crate"
+    "defaultProject": "crate",
+    "targetDefaults": {
+        "test": {
+            "inputs": [
+                "default",
+                "^default",
+                "{workspaceRoot}/jest.preset.ts",
+                "{workspaceRoot}/jest.preset.ts"
+            ]
+        }
+    }
 }

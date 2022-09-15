@@ -12,7 +12,7 @@
         "lint-fix": "nx affected --target=lint --fix && yarn lint --fix",
         "format-check": "nx workspace-lint && nx format:check --all",
         "format-fix": "nx workspace-lint && nx format --all",
-        "preinstall": "node ./scripts/hintYarn.js",
+        "preinstall": "node ./tools/scripts/hintYarn.js",
         "prepare": "is-ci || husky install",
         "release": "standard-version -s"
     },
@@ -103,6 +103,7 @@
         "standard-version": "^9.5.0",
         "swc-loader": "0.2.3",
         "ts-jest": "28.0.8",
+        "ts-node": "10.9.1",
         "typescript": "~4.8.3"
     }
 }
