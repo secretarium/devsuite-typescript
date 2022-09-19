@@ -58,7 +58,7 @@
         "@nrwl/cypress": "14.7.5",
         "@nrwl/detox": "14.7.5",
         "@nrwl/eslint-plugin-nx": "14.7.5",
-        "@nrwl/express": "14.7.5",
+        "@nrwl/express": "14.7.6",
         "@nrwl/jest": "14.7.5",
         "@nrwl/js": "14.7.5",
         "@nrwl/linter": "14.7.5",
