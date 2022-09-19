@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useLocation } from 'react-router';
 import { parse as queryParser } from 'query-string';
 import QRCode, { QRCodeProps } from 'react-qr-code';
-import { CachePolicies, useQuery } from '@secretarium/react';
+import { useQuery } from '@secretarium/react';
 
 export const CodeAuth = () => {
 
@@ -13,9 +13,7 @@ export const CodeAuth = () => {
     const [data, loading /*, error*/] = useQuery<string, string>({
         app: 'sfx',
         route: 'version'
-    }, {
-        cachePolicy: CachePolicies.CACHE_AND_NETWORK
-    }, []);
+    });
 
     if (typeof refererApplicationToken === 'string')
         return <div className='flex flex-col items-center gap-4'>

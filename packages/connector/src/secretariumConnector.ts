@@ -33,12 +33,13 @@ export const SecretariumConnector: ConnectorConstructor = class SecretariumConne
 
         const {
             // transport = 'wss',
-            connections = [],
+            connections,
+            connection,
             connectToDevTools = typeof globalThis === 'object' && !(globalThis as any).__SECRETARIUM_DEVTOOLS_CONNECTOR__
         } = options;
 
         // this.transport = transport;
-        this.connections = SecretariumConnector.expandServers(connections);
+        this.connections = SecretariumConnector.expandServers(connection ?? connections ?? []);
         this.scp = new SCP({
             logger: console
         });
@@ -60,7 +61,7 @@ export const SecretariumConnector: ConnectorConstructor = class SecretariumConne
 
     public async connect() {
         if (this._isConnecting)
-            // If we are currently connecting lets hold to know the outcome
+            // If we are currently connecting lets hold on to know the outcome
             return new Promise((resolve) => {
                 const interval = setInterval(() => {
                     if (!this._isConnecting) {

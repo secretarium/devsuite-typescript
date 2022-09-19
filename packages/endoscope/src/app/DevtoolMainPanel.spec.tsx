@@ -1,14 +1,12 @@
 import { render } from '@testing-library/react';
-
 import { BrowserRouter } from 'react-router-dom';
+import DevtoolMainPanel from './DevtoolMainPanel';
 
-import App from './App';
-
-describe('App', () => {
+describe('DevtoolMainPanel', () => {
     it('should render successfully', () => {
         const { baseElement } = render(
             <BrowserRouter>
-                <App />
+                <DevtoolMainPanel />
             </BrowserRouter>
         );
 
@@ -18,10 +16,10 @@ describe('App', () => {
     it('should have a greeting as the title', () => {
         const { getByText } = render(
             <BrowserRouter>
-                <App />
+                <DevtoolMainPanel />
             </BrowserRouter>
         );
 
-        expect(getByText(/Inspect Secretarium connection/gi)).toBeTruthy();
+        expect(getByText(/Current connected versions/gi)).toBeTruthy();
     });
 });

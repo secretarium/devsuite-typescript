@@ -1,7 +1,7 @@
 import * as Constants from './secretarium.constant';
 import * as TC from './secretarium.connector';
 import * as TK from './secretarium.key';
-// import './devtools';
+import './devtools';
 
 export type Query = TC.Query;
 export type Transaction = TC.Transaction;

@@ -17,7 +17,7 @@
                 "polyfills": "packages/crate/src/polyfills.ts",
                 "tsConfig": "packages/crate/tsconfig.app.json",
                 "assets": [
-                    "packages/crate/src/favicon.ico",
+                    "packages/crate/src/favicon.svg",
                     "packages/crate/src/assets"
                 ],
                 "styles": [

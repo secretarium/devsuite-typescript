@@ -14,11 +14,11 @@
                 "outputPath": "dist/packages/endoscope",
                 "index": "packages/endoscope/src/index.html",
                 "baseHref": "/",
-                "main": "packages/endoscope/src/main.tsx",
+                "main": "packages/endoscope/src/panel.tsx",
                 "polyfills": "packages/endoscope/src/polyfills.ts",
                 "tsConfig": "packages/endoscope/tsconfig.app.json",
                 "assets": [
-                    "packages/endoscope/src/favicon.ico",
+                    "packages/endoscope/src/favicon.svg",
                     {
                         "input": "packages/endoscope/src/assets",
                         "glob": "**/*",
