@@ -45,6 +45,11 @@
                 "^default",
                 "{workspaceRoot}/jest.preset.js"
             ]
+        },
+        "version": {
+            "dependsOn": [
+                "^version"
+            ]
         }
     }
 }
