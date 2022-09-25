@@ -50,6 +50,13 @@
                 "jestConfig": "packages/react/jest.config.ts",
                 "passWithNoTests": true
             }
+        },
+        "version": {
+            "executor": "@jscutlery/semver:version",
+            "options": {
+                "preset": "conventional",
+                "trackDeps": true
+            }
         }
     },
     "$schema": "..\\..\\node_modules\\nx\\schemas\\project-schema.json"

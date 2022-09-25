@@ -25,6 +25,7 @@ export type ServerObject = {
     trustKey: string;
     name?: string;
     cluster?: string;
+    kem?: 'rsa' | 'kyber'
 }
 
 export type Server = ConnectionString | ServerObject;
@@ -33,10 +34,15 @@ export type ConnectorTransport = 'https' | 'wss';
 
 export type ConnectorOptions = {
     transport?: ConnectorTransport
-    connections?: Server | Array<Server>;
     transformers?: ConnectorTransformerStack;
     connectToDevTools?: boolean;
-}
+} & ({
+    connection?: Server;
+    connections?: never;
+} | {
+    connection?: never;
+    connections?: Array<Server>;
+})
 
 export interface Connector {
     version: string;

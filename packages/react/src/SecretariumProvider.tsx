@@ -8,16 +8,14 @@ import './devtools';
 export const SecretariumProvider: FC<SecretariumProviderProps> = ({
     children,
     connector,
-    ...rest
+    options
 }) => {
 
     const defaults = useMemo<SecretariumContextValue>(
         () => ({
-            connector: connector ?? new SecretariumConnector({
-                ...rest
-            })
+            connector: connector ?? new SecretariumConnector(options ?? {})
         }),
-        [connector, rest]
+        [connector, options]
     );
 
     return (

@@ -1,3 +1,5 @@
+import path from 'path';
+
 export default {
     displayName: 'endoscope',
     preset: '../../jest.preset.js',
@@ -10,5 +12,5 @@ export default {
     },
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
     coverageDirectory: '../../coverage/packages/endoscope',
-    setupFiles: ['./jest/setupFile.ts']
+    setupFiles: [path.resolve(__dirname, 'jest/setupFile')]
 };

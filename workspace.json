@@ -1,4 +1,5 @@
 {
+    "$schema": "./node_modules/nx/schemas/workspace-schema.json",
     "version": 2,
     "projects": {
         "connector": "packages/connector",
@@ -9,9 +10,8 @@
         "crypto": "packages/crypto",
         "endoscope": "packages/endoscope",
         "endoscope-e2e": "packages/endoscope-e2e",
+        "hubber": "packages/hubber",
         "react": "packages/react",
-        "susi": "packages/susi",
-        "susi-e2e": "packages/susi-e2e"
-    },
-    "$schema": "./node_modules/nx/schemas/workspace-schema.json"
+        "susi": "packages/susi"
+    }
 }

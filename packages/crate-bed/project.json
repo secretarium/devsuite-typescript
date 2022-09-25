@@ -17,7 +17,7 @@
                 "polyfills": "packages/crate-bed/src/polyfills.ts",
                 "tsConfig": "packages/crate-bed/tsconfig.app.json",
                 "assets": [
-                    "packages/crate-bed/src/favicon.ico",
+                    "packages/crate-bed/src/favicon.svg",
                     "packages/crate-bed/src/assets"
                 ],
                 "styles": [
@@ -87,6 +87,13 @@
             "options": {
                 "jestConfig": "packages/crate-bed/jest.config.ts",
                 "passWithNoTests": true
+            }
+        },
+        "version": {
+            "executor": "@jscutlery/semver:version",
+            "options": {
+                "preset": "conventional",
+                "trackDeps": true
             }
         }
     },

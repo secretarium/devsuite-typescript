@@ -6,7 +6,8 @@
     "ignorePatterns": [
         "!**/*",
         ".expo",
-        "node_modules"
+        "node_modules",
+        "web-build"
     ],
     "globals": {
         "__DEV__": "readonly"

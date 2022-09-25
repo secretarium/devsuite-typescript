@@ -7,10 +7,10 @@
         ]
     },
     "exclude": [
+        "jest.config.ts",
         "**/*.spec.ts",
         "**/*.spec.tsx",
-        "test-setup.ts",
-        "jest.config.ts"
+        "test-setup.ts"
     ],
     "include": [
         "**/*.ts",
