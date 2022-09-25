@@ -7,8 +7,8 @@
         ".eslintrc.js",
         "*.js*",
         "*.ts*",
-        "apps/**/*.js*",
-        "apps/**/*.ts*",
+        "packages/*/*.js*",
+        "packages/*/*.ts",
         "tools/**/*.js"
     ]
 }
