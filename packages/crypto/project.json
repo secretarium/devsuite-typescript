@@ -3,6 +3,12 @@
     "projectType": "library",
     "targets": {
         "build": {
+            "dependsOn": [
+                {
+                    "target": "build-upstream",
+                    "projects": "self"
+                }
+            ],
             "executor": "@nrwl/js:tsc",
             "outputs": [
                 "{options.outputPath}"
@@ -15,6 +21,13 @@
                 "assets": [
                     "packages/crypto/*.md"
                 ]
+            }
+        },
+        "build-upstream": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "node tools/scripts/buildMsRCrypto.mjs",
+                "outputPath": "packages/crypto/vendor"
             }
         },
         "lint": {
