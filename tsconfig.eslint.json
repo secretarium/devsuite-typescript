@@ -1,0 +1,14 @@
+{
+    "extends": "./tsconfig.base.json",
+    "compilerOptions": {
+        "noEmit": true
+    },
+    "include": [
+        ".eslintrc.js",
+        "*.js*",
+        "*.ts*",
+        "apps/**/*.js*",
+        "apps/**/*.ts*",
+        "tools/**/*.js"
+    ]
+}

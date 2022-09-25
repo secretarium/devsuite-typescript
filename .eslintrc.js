@@ -30,18 +30,28 @@ const javascriptRules = {
     'comma-dangle': ['error', 'never'],
     'no-trailing-spaces': 'error',
     'no-extra-semi': 'error',
-    'no-unused-vars': ['error', { args: 'after-used' }],
+    'no-unused-vars': ['error', { args: 'after-used', varsIgnorePattern: '^__unused' }],
     'semi': ['error', 'always']
 };
 
 const typescriptRules = {
     ...javascriptRules,
     'no-unused-vars': 'off',
-    '@typescript-eslint/no-unused-vars': ['error', { args: 'after-used' }]
+    '@typescript-eslint/no-unused-vars': ['error', { args: 'after-used', varsIgnorePattern: '^__unused' }]
 };
 
 module.exports = {
     root: true,
+    parserOptions: {
+        tsconfigRootDir: __dirname,
+        project: [
+            './tsconfig.eslint.json',
+            './packages/*-e2e/tsconfig.json',
+            './packages/*/tsconfig.lib.json',
+            './packages/*/tsconfig.app.json',
+            './packages/*/tsconfig.spec.json'
+        ]
+    },
     ignorePatterns: ['**/*', '!**/*.json', '!**/*.js', '!**/*.ts', '!scripts', '!tools', '!.vscode'],
     plugins: ['@nrwl/nx', 'json'],
     overrides: [
