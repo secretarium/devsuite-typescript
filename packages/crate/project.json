@@ -1,4 +1,6 @@
 {
+    "name": "crate",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "packages/crate/src",
     "projectType": "application",
     "targets": {

@@ -1,4 +1,6 @@
 {
+    "name": "crate-bed",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "packages/crate-bed/src",
     "projectType": "application",
     "targets": {
