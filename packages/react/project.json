@@ -1,4 +1,6 @@
 {
+    "name": "react",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "packages/react/src",
     "projectType": "library",
     "tags": [
@@ -44,7 +46,7 @@
         "test": {
             "executor": "@nrwl/jest:jest",
             "outputs": [
-                "coverage/packages/react"
+                "{workspaceRoot}/coverage/packages/react"
             ],
             "options": {
                 "jestConfig": "packages/react/jest.config.ts",

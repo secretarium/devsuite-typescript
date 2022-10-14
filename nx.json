@@ -1,4 +1,5 @@
 {
+    "$schema": "./node_modules/nx/schemas/nx-schema.json",
     "extends": "nx/presets/core.json",
     "npmScope": "secretarium",
     "affected": {
@@ -21,6 +22,57 @@
             }
         }
     },
+    "targetDefaults": {
+        "build": {
+            "dependsOn": [
+                "^build"
+            ],
+            "inputs": [
+                "production",
+                "^production"
+            ]
+        },
+        "test": {
+            "inputs": [
+                "default",
+                "^production",
+                "{workspaceRoot}/jest.preset.js"
+            ]
+        },
+        "e2e": {
+            "inputs": [
+                "default",
+                "^production"
+            ]
+        },
+        "lint": {
+            "inputs": [
+                "default",
+                "{workspaceRoot}/.eslintrc.json"
+            ]
+        },
+        "version": {
+            "dependsOn": [
+                "^version"
+            ]
+        }
+    },
+    "namedInputs": {
+        "default": [
+            "{projectRoot}/**/*",
+            "sharedGlobals"
+        ],
+        "production": [
+            "default",
+            "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
+            "!{projectRoot}/tsconfig.spec.json",
+            "!{projectRoot}/jest.config.[jt]s",
+            "!{projectRoot}/.eslintrc.json"
+        ],
+        "sharedGlobals": [
+            "{workspaceRoot}/babel.config.json"
+        ]
+    },
     "generators": {
         "@nrwl/react": {
             "application": {
@@ -37,19 +89,5 @@
             }
         }
     },
-    "defaultProject": "crate",
-    "targetDefaults": {
-        "test": {
-            "inputs": [
-                "default",
-                "^default",
-                "{workspaceRoot}/jest.preset.js"
-            ]
-        },
-        "version": {
-            "dependsOn": [
-                "^version"
-            ]
-        }
-    }
+    "defaultProject": "crate"
 }

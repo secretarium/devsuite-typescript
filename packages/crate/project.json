@@ -1,4 +1,6 @@
 {
+    "name": "crate",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "packages/crate/src",
     "projectType": "application",
     "targets": {
@@ -81,7 +83,7 @@
         "test": {
             "executor": "@nrwl/jest:jest",
             "outputs": [
-                "coverage/packages/crate"
+                "{workspaceRoot}/coverage/packages/crate"
             ],
             "options": {
                 "jestConfig": "packages/crate/jest.config.ts",

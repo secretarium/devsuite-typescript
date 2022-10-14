@@ -1,4 +1,5 @@
 {
+    "name": "susi",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "packages/susi/src",
     "projectType": "application",
@@ -102,7 +103,7 @@
         "test": {
             "executor": "@nrwl/jest:jest",
             "outputs": [
-                "coverage/packages/susi"
+                "{workspaceRoot}/coverage/packages/susi"
             ],
             "options": {
                 "jestConfig": "packages/susi/jest.config.ts",
