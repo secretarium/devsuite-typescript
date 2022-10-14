@@ -1,6 +1,7 @@
 {
+    "name": "pocket",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "packages/susi/src",
+    "sourceRoot": "packages/pocket/src",
     "projectType": "application",
     "targets": {
         "start": {
@@ -19,13 +20,13 @@
         "serve": {
             "executor": "@nrwl/workspace:run-commands",
             "options": {
-                "command": "nx start susi"
+                "command": "nx start pocket"
             }
         },
         "eas-build": {
             "executor": "@nrwl/workspace:run-commands",
             "options": {
-                "cwd": "packages/susi",
+                "cwd": "packages/pocket",
                 "command": "eas build --non-interactive --json"
             }
         },
@@ -59,7 +60,7 @@
         "download": {
             "executor": "@nrwl/expo:download",
             "options": {
-                "output": "packages/susi/dist"
+                "output": "packages/pocket/dist"
             }
         },
         "build-ios": {
@@ -105,17 +106,17 @@
             ],
             "options": {
                 "lintFilePatterns": [
-                    "packages/susi/**/*.{ts,tsx,js,jsx}"
+                    "packages/pocket/**/*.{ts,tsx,js,jsx}"
                 ]
             }
         },
         "test": {
             "executor": "@nrwl/jest:jest",
             "outputs": [
-                "coverage/packages/susi"
+                "coverage/packages/pocket"
             ],
             "options": {
-                "jestConfig": "packages/susi/jest.config.ts",
+                "jestConfig": "packages/pocket/jest.config.ts",
                 "passWithNoTests": true
             }
         }

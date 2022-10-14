@@ -45,7 +45,7 @@ const App = () => {
                             style={[styles.textXL, styles.appTitleText]}
                             testID="heading"
                         >
-                            Welcome susi 👋
+                            Welcome pocket 👋
                         </Text>
                     </View>
                     <View style={styles.section}>

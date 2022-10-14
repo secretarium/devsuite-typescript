@@ -35,7 +35,7 @@ testem.log
 /typings
 /.swc
 .env.local*
-packages/susi-e2e/artifacts
+packages/pocket-e2e/artifacts
 
 # System Files
 .DS_Store
@@ -51,4 +51,4 @@ dist/
 *.mobileprovision
 *.orig.*
 web-build/
-apps/susi-e2e/artifacts
+apps/pocket-e2e/artifacts

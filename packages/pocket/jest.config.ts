@@ -1,5 +1,5 @@
 export default {
-    displayName: 'susi',
+    displayName: 'pocket',
     resolver: '@nrwl/jest/plugins/resolver',
     preset: 'jest-expo',
     transformIgnorePatterns: [
@@ -16,5 +16,5 @@ export default {
             'react-native/jest/assetFileTransformer.js'
         )
     },
-    coverageDirectory: '../../coverage/packages/susi'
+    coverageDirectory: '../../coverage/packages/pocket'
 };

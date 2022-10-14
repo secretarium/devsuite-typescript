@@ -1,0 +1,20 @@
+{
+    "name": "@secretarium/pocket",
+    "version": "0.0.1",
+    "private": true,
+    "dependencies": {
+        "@testing-library/jest-native": "*",
+        "@testing-library/react-native": "*",
+        "expo": "*",
+        "expo-dev-client": "*",
+        "expo-status-bar": "*",
+        "expo-splash-screen": "*",
+        "react-native": "*",
+        "react-native-svg": "*",
+        "react-native-web": "*"
+    },
+    "scripts": {
+        "eas-build-pre-install": "cd ../../ && node ./tools/scripts/listRootDependencies.js && cp yarn.lock ./packages/pocket/ && (bash -c \"[ ! -z \\\"$EAS_BUILD_NPM_CACHE_URL\\\" ] && sed -i -e \\\"s#https://registry.yarnpkg.com#$EAS_BUILD_NPM_CACHE_URL#g\\\" yarn.lock\" || true)",
+        "postinstall": "rm -r node_modules && cd ../../ && yarn install && npx nx sync-deps pocket && npx nx ensure-symlink pocket"
+    }
+}
