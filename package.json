@@ -80,7 +80,7 @@
         "@swc/helpers": "~0.4.12",
         "@swc/jest": "0.2.23",
         "@testing-library/react": "13.4.0",
-        "@testing-library/react-native": "11.1.0",
+        "@testing-library/react-native": "11.2.0",
         "@types/chrome": "0.0.197",
         "@types/express": "4.17.14",
         "@types/jest": "29.1.2",

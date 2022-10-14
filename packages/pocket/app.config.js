@@ -13,6 +13,7 @@ const envConfig = {
         icon: './assets/icon.development.png',
         favicon: './assets/favicon.development.png',
         adaptiveIcon: './assets/adaptive-icon.development.png',
+        notificationIcon: './assets/notification-icon.development.png',
         adaptiveIconBackgroundColor: '#FFFFFF'
     },
     staging: {
@@ -22,6 +23,7 @@ const envConfig = {
         icon: './assets/icon.staging.png',
         favicon: './assets/favicon.staging.png',
         adaptiveIcon: './assets/adaptive-icon.staging.png',
+        notificationIcon: './assets/notification-icon.staging.png',
         adaptiveIconBackgroundColor: '#FFFFFF'
     },
     production: {
@@ -31,6 +33,7 @@ const envConfig = {
         icon: './assets/icon.png',
         favicon: './assets/favicon.png',
         adaptiveIcon: './assets/adaptive-icon.png',
+        notificationIcon: './assets/notification-icon.png',
         adaptiveIconBackgroundColor: '#B21D36'
     }
 };

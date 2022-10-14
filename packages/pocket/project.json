@@ -113,7 +113,7 @@
         "test": {
             "executor": "@nrwl/jest:jest",
             "outputs": [
-                "coverage/packages/pocket"
+                "{workspaceRoot}/coverage/packages/pocket"
             ],
             "options": {
                 "jestConfig": "packages/pocket/jest.config.ts",
