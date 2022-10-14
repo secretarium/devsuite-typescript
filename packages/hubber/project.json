@@ -56,7 +56,7 @@
         "test": {
             "executor": "@nrwl/jest:jest",
             "outputs": [
-                "coverage/packages/hubber"
+                "{workspaceRoot}/coverage/packages/hubber"
             ],
             "options": {
                 "jestConfig": "packages/hubber/jest.config.ts",

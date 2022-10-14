@@ -46,7 +46,7 @@
         "test": {
             "executor": "@nrwl/jest:jest",
             "outputs": [
-                "coverage/packages/crypto"
+                "{workspaceRoot}/coverage/packages/crypto"
             ],
             "options": {
                 "jestConfig": "packages/crypto/jest.config.ts",

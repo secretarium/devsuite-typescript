@@ -84,7 +84,7 @@
         "test": {
             "executor": "@nrwl/jest:jest",
             "outputs": [
-                "coverage/packages/crate-bed"
+                "{workspaceRoot}/coverage/packages/crate-bed"
             ],
             "options": {
                 "jestConfig": "packages/crate-bed/jest.config.ts",

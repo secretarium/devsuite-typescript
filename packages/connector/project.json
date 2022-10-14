@@ -33,7 +33,7 @@
         "test": {
             "executor": "@nrwl/jest:jest",
             "outputs": [
-                "coverage/packages/connector"
+                "{workspaceRoot}/coverage/packages/connector"
             ],
             "options": {
                 "jestConfig": "packages/connector/jest.config.ts",
