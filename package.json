@@ -24,6 +24,7 @@
         "container-query-polyfill": "1.0.0",
         "core-js": "^3.25.5",
         "expo": "46.0.16",
+        "expo-notifications": "~0.16.1",
         "expo-splash-screen": "~0.16.2",
         "expo-status-bar": "~1.4.0",
         "express": "4.18.2",
