@@ -1,4 +1,5 @@
 {
+    "name": "hubber",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "packages/hubber/src",
     "projectType": "application",
@@ -55,7 +56,7 @@
         "test": {
             "executor": "@nrwl/jest:jest",
             "outputs": [
-                "coverage/packages/hubber"
+                "{workspaceRoot}/coverage/packages/hubber"
             ],
             "options": {
                 "jestConfig": "packages/hubber/jest.config.ts",

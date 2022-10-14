@@ -1,4 +1,6 @@
 {
+    "name": "connector",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "packages/connector/src",
     "projectType": "library",
     "targets": {
@@ -31,7 +33,7 @@
         "test": {
             "executor": "@nrwl/jest:jest",
             "outputs": [
-                "coverage/packages/connector"
+                "{workspaceRoot}/coverage/packages/connector"
             ],
             "options": {
                 "jestConfig": "packages/connector/jest.config.ts",
@@ -48,6 +50,5 @@
     },
     "tags": [
         "scope:sdk"
-    ],
-    "$schema": "..\\..\\node_modules\\nx\\schemas\\project-schema.json"
+    ]
 }
