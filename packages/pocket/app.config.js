@@ -158,7 +158,6 @@ export default {
                 // ]
             }
         ],
-        'expo-community-flipper',
         'sentry-expo'
-    ]
+    ].concat(STAGE === 'production' ? [] : ['expo-community-flipper'])
 };

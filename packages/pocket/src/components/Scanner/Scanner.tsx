@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
-import Navigation from '../Navigation';
+import { Navigation } from '../Navigation';
 import tw from 'twrnc';
-import { Camera } from 'expo-camera';
+import { Camera, CameraType } from 'expo-camera';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
 const Scanner: React.FC = () => {
@@ -23,7 +23,7 @@ const Scanner: React.FC = () => {
                     <Camera
                         style={tw`flex-1`}
                         barCodeScannerSettings={{ barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr] }}
-                        type={'back'}
+                        type={CameraType.back}
                     />
                 </View>
                 : <Text>No permission</Text>}

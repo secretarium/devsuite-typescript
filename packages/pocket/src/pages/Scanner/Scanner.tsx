@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Modal, Pressable } from 'react-native';
 import { Navigation } from '../../components';
 import tw from 'twrnc';
-import { BarCodeScanningResult, Camera } from 'expo-camera';
+import { BarCodeScanningResult, Camera, CameraType } from 'expo-camera';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { useRecoilState } from 'recoil';
 import { themeState, themeType } from '../../state';
@@ -56,7 +56,7 @@ const Scanner: React.FC = () => {
             <Modal visible={showModal} animationType="slide" transparent={true}>
                 <View style={tw`flex-1 justify-center items-center mt-12`}>
                     <View style={tw`bg-[${theme.secondaryColor}] rounded-3xl items-center shadow-2xl m-8 p-8 w-4/5`}>
-                        <Text style={[tw`text-2xl pb-4`, { fontFamily: 'MuktaMaheeBold'}]}>
+                        <Text style={[tw`text-2xl pb-4`, { fontFamily: 'MuktaMaheeBold' }]}>
                             Scan successful!
                         </Text>
                         <Text style={[tw`text-black`, { fontFamily: 'MuktaMaheeRegular' }]}>
@@ -64,12 +64,12 @@ const Scanner: React.FC = () => {
                         </Text>
                         <View style={tw`flex flex-row justify-between w-full pt-4`}>
                             <Pressable onPress={handleCancel} style={tw`bg-[${theme.primaryColor}] rounded-full p-3`}>
-                                <Text style={[tw`text-center text-[${theme.secondaryColor}] text-xl`, { fontFamily: 'MuktaMaheeBold'}]}>
+                                <Text style={[tw`text-center text-[${theme.secondaryColor}] text-xl`, { fontFamily: 'MuktaMaheeBold' }]}>
                                     Cancel
                                 </Text>
                             </Pressable>
                             <Pressable onPress={handleProceed} style={tw`bg-[${theme.primaryColor}] rounded-full p-3`}>
-                                <Text style={[tw`text-center text-[${theme.secondaryColor}] text-xl`, { fontFamily: 'MuktaMaheeBold'}]}>
+                                <Text style={[tw`text-center text-[${theme.secondaryColor}] text-xl`, { fontFamily: 'MuktaMaheeBold' }]}>
                                     Proceed
                                 </Text>
                             </Pressable>
@@ -83,7 +83,7 @@ const Scanner: React.FC = () => {
                         style={tw`flex-1`}
                         barCodeScannerSettings={{ barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr] }}
                         onBarCodeScanned={handleBarCodeScanned}
-                        type={'back'}
+                        type={CameraType.back}
                     />
                 </View>
                 : <Text>No permission</Text>}

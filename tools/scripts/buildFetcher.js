@@ -2,26 +2,28 @@ const path = require('path');
 const { mkdirSync, rmSync } = require('fs');
 const { execSync, spawn } = require('child_process');
 
+const project = process.env.NX_TASK_TARGET_PROJECT;
 const rootPath = path.resolve(__dirname, '..');
 process.chdir(rootPath);
-process.stdout.write(`Build fetching from ${rootPath}...\n`);
 const [, , ...args] = process.argv;
-const buildProcess = spawn('yarn', ['nx', 'affected', '--output-style=stream-without-prefixes', '--target=eas-build', ...args], { shell: true });
+const buildProcess = spawn('nx', ['run', `${project}:eas-build`, '--output-style=static', ...args], { shell: true });
 let result = undefined;
+let showErrorOutput = false;
 let expectingBuildOutput = false;
+let stderrBuffer = '';
+let stdoutBuffer = '';
 buildProcess.stderr.on('data', (data) => {
-    process.stdout.write(data);
+    if (data.includes('✔'))
+        showErrorOutput = true;
+    if (showErrorOutput || data.includes('🤖') || data.includes('🍎'))
+        process.stderr.write(data);
+    stderrBuffer += data;
     if (data.includes('You can press Ctrl+C to exit'))
         expectingBuildOutput = true;
 });
 buildProcess.stdout.on('data', (data) => {
     if (expectingBuildOutput)
-        try {
-            result = JSON.parse(data);
-            expectingBuildOutput = false;
-        } catch (e) {
-            // nothing
-        }
+        stdoutBuffer += data;
 });
 buildProcess.on('error', (error) => {
     process.stderr.write(`${error}\n`);
@@ -29,14 +31,25 @@ buildProcess.on('error', (error) => {
 buildProcess.on('close', (code) => {
     if (code !== 0) {
         process.stderr.write('An error occured while building mobile binaries\n');
+        process.stderr.write(stderrBuffer);
         process.exit(code);
     }
+
+    try {
+        result = JSON.parse(stdoutBuffer.substring(0, stdoutBuffer.lastIndexOf(']') + 1));
+    } catch (e) {
+        process.stderr.write('Failed to obtain build output: ' + e + '\n');
+        process.exit(1);
+    }
+
     rmSync('./dist/artifacts', { recursive: true, force: true });
     mkdirSync('./dist/artifacts', { recursive: true });
+
     if (!result) {
         process.stderr.write('Failed to obtain build output\n');
         process.exit(1);
     }
+
     let hasFailures = false;
     result.forEach(build => {
         if (build.status === 'CANCELED') {
@@ -52,6 +65,7 @@ buildProcess.on('close', (code) => {
             execSync(`download -o ./dist/artifacts --filename ${build.platform}-${build.releaseChannel}-${build.buildProfile}-${build.distribution}-${build.appVersion}-${build.appBuildVersion}-${build.gitCommitHash.substr(0, 8)}-${build.artifacts.buildUrl.split('.').pop()} ${build.artifacts.buildUrl}`);
         }
     });
+
     if (hasFailures)
         process.exit(1);
     process.exit(0);

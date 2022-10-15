@@ -18,20 +18,20 @@
             }
         },
         "serve": {
-            "executor": "@nrwl/workspace:run-commands",
+            "executor": "nx:run-commands",
             "options": {
                 "command": "nx start pocket"
             }
         },
         "eas-build": {
-            "executor": "@nrwl/workspace:run-commands",
+            "executor": "nx:run-commands",
             "options": {
                 "cwd": "packages/pocket",
-                "command": "eas build --non-interactive --json"
+                "command": "dotenv -c development eas build -- --non-interactive --json"
             }
         },
         "eas-build-download": {
-            "executor": "@nrwl/workspace:run-commands",
+            "executor": "nx:run-commands",
             "options": {
                 "command": "node ./tools/scripts/buildFetcher.js",
                 "outputPath": "dist/artifacts"
