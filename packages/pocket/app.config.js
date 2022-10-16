@@ -115,7 +115,8 @@ export default {
         backgroundColor: '#0C0D3D'
     },
     web: {
-        favicon: config.favicon
+        favicon: config.favicon,
+        bundler: 'metro'
     },
     locales: {
         en: './ios/infoPlist/en.json',
