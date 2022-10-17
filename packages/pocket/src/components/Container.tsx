@@ -1,13 +1,15 @@
 import React, { PropsWithChildren } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'twrnc';
-import { useRecoilValue } from 'recoil';
-import { themeState } from '../state';
+// import { useRecoilValue } from 'recoil';
+// import { themeState } from '../state';
 import { StatusBar } from 'expo-status-bar';
 
 export const Container: React.FC<PropsWithChildren> = ({ children }) => {
 
-    const { primaryColor, statusBarColor } = useRecoilValue(themeState);
+    // const { primaryColor, statusBarColor } = useRecoilValue(themeState);
+    const primaryColor = '#ff0000';
+    const statusBarColor = 'auto';
 
     return (
         <SafeAreaView style={tw`flex-1 bg-[${primaryColor}]`}>

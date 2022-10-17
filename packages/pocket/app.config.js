@@ -158,7 +158,7 @@ export default {
                 //     "./assets/notification-sound-other.wav"
                 // ]
             }
-        ],
-        'sentry-expo'
-    ].concat(STAGE === 'production' ? [] : ['expo-community-flipper'])
+        ]
+        // 'sentry-expo'
+    ]//.concat(STAGE === 'production' ? [] : ['expo-community-flipper'])
 };

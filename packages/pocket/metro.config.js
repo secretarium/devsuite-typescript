@@ -11,6 +11,14 @@ module.exports = (async () => {
     defaultConfig.transformer.babelTransformerPath = require.resolve(
         'react-native-svg-transformer'
     );
+
+    // Temporary utility package for using Metro on web with lazy loading and Fast Refresh.
+    defaultConfig.transformer.experimentalImportBundleSupport = true;
+    defaultConfig.transformer.asyncRequireModulePath = require.resolve(
+        '@bacons/expo-metro-runtime/asyncRequire'
+    );
+    // ----
+
     defaultConfig.transformer.minifierConfig = merge(defaultConfig.transformer.minifierConfig, {
         keep_classnames: true,
         keep_fnames: true,

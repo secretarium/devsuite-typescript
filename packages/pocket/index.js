@@ -1,12 +1,25 @@
+import './wdyr';
+// Temporary utility package for using Metro on web with lazy loading and Fast Refresh.
+import '@bacons/expo-metro-runtime';
+// ----
 import 'expo-dev-client';
 import 'expo-dev-launcher';
 import 'expo/build/Expo.fx';
+import { createRoot } from 'react-dom/client';
 import { LogBox } from 'react-native';
 import { activateKeepAwake } from 'expo-keep-awake';
 import { connectToDevTools } from 'react-devtools-core';
-import { registerRootComponent } from 'expo';
+import { AppRegistry, Platform } from 'react-native';
+// Temporarily diable `registerRootComponent` for Expo SDK 46 because of React 18 incompatility
+// import { registerRootComponent } from 'expo';
+// ----
+import withExpoRoot from 'expo/build/launch/withExpoRoot';
 
-import { App } from './src/SentryApp';
+import { App } from './src/App';
+// import { App } from './src/SentryApp';
+
+// window.ReactDOM = unstable_batchedUpdates;
+// console.log('TUTU >>>', unstable_batchedUpdates);
 
 if (__DEV__) {
     LogBox.ignoreLogs([
@@ -15,10 +28,22 @@ if (__DEV__) {
         /findHostInstance_DEPRECATED/
     ]);
     activateKeepAwake();
-    connectToDevTools();
+    if (Platform.OS !== 'web')
+        connectToDevTools();
 }
 
 // registerRootComponent calls AppRegistry.registerComponent('main', () => App);
 // It also ensures that whether you load the app in Expo Go or in a native build,
 // the environment is set up appropriately
-registerRootComponent(App);
+// ----
+// Temporarily diable `registerRootComponent` for Expo SDK 46 because of React 18 incompatility
+// registerRootComponent(App);
+//
+// Doing this manually instead
+AppRegistry.registerComponent('main', () => withExpoRoot(App));
+if ('web' === Platform.OS) {
+    const rootTag = createRoot(document.getElementById('root') ?? document.getElementById('main'));
+    const RootComponent = withExpoRoot(App);
+    rootTag.render(<RootComponent />);
+}
+// ----

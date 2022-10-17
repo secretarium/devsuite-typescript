@@ -138,7 +138,6 @@ export const SecretariumConnector: ConnectorConstructor = class SecretariumConne
             else
                 serverList.push(connection);
         });
-        console.log('expandServers', serverList);
         return serverList;
     }
 
