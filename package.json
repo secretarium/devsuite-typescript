@@ -57,7 +57,7 @@
         "@commitlint/config-nx-scopes": "^17.0.0",
         "@jscutlery/semver": "2.27.1",
         "@nrwl/eslint-plugin-nx": "15.0.0",
-        "@nrwl/express": "15.0.0",
+        "@nrwl/express": "15.0.1",
         "@nrwl/nx-cloud": "14.7.0",
         "@nrwl/react": "15.0.0",
         "@swc/cli": "~0.1.57",
