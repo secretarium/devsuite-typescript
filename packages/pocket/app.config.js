@@ -122,10 +122,10 @@ export default {
         en: './ios/infoPlist/en.json',
         fr: './ios/infoPlist/fr.json'
     },
-    jsEngine: 'hermes',
-    experiments: {
-        turboModules: true
-    },
+    // jsEngine: 'hermes',
+    // experiments: {
+    //     turboModules: true
+    // },
     extra: {
         STAGE,
         BUILD_NUMBER,
@@ -133,20 +133,20 @@ export default {
             projectId: NX_EXPO_PROJECT_ID
         }
     },
-    hooks: {
-        // postPublish: [
-        //     {
-        //         file: 'sentry-expo/upload-sourcemaps',
-        //         config: {
-        //             setCommits: true,
-        //             organization: 'secretarium',
-        //             project: 'cryptx',
-        //             url: 'https://sentry.secretarium.org/'
-        //             // "authToken": via SENTRY_AUTH_TOKEN
-        //         }
-        //     }
-        // ]
-    },
+    // hooks: {
+    // postPublish: [
+    //     {
+    //         file: 'sentry-expo/upload-sourcemaps',
+    //         config: {
+    //             setCommits: true,
+    //             organization: 'secretarium',
+    //             project: 'cryptx',
+    //             url: 'https://sentry.secretarium.org/'
+    //             // "authToken": via SENTRY_AUTH_TOKEN
+    //         }
+    //     }
+    // ]
+    // },
     plugins: [
         [
             'expo-notifications',

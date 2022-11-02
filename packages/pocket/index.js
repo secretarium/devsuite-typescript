@@ -3,17 +3,17 @@ import './wdyr';
 import '@bacons/expo-metro-runtime';
 // ----
 import 'expo-dev-client';
-import 'expo-dev-launcher';
-import 'expo/build/Expo.fx';
-import { createRoot } from 'react-dom/client';
+// import 'expo-dev-launcher';
+// import 'expo/build/Expo.fx';
+// import { createRoot } from 'react-dom/client';
 import { LogBox } from 'react-native';
 import { activateKeepAwake } from 'expo-keep-awake';
 import { connectToDevTools } from 'react-devtools-core';
-import { AppRegistry, Platform } from 'react-native';
+import { Platform } from 'react-native';
 // Temporarily diable `registerRootComponent` for Expo SDK 46 because of React 18 incompatility
-// import { registerRootComponent } from 'expo';
+import { registerRootComponent } from 'expo';
 // ----
-import withExpoRoot from 'expo/build/launch/withExpoRoot';
+// import { withDevTools } from 'expo/build/launch/withDevTools';
 
 import { App } from './src/App';
 // import { App } from './src/SentryApp';
@@ -37,13 +37,13 @@ if (__DEV__) {
 // the environment is set up appropriately
 // ----
 // Temporarily diable `registerRootComponent` for Expo SDK 46 because of React 18 incompatility
-// registerRootComponent(App);
+registerRootComponent(App);
 //
 // Doing this manually instead
-AppRegistry.registerComponent('main', () => withExpoRoot(App));
-if ('web' === Platform.OS) {
-    const rootTag = createRoot(document.getElementById('root') ?? document.getElementById('main'));
-    const RootComponent = withExpoRoot(App);
-    rootTag.render(<RootComponent />);
-}
+// AppRegistry.registerComponent('main', () => withDevTools(App));
+// if ('web' === Platform.OS) {
+//     const rootTag = createRoot(document.getElementById('root') ?? document.getElementById('main'));
+//     const RootComponent = withDevTools(App);
+//     rootTag.render(<RootComponent />);
+// }
 // ----
