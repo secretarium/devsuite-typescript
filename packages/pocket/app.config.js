@@ -139,6 +139,16 @@ export default {
             eas: {
                 projectId: NX_EXPO_PROJECT_ID
             }
-        }
+        },
+        plugins: [
+            [
+                'expo-build-properties',
+                {
+                    android: {
+                        enableProguardInReleaseBuilds: true
+                    }
+                }
+            ]
+        ]
     }
 };
