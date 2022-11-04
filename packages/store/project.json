@@ -53,10 +53,10 @@
         },
         "serve": {
             "executor": "@nrwl/webpack:dev-server",
-            "defaultConfiguration": "development",
             "options": {
                 "buildTarget": "store:build",
-                "hmr": true
+                "hmr": true,
+                "port": 4220
             },
             "configurations": {
                 "development": {
@@ -64,9 +64,11 @@
                 },
                 "production": {
                     "buildTarget": "store:build:production",
-                    "hmr": false
+                    "hmr": false,
+                    "port": 4220
                 }
-            }
+            },
+            "defaultConfiguration": "development"
         },
         "lint": {
             "executor": "@nrwl/linter:eslint",

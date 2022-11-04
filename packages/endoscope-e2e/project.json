@@ -7,7 +7,7 @@
         "e2e": {
             "executor": "@nrwl/cypress:cypress",
             "options": {
-                "cypressConfig": "packages/endoscope-e2e/cypress.json",
+                "cypressConfig": "packages/endoscope-e2e/cypress.config.ts",
                 "devServerTarget": "endoscope:serve:development",
                 "testingType": "e2e"
             },
@@ -24,7 +24,7 @@
             ],
             "options": {
                 "lintFilePatterns": [
-                    "packages/endoscope-e2e/**/*.{ts,tsx,js,jsx,json}"
+                    "packages/endoscope-e2e/**/*.{js,ts,json}"
                 ]
             }
         }

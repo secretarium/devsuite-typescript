@@ -5,7 +5,7 @@
     "projectType": "application",
     "targets": {
         "build": {
-            "executor": "@nrwl/web:webpack",
+            "executor": "@nrwl/webpack:webpack",
             "outputs": [
                 "{options.outputPath}"
             ],
@@ -52,7 +52,7 @@
             }
         },
         "serve": {
-            "executor": "@nrwl/web:dev-server",
+            "executor": "@nrwl/webpack:dev-server",
             "options": {
                 "buildTarget": "crate:build",
                 "hmr": true,
@@ -61,7 +61,8 @@
             "configurations": {
                 "production": {
                     "buildTarget": "crate:build:production",
-                    "hmr": false
+                    "hmr": false,
+                    "port": 4200
                 },
                 "development": {
                     "buildTarget": "crate:build:development"

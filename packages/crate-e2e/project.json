@@ -7,7 +7,7 @@
         "e2e": {
             "executor": "@nrwl/cypress:cypress",
             "options": {
-                "cypressConfig": "packages/crate-e2e/cypress.json",
+                "cypressConfig": "packages/crate-e2e/cypress.config.ts",
                 "devServerTarget": "crate:serve:development",
                 "testingType": "e2e"
             },
@@ -24,7 +24,7 @@
             ],
             "options": {
                 "lintFilePatterns": [
-                    "packages/crate-e2e/**/*.{ts,tsx,js,jsx,json}"
+                    "packages/crate-e2e/**/*.{js,ts,json}"
                 ]
             }
         }
