@@ -9,5 +9,6 @@ module.exports = {
     setupFilesAfterEnv: ['<rootDir>/test-setup.ts'],
     moduleNameMapper: {
         '.svg': '@nrwl/expo/plugins/jest/svg-mock'
-    }
+    },
+    coverageDirectory: '../../coverage/packages/pocket'
 };
