@@ -1,6 +1,7 @@
 /* eslint-disable */
 export default {
     displayName: "store",
+    testEnvironment: 'jsdom',
     preset: "../../jest.preset.js",
     transform: {
         "^(?!.*\\.(js|jsx|ts|tsx|css|json)$)": "@nrwl/react/plugins/jest",
