@@ -127,7 +127,7 @@
         "jest-environment-jsdom": "29.2.2",
         "jest-websocket-mock": "2.4.0",
         "metro-resolver": "0.73.3",
-        "nx": "15.0.7",
+        "nx": "15.0.9",
         "prettier": "^2.7.1",
         "react-test-renderer": "18.2.0",
         "simple-git": "3.14.1",
