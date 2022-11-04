@@ -14,7 +14,11 @@ const envConfig = {
         favicon: './assets/favicon.development.png',
         adaptiveIcon: './assets/adaptive-icon.development.png',
         notificationIcon: './assets/notification-icon.development.png',
-        adaptiveIconBackgroundColor: '#FFFFFF'
+        adaptiveIconBackgroundColor: '#FFFFFF',
+        androidNavigationBar: {
+            barStyle: 'dark-content',
+            backgroundColor: '#0C0D3D'
+        }
     },
     staging: {
         name: 'Cryptx Staging',
@@ -24,7 +28,11 @@ const envConfig = {
         favicon: './assets/favicon.staging.png',
         adaptiveIcon: './assets/adaptive-icon.staging.png',
         notificationIcon: './assets/notification-icon.staging.png',
-        adaptiveIconBackgroundColor: '#FFFFFF'
+        adaptiveIconBackgroundColor: '#FFFFFF',
+        androidNavigationBar: {
+            barStyle: 'dark-content',
+            backgroundColor: '#0C0D3D'
+        }
     },
     production: {
         name: 'Secretarium Cryptx',
@@ -34,7 +42,11 @@ const envConfig = {
         favicon: './assets/favicon.png',
         adaptiveIcon: './assets/adaptive-icon.png',
         notificationIcon: './assets/notification-icon.png',
-        adaptiveIconBackgroundColor: '#B21D36'
+        adaptiveIconBackgroundColor: '#B21D36',
+        androidNavigationBar: {
+            barStyle: 'dark-content',
+            backgroundColor: '#0C0D3D'
+        }
     }
 };
 
@@ -93,10 +105,14 @@ export default {
         updates: {
             fallbackToCacheTimeout: 0
         },
+        jsEngine: 'hermes',
         ios: {
             bundleIdentifier: config.bundle,
             supportsTablet: true,
-            buildNumber: `${BUILD_NUMBER}`
+            buildNumber: `${BUILD_NUMBER}`,
+            infoPlist: {
+                CFBundleAllowMixedLocalizations: true
+            }
         },
         android: {
             package: config.bundle,
@@ -104,13 +120,19 @@ export default {
             adaptiveIcon: {
                 foregroundImage: config.adaptiveIcon,
                 backgroundColor: config.adaptiveIconBackgroundColor
-            }
+            },
+            googleServicesFile,
+            permissions: ['CAMERA', 'USE_FINGERPRINT', 'USE_BIOMETRIC']
         },
+        androidNavigationBar: config.androidNavigationBar,
         web: {
             favicon: config.favicon,
             bundler: 'metro'
         },
-        jsEngine: 'hermes',
+        locales: {
+            en: './ios/infoPlist/en.json',
+            fr: './ios/infoPlist/fr.json'
+        },
         extra: {
             STAGE,
             BUILD_NUMBER,

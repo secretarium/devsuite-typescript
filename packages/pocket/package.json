@@ -5,8 +5,9 @@
     "dependencies": {
         "@testing-library/jest-native": "*",
         "@testing-library/react-native": "*",
-        "react-native": "*",
         "expo": "*",
+        "expo-dev-client": "*",
+        "react-native": "*",
         "react-native-svg": "*",
         "react-native-web": "*"
     },
