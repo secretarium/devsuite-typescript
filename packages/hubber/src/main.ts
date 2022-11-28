@@ -1,8 +1,13 @@
-import app from './app';
+import { start } from './app';
+import { AppDataSource } from './utils/db';
 
-const port = process.env.port || 3333;
-const server = app.listen(port, () => {
-    console.log(`Listening at http://localhost:${port}/hook`);
+AppDataSource.initialize().then(async () => {
+
+    const port = Number(process.env.PORT) || 3333;
+    const server = start().listen(port, () => {
+        console.log(`Listening at http://localhost:${port}`);
+    });
+
+    server.on('error', console.error);
+
 });
-
-server.on('error', console.error);
