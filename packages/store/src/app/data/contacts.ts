@@ -51,7 +51,6 @@ export async function updateContact(id?: string, updates?: Partial<Contact>) {
 export async function deleteContact(id?: string) {
     const contacts = await localforage.getItem<Array<Contact>>('contacts');
     const index = contacts?.findIndex(contact => contact.id === id) ?? null;
-    console.log('{PLPO >>>', index);
     if (contacts && index !== null && index > -1) {
         contacts.splice(index, 1);
         await set(contacts);

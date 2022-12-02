@@ -8,6 +8,8 @@ import MongoStore from 'connect-mongo';
 import { rateLimiterMiddleware } from './middleware/rateLimiter';
 import { morganLoggerMiddleware } from './middleware/morganLogger';
 import { probotMiddleware } from './middleware/probot';
+import { sentryRequestMiddleware, sentryTracingMiddleware, sentryErrorMiddleware } from './middleware/sentry';
+// import { i18nextMiddleware } from './middleware/i18n';
 import { getDriverSubstrate } from '../utils/db';
 import { usersRouter } from './routes';
 
@@ -15,10 +17,13 @@ const app = express();
 
 export const start = () => {
 
+    app.use(sentryRequestMiddleware);
+    app.use(sentryTracingMiddleware);
     app.use(morganLoggerMiddleware);
     app.use(rateLimiterMiddleware);
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
+    // app.use(i18nextMiddleware);
     app.use(multer().none());
     app.use(helmet());
     app.disable('x-powered-by');
@@ -60,6 +65,8 @@ export const start = () => {
 
     app.use(usersRouter);
 
+    app.use(sentryErrorMiddleware);
+
     app.all('*', (req, res) => {
         res.json({
             path: req.path,
@@ -69,7 +76,6 @@ export const start = () => {
     });
 
     return app;
-
 };
 
 export default start;

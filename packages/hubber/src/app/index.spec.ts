@@ -1,17 +1,29 @@
-// import request from 'supertest';
-// import app from './index';
+import request from 'supertest';
+// import express, { Express } from 'express';
+import { AppDataSource } from '../utils/db';
+import start from './index';
 
-// describe('request.agent(app)', function () {
-//     const agent = request.agent(app);
+// let app: Express;
 
-//     it('should pong', async function () {
-//         return agent
-//             .get('/ping')
-//             .set('Accept', 'application/json')
-//             .expect('Content-Type', /json/)
-//             .expect(200)
-//             .then(response => {
-//                 expect(response.body.pong).toBe(true);
-//             });
-//     });
-// });
+beforeAll(async () => {
+    await AppDataSource.initialize();
+    // app = express().use(start());
+});
+
+afterAll(AppDataSource.stop);
+
+describe('Testing application top level', function () {
+    const agent = request.agent(start());
+
+    it('Should pong', async function () {
+        return agent
+            .get('/ping')
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .then(response => {
+                const { pong } = response.body;
+                expect(pong).toBe(true);
+            });
+    });
+});

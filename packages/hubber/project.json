@@ -12,7 +12,10 @@
             "options": {
                 "outputPath": "dist/packages/hubber",
                 "main": "packages/hubber/src/main.ts",
-                "tsConfig": "packages/hubber/tsconfig.app.json"
+                "tsConfig": "packages/hubber/tsconfig.app.json",
+                "assets": [
+                    "packages/hubber/src/i18n/locales"
+                ]
             },
             "configurations": {
                 "production": {

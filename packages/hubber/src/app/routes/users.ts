@@ -4,15 +4,14 @@ import { User } from '../entities';
 
 export const usersRouter = Router();
 
-usersRouter.get('/users', async (res, rep) => {
-    rep.status(200).json({
+usersRouter.get('/users', async (req, res) => {
+    res.status(200).json({
         users: await db.UserCollection.findAll()
     });
 });
 
-usersRouter.put('/users', async (res, rep) => {
-    console.log(res.body);
-    const { name, email } = res.body;
+usersRouter.put('/users', async (req, res) => {
+    const { name, email } = req.body;
     try {
         await db.UserCollection.persist(new User({
             name,
@@ -20,14 +19,14 @@ usersRouter.put('/users', async (res, rep) => {
             handle: name,
             emails: [email]
         })).flush();
-        rep.status(200).json({ ok: true });
+        res.status(200).json({ ok: true });
     } catch (e) {
-        rep.status(500).json({ ok: false, exception: process.env.NODE_ENV !== 'production' ? e : undefined });
+        res.status(500).json({ ok: false, exception: process.env.NODE_ENV !== 'production' ? e : undefined });
     }
 });
 
-// usersRouter.post('/user', async (res, rep) => {
-//     rep.status(200).json({ users: await User.find() });
+// usersRouter.post('/user', async (res, res) => {
+//     res.status(200).json({ users: await User.find() });
 // });
 
 export default usersRouter;

@@ -3,13 +3,13 @@ import { createNodeMiddleware, Probot } from 'probot';
 import SmeeClient from 'smee-client';
 import probotApp from '../probot';
 
-export const smeeClient = new SmeeClient({
+const smeeClient = process.env.NODE_ENV !== 'test' ? new SmeeClient({
     source: process.env.NX_PROBOT_WEBHOOK_PROXY_URL!,
     target: 'http://localhost:3333/hook',
     logger: console
-});
+}) : null;
 
-smeeClient.start();
+smeeClient?.start();
 
 const probot = new Probot({
     appId: process.env.NX_PROBOT_APPID,

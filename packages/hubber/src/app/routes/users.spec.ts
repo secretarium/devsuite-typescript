@@ -1,10 +1,17 @@
 import request from 'supertest';
+import express from 'express';
+import { AppDataSource } from '../../utils/db';
 import users from './users';
 
-describe('request.agent(users)', function () {
-    const agent = request.agent(users);
+const userRoute = express().use(users);
 
-    it('should return users', async function () {
+beforeAll(AppDataSource.initialize);
+afterAll(AppDataSource.stop);
+
+describe('Testing application user router', function () {
+    const agent = request.agent(userRoute);
+
+    it('Should start by returning empty list of users', async function () {
         return agent
             .get('/users')
             .set('Accept', 'application/json')
@@ -13,7 +20,7 @@ describe('request.agent(users)', function () {
             .then(response => {
                 const { users } = response.body;
                 expect(users).toBeTruthy();
-                expect(users.length).toBeDefined();
+                expect(users.length).toBe(0);
             });
     });
 });
