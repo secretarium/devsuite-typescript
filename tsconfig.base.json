@@ -8,7 +8,7 @@
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "importHelpers": true,
-        "target": "es2015",
+        "target": "es2017",
         "module": "esnext",
         "lib": [
             "es2017",
@@ -29,6 +29,9 @@
             ],
             "@secretarium/react": [
                 "packages/react/src/index.ts"
+            ],
+            "@secretarium/hubber-api": [
+                "libs/hubber-api/src/index.ts"
             ]
         }
     },
