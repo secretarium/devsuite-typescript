@@ -5,6 +5,12 @@ import { BaseEntity } from './BaseEntity';
     collection: 'secrets'
 })
 export class Secret extends BaseEntity {
+
+    constructor(data: Secret) {
+        super();
+        Object.assign(this, data);
+    }
+
     @Property() name!: string;
     @Property() slug!: string;
 }

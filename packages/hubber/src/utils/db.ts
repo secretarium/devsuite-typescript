@@ -7,6 +7,8 @@ import * as Entities from '../app/entities';
 import logger from './logger';
 import i18n from '../i18n';
 
+export type { FilterQuery } from '@mikro-orm/core';
+
 const { NX_MONGODB_URL, NX_MONGODB_DBNAME } = process.env;
 
 if (!NX_MONGODB_URL)

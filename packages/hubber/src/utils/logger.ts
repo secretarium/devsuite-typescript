@@ -30,7 +30,7 @@ const colors = {
     warn: 'yellow',
     info: 'green',
     http: 'magenta',
-    debug: 'white'
+    debug: 'grey'
 };
 
 // Tell winston that you want to link the colors

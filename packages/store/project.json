@@ -42,6 +42,7 @@
                             "with": "packages/store/src/environments/environment.prod.ts"
                         }
                     ],
+                    "subresourceIntegrity": true,
                     "optimization": true,
                     "outputHashing": "all",
                     "sourceMap": false,
@@ -54,6 +55,7 @@
         "serve": {
             "executor": "@nrwl/webpack:dev-server",
             "options": {
+                "proxyConfig": "packages/store/proxy.config.js",
                 "buildTarget": "store:build",
                 "hmr": true,
                 "port": 4220

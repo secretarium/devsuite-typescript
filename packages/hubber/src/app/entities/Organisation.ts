@@ -7,6 +7,11 @@ import { User } from './User';
 })
 export class Organisation extends BaseEntity {
 
+    constructor(data: Organisation) {
+        super();
+        Object.assign(this, data);
+    }
+
     @Property() name!: string;
     @Property() slug!: string;
     @ManyToMany(() => User) members = new Collection<User>(this);

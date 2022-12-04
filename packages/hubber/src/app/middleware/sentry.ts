@@ -16,10 +16,10 @@ Sentry.init({
 });
 
 const fork = <Handler>(func: () => Handler) => {
-    // if (process.env.NODE_ENV === 'test')
-    //     return () => {
-    //         //
-    //     };
+    if (process.env.NODE_ENV === 'test')
+        return () => {
+            //
+        };
     return func();
 };
 

@@ -82,7 +82,7 @@ export const Root: FC = () => {
                         </ul>
                     ) : (
                         <p>
-                            <i>No projects</i>
+                            <i onClick={() => { throw 'No projects'; }}>No projects</i>
                         </p>
                     )}
                 </nav>

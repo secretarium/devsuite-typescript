@@ -7,7 +7,7 @@ import { Organisation } from './Organisation';
 })
 export class User extends BaseEntity {
 
-    constructor(data: Partial<User>) {
+    constructor(data: User) {
         super();
         Object.assign(this, data);
     }

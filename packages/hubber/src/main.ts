@@ -6,7 +6,7 @@ import logger from './utils/logger';
 AppDataSource.initialize().then(async () => {
 
     const port = Number(process.env.PORT) || 3333;
-    const server = start().listen(port, () => {
+    const server = start(port).listen(port, () => {
         logger.info(`Listening at http://localhost:${port}`);
     });
 
@@ -15,4 +15,6 @@ AppDataSource.initialize().then(async () => {
         AppDataSource.stop();
     });
 
+}).catch(error => {
+    logger.error(error);
 });

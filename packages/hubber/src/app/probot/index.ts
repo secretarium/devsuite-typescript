@@ -1,26 +1,24 @@
-import type { Probot, Context } from 'probot';
-
-const check = async (context: Context) => {
-    context.log.info('Code was pushed to the repo, what should we do with it?');
-};
-
-const ping = async (context: Context<'ping'>) => {
-    const { sender, repository } = context.payload;
-    context.log.info(`Github pinged from ${sender?.login}@${repository?.name}`);
-};
+import type { Probot } from 'probot';
+import logger from '../../utils/logger';
+import { storeHook } from '../controllers/hookController';
 
 const probotApp = (app: Probot) => {
 
-    app.on(['ping'], ping);
-    app.on(
-        [
-            'pull_request.opened',
-            'pull_request.synchronize',
-            'check_run.rerequested'
-        ],
-        check
-    );
-
+    app.on([
+        'ping',
+        'pull_request.opened',
+        'pull_request.synchronize',
+        'check_run.rerequested',
+        'push'
+    ], async (context) => {
+        const hook = await storeHook({
+            source: 'github',
+            event: context.name,
+            remoteId: context.id,
+            payload: context.payload as any
+        });
+        logger.info(`New record of hook ${hook._id}`);
+    });
 };
 
 export default probotApp;
