@@ -1,10 +1,14 @@
-import { createContext, useContext, useMemo, FC, PropsWithChildren } from 'react';
+import { createContext, useContext, useMemo, FC, PropsWithChildren, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocalForage } from './useLocalStorage';
 
-const AuthContext = createContext<{
-    user?: any
-}>({});
+type AuthContextType = {
+    user?: any;
+    login: (data: any) => void;
+    logout: () => void;
+}
+
+const AuthContext = createContext<AuthContextType>({} as any);
 
 type AuthProviderProps = PropsWithChildren & {
     userData?: any
@@ -16,16 +20,18 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children, userData = {} })
     const navigate = useNavigate();
 
     // call this function when you want to authenticate the user
-    const login = async (data: any) => {
+    const login = useCallback(async (data: any) => {
         setUser(data);
-        navigate('/profile');
-    };
+        navigate('/');
+    }, [navigate, setUser]);
 
     // call this function to sign out logged in user
-    const logout = () => {
-        setUser(null);
-        navigate('/', { replace: true });
-    };
+    const logout = useCallback(() => {
+        fetch('/api/logout').then(res => res.json()).then(() => {
+            setUser(null);
+            navigate('/', { replace: true });
+        });
+    }, [navigate, setUser]);
 
     const value = useMemo(
         () => ({
@@ -33,7 +39,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children, userData = {} })
             login,
             logout
         }),
-        [user]
+        [login, logout, user]
     );
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

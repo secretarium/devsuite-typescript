@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import passport from 'passport';
 import { createUser, getUsers } from '../controllers/userController';
 
 export const usersRouter = Router();
@@ -8,6 +9,26 @@ usersRouter.get('/whoami', async ({ user }, res) => {
         res.status(200).json({ me: user });
     else
         res.status(401).json({ who: 'An unknown unicorn' });
+});
+
+usersRouter.get('/login/print', async (req, res, next) => {
+    req.body = {
+        username: req.session.id,
+        password: (req.session as any).temp_print
+    };
+    next();
+}, passport.authenticate('local', {
+    passReqToCallback: true
+}), async (req, res) => {
+    res.status(200).json({ ...req.user });
+});
+
+usersRouter.get('/logout', async (req, res) => {
+    req.logout({
+        keepSessionInfo: false
+    }, () => {
+        res.status(200).json({ success: true });
+    });
 });
 
 usersRouter.get('/users', async (req, res) => {

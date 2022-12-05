@@ -1,74 +1,89 @@
-import { FC, useState, useCallback, useEffect, Fragment } from 'react';
+import { FC, useState, useCallback, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import QRCode from 'react-qr-code';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import { v4 as uuid } from 'uuid';
 import logo from './logo.svg';
+import { useAuth } from '../AuthProvider';
 
 export const Login: FC = () => {
+
+    const navigate = useNavigate();
+    const { login } = useAuth();
     const [uuidLocator, setUuidLocator] = useState<string>();
     const [uuidBeacon, setUuidBeacon] = useState<string>();
-    const [socketUrl] = useState(`ws://${window.location.host}/api/echo`);
-    const [messageHistory, setMessageHistory] = useState<Array<MessageEvent<string>>>([]);
+    const [socketUrl] = useState(`ws://${window.location.host}/api/bridge`);
+    // const [messageHistory, setMessageHistory] = useState<Array<MessageEvent<string>>>([]);
 
     const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
         reconnectAttempts: 5,
         reconnectInterval: 1
     });
 
+    const isConnected = readyState === ReadyState.OPEN;
+
     useEffect(() => {
-        if (uuidLocator || readyState !== ReadyState.OPEN)
+        if (uuidLocator || !isConnected)
             return;
         const newLocator = uuid();
         setUuidLocator(newLocator);
-        sendMessage(`request:${newLocator}`);
+        setTimeout(() => sendMessage(`request:${newLocator}`), 500);
 
-    }, [readyState, sendMessage, uuidLocator]);
+    }, [isConnected, sendMessage, uuidLocator]);
 
     useEffect(() => {
         if (!lastMessage)
             return;
         const [verb, data] = lastMessage.data.split(':');
         switch (verb) {
-            case 'beacon':
+            case 'sid':
                 setUuidBeacon(data);
                 break;
+            case 'confirmed':
+                fetch('/api/login/print').then(res => res.json()).then(udata => login(udata));
+                break;
         }
-        setMessageHistory((prev) => [lastMessage].concat(prev));
-    }, [lastMessage, sendMessage, setMessageHistory]);
+        // setMessageHistory((prev) => [lastMessage].concat(prev));
+    }, [lastMessage, login, navigate, sendMessage]);
 
     const handleClickSendMessage = useCallback(() => {
-        if (readyState === ReadyState.OPEN)
+        if (isConnected)
             setUuidLocator(undefined);
-    }, [readyState]);
+    }, [isConnected]);
 
-    const connectionStatus = {
-        [ReadyState.CONNECTING]: 'Connecting',
-        [ReadyState.OPEN]: 'Open',
-        [ReadyState.CLOSING]: 'Closing',
-        [ReadyState.CLOSED]: 'Closed',
-        [ReadyState.UNINSTANTIATED]: 'Uninstantiated'
-    }[readyState];
+    // const connectionStatus = {
+    //     [ReadyState.CONNECTING]: 'Connecting',
+    //     [ReadyState.OPEN]: 'Open',
+    //     [ReadyState.CLOSING]: 'Closing',
+    //     [ReadyState.CLOSED]: 'Closed',
+    //     [ReadyState.UNINSTANTIATED]: 'Uninstantiated'
+    // }[readyState];
 
     return <div id="login" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
         <br />
         <div style={{ textAlign: 'center' }}>
             <h1>Login</h1>
-            <span>The WebSocket is currently {connectionStatus}</span>
+            {isConnected
+                ? <span>Just open Secretarium Pocket and scan this QRCode to login</span>
+                : <span>There seems to be an issue connecting. Please refresh the page to try again</span>
+            }
             <br />
             <br />
             <br />
         </div>
-        <div style={{ textAlign: 'center', position: 'relative' }}>
-            <QRCode level='Q' value={uuidBeacon ?? ''} size={300} onClick={handleClickSendMessage} />
-            <span style={{ backgroundColor: 'white', padding: 5, paddingTop: 6, overflow: 'hidden', borderRadius: '100%', position: 'absolute', top: 160 - 35, left: 'calc(50% - 35px)', display: 'block', width: '70px', height: '70px' }}>
-                <img alt='Logo' src={logo} />
-            </span>
-            <br />
-            <br />
-        </div>
-        <div style={{ textAlign: 'center', overflow: 'hidden', maxHeight: 200 }}>
+        {isConnected && uuidBeacon
+            ? <div style={{ textAlign: 'center', position: 'relative' }}>
+                <QRCode level='Q' value={uuidBeacon} size={300} onClick={handleClickSendMessage} />
+                <span style={{ backgroundColor: 'white', padding: 5, paddingTop: 6, overflow: 'hidden', borderRadius: '100%', position: 'absolute', top: 160 - 35, left: 'calc(50% - 35px)', display: 'block', width: '70px', height: '70px' }}>
+                    <img alt='Logo' src={logo} />
+                </span>
+                <br />
+                <br />
+            </div>
+            : null}
+        {/* <div style={{ textAlign: 'center', overflow: 'hidden', maxHeight: 200 }}>
             {messageHistory.map((message, idx) => <Fragment key={idx}><span style={{ fontWeight: !idx ? 'bold' : 'inherit' }}>{message ? message.data : null}</span><br /></Fragment>)}
-        </div>
+        </div> */}
     </div>;
 };
 

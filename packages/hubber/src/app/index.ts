@@ -12,13 +12,14 @@ import { rateLimiterMiddleware } from './middleware/rateLimiter';
 import { morganLoggerMiddleware } from './middleware/morganLogger';
 import { probotMiddleware } from './middleware/probot';
 import { sentryRequestMiddleware, sentryTracingMiddleware, sentryErrorMiddleware } from './middleware/sentry';
-import { passportMiddleware } from './middleware/passport';
+import { passportLoginCheckMiddleware } from './middleware/passport';
 import { trcpMiddlware } from './middleware/trpc';
 // import { i18nextMiddleware } from './middleware/i18n';
 import { getDriverSubstrate } from '../utils/db';
 import { usersRouter } from './routes';
+import logger from '../utils/logger';
 
-const { app } = ews(express(), undefined, {
+const { app, getWss } = ews(express(), undefined, {
     wsOptions: {
         clientTracking: true
     }
@@ -59,7 +60,8 @@ export const start = (port?: number) => {
         resave: false,
         // Don't create session until something stored
         saveUninitialized: true,
-        store: MongoStore.create(mongoOptions)
+        store: MongoStore.create(mongoOptions),
+        genid: () => uuid()
     };
 
     if (app.get('env') === 'production') {
@@ -76,23 +78,37 @@ export const start = (port?: number) => {
     app.use(passport.initialize());
     app.use(passport.session());
 
-    app.ws('/echo', (ws, { session }) => {
+    app.ws('/bridge', (ws, { session, sessionID, sessionStore }) => {
+        (ws as any).sessionID = sessionID;
         ws.on('message', (msg) => {
-            const [verb, data] = msg.toString().split(':');
+            const [verb, ...data] = msg.toString().split(':');
             if (verb === 'request') {
-                const beacon = uuid();
-                (session as any).locator = data;
-                (session as any).beacon = beacon;
+                logger.info('New bridge client request ...');
+                const [locator] = data;
+                (session as any).locator = locator;
                 session.save(() => {
-                    ws.send(`beacon:${beacon}`);
+                    ws.send(`sid:${sessionID}`);
                 });
                 return;
+            } else if (verb === 'confirm') {
+                const [sid, locator, temp_print] = data;
+                sessionStore.get(sid, (err, rsession) => {
+                    if (!rsession)
+                        return;
+                    if ((rsession as any).locator !== locator)
+                        return;
+                    (rsession as any).temp_print = temp_print;
+                    sessionStore.set(sid, rsession, () => {
+                        const browserTarget = Array.from(getWss().clients.values()).find(w => (w as any).sessionID === sid);
+                        browserTarget?.send('confirmed');
+                    });
+                });
             }
             ws.send(msg);
         });
     });
 
-    app.use(passportMiddleware);
+    app.use(passportLoginCheckMiddleware);
     app.use('/trpc', trcpMiddlware);
     app.use(usersRouter);
 

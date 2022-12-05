@@ -1,5 +1,6 @@
 import { FC, useEffect } from 'react';
 import { Outlet, NavLink, useLoaderData, useNavigation, useSubmit, LoaderFunction, Link } from 'react-router-dom';
+import { useAuth } from '../AuthProvider';
 import { Project, getProjects } from '../data/projects';
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -10,6 +11,8 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export const Root: FC = () => {
+
+    const { logout } = useAuth();
     const { projects, q }: { projects: Project[], q?: string } = useLoaderData() as any;
     const navigation = useNavigation();
     const submit = useSubmit();
@@ -87,6 +90,7 @@ export const Root: FC = () => {
                     )}
                 </nav>
                 <Link to='/project/new' id='add'>Add repository</Link>
+                <button onClick={logout}>Log out</button>
             </div>
             <div id="detail" className={
                 navigation.state === 'loading' ? 'loading' : ''
