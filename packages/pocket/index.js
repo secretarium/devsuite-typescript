@@ -2,8 +2,14 @@ import { registerRootComponent } from 'expo';
 import { LogBox, Platform } from 'react-native';
 import { activateKeepAwake } from 'expo-keep-awake';
 import { connectToDevTools } from 'react-devtools-core';
+// import { ExpoRoot } from 'expo-router';
 
-import App from './src/app/App';
+import App from './src/app/Router';
+// Must be exported or Fast Refresh won't update the context
+// export function App() {
+//     const ctx = require.context('./src/app');
+//     return <ExpoRoot context={ctx} />;
+// }
 
 if (__DEV__) {
 

@@ -6,13 +6,14 @@
         "@testing-library/jest-native": "*",
         "@testing-library/react-native": "*",
         "expo": "*",
+        "expo-barcode-scanner": "*",
         "expo-dev-client": "*",
         "react-native": "*",
         "react-native-svg": "*",
         "react-native-web": "*"
     },
     "scripts": {
-        "eas-build-pre-install": "cd ../../ && cp yarn.lock ./packages/pocket/",
+        "eas-build-pre-install": "cd ../../ && node ./tools/scripts/listRootDependencies.js && cp yarn.lock ./packages/pocket/",
         "postinstall": "rm -r node_modules && cd ../../ && yarn install && npx nx sync-deps pocket && npx nx ensure-symlink pocket"
     }
 }

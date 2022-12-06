@@ -17,7 +17,8 @@ export const Login: FC = () => {
 
     const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
         reconnectAttempts: 5,
-        reconnectInterval: 1
+        reconnectInterval: 1,
+        shouldReconnect: () => true
     });
 
     const isConnected = readyState === ReadyState.OPEN;
@@ -71,9 +72,9 @@ export const Login: FC = () => {
             <br />
             <br />
         </div>
-        {isConnected && uuidBeacon
+        {isConnected && uuidBeacon && uuidLocator
             ? <div style={{ textAlign: 'center', position: 'relative' }}>
-                <QRCode level='Q' value={uuidBeacon} size={300} onClick={handleClickSendMessage} />
+                <QRCode level='Q' value={`cryptx_check:${uuidBeacon}:${uuidLocator}`} size={300} onClick={handleClickSendMessage} />
                 <span style={{ backgroundColor: 'white', padding: 5, paddingTop: 6, overflow: 'hidden', borderRadius: '100%', position: 'absolute', top: 160 - 35, left: 'calc(50% - 35px)', display: 'block', width: '70px', height: '70px' }}>
                     <img alt='Logo' src={logo} />
                 </span>

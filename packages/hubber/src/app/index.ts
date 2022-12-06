@@ -79,7 +79,15 @@ export const start = (port?: number) => {
     app.use(passport.session());
 
     app.ws('/bridge', (ws, { session, sessionID, sessionStore }) => {
+        logger.info('Wassssup ? ...');
         (ws as any).sessionID = sessionID;
+        ws.on('connection', (ws) => {
+            ws.isAlive = true;
+            logger.info('Client is alive !');
+        });
+        ws.on('upgrade', () => {
+            logger.info('Client is upgrading ...');
+        });
         ws.on('message', (msg) => {
             const [verb, ...data] = msg.toString().split(':');
             if (verb === 'request') {
@@ -91,6 +99,7 @@ export const start = (port?: number) => {
                 });
                 return;
             } else if (verb === 'confirm') {
+                logger.info('New remode device confirmation ...');
                 const [sid, locator, temp_print] = data;
                 sessionStore.get(sid, (err, rsession) => {
                     if (!rsession)

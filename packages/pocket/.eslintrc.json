@@ -18,7 +18,8 @@
                 "*.jsx"
             ],
             "rules": {
-                "@typescript-eslint/ban-ts-comment": "off"
+                "@typescript-eslint/ban-ts-comment": "off",
+                "jsx-a11y/accessible-emoji": "off"
             },
             "globals": {
                 "__CLIENT__": true,
