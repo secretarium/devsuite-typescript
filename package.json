@@ -105,7 +105,7 @@
         "@nrwl/eslint-plugin-nx": "15.2.4",
         "@nrwl/expo": "15.2.4",
         "@nrwl/express": "15.2.4",
-        "@nrwl/jest": "15.2.4",
+        "@nrwl/jest": "15.3.3",
         "@nrwl/nx-cloud": "15.0.2",
         "@nrwl/react": "15.2.4",
         "@nrwl/web": "15.2.4",
