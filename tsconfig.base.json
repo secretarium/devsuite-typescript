@@ -30,6 +30,9 @@
             "@secretarium/hubber-api": [
                 "libs/hubber-api/src/index.ts"
             ],
+            "@secretarium/hubber-db": [
+                "libs/hubber-db/src/index.ts"
+            ],
             "@secretarium/react": [
                 "packages/react/src/index.ts"
             ]
