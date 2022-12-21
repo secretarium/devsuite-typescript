@@ -11,13 +11,13 @@ export const ScannerCombo: FC = () => {
     const navigate = useNavigate();
     const [hasPermission, setHasPermission] = useState<boolean>();
     const [scanned, setScanned] = useState(false);
-    const [socketUrl] = useState('ws://192.168.1.155:3333/bridge');
+    const [socketUrl, setSocketUrl] = useState<string | null>(null);
 
     const { sendMessage, readyState } = useWebSocket(socketUrl, {
         reconnectAttempts: 50,
         reconnectInterval: 3000,
         shouldReconnect: () => true
-    });
+    }, true);
 
     const isConnected = readyState === ReadyState.OPEN;
 
@@ -33,7 +33,7 @@ export const ScannerCombo: FC = () => {
     const handleBarCodeScanned: BarCodeScannedCallback = ({ data }) => {
         setScanned(true);
         try {
-            const [flag, uuidBeacon, uuidLocator] = data.split(':');
+            const [flag, address, uuidBeacon, uuidLocator] = data.split('#');
             // console.log(flag, uuidBeacon, uuidLocator);
             if (flag === 'cryptx_check') {
                 // alert('cryptx_check');
@@ -74,8 +74,11 @@ export const ScannerCombo: FC = () => {
                 //     //     return;
                 //     console.log('FALL OFF', sock?.readyState);
 
-                sendMessage(`confirm:${uuidBeacon}:${uuidLocator}:my_demo_pass_signature`);
-                navigate('/');
+                setSocketUrl(address);
+                setTimeout(() => {
+                    sendMessage(`confirm#${uuidBeacon}#${uuidLocator}#my_demo_pass_signature`);
+                    navigate('/');
+                }, 500);
                 // }, 500);
                 // });
             }

@@ -12,6 +12,7 @@ export const Login: FC = () => {
     const { login } = useAuth();
     const [uuidLocator, setUuidLocator] = useState<string>();
     const [uuidBeacon, setUuidBeacon] = useState<string>();
+    const [addressDestination, setAddressDestination] = useState<string>();
     const [socketUrl] = useState(`ws://${window.location.host}/api/bridge`);
     // const [messageHistory, setMessageHistory] = useState<Array<MessageEvent<string>>>([]);
 
@@ -28,17 +29,19 @@ export const Login: FC = () => {
             return;
         const newLocator = uuid();
         setUuidLocator(newLocator);
-        setTimeout(() => sendMessage(`request:${newLocator}`), 500);
+        setTimeout(() => sendMessage(`request#${newLocator}`), 500);
 
     }, [isConnected, sendMessage, uuidLocator]);
 
     useEffect(() => {
         if (!lastMessage)
             return;
-        const [verb, data] = lastMessage.data.split(':');
+        console.log('lastMessage', lastMessage);
+        const [verb, data, address] = lastMessage.data.split('#');
         switch (verb) {
             case 'sid':
                 setUuidBeacon(data);
+                setAddressDestination(address);
                 break;
             case 'confirmed':
                 fetch('/api/login/print').then(res => res.json()).then(udata => login(udata));
@@ -60,6 +63,8 @@ export const Login: FC = () => {
     //     [ReadyState.UNINSTANTIATED]: 'Uninstantiated'
     // }[readyState];
 
+    console.log(isConnected, addressDestination, uuidBeacon, uuidLocator);
+
     return <div id="login" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
         <br />
         <div style={{ textAlign: 'center' }}>
@@ -72,9 +77,9 @@ export const Login: FC = () => {
             <br />
             <br />
         </div>
-        {isConnected && uuidBeacon && uuidLocator
+        {isConnected && addressDestination && uuidBeacon && uuidLocator
             ? <div style={{ textAlign: 'center', position: 'relative' }}>
-                <QRCode level='Q' value={`cryptx_check:${uuidBeacon}:${uuidLocator}`} size={300} onClick={handleClickSendMessage} />
+                <QRCode level='Q' value={`cryptx_check#${addressDestination}#${uuidBeacon}#${uuidLocator}`} size={300} onClick={handleClickSendMessage} />
                 <span style={{ backgroundColor: 'white', padding: 5, paddingTop: 6, overflow: 'hidden', borderRadius: '100%', position: 'absolute', top: 160 - 35, left: 'calc(50% - 35px)', display: 'block', width: '70px', height: '70px' }}>
                     <img alt='Logo' src={logo} />
                 </span>

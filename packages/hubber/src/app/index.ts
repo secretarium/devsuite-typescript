@@ -1,3 +1,5 @@
+import './opentelemetry';
+import ip from 'ip';
 import express from 'express';
 import session from 'express-session';
 import ews from 'express-ws';
@@ -51,7 +53,8 @@ export const start = (port?: number) => {
     // } = csrfSync();
 
     const mongoOptions = {
-        client: getDriverSubstrate()
+        client: getDriverSubstrate(),
+        collectionName: 'sessions'
     };
 
     const sessionOptions: session.SessionOptions = {
@@ -89,13 +92,13 @@ export const start = (port?: number) => {
             logger.info('Client is upgrading ...');
         });
         ws.on('message', (msg) => {
-            const [verb, ...data] = msg.toString().split(':');
+            const [verb, ...data] = msg.toString().split('#');
             if (verb === 'request') {
                 logger.info('New bridge client request ...');
                 const [locator] = data;
                 (session as any).locator = locator;
                 session.save(() => {
-                    ws.send(`sid:${sessionID}`);
+                    ws.send(`sid#${sessionID}#ws://${ip.address('public')}:${port}/bridge`);
                 });
                 return;
             } else if (verb === 'confirm') {
