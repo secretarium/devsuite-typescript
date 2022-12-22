@@ -35,6 +35,9 @@
             ],
             "@secretarium/react": [
                 "packages/react/src/index.ts"
+            ],
+            "@secretarium/smart-contract": [
+                "libs/smart-contract/src/index.ts"
             ]
         }
     },
