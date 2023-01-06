@@ -49,7 +49,8 @@ module.exports = {
             './{packages,apps,libs}/*-e2e/tsconfig.json',
             './{packages,apps,libs}/*/tsconfig.lib.json',
             './{packages,apps,libs}/*/tsconfig.app.json',
-            './{packages,apps,libs}/*/tsconfig.spec.json'
+            './{packages,apps,libs}/*/tsconfig.spec.json',
+            './{packages,apps,libs}/*/tsconfig.server.json'
         ]
     },
     ignorePatterns: ['**/*', '!**/*.json', '!**/*.js', '!**/*.ts', '!scripts', '!tools', '!.vscode'],

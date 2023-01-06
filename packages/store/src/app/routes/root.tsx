@@ -68,7 +68,7 @@ export const Root: FC = () => {
                             {projects.map((project) => (
                                 <li key={project.id}>
                                     <NavLink
-                                        to={`contacts/${project.id}`}
+                                        to={`projects/${project.id}`}
                                         className={({ isActive, isPending }) =>
                                             isActive
                                                 ? 'active'
@@ -89,7 +89,7 @@ export const Root: FC = () => {
                         </p>
                     )}
                 </nav>
-                <Link to='/project/new' id='add'>Add repository</Link>
+                <Link to='/projects/new' id='add'>Add repository</Link>
                 <button onClick={logout}>Log out</button>
             </div>
             <div id="detail" className={

@@ -12,9 +12,18 @@ export class User extends BaseEntity {
         Object.assign(this, data);
     }
 
-    @Property() @Unique() name!: string;
-    @Property() username!: string;
+    @Property() @Unique() login!: string;
     @Property() emails!: string[];
-    @Property() handle!: string;
+    @Property() devices!: string[];
+    @Property() github_tokens!: GitHubToken[];
     @ManyToMany(() => Organisation) organisations = new Collection<Organisation>(this);
+}
+
+type GitHubToken = {
+    access_token: string;
+    expires_in: number;
+    refresh_token: string;
+    refresh_token_expires_in: number;
+    token_type: 'bearer';
+    scope: string;
 }

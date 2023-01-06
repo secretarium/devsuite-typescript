@@ -1,61 +1,35 @@
 import { FC } from 'react';
 import { Form, LoaderFunction, useLoaderData, useFetcher, ActionFunction } from 'react-router-dom';
-import { Contact, getContact, updateContact } from '../data/contacts';
+import { Project, getProject, updateProject } from '../../data/projects';
 
 export const loader: LoaderFunction = async ({ params }) => {
-    const contact = await getContact(params['contactId']);
-    if (!contact) {
+    const project = await getProject(params['projectId']);
+    if (!project) {
         throw new Response('', {
             status: 404,
             statusText: 'Not Found'
         });
     }
-    return contact;
+    return project;
 };
 
 export const action: ActionFunction = async ({ request, params }) => {
     const formData = await request.formData();
-    return updateContact(params['contactId'], {
+    return updateProject(params['projectId'], {
         favorite: formData.get('favorite') === 'true'
     });
 };
 
-export const ContactItem: FC = () => {
-    const contact = useLoaderData() as Contact;
+export const ProjectItem: FC = () => {
+    const project = useLoaderData() as Project;
 
-    return <div id="contact">
-        <div>
-            <img
-                alt={contact.first}
-                key={contact.avatar}
-                src={contact.avatar}
-            />
-        </div>
+    return <div id="project">
 
         <div>
             <h1>
-                {contact.first || contact.last ? (
-                    <>
-                        {contact.first} {contact.last}
-                    </>
-                ) : (
-                    <i>No Name</i>
-                )}{' '}
-                <Favorite contact={contact} />
+                {project.name ?? <i>No Name</i>}
+                <Favorite project={project} />
             </h1>
-
-            {contact.twitter && (
-                <p>
-                    <a
-                        target="_blank"
-                        href={`https://twitter.com/${contact.twitter}`} rel="noreferrer"
-                    >
-                        {contact.twitter}
-                    </a>
-                </p>
-            )}
-
-            {contact.notes && <p>{contact.notes}</p>}
 
             <div>
                 <Form action="edit">
@@ -82,9 +56,9 @@ export const ContactItem: FC = () => {
     </div>;
 };
 
-const Favorite: FC<{ contact: Contact }> = ({ contact }) => {
+const Favorite: FC<{ project: Project }> = ({ project }) => {
     const fetcher = useFetcher();
-    let favorite = contact.favorite;
+    let favorite = project.favorite;
     if (fetcher.formData) {
         favorite = fetcher.formData.get('favorite') === 'true';
     }
@@ -105,4 +79,4 @@ const Favorite: FC<{ contact: Contact }> = ({ contact }) => {
     );
 };
 
-export default ContactItem;
+export default ProjectItem;

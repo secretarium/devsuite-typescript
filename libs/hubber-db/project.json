@@ -49,13 +49,15 @@
         "compile": {
             "executor": "nx:run-commands",
             "options": {
-                "command": "prisma generate"
+                "command": "prisma generate --schema src/prisma/schema.prisma",
+                "cwd": "libs/hubber-db"
             }
         },
         "push": {
             "executor": "nx:run-commands",
             "options": {
-                "command": "prisma db push"
+                "command": "prisma db push --schema src/prisma/schema.prisma",
+                "cwd": "libs/hubber-db"
             }
         }
     },

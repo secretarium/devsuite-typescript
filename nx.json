@@ -16,7 +16,9 @@
                     "build",
                     "lint",
                     "test",
-                    "e2e"
+                    "e2e",
+                    "build-custom-server",
+                    "build-custom-server"
                 ],
                 "accessToken": "ZTM5YThjMTctZDdiMS00ZjU1LThjN2ItNTk5ODUxODU0YzllfHJlYWQtd3JpdGU="
             }
@@ -87,6 +89,17 @@
                 "style": "css",
                 "linter": "eslint"
             }
+        },
+        "@nrwl/next": {
+            "application": {
+                "style": "css",
+                "linter": "eslint"
+            }
+        }
+    },
+    "pluginsConfig": {
+        "@nrwl/js": {
+            "analyzeSourceFiles": true
         }
     },
     "defaultProject": "crate"

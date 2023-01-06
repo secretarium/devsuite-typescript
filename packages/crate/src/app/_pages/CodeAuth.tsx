@@ -1,13 +1,13 @@
 import { FC } from 'react';
 import { useLocation } from 'react-router';
-import { parse as queryParser } from 'query-string';
+import qs from 'query-string';
 import QRCode, { QRCodeProps } from 'react-qr-code';
 import { useQuery } from '@secretarium/react';
 
 export const CodeAuth = () => {
 
     const { search, pathname } = useLocation();
-    const { r: refererApplicationToken } = queryParser(search);
+    const { r: refererApplicationToken } = qs.parse(search);
     const QRCodeComp: FC<QRCodeProps> = QRCode as any;
 
     const [data, loading /*, error*/] = useQuery<string, string>({

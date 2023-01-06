@@ -1,8 +1,8 @@
-import { router, procedure } from '../trpc';
+import { createTRPCRouter, publicProcedure } from '../trpc';
 // import { z } from 'zod';
 
-export const v0Router = router({
-    hello: procedure.query(() => ({ hello: 'world' }))
+export const v0Router = createTRPCRouter({
+    hello: publicProcedure.query(() => ({ hello: 'world' }))
     // getUser: t.procedure.input(z.string()).query((req) => {
     //     req.input;
     //     return { id: req.input, name: 'Bilbo' };

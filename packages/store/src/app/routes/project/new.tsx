@@ -9,13 +9,7 @@ export const action: ActionFunction = async () => {
 };
 
 export const NewProject: FC = () => {
-    return (
-        <p id="zero-state">
-            This is a demo for Secretarium CC.
-            <br />
-            Not for use in sales material.
-        </p>
-    );
+    return <a href="https://github.com/login/oauth/authorize?state=github%3Ad42&client_id=Iv1.6ff39dee83590f91&redirect_uri=http%3A%2F%2Flocalhost:4220%2Fauth">Connect to GitHub</a>;
 };
 
 export default NewProject;

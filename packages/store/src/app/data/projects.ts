@@ -8,6 +8,7 @@ export type Project = {
     repo: string;
     organisation?: string;
     createdAt: number;
+    favorite?: boolean;
 }
 
 export async function getProjects(query?: string): Promise<Array<Project>> {

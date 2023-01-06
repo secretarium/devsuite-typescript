@@ -8,8 +8,10 @@ import multer from 'multer';
 import cors from 'cors';
 // import { csrfSync } from 'csrf-sync';
 import passport from 'passport';
-import MongoStore from 'connect-mongo';
+// import MongoStore from 'connect-mongo';
 import { v4 as uuid } from 'uuid';
+import { PrismaSessionStore } from '@quixo3/prisma-session-store';
+import { PrismaClient } from '@prisma/client';
 import { rateLimiterMiddleware } from './middleware/rateLimiter';
 import { morganLoggerMiddleware } from './middleware/morganLogger';
 import { probotMiddleware } from './middleware/probot';
@@ -17,7 +19,7 @@ import { sentryRequestMiddleware, sentryTracingMiddleware, sentryErrorMiddleware
 import { passportLoginCheckMiddleware } from './middleware/passport';
 import { trcpMiddlware } from './middleware/trpc';
 // import { i18nextMiddleware } from './middleware/i18n';
-import { getDriverSubstrate } from '../utils/db';
+// import { getDriverSubstrate } from '../utils/db';
 import { usersRouter } from './routes';
 import logger from '../utils/logger';
 
@@ -52,10 +54,10 @@ export const start = (port?: number) => {
     //     csrfSynchronisedProtection
     // } = csrfSync();
 
-    const mongoOptions = {
-        client: getDriverSubstrate(),
-        collectionName: 'sessions'
-    };
+    // const mongoOptions = {
+    //     client: getDriverSubstrate(),
+    //     collectionName: 'sessions'
+    // };
 
     const sessionOptions: session.SessionOptions = {
         secret: process.env.NX_EXPRESS_SESSION_SECRETS?.split(',') ?? [],
@@ -63,7 +65,15 @@ export const start = (port?: number) => {
         resave: false,
         // Don't create session until something stored
         saveUninitialized: true,
-        store: MongoStore.create(mongoOptions),
+        // store: MongoStore.create(mongoOptions),
+        store: new PrismaSessionStore(
+            new PrismaClient(),
+            {
+                checkPeriod: 2 * 60 * 1000,  //ms
+                dbRecordIdIsSessionId: true,
+                dbRecordIdFunction: undefined
+            }
+        ),
         genid: () => uuid()
     };
 
@@ -102,7 +112,7 @@ export const start = (port?: number) => {
                 });
                 return;
             } else if (verb === 'confirm') {
-                logger.info('New remode device confirmation ...');
+                logger.info('New remote device confirmation ...');
                 const [sid, locator, temp_print] = data;
                 sessionStore.get(sid, (err, rsession) => {
                     if (!rsession)
