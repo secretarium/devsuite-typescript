@@ -1,12 +1,11 @@
-import { User } from '../entities';
-import db, { FilterQuery } from '../../utils/db';
+import db, { Prisma } from '../../utils/db';
 
-export const createUser = async (user: User) => {
-    return db.UserCollection.persist(new User(user)).flush();
+export const createUser = async (user: Prisma.UserCreateInput) => {
+    return db.user.create({ data: user });
 };
 
-export const getUsers = async (userFilter?: FilterQuery<User>) => {
+export const getUsers = async (userFilter?: Prisma.UserWhereUniqueInput) => {
     if (userFilter)
-        return await db.UserCollection.find(userFilter);
-    return await db.UserCollection.findAll();
+        return await db.user.findUnique({ where: userFilter });
+    return await db.user.findMany();
 };

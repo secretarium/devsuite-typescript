@@ -1,11 +1,7 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
-import { PrismaClient } from '@prisma/client';
-// import db from '../../utils/db';
-
 import type { RequestHandler } from 'express';
-// import db from '../../utils/db';
-import { User as UserEntity } from '../entities';
+import db, { User as UserEntity } from '../../utils/db';
 import logger from '../../utils/logger';
 
 declare global {
@@ -15,8 +11,6 @@ declare global {
         interface User extends UserEntity { }
     }
 }
-
-const db = new PrismaClient();
 
 passport.serializeUser((user, cb) => {
     logger.debug('serializeUser', typeof user, user);
@@ -44,8 +38,8 @@ passport.use(new LocalStrategy({
         const { temp_print } = req.session as any;
         const existingUser = db.user.findFirst({
             where: {
-                image: {
-                    contains: temp_print
+                devices: {
+                    has: temp_print
                 }
             }
         });

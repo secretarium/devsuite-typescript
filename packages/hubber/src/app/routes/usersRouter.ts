@@ -53,7 +53,7 @@ usersRouter.get('/get_token', async (req, res) => {
         res.status(400).json({ ok: false, message: 'Not logged-in' });
         return;
     }
-    const currentUser = await db.UserCollection.findOne({ id: req.user.id });
+    const currentUser = await db.user.findUnique({ where: { id: req.user.id } });
     if (!currentUser) {
         res.status(400).json({ ok: false, message: 'User not found' });
         return;
@@ -78,8 +78,11 @@ usersRouter.get('/get_token', async (req, res) => {
             res.status(500).json({ ok: false, message: 'Access token could not be retreived', data });
             return;
         }
-        currentUser?.github_tokens.push(data);
-        await db.UserCollection.nativeUpdate({ id: req.user.id }, currentUser);
+        currentUser.github_tokens.push(data);
+        await db.user.update({
+            where: { id: req.user.id },
+            data: currentUser
+        });
         res.status(200).json({
             data
         });
@@ -94,7 +97,7 @@ usersRouter.get('/get_repos', async (req, res) => {
         return;
     }
     try {
-        const currentUser = await db.UserCollection.findOne({ id: req.user.id });
+        const currentUser = await db.user.findUnique({ where: { id: req.user.id } });
         if (!currentUser) {
             res.status(400).json({ ok: false, message: 'User not found' });
             return;

@@ -17,7 +17,7 @@ const probotApp = (app: Probot) => {
             remoteId: context.id,
             payload: context.payload as any
         });
-        logger.info(`New record of hook ${hook._id}`);
+        logger.info(`New record of hook ${hook.id}`);
     });
 };
 
