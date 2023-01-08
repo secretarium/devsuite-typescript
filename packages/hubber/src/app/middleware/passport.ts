@@ -36,7 +36,7 @@ passport.use(new LocalStrategy({
         if (!username || !password)
             return cb(null, false, { message: 'User was not confirmed by remote device.' });
         const { temp_print } = req.session as any;
-        const existingUser = db.user.findFirst({
+        const existingUser = await db.user.findFirst({
             where: {
                 devices: {
                     has: temp_print
@@ -48,8 +48,10 @@ passport.use(new LocalStrategy({
         //         $contains: [temp_print]
         //     }
         // });
-        console.log('LocalStrategy>existingUser', existingUser);
-        const user = existingUser;
+        console.log('LocalStrategy > existingUser', existingUser);
+        // TODO Plug-in user construct
+        // const user = existingUser;
+        const user = req.session;
         // const user = await db.UserCollection.findOne({
         //     name: username
         // });
