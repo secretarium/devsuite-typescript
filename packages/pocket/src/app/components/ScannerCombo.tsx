@@ -3,7 +3,12 @@ import { Text, StyleSheet, Button, View } from 'react-native';
 import { BarCodeScanner, BarCodeScannedCallback } from 'expo-barcode-scanner';
 import useWebSocket, { ReadyState } from 'react-native-use-websocket';
 import { useNavigate } from 'react-router-native';
+import * as SecureStore from 'expo-secure-store';
 // import { WebSocket } from '@d-fischer/isomorphic-ws';
+
+async function getUniqueIdKey(): Promise<string | null> {
+    return await SecureStore.getItemAsync('uniqueId');
+}
 
 export const ScannerCombo: FC = () => {
 
@@ -12,6 +17,8 @@ export const ScannerCombo: FC = () => {
     const [hasPermission, setHasPermission] = useState<boolean>();
     const [scanned, setScanned] = useState(false);
     const [socketUrl, setSocketUrl] = useState<string | null>(null);
+    const [hasLoadedId, setHasLoadedId] = useState(false);
+    const [uniqueId, setUniqueId] = useState<string | null>(null);
 
     const { sendMessage, readyState } = useWebSocket(socketUrl, {
         reconnectAttempts: 50,
@@ -30,11 +37,20 @@ export const ScannerCombo: FC = () => {
         getBarCodeScannerPermissions();
     }, []);
 
+    useEffect(() => {
+        if (hasLoadedId)
+            return;
+        setHasLoadedId(true);
+        (async () => {
+            const uId = await getUniqueIdKey();
+            setUniqueId(uId);
+        })();
+    }, [hasLoadedId]);
+
     const handleBarCodeScanned: BarCodeScannedCallback = ({ data }) => {
         setScanned(true);
         try {
             const [flag, address, uuidBeacon, uuidLocator] = data.split('#');
-            // console.log(flag, uuidBeacon, uuidLocator);
             if (flag === 'cryptx_check') {
                 // alert('cryptx_check');
                 // alert('asde');
@@ -76,7 +92,7 @@ export const ScannerCombo: FC = () => {
 
                 setSocketUrl(address);
                 setTimeout(() => {
-                    sendMessage(`confirm#${uuidBeacon}#${uuidLocator}#my_demo_pass_signature`);
+                    sendMessage(`confirm#${uuidBeacon}#${uuidLocator}#${uniqueId}`);
                     navigate('/');
                 }, 500);
                 // }, 500);

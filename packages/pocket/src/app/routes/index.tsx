@@ -1,8 +1,34 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Link } from 'react-router-native';
 import { View, StyleSheet, Text } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
+import { v4 as uuid } from 'uuid';
+
+async function createUniqueIdKey() {
+    const result = await SecureStore.getItemAsync('uniqueId');
+    if (!result) {
+        await SecureStore.setItemAsync('uniqueId', uuid(), {
+            authenticationPrompt: 'Please unlock Pocket'
+        });
+        return null;
+    }
+    return result;
+}
 
 export const Index: FC = () => {
+
+    const [hasLoadedId, setHasLoadedId] = useState(false);
+    const [uniqueId, setUniqueId] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (hasLoadedId)
+            return;
+        setHasLoadedId(true);
+        (async () => {
+            const uId = await createUniqueIdKey();
+            setUniqueId(uId);
+        })();
+    }, []);
 
     return (
         <>
@@ -16,9 +42,9 @@ export const Index: FC = () => {
                 </Text>
             </View>
             <View style={styles.section}>
-                <View style={styles.hero}>
+                <View style={[styles.hero].concat(!uniqueId ? [styles.heroDisabled] : [] as any)}>
                     <View style={styles.heroTitle}>
-                        <Link to='/scan'>
+                        <Link to='/scan' disabled={!uniqueId}>
                             <Text
                                 style={[
                                     styles.textLg,
@@ -55,6 +81,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#143055',
         padding: 36,
         marginBottom: 24
+    },
+    heroDisabled: {
+        backgroundColor: '#CCCCCC'
     },
     heroTitle: {
         flex: 1,
