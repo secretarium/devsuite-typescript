@@ -7,7 +7,7 @@ import * as SecureStore from 'expo-secure-store';
 // import { WebSocket } from '@d-fischer/isomorphic-ws';
 
 async function getUniqueIdKey(): Promise<string | null> {
-    return await SecureStore.getItemAsync('uniqueId');
+    return await SecureStore.getItemAsync('v0.alpha.uniqueId');
 }
 
 export const ScannerCombo: FC = () => {

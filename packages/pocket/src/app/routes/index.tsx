@@ -2,12 +2,17 @@ import { FC, useEffect, useState } from 'react';
 import { Link } from 'react-router-native';
 import { View, StyleSheet, Text } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
-import { v4 as uuid } from 'uuid';
+
+const generateUniqSerial = () => 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'.replace(/[x]/g, (c) => {
+    const r = Math.random() * 16 | 0;
+    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+});
 
 async function createUniqueIdKey() {
-    const result = await SecureStore.getItemAsync('uniqueId');
+    const result = await SecureStore.getItemAsync('v0.alpha.uniqueId');
     if (!result) {
-        await SecureStore.setItemAsync('uniqueId', uuid(), {
+        await SecureStore.setItemAsync('v0.alpha.uniqueId', generateUniqSerial(), {
             authenticationPrompt: 'Please unlock Pocket'
         });
         return null;
@@ -56,6 +61,9 @@ export const Index: FC = () => {
                         </Link>
                     </View>
                 </View>
+            </View>
+            <View style={styles.section}>
+                <Text>{uniqueId}</Text>
             </View>
         </>
     );
