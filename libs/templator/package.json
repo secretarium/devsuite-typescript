@@ -1,7 +1,7 @@
 {
     "name": "create-trustless-contract",
     "description": "The script to create Trustless smart contract",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "license": "MIT",
     "author": {
         "email": "florian@secretarium.com",
