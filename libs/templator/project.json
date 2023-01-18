@@ -10,6 +10,7 @@
                 "{options.outputPath}"
             ],
             "options": {
+                "buildableProjectDepsInPackageJsonType": "dependencies",
                 "outputPath": "dist/libs/templator",
                 "tsConfig": "libs/templator/tsconfig.lib.json",
                 "packageJson": "libs/templator/package.json",
