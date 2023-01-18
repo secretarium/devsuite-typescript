@@ -20,6 +20,7 @@
         "forceConsistentCasingInFileNames": true,
         "resolveJsonModule": true,
         "strict": true,
+        "strictNullChecks": true,
         "baseUrl": ".",
         "paths": {
             "@secretarium/connector": [

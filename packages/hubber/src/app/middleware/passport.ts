@@ -9,11 +9,14 @@ declare global {
     namespace Express {
         // eslint-disable-next-line @typescript-eslint/no-empty-interface
         interface User extends UserEntity { }
+        interface Request {
+            user?: UserEntity;
+        }
     }
 }
 
 passport.serializeUser((user, cb) => {
-    logger.debug('serializeUser', typeof user, user);
+    logger.debug(`serializeUser ${typeof user} >> ${JSON.stringify(user)}`);
     process.nextTick(function () {
         return cb(null, {
             id: user.id,
@@ -23,7 +26,7 @@ passport.serializeUser((user, cb) => {
 });
 
 passport.deserializeUser((user: Express.User, cb) => {
-    logger.debug('deserializeUser', typeof user, user);
+    logger.debug(`deserializeUser ${typeof user} >> ${JSON.stringify(user)}`);
     process.nextTick(function () {
         return cb(null, user);
     });
@@ -68,7 +71,13 @@ export const passportLoginCheckMiddleware: RequestHandler = (req, res, next) => 
     const user = req.user ? req.user.id : null;
     if (user !== null) {
         next();
-    } else if (req.url === '/users/login' || req.url === '/login/print' || req.url === '/whoami') {
+    } else if (
+        req.path === '/users/login' ||
+        req.path === '/login/print' ||
+        req.path === '/log_in_github' ||
+        req.path === '/get_repos' ||
+        req.path.match(/^\/trpc/) ||
+        req.path === '/whoami') {
         next();
     } else {
         res.status(400).json({ status: 'error', message: 'Please login first' });

@@ -1,21 +1,23 @@
 import { FC, useEffect } from 'react';
 import { Outlet, NavLink, useLoaderData, useNavigation, useSubmit, LoaderFunction, Link } from 'react-router-dom';
 import { useAuth } from '../AuthProvider';
-import { Project, getProjects } from '../data/projects';
+import api from '../utils/api';
 
 export const loader: LoaderFunction = async ({ request }) => {
     const url = new URL(request.url);
     const q = url.searchParams.get('q') ?? undefined;
-    const projects = await getProjects(q);
+    // const projects = await getProjects(q);
+    const projects = [] as any;
     return { projects, q };
 };
 
 export const Root: FC = () => {
 
     const { logout } = useAuth();
-    const { projects, q }: { projects: Project[], q?: string } = useLoaderData() as any;
+    const { projects, q }: { projects: any[], q?: string } = useLoaderData() as any;
     const navigation = useNavigation();
     const submit = useSubmit();
+    const { data } = api.v0.auth.getSession.useQuery();
 
     const searching =
         navigation.location &&
@@ -89,6 +91,9 @@ export const Root: FC = () => {
                         </p>
                     )}
                 </nav>
+                <pre>
+                    PLOP: {JSON.stringify(data?.user)}
+                </pre>
                 <Link to='/projects/new' id='add'>Add repository</Link>
                 <button onClick={logout}>Log out</button>
             </div>

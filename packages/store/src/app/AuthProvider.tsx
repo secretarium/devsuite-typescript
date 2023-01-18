@@ -16,13 +16,13 @@ type AuthProviderProps = PropsWithChildren & {
 
 export const AuthProvider: FC<AuthProviderProps> = ({ children, userData = {} }) => {
 
-    const [user, setUser] = useLocalForage('user', userData.me ?? null);
+    const [user, setUser] = useLocalForage('user', userData ?? null);
     const navigate = useNavigate();
 
     // call this function when you want to authenticate the user
     const login = useCallback(async (data: any) => {
         setUser(data);
-        navigate('/');
+        navigate('/dashboard');
     }, [navigate, setUser]);
 
     // call this function to sign out logged in user

@@ -21,23 +21,54 @@ model Session {
     expiresAt DateTime
 }
 
+type GitHubToken {
+    access_token             String
+    expires_in               Int
+    refresh_token            String
+    refresh_token_expires_in Int
+    token_type               String   @default("bearer")
+    scope                    String
+    created_at               DateTime
+}
+
 model User {
-    id            String   @id @default(uuid()) @map("_id")
-    login         String   @unique
-    emails        String[] @default([])
-    devices       String[] @default([])
-    github_tokens Json[]   @default([])
-    createdAt     DateTime @default(now())
+    id            String        @id @default(uuid()) @map("_id")
+    login         String        @unique
+    emails        String[]      @default([])
+    devices       String[]      @default([])
+    github_tokens GitHubToken[]
+    createdAt     DateTime      @default(now())
+}
+
+enum HookSource {
+    github
+}
+
+enum HookProcessingStatus {
+    idle
+    running
+    done
 }
 
 model Hook {
-    id        String   @id @default(uuid()) @map("_id")
-    source    String
+    id        String               @id @default(uuid()) @map("_id")
+    source    HookSource
     event     String
     remoteId  String
-    status    String   @default("idle")
-    payload   String
+    status    HookProcessingStatus @default(idle)
+    payload   Json
+    createdAt DateTime             @default(now())
+}
+
+model DeployableRepos {
+    id        String   @id @default(uuid()) @map("_id")
+    token     String
+    owner     String
+    name      String
+    config    String?
     createdAt DateTime @default(now())
+
+    @@unique([token, owner, name])
 }
 
 // NextAuth.js Models
