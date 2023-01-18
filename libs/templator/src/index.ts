@@ -15,7 +15,7 @@ import type { CommandOptions, SubstitutionData } from './lib/types';
 import { newStep } from './lib/utils';
 import packageJson from '../package.json';
 
-// const EXPO_BETA = false;
+// const TRUSTLESS_BETA = false;
 
 // `yarn run` may change the current working dir, then we should use `INIT_CWD` env.
 const CWD = process.env.INIT_CWD || process.cwd();
@@ -153,8 +153,8 @@ async function main(target: string | undefined, options: CommandOptions) {
 // async function downloadPackageAsync(targetDir: string): Promise<string> {
 //     return await newStep('Downloading module template from npm', async (step) => {
 //         // const tarballUrl = await getNpmTarballUrl(
-//         //     'expo-module-template',
-//         //     EXPO_BETA ? 'next' : 'latest'
+//         //     'trustless-sc-template',
+//         //     TRUSTLESS_BETA ? 'next' : 'latest'
 //         // );
 
 //         // await downloadTarball({
@@ -174,8 +174,8 @@ async function main(target: string | undefined, options: CommandOptions) {
 async function createTemplateAsync(targetDir: string, data: SubstitutionData): Promise<string> {
     return await newStep('Creating template files', async (step) => {
         // const tarballUrl = await getNpmTarballUrl(
-        //     'expo-module-template',
-        //     EXPO_BETA ? 'next' : 'latest'
+        //     'trustless-sc-template',
+        //     TRUSTLESS_BETA ? 'next' : 'latest'
         // );
 
         // await downloadTarball({
@@ -183,7 +183,7 @@ async function createTemplateAsync(targetDir: string, data: SubstitutionData): P
         //     dir: targetDir
         // });
 
-        await fs.copy(path.join(CWD, 'template', '.'), targetDir, {
+        await fs.copy(path.join(__dirname, '..', 'template', '.'), targetDir, {
             recursive: true
         });
         // await fs.copy(path.join(CWD, 'template', '.secretariumrc.json'), path.join(targetDir, '.secretariumrc.json'), {
@@ -213,7 +213,7 @@ async function createTemplateAsync(targetDir: string, data: SubstitutionData): P
 // }
 
 /**
- * Creates the module based on the `ejs` template (e.g. `expo-module-template` package).
+ * Creates the module based on the `ejs` template (e.g. `trustless-sc-template` package).
  */
 // async function createModuleFromTemplate(
 //     templatePath: string,
@@ -344,13 +344,13 @@ program
     .version(packageJson.version)
     .description(packageJson.description)
     .arguments('[path]')
-    .option(
-        '-s, --source <source_dir>',
-        'Local path to the template. By default it downloads `expo-module-template` from NPM.'
-    )
-    .option('--with-readme', 'Whether to include README.md file.', false)
-    .option('--with-changelog', 'Whether to include CHANGELOG.md file.', false)
-    .option('--no-example', 'Whether to skip creating the example app.', false)
+    // .option(
+    //     '-s, --source <source_dir>',
+    //     'Local path to the template. By default it downloads `trustless-sc-template` from NPM.'
+    // )
+    // .option('--with-readme', 'Whether to include README.md file.', false)
+    // .option('--with-changelog', 'Whether to include CHANGELOG.md file.', false)
+    // .option('--no-example', 'Whether to skip creating the example app.', false)
     .action(main);
 
 program.parse(process.argv);
