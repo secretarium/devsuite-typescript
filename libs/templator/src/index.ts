@@ -4,12 +4,10 @@ import { Command } from 'commander';
 import fs from 'fs-extra';
 import path from 'path';
 import prompts from 'prompts';
-
-// import { createExampleApp } from './lib/createExampleApp';
-// import { installDependencies } from './lib/packageManager';
+import { replaceInFile } from 'replace-in-file';
 import { getSlugPrompt, getSubstitutionDataPrompts } from './lib/prompts';
 import {
-    formatRunCommand,
+    // formatRunCommand,
     PackageManagerName,
     resolvePackageManager
 } from './lib/resolvePackageManager';
@@ -51,8 +49,8 @@ async function main(target: string | undefined, options: CommandOptions) {
 
     options.target = targetDir;
 
-    // const data = await askForSubstitutionDataAsync(slug);
-    await askForSubstitutionDataAsync(slug);
+    const data = await askForSubstitutionDataAsync(slug);
+    // await askForSubstitutionDataAsync(slug);
 
     // Make one line break between prompts and progress logs
     console.log();
@@ -61,7 +59,7 @@ async function main(target: string | undefined, options: CommandOptions) {
     const packagePath = options.source
         ? path.join(CWD, options.source)
         // : await downloadPackageAsync(targetDir);
-        : await createTemplateAsync(targetDir);
+        : await createTemplateAsync(targetDir, data);
 
     // await newStep('Creating the module from template files', async (step) => {
     //     await createModuleFromTemplate(packagePath, targetDir, data);
@@ -173,7 +171,7 @@ async function main(target: string | undefined, options: CommandOptions) {
 /**
  * Create template files.
  */
-async function createTemplateAsync(targetDir: string): Promise<string> {
+async function createTemplateAsync(targetDir: string, data: SubstitutionData): Promise<string> {
     return await newStep('Creating template files', async (step) => {
         // const tarballUrl = await getNpmTarballUrl(
         //     'expo-module-template',
@@ -185,7 +183,21 @@ async function createTemplateAsync(targetDir: string): Promise<string> {
         //     dir: targetDir
         // });
 
-        await fs.copyFile('.secretariumrc.json', path.join(targetDir, '.secretariumrc.json'));
+        await fs.copy(path.join(CWD, 'template', '.'), targetDir, {
+            recursive: true
+        });
+        // await fs.copy(path.join(CWD, 'template', '.secretariumrc.json'), path.join(targetDir, '.secretariumrc.json'), {
+        //     recursive: true
+        // });
+        // await fs.copy(path.join(CWD, 'template', 'apps'), path.join(targetDir, 'apps'), {
+        //     recursive: true
+        // });
+
+        await replaceInFile({
+            files: path.join(targetDir, '.secretariumrc.json'),
+            from: [/{{SMART_CONTRACT_NAME}}/g, /{{SMART_CONTRACT_SLUG}}/g],
+            to: [data.project.name, data.project.slug]
+        });
 
         step.succeed('Creating template files');
 
@@ -193,12 +205,12 @@ async function createTemplateAsync(targetDir: string): Promise<string> {
     });
 }
 
-function handleSuffix(name: string, suffix: string): string {
-    if (name.endsWith(suffix)) {
-        return name;
-    }
-    return `${name}${suffix}`;
-}
+// function handleSuffix(name: string, suffix: string): string {
+//     if (name.endsWith(suffix)) {
+//         return name;
+//     }
+//     return `${name}${suffix}`;
+// }
 
 /**
  * Creates the module based on the `ejs` template (e.g. `expo-module-template` package).
@@ -264,9 +276,7 @@ async function askForSubstitutionDataAsync(slug: string): Promise<SubstitutionDa
             name,
             version: '0.1.0',
             description,
-            package: projectPackage,
-            moduleName: handleSuffix(name, 'Module'),
-            viewName: handleSuffix(name, 'View')
+            package: projectPackage
         },
         author: `${authorName} <${authorEmail}> (${authorUrl})`,
         license: 'MIT',
@@ -312,13 +322,14 @@ function printFurtherInstructions(
     if (includesExample) {
         const commands = [
             `cd ${path.relative(CWD, targetDir)}`,
-            formatRunCommand(packageManager, 'open:ios'),
-            formatRunCommand(packageManager, 'open:android')
+            'code .'
+            // formatRunCommand(packageManager, 'open:ios'),
+            // formatRunCommand(packageManager, 'open:android')
         ];
 
         console.log();
         console.log(
-            'To start developing your module, navigate to the directory and open iOS and Android projects of the example app'
+            'To start developing your smart contract, navigate to the directory and open your favorite editor'
         );
         commands.forEach((command) => console.log(chalk.gray('>'), chalk.bold(command)));
         console.log();

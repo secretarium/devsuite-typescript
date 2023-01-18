@@ -21,8 +21,6 @@ export type SubstitutionData = {
         version: string;
         description: string;
         package: string;
-        moduleName: string;
-        viewName: string;
     };
     author: string;
     license: string;

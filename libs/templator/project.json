@@ -17,6 +17,7 @@
                 "main": "libs/templator/src/index.ts",
                 "assets": [
                     "libs/templator/bin/*",
+                    "libs/templator/template/*",
                     "libs/templator/*.md"
                 ]
             }

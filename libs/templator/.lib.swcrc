@@ -4,7 +4,8 @@
         "parser": {
             "syntax": "typescript",
             "decorators": true,
-            "dynamicImport": true
+            "dynamicImport": true,
+            "exportDefaultFrom": false
         },
         "transform": {
             "decoratorMetadata": true,
@@ -16,13 +17,14 @@
             }
         },
         "keepClassNames": true,
-        "externalHelpers": true,
+        "externalHelpers": false,
         "loose": true
     },
     "module": {
         "type": "commonjs",
         "strict": true,
-        "noInterop": true
+        "lazy": false,
+        "noInterop": false
     },
     "sourceMaps": true,
     "exclude": [
