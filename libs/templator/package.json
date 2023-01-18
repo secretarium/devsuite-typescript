@@ -1,0 +1,12 @@
+{
+    "name": "create-trustless-contract",
+    "description": "The script to create Trustless smart contract",
+    "version": "0.0.1",
+    "author": {
+        "email": "florian@secretarium.com",
+        "name": "Florian Guitton"
+    },
+    "bin": {
+        "create-trustless-contract": "./bin/create-trustless-contract"
+    }
+}
