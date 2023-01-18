@@ -5,7 +5,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import prompts from 'prompts';
 
-import { createExampleApp } from './lib/createExampleApp';
+// import { createExampleApp } from './lib/createExampleApp';
 // import { installDependencies } from './lib/packageManager';
 import { getSlugPrompt, getSubstitutionDataPrompts } from './lib/prompts';
 import {
@@ -13,7 +13,7 @@ import {
     PackageManagerName,
     resolvePackageManager
 } from './lib/resolvePackageManager';
-import { CommandOptions, SubstitutionData } from './lib/types';
+import type { CommandOptions, SubstitutionData } from './lib/types';
 import { newStep } from './lib/utils';
 import packageJson from '../package.json';
 
@@ -51,7 +51,8 @@ async function main(target: string | undefined, options: CommandOptions) {
 
     options.target = targetDir;
 
-    const data = await askForSubstitutionDataAsync(slug);
+    // const data = await askForSubstitutionDataAsync(slug);
+    await askForSubstitutionDataAsync(slug);
 
     // Make one line break between prompts and progress logs
     console.log();
@@ -103,10 +104,10 @@ async function main(target: string | undefined, options: CommandOptions) {
     if (!options.withChangelog) {
         await fs.remove(path.join(targetDir, 'CHANGELOG.md'));
     }
-    if (options.example) {
-        // Create "example" folder
-        await createExampleApp(data, targetDir, packageManager);
-    }
+    // if (options.example) {
+    //     // Create "example" folder
+    //     await createExampleApp(data, targetDir, packageManager);
+    // }
 
     console.log();
     console.log('✅ Successfully created a Trustless smart contract');
