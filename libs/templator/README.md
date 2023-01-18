@@ -1,11 +1,11 @@
-# templator
+# create-trustless-contract
 
-This library was generated with [Nx](https://nx.dev).
+Initializes a new [Secretarium Trustless smart contract](https://secretarium.com/) project with scaffolding for TypeScript.
 
-## Running unit tests
+### Usage
 
-Run `nx test templator` to execute the unit tests via [Jest](https://jestjs.io).
+```
+yarn create trustless-contract
+```
 
-## Running lint
-
-Run `nx lint templator` to execute the lint via [ESLint](https://eslint.org/).
+To test beta releases, run `TRUSTLESS_BETA=1 yarn create trustless-contract`.
