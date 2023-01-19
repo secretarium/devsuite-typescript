@@ -71,7 +71,7 @@ export const LoginQR: FC = () => {
                             <span className='absolute block overflow-hidden top-0 left-[calc(50%-150px)] w-[300px] h-[300px]'>
                                 <QRCode level='Q' value={`cryptx_check#${addressDestination}#${uuidBeacon}#${uuidLocator}`} size={300} onClick={handleClickSendMessage} />
                             </span>
-                            <span className='absolute block overflow-hidden rounded-full p-5 pt-6 top-[calc(160-35)] left-[calc(50%-35px)] w-[70px] h-[70px]'>
+                            <span className='absolute block overflow-hidden rounded-full p-5 pt-6 top-[calc(160px-55px)] left-[calc(50%-35px)] w-[80px] h-[80px] bg-white'>
                                 <img alt='Logo' src={logo} />
                             </span>
                             <br />
