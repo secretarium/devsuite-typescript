@@ -9,8 +9,5 @@
     },
     "bin": {
         "create-trustless-contract": "./bin/create-trustless-contract"
-    },
-    "dependencies": {
-        "@swc/helpers": "0.4.14"
     }
 }
