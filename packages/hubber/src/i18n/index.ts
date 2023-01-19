@@ -1,7 +1,7 @@
 import path from 'node:path';
 import i18n from 'i18next';
-import Backend from 'i18next-node-fs-backend';
-import i18nextMiddleware from 'i18next-express-middleware';
+import Backend from 'i18next-fs-backend';
+import i18nextMiddleware from 'i18next-http-middleware';
 
 (async () => {
     await i18n
