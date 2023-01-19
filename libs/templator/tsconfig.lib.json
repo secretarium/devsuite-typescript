@@ -16,6 +16,7 @@
     "include": [
         "bin/*",
         "src/**/*.ts",
-        "template/**/*.ts"
+        "template/**/*.ts",
+        ".github/**/*.js"
     ]
 }
