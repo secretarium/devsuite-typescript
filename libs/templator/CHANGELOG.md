@@ -2,6 +2,13 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.0.8](///compare/templator@0.0.7...templator@0.0.8) (2023-01-19)
+
+
+### Bug Fixes
+
+* **templator:** Remove CLRF in binary and change SWC compiler exclude rule 5b0b760
+
 ## [0.0.7](///compare/templator@0.0.6...templator@0.0.7) (2023-01-19)
 
 ## [0.0.6](///compare/templator@0.0.5...templator@0.0.6) (2023-01-18)
