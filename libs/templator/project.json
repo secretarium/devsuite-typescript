@@ -16,8 +16,13 @@
                 "packageJson": "libs/templator/package.json",
                 "main": "libs/templator/src/index.ts",
                 "assets": [
+                    {
+                        "glob": "**/(\\.*|*)",
+                        "input": "libs/templator/template",
+                        "output": "template",
+                        "ignore": []
+                    },
                     "libs/templator/bin/*",
-                    "libs/templator/template/*",
                     "libs/templator/*.md"
                 ]
             }

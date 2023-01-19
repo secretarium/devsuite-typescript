@@ -184,7 +184,8 @@ async function createTemplateAsync(targetDir: string, data: SubstitutionData): P
         // });
 
         await fs.copy(path.join(__dirname, '..', 'template', '.'), targetDir, {
-            recursive: true
+            recursive: true,
+            filter: () => true
         });
         // await fs.copy(path.join(CWD, 'template', '.secretariumrc.json'), path.join(targetDir, '.secretariumrc.json'), {
         //     recursive: true
