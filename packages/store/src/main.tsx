@@ -1,11 +1,12 @@
 // import './wdyr';
-import './opentelemetry';
+// import './opentelemetry';
 import './app/utils/sentry';
-import * as ReactDOM from 'react-dom/client';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
 
 import App from './app/Router';
 
-const root = ReactDOM.createRoot(
+const root = createRoot(
     document.getElementById('root') as HTMLElement
 );
 

@@ -54,7 +54,14 @@ passport.use(new LocalStrategy({
         console.log('LocalStrategy > existingUser', existingUser);
         // TODO Plug-in user construct
         // const user = existingUser;
-        const user = req.session;
+        const user = {
+            id: req.session.id,
+            login: req.session.id,
+            emails: [`${req.session.id}@local`],
+            devices: [(req.session as any).temp_print],
+            github_tokens: req.session.github_token ? [req.session.github_token] : [],
+            createdAt: new Date()
+        };
         // const user = await db.UserCollection.findOne({
         //     name: username
         // });

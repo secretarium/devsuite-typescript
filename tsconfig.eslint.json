@@ -9,6 +9,8 @@
         "*.ts*",
         "packages/**/*.js*",
         "packages/**/*.ts*",
+        "libs/**/*.js*",
+        "libs/**/*.ts*",
         "tools/**/*.js",
         "tools/**/*.ts"
     ]

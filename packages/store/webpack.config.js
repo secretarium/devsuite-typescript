@@ -18,6 +18,11 @@ const getWebpackConfig = (config) => {
         'url': false
     };
 
+    baseConfig.ignoreWarnings.push({
+        module: /src\/styles.css/,
+        message: /@import must precede all other statements/
+    });
+
     return baseConfig;
 };
 
