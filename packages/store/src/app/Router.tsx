@@ -1,3 +1,4 @@
+import { type FC } from 'react';
 import { createRoutesFromElements, Route, RouterProvider, defer } from 'react-router-dom';
 import { sentryCreateBrowserRouter } from './utils/sentry';
 import Root, { loader as rootLoader } from './routes/root';
@@ -35,6 +36,10 @@ const router = sentryCreateBrowserRouter(
                 <Route index element={<Deploy />} />
                 <Route
                     path="select"
+                    element={<RepoSelect />}
+                />
+                <Route
+                    path="repo/:org/:repo"
                     element={<RepoSelect />}
                 />
             </Route>
@@ -82,13 +87,12 @@ const router = sentryCreateBrowserRouter(
     )
 );
 
-export function Router() {
+export const Router: FC = () => {
     return (
-
         <Providers>
             <RouterProvider router={router} />
         </Providers>
     );
-}
+};
 
 export default Router;
