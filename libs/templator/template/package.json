@@ -1,5 +1,6 @@
 {
-    "dependencies": {
-        "@secretarium/trustless-app": "*"
+    "devDependencies": {
+        "@secretarium/trustless-app": "*",
+        "assemblyscript": "^0.26.6"
     }
 }
