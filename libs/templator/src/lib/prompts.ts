@@ -9,7 +9,7 @@ export function getSlugPrompt(customTargetPath?: string | null): PromptObject<st
     const initial =
         targetBasename && validateNpmPackage(targetBasename).validForNewPackages
             ? targetBasename
-            : 'my-smart-contract';
+            : 'my-trustless-app';
 
     return {
         type: 'text',

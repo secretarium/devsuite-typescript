@@ -1,0 +1,15 @@
+{
+    "extends": "assemblyscript/std/assembly.json",
+    "compilerOptions": {
+        "rootDir": ".",
+        "baseUrl": ".",
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "types": [
+            "assembly"
+        ]
+    },
+    "include": [
+        "./**/*.ts"
+    ]
+}

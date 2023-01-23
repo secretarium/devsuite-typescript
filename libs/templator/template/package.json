@@ -1,0 +1,5 @@
+{
+    "dependencies": {
+        "@secretarium/trustless-app": "*"
+    }
+}
