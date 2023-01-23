@@ -108,7 +108,7 @@ async function main(target: string | undefined, options: CommandOptions) {
     // }
 
     console.log();
-    console.log('✅ Successfully created a Trustless smart contract');
+    console.log('✅ Successfully created a Trustless application');
 
     printFurtherInstructions(targetDir, packageManager, options.example);
 }
@@ -330,7 +330,7 @@ function printFurtherInstructions(
 
         console.log();
         console.log(
-            'To start developing your smart contract, navigate to the directory and open your favorite editor'
+            'To start developing your trustless application, navigate to the directory and open your favorite editor'
         );
         commands.forEach((command) => console.log(chalk.gray('>'), chalk.bold(command)));
         console.log();

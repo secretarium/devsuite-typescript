@@ -26,15 +26,15 @@ export async function getSubstitutionDataPrompts(slug: string): Promise<PromptOb
         {
             type: 'text',
             name: 'name',
-            message: 'What is the name of your smart contract?',
-            initial: 'My smart contract',
+            message: 'What is the name of your trustless application?',
+            initial: 'My trustless application',
             validate: (input) => !!input || 'The description cannot be empty'
         },
         {
             type: 'text',
             name: 'description',
-            message: 'How would you describe the smart contract?',
-            initial: 'This is a smart contract for the Trustless Network',
+            message: 'How would you describe the trustless application?',
+            initial: 'This is a trustless application for the Trustless Network',
             validate: (input) => !!input || 'The description cannot be empty'
         },
         {

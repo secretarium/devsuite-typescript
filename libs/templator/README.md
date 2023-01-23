@@ -1,6 +1,6 @@
 # create-trustless-contract
 
-Initializes a new [Secretarium Trustless smart contract](https://secretarium.com/) project with scaffolding for TypeScript.
+Initializes a new [Secretarium Trustless application](https://secretarium.com/) project with scaffolding for TypeScript.
 
 ### Usage
 
