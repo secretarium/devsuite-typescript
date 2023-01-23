@@ -7,11 +7,11 @@ const { exclude: _, ...swcJestConfig } = JSON.parse(
     readFileSync(`${__dirname}/.lib.swcrc`, "utf-8")
 );
 export default {
-    displayName: "smart-contract",
+    displayName: "trustless-app",
     preset: "../../jest.preset.js",
     transform: {
         "^.+\\.[tj]s$": ["@swc/jest", swcJestConfig],
     },
     moduleFileExtensions: ["ts", "js", "html"],
-    coverageDirectory: "../../coverage/libs/smart-contract",
+    coverageDirectory: "../../coverage/libs/trustless-app",
 };

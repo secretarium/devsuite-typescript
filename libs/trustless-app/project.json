@@ -1,0 +1,56 @@
+{
+    "name": "trustless-app",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "libs/trustless-app/src",
+    "projectType": "library",
+    "targets": {
+        "build": {
+            "executor": "@nrwl/js:swc",
+            "outputs": [
+                "{options.outputPath}"
+            ],
+            "options": {
+                "buildableProjectDepsInPackageJsonType": "dependencies",
+                "outputPath": "dist/libs/trustless-app",
+                "tsConfig": "libs/trustless-app/tsconfig.lib.json",
+                "packageJson": "libs/trustless-app/package.json",
+                "main": "libs/trustless-app/src/index.ts",
+                "assets": [
+                    "libs/trustless-app/bin/*",
+                    "libs/trustless-app/*.md"
+                ]
+            }
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "outputs": [
+                "{options.outputFile}"
+            ],
+            "options": {
+                "lintFilePatterns": [
+                    "libs/trustless-app/**/*.ts"
+                ]
+            }
+        },
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "outputs": [
+                "{workspaceRoot}/coverage/{projectRoot}"
+            ],
+            "options": {
+                "jestConfig": "libs/trustless-app/jest.config.ts",
+                "passWithNoTests": true
+            }
+        },
+        "version": {
+            "executor": "@jscutlery/semver:version",
+            "options": {
+                "preset": "conventional",
+                "trackDeps": true,
+                "tagPrefix": "${projectName}@",
+                "commitMessageFormat": "chore(${projectName}): Release version ${version}"
+            }
+        }
+    },
+    "tags": []
+}

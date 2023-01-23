@@ -4,11 +4,17 @@
         "parser": {
             "syntax": "typescript",
             "decorators": true,
-            "dynamicImport": true
+            "dynamicImport": true,
+            "exportDefaultFrom": false
         },
         "transform": {
             "decoratorMetadata": true,
             "legacyDecorator": true
+        },
+        "minify": {
+            "format": {
+                "comments": false
+            }
         },
         "keepClassNames": true,
         "externalHelpers": true,
@@ -17,6 +23,7 @@
     "module": {
         "type": "commonjs",
         "strict": true,
+        "lazy": false,
         "noInterop": true
     },
     "sourceMaps": true,

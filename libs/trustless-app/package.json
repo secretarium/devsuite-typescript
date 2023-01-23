@@ -1,0 +1,25 @@
+{
+    "name": "@secretarium/trustless-app",
+    "description": "Secretarium Trustless Apps helpers and definitions",
+    "version": "0.0.3",
+    "license": "MIT",
+    "private": false,
+    "author": {
+        "email": "florian@secretarium.com",
+        "name": "Florian Guitton"
+    },
+    "bin": {
+        "sta-compile": "./bin/compile"
+    },
+    "type": "commonjs",
+    "types": "./src/index.d.ts",
+    "ascMain": "./src/index.d.ts",
+    "exports": {
+        "./compile": {
+            "require": "./src/compile.js"
+        }
+    },
+    "peerDependencies": {
+        "assemblyscript": "^0.26"
+    }
+}
