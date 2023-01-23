@@ -2,6 +2,13 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.0.10](///compare/templator@0.0.9...templator@0.0.10) (2023-01-23)
+
+
+### Bug Fixes
+
+* **templator:** Add missing dependencies and adjusting template e247669
+
 ## [0.0.9](///compare/templator@0.0.8...templator@0.0.9) (2023-01-23)
 
 ## [0.0.8](///compare/templator@0.0.7...templator@0.0.8) (2023-01-19)
