@@ -1,8 +1,10 @@
 import { Router } from 'express';
 import passport from 'passport';
 import fetch from 'node-fetch';
+// import { OAuthApp } from '@octokit/oauth-app';
 import { createUser, getUsers } from '../controllers/userController';
-import db, { GitHubToken } from '../../utils/db';
+import db from '../../utils/db';
+import { objectToCamel } from 'ts-case-convert';
 
 export const usersRouter = Router();
 
@@ -10,7 +12,7 @@ usersRouter.get('/whoami', async ({ user, session }, res) => {
     if (user)
         res.status(200).json({ me: user });
     else
-        res.status(401).json({ who: 'An unknown unicorn', has_github_token: !!session.github_token });
+        res.status(401).json({ who: 'An unknown unicorn', has_githubToken: !!session.githubToken });
 });
 
 usersRouter.get('/login/print', async (req, res, next) => {
@@ -48,16 +50,10 @@ usersRouter.post('/users', async (req, res) => {
     }
 });
 
-declare module 'express-session' {
-    interface SessionData {
-        github_token: GitHubToken
-    }
-}
-
 usersRouter.get('/log_in_github', async (req, res) => {
-    if (req.session.github_token)
+    if (req.session.githubToken)
         return res.status(200).json({
-            data: req.session.github_token
+            data: req.session.githubToken
         });
     // if (!req.user) {
     //     res.status(400).json({ ok: false, message: 'Not logged-in' });
@@ -69,8 +65,15 @@ usersRouter.get('/log_in_github', async (req, res) => {
     //     return;
     // }
     const user = !req.user ? null : await db.user.findUnique({ where: { id: req.user.id } });
-    const { code, redirect_uri } = req.query;
+    const { code, redirectUri } = req.query as Record<string, string>;
     try {
+        // const app = new OAuthApp({
+        //     clientId: process.env.NX_GITHUB_CLIENTID as string,
+        //     clientSecret: process.env.NX_GITHUB_CLIENTSECRET as string,
+        //     redirectUrl: redirectUri.toString()
+        // });
+        // const result = await app.createToken({ code });
+        // result.authentication.
         const result = await fetch('https://github.com/login/oauth/access_token', {
             method: 'POST',
             headers: {
@@ -81,19 +84,19 @@ usersRouter.get('/log_in_github', async (req, res) => {
                 client_id: process.env.NX_GITHUB_CLIENTID,
                 client_secret: process.env.NX_GITHUB_CLIENTSECRET,
                 code,
-                redirect_uri
+                redirect_uri: redirectUri
             })
         });
-        const data = {
-            ...await result.json(),
-            created_at: Date.now()
+        const data: any = {
+            ...objectToCamel(await result.json()),
+            createdAt: Date.now()
         };
-        if (!data.access_token) {
+        if (!data.accessToken) {
             res.status(500).json({ ok: false, message: 'Access token could not be retreived', data });
             return;
         }
         if (user) {
-            user.github_tokens.push(data);
+            user.githubTokens.push(data);
             await db.user.update({
                 where: { id: user.id },
                 data: user
@@ -101,7 +104,7 @@ usersRouter.get('/log_in_github', async (req, res) => {
         }
         req.sessionStore.set(req.sessionID, {
             ...req.session,
-            github_token: data
+            githubToken: data
         }, (err) => {
             if (err)
                 return res.status(500).json({

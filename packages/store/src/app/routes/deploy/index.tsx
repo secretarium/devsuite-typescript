@@ -10,15 +10,15 @@ export const Index: FC = () => {
     const [hasRedirected, setHasRedirected] = useState(false);
 
     useEffect(() => {
-        if (!hasRedirected && user.has_github_token) {
+        if (!hasRedirected && user.has_githubToken) {
             setHasRedirected(true);
             navigate('/deploy/select');
         }
-    }, [hasRedirected, navigate, user.has_github_token]);
+    }, [hasRedirected, navigate, user.has_githubToken]);
 
     const state = JSON.stringify({
         source: 'github',
-        redirect_uri: '/deploy/select'
+        redirectUri: '/deploy/select'
     });
 
     const githubAuth = new URL('https://github.com/login/oauth/authorize');

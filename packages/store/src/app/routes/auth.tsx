@@ -8,7 +8,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     const { code, state } = queryParams;
     let data = null;
     if (code) {
-        const response = await fetch(`/api/log_in_github?code=${code}&state=${state}&redirect_uri=${encodeURIComponent('http://localhost:4220/auth')}`, {
+        const response = await fetch(`/api/log_in_github?code=${code}&state=${state}&redirectUri=${encodeURIComponent('http://localhost:4220/auth')}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
@@ -24,15 +24,15 @@ export const Index: FC = () => {
     const navigate = useNavigate();
     const [hasRedirected, setHasRedirected] = useState(false);
     const { data, state, queryParams }: { data: any, state: string, queryParams?: qs.ParsedQuery<string> } = useLoaderData() as any;
-    const { redirect_uri }: { redirect_uri: string } = state ? JSON.parse(state) : {};
+    const { redirectUri }: { redirectUri: string } = state ? JSON.parse(state) : {};
 
     useEffect(() => {
-        if (!hasRedirected && redirect_uri) {
-            console.log(redirect_uri);
+        if (!hasRedirected && redirectUri) {
+            console.log(redirectUri);
             setHasRedirected(true);
-            navigate(redirect_uri);
+            navigate(redirectUri);
         }
-    }, [hasRedirected, navigate, redirect_uri]);
+    }, [hasRedirected, navigate, redirectUri]);
 
     return <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="pt-12 pb-12 md:pt-20 md:pb-20">

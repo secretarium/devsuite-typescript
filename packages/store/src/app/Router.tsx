@@ -14,6 +14,10 @@ import { ProtectedLayout } from './ProtectedLayout';
 import Login from './routes/login';
 import Deploy from './routes/deploy';
 import RepoSelect from './routes/deploy/select';
+import RepoSheet from './routes/deploy/repo';
+import AppListing from './routes/apps/index';
+import Catalog from './routes/catalog';
+import CatalogListing from './routes/catalog/listing';
 import Providers from './Providers';
 
 const getUserData = () => fetch('/api/whoami', { method: 'GET' })
@@ -31,6 +35,15 @@ const router = sentryCreateBrowserRouter(
                 element={<Login />}
             />
             <Route
+                path="store"
+            >
+                <Route index element={<Catalog />} />
+                <Route
+                    path="app/:slug"
+                    element={<CatalogListing />}
+                />
+            </Route>
+            <Route
                 path="deploy"
             >
                 <Route index element={<Deploy />} />
@@ -39,8 +52,17 @@ const router = sentryCreateBrowserRouter(
                     element={<RepoSelect />}
                 />
                 <Route
-                    path="repo/:org/:repo"
-                    element={<RepoSelect />}
+                    path="repo/:owner/:name"
+                    element={<RepoSheet />}
+                />
+            </Route>
+            <Route
+                path="apps"
+            >
+                <Route index element={<AppListing />} />
+                <Route
+                    path=":appId"
+                    element={<AppListing />}
                 />
             </Route>
             <Route

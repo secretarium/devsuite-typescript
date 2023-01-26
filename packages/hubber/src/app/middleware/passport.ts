@@ -1,19 +1,8 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import type { RequestHandler } from 'express';
-import db, { User as UserEntity } from '../../utils/db';
+import db from '../../utils/db';
 import logger from '../../utils/logger';
-
-declare global {
-    // eslint-disable-next-line @typescript-eslint/no-namespace
-    namespace Express {
-        // eslint-disable-next-line @typescript-eslint/no-empty-interface
-        interface User extends UserEntity { }
-        interface Request {
-            user?: UserEntity;
-        }
-    }
-}
 
 passport.serializeUser((user, cb) => {
     logger.debug(`serializeUser ${typeof user} >> ${JSON.stringify(user)}`);
@@ -42,7 +31,7 @@ passport.use(new LocalStrategy({
         const existingUser = await db.user.findFirst({
             where: {
                 devices: {
-                    has: temp_print
+                    some: temp_print
                 }
             }
         });
@@ -59,8 +48,9 @@ passport.use(new LocalStrategy({
             login: req.session.id,
             emails: [`${req.session.id}@local`],
             devices: [(req.session as any).temp_print],
-            github_tokens: req.session.github_token ? [req.session.github_token] : [],
-            createdAt: new Date()
+            githubTokens: req.session.githubToken ? [req.session.githubToken] : [],
+            createdAt: new Date(),
+            updatedAt: new Date()
         };
         // const user = await db.UserCollection.findOne({
         //     name: username

@@ -1,7 +1,6 @@
-import 'express-session';
 // import { getServerAuthSession, type Session } from '@secretarium/hubber-auth';
 // import { getServerAuthSession } from './get-session';
-import { prisma, User as UserEntity } from '@secretarium/hubber-db';
+import { prisma } from '@secretarium/hubber-db';
 import { type inferAsyncReturnType } from '@trpc/server';
 // import { type CreateNextContextOptions } from '@trpc/server/adapters/next';
 import { type CreateExpressContextOptions } from '@trpc/server/adapters/express';
@@ -56,20 +55,10 @@ import { type CreateExpressContextOptions } from '@trpc/server/adapters/express'
 //     });
 // };
 
-declare global {
-    // eslint-disable-next-line @typescript-eslint/no-namespace
-    namespace Express {
-        // eslint-disable-next-line @typescript-eslint/no-empty-interface
-        interface User extends UserEntity { }
-        interface Request {
-            user?: UserEntity;
-        }
-    }
-}
 
 export const createContext = async (opts: CreateExpressContextOptions) => {
     const { req } = opts;
-    const { session, sessionID, sessionStore, user } = req as Express.Request;
+    const { session, sessionID, sessionStore, user } = req;
 
     return {
         session,

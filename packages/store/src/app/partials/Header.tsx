@@ -1,9 +1,18 @@
 import { useState, useEffect, FC } from 'react';
 import { Link } from 'react-router-dom';
+import api from '../utils/api';
 
 const Header: FC = () => {
 
     const [top, setTop] = useState(true);
+    const { data } = api.v0.auth.getSession.useQuery();
+    const shouldDisplayEphemeralAlert = data && data.session.unclaimedApplications?.length && !data.user;
+    console.log(data);
+    console.log(data !== undefined);
+    console.log(data && data.user === undefined);
+    console.log(data && data.session.githubToken !== undefined);
+    console.log(data !== undefined && data.user === undefined && data.session.githubToken !== undefined);
+    console.log('shouldDisplayEphemeralAlert', shouldDisplayEphemeralAlert);
 
     // detect whether user has scrolled the page down by 10px
     useEffect(() => {
@@ -16,6 +25,10 @@ const Header: FC = () => {
 
     return (
         <header className={`fixed w-full z-30 md:bg-opacity-90 transition duration-300 ease-in-out ${!top && 'bg-white backdrop-blur-sm shadow-lg'}`}>
+            {shouldDisplayEphemeralAlert ? <div className="max-w-6xl mx-auto py-2 text-center text-white bg-red-500">
+                You have deployed a trustless app but are not logged in !<br />
+                You must sign in in order to save your work !
+            </div> : null}
             <div className="max-w-6xl mx-auto px-5 sm:px-6">
                 <div className="flex items-center justify-between h-16 md:h-20">
 
@@ -39,6 +52,11 @@ const Header: FC = () => {
                     {/* Site navigation */}
                     <nav className="flex flex-grow">
                         <ul className="flex flex-grow justify-end flex-wrap items-center">
+                            <li>
+                                <Link to="/store" className="btn-sm text-gray-900 bg-gray-200 hover:bg-gray-300 ml-3">
+                                    <span>Store</span>
+                                </Link>
+                            </li>
                             <li>
                                 <Link to="/deploy" className="btn-sm text-gray-900 bg-gray-200 hover:bg-gray-300 ml-3">
                                     <span>Deploy now</span>
