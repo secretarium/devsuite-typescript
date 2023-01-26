@@ -137,7 +137,7 @@
         "@commitlint/config-nx-scopes": "^17.4.2",
         "@expo/cli": "0.4.11",
         "@jscutlery/semver": "2.29.3",
-        "@nrwl/cypress": "15.4.5",
+        "@nrwl/cypress": "15.6.2",
         "@nrwl/detox": "15.4.5",
         "@nrwl/esbuild": "15.4.5",
         "@nrwl/eslint-plugin-nx": "15.4.5",
