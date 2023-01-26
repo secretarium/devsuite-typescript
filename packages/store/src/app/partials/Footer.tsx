@@ -33,7 +33,7 @@ const Footer: FC = () => {
                     </div>
 
                     {/* 2nd block */}
-                    <div className="sm:col-span-5 md:col-span-3 lg:col-span-3">
+                    <div className="sm:col-span-5 md:col-span-4 lg:col-span-3">
                         <h6 className="text-gray-800 font-medium mb-2">Products</h6>
                         <ul className="text-sm">
                             <li className="mb-2">
@@ -52,7 +52,7 @@ const Footer: FC = () => {
                     </div>
 
                     {/* 3rd block */}
-                    <div className="sm:col-span-5 md:col-span-3 lg:col-span-3">
+                    <div className="sm:col-span-5 md:col-span-4 lg:col-span-3">
                         <h6 className="text-gray-800 font-medium mb-2">Resources</h6>
                         <ul className="text-sm">
                             <li className="mb-2">
@@ -68,7 +68,7 @@ const Footer: FC = () => {
                     </div>
 
                     {/* 4th block */}
-                    <div className="sm:col-span-5 md:col-span-3 lg:col-span-3">
+                    <div className="sm:col-span-5 md:col-span-4 lg:col-span-3">
                         <h6 className="text-gray-800 font-medium mb-2">Company</h6>
                         <ul className="text-sm">
                             <li className="mb-2">

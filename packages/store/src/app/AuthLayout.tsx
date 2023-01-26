@@ -11,7 +11,7 @@ export const AuthLayout = () => {
     return (
         <Suspense fallback={<div className="flex flex-col min-h-screen overflow-hidden">
             <Header />
-            <main className="flex-grow">
+            <main className="flex-grow pt-24">
                 <div id="error-page">
                     <div className="max-w-6xl mx-auto px-4 sm:px-6">
                         <div className="pt-12 pb-12 md:pt-20 md:pb-20">
@@ -34,7 +34,7 @@ export const AuthLayout = () => {
                 resolve={userPromise}
                 errorElement={<div className="flex flex-col min-h-screen overflow-hidden">
                     <Header />
-                    <main className="flex-grow">
+                    <main className="flex-grow pt-24">
                         <div id="error-page">
                             <div className="max-w-6xl mx-auto px-4 sm:px-6">
                                 <div className="pt-12 pb-12 md:pt-20 md:pb-20">
@@ -58,7 +58,7 @@ export const AuthLayout = () => {
                     <AuthProvider userData={user}>
                         <div className="flex flex-col min-h-screen overflow-hidden">
                             <Header />
-                            <main className="flex-grow">
+                            <main className="flex-grow pt-24">
                                 {outlet}
                             </main>
                             <Footer />

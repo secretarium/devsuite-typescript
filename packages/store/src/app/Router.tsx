@@ -16,6 +16,7 @@ import Deploy from './routes/deploy';
 import RepoSelect from './routes/deploy/select';
 import RepoSheet from './routes/deploy/repo';
 import AppListing from './routes/apps/index';
+import DomainListing from './routes/domains/index';
 import Catalog from './routes/catalog';
 import CatalogListing from './routes/catalog/listing';
 import Providers from './Providers';
@@ -63,6 +64,15 @@ const router = sentryCreateBrowserRouter(
                 <Route
                     path=":appId"
                     element={<AppListing />}
+                />
+            </Route>
+            <Route
+                path="domains"
+            >
+                <Route index element={<DomainListing />} />
+                <Route
+                    path=":domainId"
+                    element={<DomainListing />}
                 />
             </Route>
             <Route

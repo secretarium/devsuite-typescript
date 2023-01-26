@@ -11,7 +11,7 @@ import passport from 'passport';
 // import MongoStore from 'connect-mongo';
 import { v4 as uuid } from 'uuid';
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@secretarium/hubber-db';
 import { rateLimiterMiddleware } from './middleware/rateLimiter';
 import { morganLoggerMiddleware } from './middleware/morganLogger';
 import { probotMiddleware } from './middleware/probot';
@@ -22,6 +22,7 @@ import { trcpMiddlware } from './middleware/trpc';
 // import { getDriverSubstrate } from '../utils/db';
 import { usersRouter } from './routes';
 import logger from '../utils/logger';
+import { webLinkerMiddlware } from './middleware/webLinker';
 
 const { app, getWss } = ews(express(), undefined, {
     wsOptions: {
@@ -67,7 +68,7 @@ export const start = (port?: number) => {
         saveUninitialized: true,
         // store: MongoStore.create(mongoOptions),
         store: new PrismaSessionStore(
-            new PrismaClient(),
+            prisma,
             {
                 checkPeriod: 2 * 60 * 1000,  //ms
                 dbRecordIdIsSessionId: true,
@@ -91,6 +92,9 @@ export const start = (port?: number) => {
     app.use(passport.initialize());
     app.use(passport.session());
 
+    // Contextualise user session, devices, tags, tokens
+    app.use(webLinkerMiddlware);
+
     app.ws('/bridge', (ws, { session, sessionID, sessionStore }) => {
         logger.info('Wassssup ? ...');
         (ws as any).sessionID = sessionID;
@@ -113,13 +117,13 @@ export const start = (port?: number) => {
                 return;
             } else if (verb === 'confirm') {
                 logger.info('New remote device confirmation ...');
-                const [sid, locator, temp_print] = data;
+                const [sid, locator, localId] = data;
                 sessionStore.get(sid, (err, rsession) => {
                     if (!rsession)
                         return;
                     if ((rsession as any).locator !== locator)
                         return;
-                    (rsession as any).temp_print = temp_print;
+                    (rsession as any).localId = localId;
                     sessionStore.set(sid, rsession, () => {
                         const browserTarget = Array.from(getWss().clients.values()).find(w => (w as any).sessionID === sid);
                         browserTarget?.send('confirmed');

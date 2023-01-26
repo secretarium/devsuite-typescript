@@ -6,8 +6,10 @@ import api from '../../utils/api';
 export const Select: FC = () => {
 
     const [shouldRefresh, setShouldRefresh] = useState(false);
-    const { data: deployables, isLoading, refetch } = api.v0.repos.deployables.useQuery(shouldRefresh, {
-        queryKey: ['v0.repos.deployables', shouldRefresh],
+    const { data: deployables, isLoading, refetch } = api.v0.repos.deployables.useQuery({
+        refreshing: shouldRefresh
+    }, {
+        queryKey: ['v0.repos.deployables', { refreshing: shouldRefresh }],
         cacheTime: 0,
         retry: false,
         refetchOnWindowFocus: false,

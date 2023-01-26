@@ -1,4 +1,3 @@
-declare module 'sort-by';
 declare module '@iconscout/react-unicons' {
 
     import { SVGProps } from 'react';

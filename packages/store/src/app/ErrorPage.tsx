@@ -12,7 +12,7 @@ export const ErrorPage = () => {
         <Header />
 
         {/*  Page content */}
-        <main className="flex-grow">
+        <main className="flex-grow pt-24">
             <div id="error-page">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6">
                     <div className="pt-12 pb-12 md:pt-20 md:pb-20">

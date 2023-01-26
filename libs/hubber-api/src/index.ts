@@ -1,7 +1,7 @@
 import 'express';
 import 'express-session';
 import 'passport';
-import { type User as UserEntity, GitHubToken } from '@secretarium/hubber-db';
+import { type User as UserEntity, GitHubToken, Web } from '@secretarium/hubber-db';
 
 declare module 'express-session' {
     interface SessionData {
@@ -15,6 +15,10 @@ declare global {
     namespace Express {
         // eslint-disable-next-line @typescript-eslint/no-empty-interface
         interface User extends UserEntity { }
+        interface Request {
+            web: Web;
+            webId: string;
+        }
     }
 }
 

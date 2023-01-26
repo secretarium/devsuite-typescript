@@ -24,40 +24,16 @@ passport.deserializeUser((user: Express.User, cb) => {
 passport.use(new LocalStrategy({
     passReqToCallback: true
 }, async (req, username, password, cb) => {
+    const { web } = req;
     try {
         if (!username || !password)
             return cb(null, false, { message: 'User was not confirmed by remote device.' });
-        const { temp_print } = req.session as any;
         const existingUser = await db.user.findFirst({
-            where: {
-                devices: {
-                    some: temp_print
-                }
-            }
+            where: { id: web.userId ?? undefined }
         });
-        // const existingUser = db.UserCollection.findOne({
-        //     devices: {
-        //         $contains: [temp_print]
-        //     }
-        // });
-        console.log('LocalStrategy > existingUser', existingUser);
-        // TODO Plug-in user construct
-        // const user = existingUser;
-        const user = {
-            id: req.session.id,
-            login: req.session.id,
-            emails: [`${req.session.id}@local`],
-            devices: [(req.session as any).temp_print],
-            githubTokens: req.session.githubToken ? [req.session.githubToken] : [],
-            createdAt: new Date(),
-            updatedAt: new Date()
-        };
-        // const user = await db.UserCollection.findOne({
-        //     name: username
-        // });
-        if (!user)
+        if (!existingUser)
             return cb(null, false, { message: 'User was not confirmed by remote device.' });
-        cb(null, user);
+        cb(null, existingUser);
     } catch (error) {
         cb(error);
     }
@@ -71,7 +47,6 @@ export const passportLoginCheckMiddleware: RequestHandler = (req, res, next) => 
     } else if (
         req.path === '/users/login' ||
         req.path === '/login/print' ||
-        req.path === '/log_in_github' ||
         req.path === '/get_repos' ||
         req.path.match(/^\/trpc/) ||
         req.path === '/whoami') {

@@ -15,11 +15,12 @@ datasource db {
 }
 
 model Session {
-    id              String           @id @default(uuid()) @map("_id")
-    sid             String           @unique
-    data            String
-    expiresAt       DateTime
-    deployableRepos DeployableRepo[]
+    id        String   @id @default(uuid()) @map("_id")
+    sid       String   @unique
+    data      String
+    expiresAt DateTime
+    web       Web?     @relation(fields: [webId], references: [id])
+    webId     String?
 }
 
 type GitHubToken {
@@ -33,13 +34,13 @@ type GitHubToken {
 }
 
 model User {
-    id           String        @id @default(uuid()) @map("_id")
-    login        String        @unique
-    emails       String[]      @default([])
-    devices      Device[]
-    githubTokens GitHubToken[]
-    createdAt    DateTime      @default(now())
-    updatedAt    DateTime      @updatedAt
+    id        String   @id @default(uuid()) @map("_id")
+    login     String   @unique
+    emails    String[] @default([])
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    web       Web[]
+    webId     String?
 }
 
 enum HookSource {
@@ -70,10 +71,8 @@ model DeployableRepo {
     config           String?
     createdAt        DateTime      @default(now())
     applications     Application[]
-    session          Session       @relation(fields: [sessionId], references: [id])
-    sessionId        String
-    device           Device?       @relation(fields: [deviceId], references: [id])
-    deviceId         String?
+    web              Web           @relation(fields: [webId], references: [id])
+    webId            String
 
     @@unique([creatorAuthToken, owner, name])
 }
@@ -98,6 +97,8 @@ model Domain {
 
 model Application {
     id          String         @id @default(uuid()) @map("_id")
+    web         Web            @relation(fields: [webId], references: [id])
+    webId       String
     name        String
     bundleId    String
     domains     Domain[]
@@ -117,14 +118,25 @@ model Application {
     updatedAt   DateTime       @updatedAt
 }
 
-model Device {
+model Web {
     id              String           @id @default(uuid()) @map("_id")
-    temp_print      String
-    deployableRepos DeployableRepo[]
-    createdAt       DateTime         @default(now())
-    lastUsed        DateTime
+    ephemerals      String[]         @default([])
     user            User?            @relation(fields: [userId], references: [id])
     userId          String?
+    githubToken     GitHubToken?
+    sessions        Session[]
+    devices         Device[]
+    deployableRepos DeployableRepo[]
+    applications    Application[]
+}
+
+model Device {
+    id        String   @id @default(uuid()) @map("_id")
+    localId   String
+    createdAt DateTime @default(now())
+    lastUsed  DateTime
+    web       Web?     @relation(fields: [webId], references: [id])
+    webId     String?
 }
 
 // NextAuth.js Models

@@ -7,12 +7,6 @@ const Header: FC = () => {
     const [top, setTop] = useState(true);
     const { data } = api.v0.auth.getSession.useQuery();
     const shouldDisplayEphemeralAlert = data && data.session.unclaimedApplications?.length && !data.user;
-    console.log(data);
-    console.log(data !== undefined);
-    console.log(data && data.user === undefined);
-    console.log(data && data.session.githubToken !== undefined);
-    console.log(data !== undefined && data.user === undefined && data.session.githubToken !== undefined);
-    console.log('shouldDisplayEphemeralAlert', shouldDisplayEphemeralAlert);
 
     // detect whether user has scrolled the page down by 10px
     useEffect(() => {
@@ -25,7 +19,7 @@ const Header: FC = () => {
 
     return (
         <header className={`fixed w-full z-30 md:bg-opacity-90 transition duration-300 ease-in-out ${!top && 'bg-white backdrop-blur-sm shadow-lg'}`}>
-            {shouldDisplayEphemeralAlert ? <div className="max-w-6xl mx-auto py-2 text-center text-white bg-red-500">
+            {shouldDisplayEphemeralAlert ? <div className="max-w-6xl mx-auto py-3 text-center text-white bg-red-500">
                 You have deployed a trustless app but are not logged in !<br />
                 You must sign in in order to save your work !
             </div> : null}

@@ -4,32 +4,38 @@ import { createTRPCRouter, publicProcedure } from '../trpc';
 import { z } from 'zod';
 import { objectToCamel } from 'ts-case-convert';
 import { isTruthy } from './utils/isTruthy';
-import { DeployableRepo } from '@prisma/client';
+import type { DeployableRepo, GitHubToken } from '@prisma/client';
 import { repoConfigSchema } from './utils/repoConfigChecker';
 
-export const userRouter = createTRPCRouter({
+export const reposRouter = createTRPCRouter({
     deployables: publicProcedure
-        .input(z.boolean().default(false))
-        .query(async ({ ctx: { session, sessionStore, sessionID, prisma }, input: refreshing }) => {
+        .input(z.object({
+            refreshing: z.boolean().default(false)
+        }))
+        .query(async ({ ctx: { session, sessionStore, sessionID, prisma, web }, input: { refreshing } }) => {
 
-            let manifest: DeployableRepo[] = await prisma.deployableRepo.findMany({ where: { sessionId: sessionID } });
+            let manifest: DeployableRepo[] = await prisma.deployableRepo.findMany({
+                where: {
+                    webId: web.id
+                }
+            });
 
             if (manifest.length && !refreshing)
                 return manifest.filter(repo => repo.config);
 
-            if (!session.githubToken)
+            if (!web.githubToken)
                 return null;
 
-            const { accessToken: lookupAccessToken } = session.githubToken;
+            const { accessToken: lookupAccessToken } = web.githubToken;
             manifest = await prisma.deployableRepo.findMany({ where: { creatorAuthToken: lookupAccessToken } });
 
             if (manifest.length && !refreshing)
                 return manifest.filter(repo => repo.config);
 
-            const { refreshToken, expiresIn, createdAt } = session.githubToken;
+            const { refreshToken, expiresIn, createdAt } = web.githubToken;
             if (createdAt.valueOf() + expiresIn * 1000 < new Date().valueOf()) {
                 try {
-                    console.log('Refreshing GitHub token ...');
+
                     const result = await fetch('https://github.com/login/oauth/access_token', {
                         method: 'POST',
                         headers: {
@@ -44,7 +50,7 @@ export const userRouter = createTRPCRouter({
                         })
                     });
                     const data: any = {
-                        ...objectToCamel(await result.json()),
+                        ...objectToCamel(await result.json() as any),
                         createdAt: Date.now()
                     };
                     if (!data.error)
@@ -64,7 +70,7 @@ export const userRouter = createTRPCRouter({
                 }
             }
 
-            const { accessToken } = session.githubToken;
+            const { accessToken } = web.githubToken;
             const octokit = new Octokit({ auth: accessToken });
             const reposData = await octokit.paginate(
                 octokit.repos.listForAuthenticatedUser,
@@ -73,13 +79,9 @@ export const userRouter = createTRPCRouter({
                 },
                 (response) => response.data.filter((r) => !r.archived)
             );
-            // return [{
-            //     owner: `${Math.random()}`,
-            //     name: `${Math.random()}`,
-            //     token: accessToken
-            // }];
+
             const repos = reposData.map(repo => ({
-                sessionId: sessionID,
+                webId: web.id,
                 creatorAuthToken: accessToken,
                 owner: repo.owner.login,
                 name: repo.name
@@ -92,8 +94,6 @@ export const userRouter = createTRPCRouter({
                 }),
                 prisma.deployableRepo.findMany({ where: { creatorAuthToken: accessToken } })
             ]);
-
-            // return reposWithId;
 
             const validRepos = await Promise.all(reposWithId.map(async repo => {
                 try {
@@ -117,21 +117,17 @@ export const userRouter = createTRPCRouter({
             }));
 
             return validRepos.filter(repo => repo?.config).filter(isTruthy);
-            // return mapping.filter(repoContent => repoContent.length);
-            // console.log('PLOP >>>', mapping.filter(repoContent => repoContent.length));
-            // return mapping.filter(repoContent => repoContent.length).reduce((prev, [repo, content]) => {
-            //     if (content.trim() !== '')
-            //         prev[repo] = content;
-            //     return prev;
-            // }, {} as Record<string, string>);
         }),
     getRepo: publicProcedure
-        .input(z.object({ owner: z.string(), name: z.string() }))
-        .query(async ({ ctx: { sessionID, prisma }, input: repoInfo }) => {
+        .input(z.object({
+            owner: z.string(),
+            name: z.string()
+        }))
+        .query(async ({ ctx: { webId, prisma }, input: repoInfo }) => {
 
             const data = await prisma.deployableRepo.findFirst({
                 where: {
-                    sessionId: sessionID,
+                    webId,
                     ...repoInfo
                 }
             });
@@ -149,49 +145,49 @@ export const userRouter = createTRPCRouter({
                 configError: !parsedConfig?.success ? parsedConfig?.error.flatten() : null
             };
         }),
-    deployApplications: publicProcedure
+    registerGitHubCredentials: publicProcedure
         .input(z.object({
-            repoId: z.string(),
-            applications: z.array(z.string())
+            code: z.string()
         }))
-        .mutation(async ({ ctx: { prisma, session, sessionStore, sessionID, user }, input: { repoId, applications } }) => {
+        .query(async ({ ctx: { session, sessionStore, sessionID, prisma, webId }, input: { code } }) => {
 
-            const repoData = await prisma.deployableRepo.findFirst({
-                where: {
-                    id: repoId
-                }
+            const result = await fetch('https://github.com/login/oauth/access_token', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    client_id: process.env['NX_GITHUB_CLIENTID'],
+                    client_secret: process.env['NX_GITHUB_CLIENTSECRET'],
+                    code
+                })
             });
 
-            if (!repoData)
-                throw (new Error('There is no such repo'));
+            const data = {
+                ...objectToCamel<GitHubToken & { error?: string; errorDescription?: string; }>(await result.json() as any),
+                createdAt: new Date()
+            };
 
-            applications.forEach(async appName => {
-                await prisma.application.create({
-                    data: {
-                        name: appName,
-                        repoId,
-                        catogories: [],
-                        tags: [],
-                        bundleId: '',
-                        version: '',
-                        author: sessionID
-                    }
+            if (!data.error) {
+                await prisma.web.update({
+                    where: { id: webId },
+                    data: { githubToken: data }
                 });
-                if (user === undefined)
-                    await new Promise<void>((resolve, reject) => {
-                        sessionStore.set(sessionID, {
-                            ...session,
-                            unclaimedApplications: (session.unclaimedApplications ?? []).concat([appName])
-                        }, (err) => {
-                            if (err)
-                                return reject(err);
-                            return resolve();
-                        });
+                await new Promise<void>((resolve, reject) => {
+                    session.githubToken = data;
+                    sessionStore.set(sessionID, {
+                        ...session,
+                        githubToken: data
+                    }, (err) => {
+                        if (err)
+                            return reject(err);
+                        return resolve();
                     });
-            });
-
-            return true;
+                });
+            }
+            return data;
         })
 });
 
-export default userRouter;
+export default reposRouter;

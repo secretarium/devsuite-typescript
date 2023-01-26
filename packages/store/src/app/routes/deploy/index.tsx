@@ -10,11 +10,11 @@ export const Index: FC = () => {
     const [hasRedirected, setHasRedirected] = useState(false);
 
     useEffect(() => {
-        if (!hasRedirected && user.has_githubToken) {
+        if (!hasRedirected && user.hasGithubToken) {
             setHasRedirected(true);
             navigate('/deploy/select');
         }
-    }, [hasRedirected, navigate, user.has_githubToken]);
+    }, [hasRedirected, navigate, user.hasGithubToken]);
 
     const state = JSON.stringify({
         source: 'github',

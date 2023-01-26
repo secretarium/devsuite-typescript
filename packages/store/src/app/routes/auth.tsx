@@ -1,39 +1,56 @@
 import { FC, useState, useEffect } from 'react';
 import { LoaderFunction, useLoaderData, useNavigate } from 'react-router-dom';
 import qs from 'query-string';
+import { v4 as uuid } from 'uuid';
+import { httpApi } from '../utils/api';
 
 export const loader: LoaderFunction = async ({ request }) => {
     const { search } = new URL(request.url);
-    const queryParams = qs.parse(search);
-    const { code, state } = queryParams;
+    const { code, state } = qs.parse(search);
     let data = null;
     if (code) {
-        const response = await fetch(`/api/log_in_github?code=${code}&state=${state}&redirectUri=${encodeURIComponent('http://localhost:4220/auth')}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
+        data = await httpApi.v0.repos.registerGitHubCredentials.query({
+            code: code as string
         });
-        data = await response.json();
     }
-    return { data, state, queryParams };
+    return { data, state };
 };
 
 export const Index: FC = () => {
 
     const navigate = useNavigate();
     const [hasRedirected, setHasRedirected] = useState(false);
-    const { data, state, queryParams }: { data: any, state: string, queryParams?: qs.ParsedQuery<string> } = useLoaderData() as any;
+    const { data, state }: { data: any, state: string } = useLoaderData() as any;
     const { redirectUri }: { redirectUri: string } = state ? JSON.parse(state) : {};
 
     useEffect(() => {
-        if (!hasRedirected && redirectUri) {
-            console.log(redirectUri);
+        if (!hasRedirected && redirectUri && !data.error) {
             setHasRedirected(true);
+            const emphemeralSessionTag = window.localStorage.getItem('emphemeralSessionTag');
+            if (!emphemeralSessionTag)
+                window.localStorage.setItem('emphemeralSessionTag', uuid());
             navigate(redirectUri);
         }
-    }, [hasRedirected, navigate, redirectUri]);
+    }, [data.error, hasRedirected, navigate, redirectUri]);
 
+    if (data.error)
+        return <div className="max-w-6xl mx-auto px-4 sm:px-6">
+            <div className="pt-12 pb-12 md:pt-20 md:pb-20">
+                <div className="text-center pb-12 md:pb-16">
+                    <br />
+                    <div>
+                        <h1 className='text-xl font-bold'>We faced a problem</h1>
+                    </div>
+                    <div>
+                        An issue occurred while we attempted to log you into Github
+                    </div>
+                    <br />
+                    <div className='text-left w-1/2 mx-auto p-5 bg-slate-300' >
+                        <pre>{JSON.stringify(data.errorDescription, null, 4)}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>;
     return <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="pt-12 pb-12 md:pt-20 md:pb-20">
             <div className="text-center pb-12 md:pb-16">
@@ -43,10 +60,6 @@ export const Index: FC = () => {
                 </div>
                 <div>
                     Please be patient while we are gathering your Git info...
-                </div>
-                <div className='text-left w-1/2 mx-auto' >
-                    <pre>{JSON.stringify(data, null, 4)}</pre>
-                    <pre>{JSON.stringify(queryParams, null, 4)}</pre>
                 </div>
             </div>
         </div>

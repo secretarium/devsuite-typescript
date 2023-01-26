@@ -7,7 +7,7 @@ export const AppListing: FC = () => {
 
     // const navigate = useNavigate();
     const { data: applicationList, isLoading } = api.v0.applications.getAll.useQuery();
-    // const { mutate, isLoading: isTriggeringDeploy, isSuccess: hasTriggeredDeploy, error: mutationError } = api.v0.repos.deployApplications.useMutation({
+    // const { mutate, isLoading: isTriggeringDeploy, isSuccess: hasTriggeredDeploy, error: mutationError } = api.v0.applications.deployApplications.useMutation({
     //     onSuccess: () => navigate('/apps')
     // });
     // const { register, handleSubmit, watch } = useForm<{ applications: string[] }>();
