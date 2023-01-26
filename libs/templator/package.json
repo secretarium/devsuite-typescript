@@ -1,5 +1,5 @@
 {
-    "name": "create-trustless-contract",
+    "name": "create-trustless-app",
     "description": "The script to create Trustless application",
     "version": "0.0.10",
     "license": "MIT",
@@ -9,6 +9,6 @@
         "name": "Florian Guitton"
     },
     "bin": {
-        "create-trustless-contract": "./bin/create-trustless-contract"
+        "create-trustless-app": "./bin/create-trustless-app"
     }
 }
