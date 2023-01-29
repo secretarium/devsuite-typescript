@@ -37,9 +37,10 @@ export const webLinkerMiddlware: RequestHandler = async (req, res, next) => {
     const setOfEphemeralId = Array.from(new Set((web?.ephemerals ?? []).concat(ephemeralTag ? [ephemeralTag] : [])));
     const nextWeb = await prisma.web.upsert({
         where: {
-            id: web?.id ?? uuid()
+            id: web?.id || ''
         },
         create: {
+            id: uuid(),
             sessions: {
                 connect: setOfSessionId
             },
