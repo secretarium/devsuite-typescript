@@ -9,7 +9,8 @@
     },
     "include": [
         "bin/*",
-        "src/**/*.ts"
+        "src/**/*.ts",
+        "types/**/*.ts"
     ],
     "exclude": [
         "jest.config.ts",

@@ -3,6 +3,10 @@
     "compilerOptions": {
         "rootDir": ".",
         "baseUrl": ".",
+        "target": "esnext",
+        "module": "commonjs",
+        "noLib": true,
+        "allowJs": false,
         "strict": true,
         "forceConsistentCasingInFileNames": true,
         "types": [

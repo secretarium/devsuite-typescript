@@ -1,4 +1,4 @@
-import { notify, add_user_query, add_user_transaction, Query, Transaction } from '@secretarium/trustless-app/src/index.d';
+import '@secretarium/trustless-app';
 
 export const my_query: Query = (arg) => {
     const s = String.UTF8.decode(arg, true);

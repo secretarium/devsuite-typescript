@@ -1,0 +1,6 @@
+{
+    "extends": "@secretarium/trustless-app/tsconfig.sdk.json",
+    "include": [
+        "./**/*.ts"
+    ]
+}

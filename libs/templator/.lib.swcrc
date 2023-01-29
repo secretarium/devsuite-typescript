@@ -1,6 +1,6 @@
 {
     "jsc": {
-        "target": "es2017",
+        "target": "es2015",
         "parser": {
             "syntax": "typescript",
             "decorators": true,
@@ -24,7 +24,7 @@
         "type": "commonjs",
         "strict": true,
         "lazy": false,
-        "noInterop": false
+        "noInterop": true
     },
     "sourceMaps": true,
     "exclude": [
@@ -33,6 +33,7 @@
         ".*\\.test.tsx?$",
         "./src/jest-setup.ts$",
         "./**/jest-setup.ts$",
+        "./bin/**",
         "./template/**",
         ".*.js$"
     ]

@@ -1,0 +1,25 @@
+{
+    "extends": "assemblyscript/std/assembly.json",
+    "compilerOptions": {
+        "forceConsistentCasingInFileNames": true,
+        "target": "esnext",
+        "module": "commonjs",
+        "noLib": true,
+        "allowJs": false,
+        "typeRoots": [
+            "../../assemblyscript/std/types",
+            "../node_modules/assemblyscript/std/types",
+            "types"
+        ],
+        "types": [
+            "assembly",
+            "sdk"
+        ],
+        "baseUrl": ".",
+        "paths": {
+            "*": [
+                "./sdk/*"
+            ]
+        }
+    }
+}

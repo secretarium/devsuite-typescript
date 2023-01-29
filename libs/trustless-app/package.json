@@ -9,17 +9,18 @@
         "name": "Florian Guitton"
     },
     "bin": {
-        "sta-compile": "./bin/compile"
+        "stac": "./bin/stac"
     },
     "type": "commonjs",
-    "types": "./src/index.d.ts",
+    "types": "./types/sdk/index.d.ts",
     "ascMain": "./src/index.d.ts",
     "exports": {
-        "./compile": {
+        "./stac": {
+            "default": "./src/compile.js",
             "require": "./src/compile.js"
         }
     },
-    "peerDependencies": {
+    "dependencies": {
         "assemblyscript": "^0.26"
     }
 }
