@@ -17,8 +17,7 @@
                 "main": "libs/trustless-app/src/index.ts",
                 "assets": [
                     "libs/trustless-app/bin/*",
-                    "libs/trustless-app/types/**",
-                    "libs/trustless-app/tsconfig.sdk.json",
+                    "libs/trustless-app/assembly/**",
                     "libs/trustless-app/*.md"
                 ]
             }

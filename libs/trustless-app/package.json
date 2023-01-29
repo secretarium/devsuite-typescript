@@ -12,8 +12,9 @@
         "stac": "./bin/stac"
     },
     "type": "commonjs",
-    "types": "./types/sdk/index.d.ts",
-    "ascMain": "./src/index.d.ts",
+    "main": "assembly/index.ts",
+    "types": "assembly/index.ts",
+    "ascMain": "assembly/index.ts",
     "exports": {
         "./stac": {
             "default": "./src/compile.js",
@@ -21,6 +22,6 @@
         }
     },
     "dependencies": {
-        "assemblyscript": "^0.26"
+        "asbuild": "^0.2"
     }
 }

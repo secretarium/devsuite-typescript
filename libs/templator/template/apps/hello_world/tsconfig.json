@@ -1,5 +1,8 @@
 {
-    "extends": "@secretarium/trustless-app/tsconfig.sdk.json",
+    "extends": "assemblyscript/std/assembly.json",
+    "compilerOptions": {
+        "forceConsistentCasingInFileNames": true
+    },
     "include": [
         "./**/*.ts"
     ]
