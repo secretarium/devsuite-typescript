@@ -2,6 +2,13 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.1.2](///compare/templator@0.1.1...templator@0.1.2) (2023-01-29)
+
+
+### Bug Fixes
+
+* Include interop helpers in binary compilation 8d03140
+
 ## [0.1.1](///compare/templator@0.1.0...templator@0.1.1) (2023-01-29)
 
 
