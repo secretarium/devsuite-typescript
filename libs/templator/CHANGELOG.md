@@ -2,6 +2,13 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.1.1](///compare/templator@0.1.0...templator@0.1.1) (2023-01-29)
+
+
+### Bug Fixes
+
+* **templator:** Rename creator binary to app 41e54f6
+
 ## [0.1.0](///compare/templator@0.0.10...templator@0.1.0) (2023-01-29)
 
 ### Dependency Updates
