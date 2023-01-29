@@ -1,6 +1,7 @@
 import { useRouteError } from 'react-router-dom';
 import Header from './partials/Header';
 import Footer from './partials/Footer';
+import { AppWrapper } from './AppLayout';
 
 export const ErrorPage = () => {
     const error: any = useRouteError();
@@ -13,23 +14,19 @@ export const ErrorPage = () => {
 
         {/*  Page content */}
         <main className="flex-grow pt-24">
-            <div id="error-page">
-                <div className="max-w-6xl mx-auto px-4 sm:px-6">
-                    <div className="pt-12 pb-12 md:pt-20 md:pb-20">
-                        <div className="text-center pb-12 md:pb-16">
-                            <br />
-                            <div className='pb-5' >
-                                <h1 className='text-xl font-bold'>Oops!</h1>
-                            </div>
-                            <div className='relative h-[300px]'>
-                                <p>Sorry, an unexpected error has occurred.</p>
-                                <p>
-                                    <i>{error.statusText || error.message}</i>
-                                </p>
-                            </div>
-                        </div>
+            <div id="message-page">
+                <AppWrapper>
+                    <br />
+                    <div className='pb-5' >
+                        <h1 className='text-xl font-bold'>Oops!</h1>
                     </div>
-                </div>
+                    <div className='relative h-[300px]'>
+                        <p>Sorry, an unexpected error has occurred.</p>
+                        <p>
+                            <i>{error.statusText || error.message}</i>
+                        </p>
+                    </div>
+                </AppWrapper>
             </div>
         </main>
 

@@ -1,8 +1,25 @@
-import { Suspense } from 'react';
+import { FC, PropsWithChildren, Suspense } from 'react';
 import { Await, useLoaderData, useOutlet } from 'react-router-dom';
 import { AuthProvider } from './AuthProvider';
+import { AppWrapper } from './AppLayout';
 import Header from './partials/Header';
 import Footer from './partials/Footer';
+
+const MainWrapper: FC<PropsWithChildren> = ({ children }) => {
+    return <main className="flex-grow pt-24">
+        {children}
+    </main>;
+};
+
+const ContentWrapper: FC<PropsWithChildren> = ({ children }) => {
+    return <MainWrapper>
+        <div id="message-page">
+            <AppWrapper>
+                {children}
+            </AppWrapper>
+        </div>
+    </MainWrapper>;
+};
 
 export const AuthLayout = () => {
     const outlet = useOutlet();
@@ -11,46 +28,28 @@ export const AuthLayout = () => {
     return (
         <Suspense fallback={<div className="flex flex-col min-h-screen overflow-hidden">
             <Header />
-            <main className="flex-grow pt-24">
-                <div id="error-page">
-                    <div className="max-w-6xl mx-auto px-4 sm:px-6">
-                        <div className="pt-12 pb-12 md:pt-20 md:pb-20">
-                            <div className="text-center pb-12 md:pb-16">
-                                <br />
-                                <div className='pb-5' >
-                                    <h1 className='text-xl font-bold'>Loading...</h1>
-                                </div>
-                                <div className='relative h-[300px]'>
-                                    <p>Give us one moment</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <ContentWrapper>
+                <div className='pb-5' >
+                    <h1 className='text-xl font-bold'>Loading...</h1>
                 </div>
-            </main>
+                <div className='relative h-[300px]'>
+                    <p>Give us one moment</p>
+                </div>
+            </ContentWrapper>
             <Footer />
         </div>}>
             <Await
                 resolve={userPromise}
                 errorElement={<div className="flex flex-col min-h-screen overflow-hidden">
                     <Header />
-                    <main className="flex-grow pt-24">
-                        <div id="error-page">
-                            <div className="max-w-6xl mx-auto px-4 sm:px-6">
-                                <div className="pt-12 pb-12 md:pt-20 md:pb-20">
-                                    <div className="text-center pb-12 md:pb-16">
-                                        <br />
-                                        <div className='pb-5' >
-                                            <h1 className='text-xl font-bold'>Oops!</h1>
-                                        </div>
-                                        <div className='relative h-[300px]'>
-                                            <p>Something went wrong!</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    <ContentWrapper>
+                        <div className='pb-5' >
+                            <h1 className='text-xl font-bold'>Oops!</h1>
                         </div>
-                    </main>
+                        <div className='relative h-[300px]'>
+                            <p>Something went wrong!</p>
+                        </div>
+                    </ContentWrapper>
                     <Footer />
                 </div>
                 }
@@ -62,7 +61,6 @@ export const AuthLayout = () => {
                                 {outlet}
                             </main>
                             <Footer />
-
                         </div>
                     </AuthProvider>
                 }

@@ -442,7 +442,7 @@ i {
     margin-bottom: 0.5rem;
 }
 
-#error-page {
+#message-page {
     display: flex;
     flex-direction: column;
     align-items: center;
