@@ -2,6 +2,16 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.1.0](///compare/templator@0.0.10...templator@0.1.0) (2023-01-29)
+
+### Dependency Updates
+
+* `trustless-app` updated to version `0.1.0`
+
+### Features
+
+* Switching over to using asb in place of asc for sdk compilation 5157354
+
 ## [0.0.10](///compare/templator@0.0.9...templator@0.0.10) (2023-01-23)
 
 
