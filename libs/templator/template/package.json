@@ -3,6 +3,7 @@
         "build": "stac ."
     },
     "devDependencies": {
-        "@secretarium/trustless-app": "*"
+        "@secretarium/trustless-app": "*",
+        "assemblyscript": "^0.26"
     }
 }
