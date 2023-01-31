@@ -3,6 +3,22 @@ import * as dns from 'dns/promises';
 import { createTRPCRouter, publicProcedure } from '../trpc';
 
 export const domainRouter = createTRPCRouter({
+    getByApplication: publicProcedure
+        .input(z.object({
+            appId: z.string()
+        }))
+        .query(async ({ ctx: { prisma }, input: { appId } }) => {
+
+            if (!appId)
+                return [];
+
+            return await prisma.domain.findMany({
+                where: {
+                    applicationId: appId
+                }
+            });
+
+        }),
     getAll: publicProcedure
         .query(async ({ ctx: { prisma, webId } }) => {
 

@@ -25,9 +25,9 @@
 html {
     box-sizing: border-box;
     font-size: 15px;
+    overflow-y: scroll;
 }
 
-a,
 .a-like {
     border-radius: 0.3rem;
     display: inline-flex;

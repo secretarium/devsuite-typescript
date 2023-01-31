@@ -39,8 +39,8 @@ export const Index: FC = () => {
             <h1 className='text-xl font-bold'>Look for your code</h1>
         </div>
         <div className='relative h-[300px]'>
-            <a href={githubAuth.toString()} className='mb-3 rounded-full bg-black hover:bg-gray-900 text-white'><UilGithub color='white' />&nbsp;Connect to GitHub</a><br />
-            <a href={gitlabAuth.toString()} className='rounded-full bg-[#db7130] hover:bg-[#bb472d] text-white'><UilGitlab color='white' />&nbsp;Connect to GitHub</a>
+            <a href={githubAuth.toString()} className='a-like mb-3 rounded-full bg-black hover:bg-gray-900 text-white'><UilGithub color='white' />&nbsp;Connect to GitHub</a><br />
+            <a href={gitlabAuth.toString()} className='a-like rounded-full bg-[#db7130] hover:bg-[#bb472d] text-white'><UilGitlab color='white' />&nbsp;Connect to GitHub</a>
         </div>
     </>;
 };

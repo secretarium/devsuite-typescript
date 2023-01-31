@@ -39,7 +39,7 @@ export const Select: FC = () => {
                 <br />
                 {deployables.map((repo) => {
                     const fullName = `${repo.owner}/${repo.name}`;
-                    return <Link to={`/deploy/repo/${fullName}`} key={fullName} className='rounded-full bg-slate-200 hover:bg-slate-300 mx-1'>{fullName}</Link>;
+                    return <Link to={`/deploy/repo/${fullName}`} key={fullName} className='a-like rounded-full bg-slate-200 hover:bg-slate-300 mx-1'>{fullName}</Link>;
                 })}
                 <br />
                 <br />

@@ -63,7 +63,7 @@ export const start = (port?: number) => {
     const sessionOptions: session.SessionOptions = {
         secret: process.env.NX_EXPRESS_SESSION_SECRETS?.split(',') ?? [],
         // Don't save session if unmodified
-        resave: false,
+        resave: true,
         // Don't create session until something stored
         saveUninitialized: true,
         // store: MongoStore.create(mongoOptions),
@@ -72,7 +72,8 @@ export const start = (port?: number) => {
             {
                 checkPeriod: 2 * 60 * 1000,  //ms
                 dbRecordIdIsSessionId: true,
-                dbRecordIdFunction: undefined
+                dbRecordIdFunction: undefined,
+                sessionModelName: 'session'
             }
         ),
         genid: () => uuid()

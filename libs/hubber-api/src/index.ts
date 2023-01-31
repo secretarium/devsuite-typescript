@@ -6,7 +6,6 @@ import { type User as UserEntity, GitHubToken, Web } from '@secretarium/hubber-d
 declare module 'express-session' {
     interface SessionData {
         githubToken?: GitHubToken;
-        unclaimedApplications?: string[];
     }
 }
 

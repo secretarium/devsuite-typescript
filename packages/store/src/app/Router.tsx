@@ -6,13 +6,19 @@ import ErrorPage from './ErrorPage';
 import Landing from './routes/landing';
 import { AuthLayout } from './AuthLayout';
 import AppLayout from './AppLayout';
-// import { ProtectedLayout } from './ProtectedLayout';
+import { ProtectedLayout } from './ProtectedLayout';
+import Dashboard from './routes/dashboard';
 import Login from './routes/login';
 import Deploy from './routes/deploy';
 import RepoSelect from './routes/deploy/select';
 import RepoSheet from './routes/deploy/repo';
-import AppListing from './routes/apps/index';
-import DomainListing from './routes/domains/index';
+import AppInfo from './routes/apps/index';
+import AppActivity from './routes/apps/activity';
+import AppDomains from './routes/apps/domains';
+import AppDeployments from './routes/apps/deployments';
+import AppEnvironment from './routes/apps/environment';
+import AppListing from './routes/apps/listing';
+import AppSettings from './routes/apps/settings';
 import Catalog from './routes/catalog';
 import CatalogListing from './routes/catalog/listing';
 import Providers from './Providers';
@@ -56,39 +62,36 @@ const router = sentryCreateBrowserRouter(
                         element={<RepoSheet />}
                     />
                 </Route>
-                <Route
-                    path="apps"
-                >
-                    <Route index element={<AppListing />} />
-                    <Route
-                        path=":appId"
-                        element={<AppListing />}
-                    />
-                </Route>
-                <Route
-                    path="domains"
-                >
-                    <Route index element={<DomainListing />} />
-                    <Route
-                        path=":domainId"
-                        element={<DomainListing />}
-                    />
-                </Route>
             </Route>
             <Route
                 path="auth"
                 loader={authLoader}
                 element={<AuthCodeReception />}
             />
-            <Route
-                path="/"
-                element={<Landing />}
-            />
-            {/*
+            <Route path='home' element={<Landing />} />
             <Route element={<ProtectedLayout />}>
+                <Route element={<Dashboard />} >
+                    <Route index element={<AppInfo />} />
+                    <Route
+                        path="app"
+                    >
+                        <Route index element={<AppInfo />} />
+                        <Route
+                            path=":appId"
+                            element={<AppInfo />}
+                        >
+                            <Route index element={<AppActivity />} />
+                            <Route path="deployments" element={<AppDeployments />} />
+                            <Route path="environment" element={<AppEnvironment />} />
+                            <Route path="domains" element={<AppDomains />} />
+                            <Route path="listing" element={<AppListing />} />
+                            <Route path="settings" element={<AppSettings />} />
+                            <Route path="*" element={<AppActivity />} />
+                        </Route>
+                    </Route>
+                </Route>
             </Route>
-             */}
-        </Route>
+        </Route >
     )
 );
 

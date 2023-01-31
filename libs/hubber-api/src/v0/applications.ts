@@ -46,8 +46,7 @@ export const applicationRouter = createTRPCRouter({
                 if (user === undefined)
                     await new Promise<void>((resolve, reject) => {
                         sessionStore.set(sessionID, {
-                            ...session,
-                            unclaimedApplications: (session.unclaimedApplications ?? []).concat([appName])
+                            ...session
                         }, (err) => {
                             if (err)
                                 return reject(err);

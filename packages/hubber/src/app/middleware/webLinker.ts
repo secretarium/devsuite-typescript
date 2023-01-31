@@ -34,30 +34,39 @@ export const webLinkerMiddlware: RequestHandler = async (req, res, next) => {
         }
     });
 
-    const setOfSessionId = Array.from(new Set((web?.sessions.map(s => s.sid) ?? []).concat([sessionID]))).map(sid => ({ sid }));
-    const setOfEphemeralId = Array.from(new Set((web?.ephemerals ?? []).concat(ephemeralTag ? [ephemeralTag] : [])));
-    const nextWeb = await prisma.web.upsert({
-        where: {
-            id: web?.id || ''
-        },
-        create: {
-            id: uuid(),
-            name: uniqueNamesGenerator({
-                dictionaries: [adjectives, colors, animals],
-                separator: '-'
-            }),
-            sessions: {
-                connect: setOfSessionId
-            },
-            ephemerals: setOfEphemeralId
-        },
-        update: {
-            sessions: { set: setOfSessionId },
-            ephemerals: setOfEphemeralId
-        }
-    });
+    // if (!sessionID)
+    //     return next();
 
-    req.web = nextWeb;
-    req.webId = nextWeb.id;
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> sessionID', sessionID);
+    try {
+        const setOfSessionId = Array.from(new Set((web?.sessions.map(s => s.sid) ?? []).concat([sessionID]))).map(sid => ({ sid }));
+        const setOfEphemeralId = Array.from(new Set((web?.ephemerals ?? []).concat(ephemeralTag ? [ephemeralTag] : [])));
+        const nextWeb = await prisma.web.upsert({
+            where: {
+                id: web?.id || ''
+            },
+            create: {
+                id: uuid(),
+                name: uniqueNamesGenerator({
+                    dictionaries: [adjectives, colors, animals],
+                    separator: '-'
+                }),
+                sessions: {
+                    connect: setOfSessionId
+                },
+                ephemerals: setOfEphemeralId
+            },
+            update: {
+                sessions: { set: setOfSessionId },
+                ephemerals: setOfEphemeralId
+            }
+        });
+
+        req.web = nextWeb;
+        req.webId = nextWeb.id;
+    } catch (e) {
+        console.error(e);
+    }
+
     next();
 };

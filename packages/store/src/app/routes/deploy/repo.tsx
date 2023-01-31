@@ -10,7 +10,7 @@ export const Select: FC = () => {
     const repoInfo = useParams() as { owner: string, name: string };
     const { data: repoData, isLoading } = api.v0.repos.getRepo.useQuery(repoInfo);
     const { mutate, isLoading: isTriggeringDeploy, isSuccess: hasTriggeredDeploy, error: mutationError } = api.v0.applications.deployApplications.useMutation({
-        onSuccess: () => navigate('/apps')
+        onSuccess: () => navigate('/')
     });
     const { register, handleSubmit, watch } = useForm<{ applications: string[] }>();
     const appSelectionWatch = watch('applications', []);
@@ -22,7 +22,7 @@ export const Select: FC = () => {
             </div>
             <div className='relative'>
                 {isLoading ? <>
-                    We are fetch data about your repository.<br />
+                    We are fetching data about your repository.<br />
                     It will only take a moment...<br />
                     <br />
                     <UilSpinner className='inline-block animate-spin' />
