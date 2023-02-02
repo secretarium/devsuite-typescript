@@ -2,7 +2,7 @@ import { FC, useState, useCallback, useEffect } from 'react';
 import QRCode from 'react-qr-code';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import { v4 as uuid } from 'uuid';
-import logo from '../images/logo.svg';
+import secretariumLogo from '../images/secretarium-logo.svg';
 import { useAuth } from '../AuthProvider';
 
 export const LoginQR: FC = () => {
@@ -72,7 +72,7 @@ export const LoginQR: FC = () => {
                                 <QRCode level='Q' value={`cryptx_check#${addressDestination}#${uuidBeacon}#${uuidLocator}`} size={300} onClick={handleClickSendMessage} />
                             </span>
                             <span className='absolute block overflow-hidden rounded-full p-5 pt-6 top-[calc(160px-55px)] left-[calc(50%-35px)] w-[80px] h-[80px] bg-white'>
-                                <img alt='Logo' src={logo} />
+                                <img alt='Secretarium' src={secretariumLogo} />
                             </span>
                             <br />
                             <br />

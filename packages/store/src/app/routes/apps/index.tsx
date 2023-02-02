@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { NavLink, useOutlet, useParams } from 'react-router-dom';
 import { UilSpinner } from '@iconscout/react-unicons';
 import api from '../../utils/api';
+import { formatTimeAgo } from '../../utils/formatTimeAgo';
 
 export const AppListing: FC = () => {
 
@@ -49,12 +50,12 @@ export const AppListing: FC = () => {
                 </div>
                 <div className="ml-auto sm:flex hidden items-center justify-end">
                     <div className="text-right">
-                        <div className="text-xs text-gray-400 dark:text-gray-400">Running since:</div>
-                        <div className="text-gray-900 text-lg dark:text-white">{new Date().toDateString()}</div>
+                        <div className="text-xs text-gray-400 dark:text-gray-400">Created</div>
+                        <div className="text-gray-900 text-lg dark:text-white" title={application.createdAt.toDateString()}>{formatTimeAgo(application.createdAt)}</div>
                     </div>
                     {/*
                     <button className="w-8 h-8 ml-4 text-gray-400 shadow dark:text-gray-400 rounded-full flex items-center justify-center border border-gray-200 dark:border-gray-700">
-                        <svg viewBox="0 0 24 24" className="w-4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <svg viewBox="0 0 24 24" className="w-4" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
                             <circle cx="12" cy="12" r="1"></circle>
                             <circle cx="19" cy="12" r="1"></circle>
                             <circle cx="5" cy="12" r="1"></circle>

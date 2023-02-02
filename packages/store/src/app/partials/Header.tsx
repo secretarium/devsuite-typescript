@@ -1,6 +1,8 @@
 import { useState, useEffect, FC } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import api from '../utils/api';
+import klaveLogo from '../images/klave-logo.svg';
+import { UilBox } from '@iconscout/react-unicons';
 
 const Header: FC = () => {
 
@@ -18,30 +20,21 @@ const Header: FC = () => {
     }, [top]);
 
     return (
-        <header className={`fixed w-full z-30 md:bg-opacity-90 transition duration-300 ease-in-out ${!top && 'bg-white backdrop-blur-sm shadow-lg'}`}>
+        <header className={`fixed w-full z-30 md:bg-opacity-90 transition duration-300 ease-in-out ${!top && 'bg-white dark:bg-gray-900 backdrop-blur-sm shadow-lg'}`}>
             {data?.hasUnclaimedApplications ? <div className='text-white bg-red-500'>
                 <div className="max-w-6xl mx-auto py-3 text-center ">
                     You have deployed a trustless app but are not logged in !<br />
                     You must sign in in order to save your work !
                 </div>
             </div> : null}
-            <div className="max-w-6xl mx-auto px-5 sm:px-6">
+            <div className="max-w-6xl mx-auto px-5 sm:px-6 dark:invert">
                 <div className="flex items-center justify-between h-16 md:h-20">
 
                     {/* Site branding */}
                     <div className="flex-shrink-0 mr-4">
                         {/* Logo */}
-                        <Link to={['/', '/home'].includes(pathname) ? '/home' : '/'} className="block a-like" aria-label="Secretarium Platform">
-                            <svg className="w-8 h-8 inline-block" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-                                <defs>
-                                    <radialGradient cx="21.152%" cy="86.063%" fx="21.152%" fy="86.063%" r="79.941%" id="header-logo">
-                                        <stop stopColor="#4FD1C5" offset="0%" />
-                                        <stop stopColor="#81E6D9" offset="25.871%" />
-                                        <stop stopColor="#338CF5" offset="100%" />
-                                    </radialGradient>
-                                </defs>
-                                <rect width="32" height="32" rx="16" fill="url(#header-logo)" fillRule="nonzero" />
-                            </svg>
+                        <Link to={pathname === '/' && (data && (data.hasUnclaimedApplications || data.me)) ? '/home' : '/'} className="block ml-0" aria-label="Secretarium Platform">
+                            <img alt='Secretarium' src={klaveLogo} width={40} className='inline-block' />
                             <span className='h-full px-6 font-bold text-lg'>
                                 The Klave Network
                             </span>
@@ -52,8 +45,8 @@ const Header: FC = () => {
                     <nav className="flex flex-grow">
                         <ul className="flex flex-grow justify-end flex-wrap items-center">
                             <li>
-                                <Link to="/store" className="btn-sm text-gray-900 bg-gray-200 hover:bg-gray-300 ml-3 a-like">
-                                    <span>Store</span>
+                                <Link to="/blocks" className="btn-sm text-gray-900 bg-gray-200 hover:bg-gray-300 ml-3 a-like">
+                                    <span><UilBox className='inline-block h-5 font-normal' /> Klave Blocks</span>
                                 </Link>
                             </li>
                             <li>
@@ -70,9 +63,7 @@ const Header: FC = () => {
                                 </Link>
                             </li>
                         </ul>
-
                     </nav>
-
                 </div>
             </div>
         </header>

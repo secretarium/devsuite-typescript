@@ -21,6 +21,8 @@ declare global {
     }
 }
 
+export * from './types';
+
 export type { Router } from './router';
 export { router } from './router';
 

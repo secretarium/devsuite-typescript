@@ -20,7 +20,7 @@ import { passportLoginCheckMiddleware } from './middleware/passport';
 import { trcpMiddlware } from './middleware/trpc';
 // import { i18nextMiddleware } from './middleware/i18n';
 // import { getDriverSubstrate } from '../utils/db';
-import { usersRouter } from './routes';
+import { usersRouter, filesRouter } from './routes';
 import logger from '../utils/logger';
 import { webLinkerMiddlware } from './middleware/webLinker';
 
@@ -138,6 +138,7 @@ export const start = (port?: number) => {
     app.use(passportLoginCheckMiddleware);
     app.use('/trpc', trcpMiddlware);
     app.use(usersRouter);
+    app.use(filesRouter);
 
     app.use(sentryErrorMiddleware);
 

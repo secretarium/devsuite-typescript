@@ -15,5 +15,13 @@
 
 // }
 
+export declare interface Table {
+    get(name: string): string;
+}
+
+export declare interface Ledger {
+    getTable(name: string): Table;
+}
+
 export declare type Query = (arg: ArrayBuffer) => void;
 export declare type Transaction = (arg: ArrayBuffer) => void;

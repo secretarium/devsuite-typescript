@@ -1,10 +1,11 @@
 import { FC } from 'react';
 import { Link } from 'react-router-dom';
 import secretariumLogo from '../images/secretarium-gray.svg';
+// import klaveLogo from '../images/klave-logo.svg';
 
 const Footer: FC = () => {
     return (
-        <footer>
+        <footer className='dark:invert'>
             <div className="max-w-6xl mx-auto px-4 sm:px-6">
 
                 {/* Top area: Blocks */}
@@ -14,18 +15,9 @@ const Footer: FC = () => {
                     <div className="sm:col-span-12 lg:col-span-3">
                         <div className="mb-2">
                             {/* Logo */}
-                            <Link to="/" className="inline-block" aria-label="Secretarium Platform">
-                                <svg className="w-8 h-8" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-                                    <defs>
-                                        <radialGradient cx="21.152%" cy="86.063%" fx="21.152%" fy="86.063%" r="79.941%" id="footer-logo">
-                                            <stop stopColor="#4FD1C5" offset="0%" />
-                                            <stop stopColor="#81E6D9" offset="25.871%" />
-                                            <stop stopColor="#338CF5" offset="100%" />
-                                        </radialGradient>
-                                    </defs>
-                                    <rect width="32" height="32" rx="16" fill="url(#footer-logo)" fillRule="nonzero" />
-                                </svg>
-                            </Link>
+                            {/* <Link to="/" className="inline-block mb-4" aria-label="Secretarium Platform">
+                                <img alt='Secretarium' src={klaveLogo} width={40} className='inline-block' />
+                            </Link> */}
                             <a href="https://secretarium.com" className="inline-block" aria-label="Secretarium">
                                 <img alt='Secretarium' src={secretariumLogo} className="lg:w-2/3 w-40" />
                             </a>

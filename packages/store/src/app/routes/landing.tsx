@@ -5,7 +5,7 @@ import Testimonials from '../partials/Testimonials';
 import Newsletter from '../partials/Newsletter';
 
 function Landing() {
-    return <>
+    return <div className='w-full dark:invert'>
 
         {/*  Page sections */}
         <HeroHome />
@@ -14,7 +14,7 @@ function Landing() {
         <Testimonials />
         <Newsletter />
 
-    </>;
+    </div>;
 }
 
 export default Landing;

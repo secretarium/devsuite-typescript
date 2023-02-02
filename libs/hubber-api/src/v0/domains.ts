@@ -1,11 +1,12 @@
 import { z } from 'zod';
 import * as dns from 'dns/promises';
+import { v4 as uuid } from 'uuid';
 import { createTRPCRouter, publicProcedure } from '../trpc';
 
 export const domainRouter = createTRPCRouter({
     getByApplication: publicProcedure
         .input(z.object({
-            appId: z.string()
+            appId: z.string().uuid()
         }))
         .query(async ({ ctx: { prisma }, input: { appId } }) => {
 
@@ -32,9 +33,9 @@ export const domainRouter = createTRPCRouter({
 
             return domainList;
         }),
-    validateDomain: publicProcedure
-        .input(z.object({ domainId: z.string() }))
-        .query(async ({ ctx: { prisma }, input: { domainId } }) => {
+    validate: publicProcedure
+        .input(z.object({ domainId: z.string().uuid() }))
+        .mutation(async ({ ctx: { prisma }, input: { domainId } }) => {
 
             const domain = await prisma.domain.findUnique({
                 where: {
@@ -52,6 +53,21 @@ export const domainRouter = createTRPCRouter({
             });
 
             return txtRecords;
+        }),
+    add: publicProcedure
+        .input(z.object({ fqdn: z.string().regex(/^[0-9\p{L}][0-9\p{L}\-.]{1,61}[0-9\p{L}]\.[0-9\p{L}][\p{L}-]*[0-9\p{L}]+$/ugm) }))
+        .mutation(async ({ ctx: { prisma }, input: { fqdn } }) => {
+
+            // if (fqdn.trim() === '')
+            //     throw new Error('The FQDN was not the right format');
+
+            return await prisma.domain.create({
+                data: {
+                    fqdn,
+                    verified: false,
+                    token: `secretarium=v1 trustless-bundle-verification=${uuid()}`
+                }
+            });
         })
 });
 

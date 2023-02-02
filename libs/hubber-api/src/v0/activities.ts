@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { createTRPCRouter, publicProcedure } from '../trpc';
 
-export const deployementRouter = createTRPCRouter({
+export const activityRouter = createTRPCRouter({
     getByApplication: publicProcedure
         .input(z.object({
             appId: z.string().uuid()
@@ -11,7 +11,7 @@ export const deployementRouter = createTRPCRouter({
             if (!appId)
                 return [];
 
-            return await prisma.deployement.findMany({
+            return await prisma.activityLog.findMany({
                 where: {
                     applicationId: appId
                 },
@@ -25,7 +25,7 @@ export const deployementRouter = createTRPCRouter({
     getAll: publicProcedure
         .query(async ({ ctx: { prisma, webId } }) => {
 
-            const domainList = await prisma.deployement.findMany({
+            const domainList = await prisma.activityLog.findMany({
                 where: {
                     application: {
                         webId
@@ -37,4 +37,4 @@ export const deployementRouter = createTRPCRouter({
         })
 });
 
-export default deployementRouter;
+export default activityRouter;

@@ -41,7 +41,7 @@ const router = sentryCreateBrowserRouter(
                     element={<Login />}
                 />
                 <Route
-                    path="store"
+                    path="blocks"
                 >
                     <Route index element={<Catalog />} />
                     <Route

@@ -9,7 +9,7 @@ export const Select: FC = () => {
     const navigate = useNavigate();
     const repoInfo = useParams() as { owner: string, name: string };
     const { data: repoData, isLoading } = api.v0.repos.getRepo.useQuery(repoInfo);
-    const { mutate, isLoading: isTriggeringDeploy, isSuccess: hasTriggeredDeploy, error: mutationError } = api.v0.applications.deployApplications.useMutation({
+    const { mutate, isLoading: isTriggeringDeploy, isSuccess: hasTriggeredDeploy, error: mutationError } = api.v0.applications.deployFromRepo.useMutation({
         onSuccess: () => navigate('/')
     });
     const { register, handleSubmit, watch } = useForm<{ applications: string[] }>();

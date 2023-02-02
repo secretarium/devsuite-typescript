@@ -40,7 +40,6 @@ model User {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     web       Web[]
-    webId     String?
 }
 
 enum HookSource {
@@ -64,25 +63,56 @@ model Hook {
 }
 
 model DeployableRepo {
-    id               String        @id @default(uuid()) @map("_id")
+    id               String   @id @default(uuid()) @map("_id")
     creatorAuthToken String
     owner            String
     name             String
     config           String?
-    createdAt        DateTime      @default(now())
-    applications     Application[]
-    web              Web           @relation(fields: [webId], references: [id])
+    createdAt        DateTime @default(now())
+    web              Web      @relation(fields: [webId], references: [id])
     webId            String
 
     @@unique([creatorAuthToken, owner, name])
 }
 
+model Repo {
+    id           String        @id @default(uuid()) @map("_id")
+    owner        String
+    name         String
+    config       String
+    createdAt    DateTime      @default(now())
+    updatedAt    DateTime      @updatedAt
+    applications Application[]
+
+    @@unique([owner, name])
+}
+
+enum DeployementStatus {
+    created
+    deploying
+    deployed
+    terminating
+    terminated
+    errored
+}
+
+enum DeployementLife {
+    short
+    long
+}
+
 model Deployement {
-    id            String       @id @default(uuid()) @map("_id")
-    locations     String[]     @default([])
-    createdAt     DateTime     @default(now())
-    application   Application? @relation(fields: [applicationId], references: [id])
-    applicationId String?
+    id            String            @id @default(uuid()) @map("_id")
+    version       String?
+    locations     String[]          @default([])
+    status        DeployementStatus @default(created)
+    life          DeployementLife   @default(short)
+    sealed        Boolean           @default(false)
+    tags          String[]          @default([])
+    createdAt     DateTime          @default(now())
+    updatedAt     DateTime          @updatedAt
+    application   Application       @relation(fields: [applicationId], references: [id])
+    applicationId String
 }
 
 model Domain {
@@ -96,27 +126,59 @@ model Domain {
     applicationId String?
 }
 
+model File {
+    id                String   @id @default(uuid()) @map("_id")
+    uploadToken       String
+    uploadTokenExpiry DateTime
+    size              Int
+    createdAt         DateTime @default(now())
+}
+
+enum ActivityLogClass {
+    pushHook
+    pullRequestHook
+    deployment
+    domain
+    environment
+    listing
+}
+
+type ActivityLogRecord {
+    type    String
+    payload Json
+}
+
+model ActivityLog {
+    id            String            @id @default(uuid()) @map("_id")
+    application   Application       @relation(fields: [applicationId], references: [id])
+    applicationId String
+    class         ActivityLogClass
+    context       ActivityLogRecord
+    createdAt     DateTime          @default(now())
+}
+
 model Application {
-    id          String         @id @default(uuid()) @map("_id")
-    web         Web            @relation(fields: [webId], references: [id])
-    webId       String
-    name        String
-    bundleId    String
-    domains     Domain[]
-    license     String?
-    version     String
-    description String?
-    author      String
-    homepage    String?
-    catogories  String[]       @default([])
-    tags        String[]       @default([])
-    logo        String?
-    color       String?
-    repo        DeployableRepo @relation(fields: [repoId], references: [id])
-    repoId      String
-    deployments Deployement[]
-    createdAt   DateTime       @default(now())
-    updatedAt   DateTime       @updatedAt
+    id           String        @id @default(uuid()) @map("_id")
+    web          Web           @relation(fields: [webId], references: [id])
+    webId        String
+    name         String
+    domains      Domain[]
+    license      String?
+    description  String?
+    webhook      String?
+    author       String
+    homepage     String?
+    catogories   String[]      @default([])
+    tags         String[]      @default([])
+    logoFileId   String?
+    bannerFileId String?
+    color        String?
+    repo         Repo          @relation(fields: [repoId], references: [id])
+    repoId       String
+    deployments  Deployement[]
+    createdAt    DateTime      @default(now())
+    updatedAt    DateTime      @updatedAt
+    activityLog  ActivityLog[]
 }
 
 model Web {

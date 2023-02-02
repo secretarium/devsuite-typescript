@@ -34,10 +34,8 @@ export const webLinkerMiddlware: RequestHandler = async (req, res, next) => {
         }
     });
 
-    // if (!sessionID)
-    //     return next();
+    await new Promise(resolve => session.save(resolve));
 
-    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> sessionID', sessionID);
     try {
         const setOfSessionId = Array.from(new Set((web?.sessions.map(s => s.sid) ?? []).concat([sessionID]))).map(sid => ({ sid }));
         const setOfEphemeralId = Array.from(new Set((web?.ephemerals ?? []).concat(ephemeralTag ? [ephemeralTag] : [])));
