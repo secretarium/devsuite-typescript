@@ -7,7 +7,6 @@ import prompts from 'prompts';
 import { replaceInFile } from 'replace-in-file';
 import { getSlugPrompt, getSubstitutionDataPrompts } from './lib/prompts';
 import {
-    // formatRunCommand,
     PackageManagerName,
     resolvePackageManager
 } from './lib/resolvePackageManager';
@@ -15,24 +14,11 @@ import type { CommandOptions, SubstitutionData } from './lib/types';
 import { newStep } from './lib/utils';
 import packageJson from '../package.json';
 
-// const TRUSTLESS_BETA = false;
-
 // `yarn run` may change the current working dir, then we should use `INIT_CWD` env.
 const CWD = process.env.INIT_CWD || process.cwd();
 
 // Docs URL
 const DOCS_URL = 'https://secretarium.com';
-
-// Ignore some paths. Especially `package.json` as it is rendered
-// from `$package.json` file instead of the original one.
-// const IGNORES_PATHS = [
-//     '.DS_Store',
-//     'build',
-//     'node_modules',
-//     'package.json',
-//     '.npmignore',
-//     '.gitignore'
-// ];
 
 /**
  * The main function of the command.
@@ -61,11 +47,6 @@ async function main(target: string | undefined, options: CommandOptions) {
         // : await downloadPackageAsync(targetDir);
         : await createTemplateAsync(targetDir, data);
 
-    // await newStep('Creating the module from template files', async (step) => {
-    //     await createModuleFromTemplate(packagePath, targetDir, data);
-    //     step.succeed('Created the module from template files');
-    // });
-
     await newStep('Creating an empty Git repository', async (step) => {
         try {
             await spawnAsync('git', ['init'], {
@@ -78,19 +59,6 @@ async function main(target: string | undefined, options: CommandOptions) {
         }
     });
 
-    // await newStep('Installing module dependencies', async (step) => {
-    //     await installDependencies(packageManager, targetDir);
-    //     step.succeed('Installed module dependencies');
-    // });
-
-    // await newStep('Compiling TypeScript files', async (step) => {
-    //     await spawnAsync(packageManager, ['run', 'build'], {
-    //         cwd: targetDir,
-    //         stdio: 'ignore'
-    //     });
-    //     step.succeed('Compiled TypeScript files');
-    // });
-
     if (!options.source) {
         // Files in the downloaded tarball are wrapped in `package` dir.
         // We should remove it after all.
@@ -102,10 +70,6 @@ async function main(target: string | undefined, options: CommandOptions) {
     if (!options.withChangelog) {
         await fs.remove(path.join(targetDir, 'CHANGELOG.md'));
     }
-    // if (options.example) {
-    //     // Create "example" folder
-    //     await createExampleApp(data, targetDir, packageManager);
-    // }
 
     console.log();
     console.log('✅ Successfully created a Trustless application');
@@ -114,88 +78,18 @@ async function main(target: string | undefined, options: CommandOptions) {
 }
 
 /**
- * Recursively scans for the files within the directory. Returned paths are relative to the `root` path.
- */
-// async function getFilesAsync(root: string, dir: string | null = null): Promise<string[]> {
-//     const files: string[] = [];
-//     const baseDir = dir ? path.join(root, dir) : root;
-
-//     for (const file of await fs.readdir(baseDir)) {
-//         const relativePath = dir ? path.join(dir, file) : file;
-
-//         if (IGNORES_PATHS.includes(relativePath) || IGNORES_PATHS.includes(file)) {
-//             continue;
-//         }
-
-//         const fullPath = path.join(baseDir, file);
-//         const stat = await fs.lstat(fullPath);
-
-//         if (stat.isDirectory()) {
-//             files.push(...(await getFilesAsync(root, relativePath)));
-//         } else {
-//             files.push(relativePath);
-//         }
-//     }
-//     return files;
-// }
-
-/**
- * Asks NPM registry for the url to the tarball.
- */
-// async function getNpmTarballUrl(packageName: string, version = 'latest'): Promise<string> {
-//     const { stdout } = await spawnAsync('npm', ['view', `${packageName}@${version}`, 'dist.tarball']);
-//     return stdout.trim();
-// }
-
-/**
- * Downloads the template from NPM registry.
- */
-// async function downloadPackageAsync(targetDir: string): Promise<string> {
-//     return await newStep('Downloading module template from npm', async (step) => {
-//         // const tarballUrl = await getNpmTarballUrl(
-//         //     'trustless-sc-template',
-//         //     TRUSTLESS_BETA ? 'next' : 'latest'
-//         // );
-
-//         // await downloadTarball({
-//         //     url: tarballUrl,
-//         //     dir: targetDir
-//         // });
-
-//         step.succeed('Downloaded module template from npm');
-
-//         return path.join(targetDir, 'package');
-//     });
-// }
-
-/**
  * Create template files.
  */
 async function createTemplateAsync(targetDir: string, data: SubstitutionData): Promise<string> {
     return await newStep('Creating template files', async (step) => {
-        // const tarballUrl = await getNpmTarballUrl(
-        //     'trustless-sc-template',
-        //     TRUSTLESS_BETA ? 'next' : 'latest'
-        // );
-
-        // await downloadTarball({
-        //     url: tarballUrl,
-        //     dir: targetDir
-        // });
 
         await fs.copy(path.join(__dirname, '..', 'template', '.'), targetDir, {
             recursive: true,
             filter: () => true
         });
-        // await fs.copy(path.join(CWD, 'template', '.secretariumrc.json'), path.join(targetDir, '.secretariumrc.json'), {
-        //     recursive: true
-        // });
-        // await fs.copy(path.join(CWD, 'template', 'apps'), path.join(targetDir, 'apps'), {
-        //     recursive: true
-        // });
 
         await replaceInFile({
-            files: path.join(targetDir, '.secretariumrc.json'),
+            files: path.join(targetDir, '.klaverc.json'),
             from: [/{{SMART_CONTRACT_NAME}}/g, /{{SMART_CONTRACT_SLUG}}/g],
             to: [data.project.name, data.project.slug]
         });
@@ -205,39 +99,6 @@ async function createTemplateAsync(targetDir: string, data: SubstitutionData): P
         return path.join(targetDir, 'package');
     });
 }
-
-// function handleSuffix(name: string, suffix: string): string {
-//     if (name.endsWith(suffix)) {
-//         return name;
-//     }
-//     return `${name}${suffix}`;
-// }
-
-/**
- * Creates the module based on the `ejs` template (e.g. `trustless-sc-template` package).
- */
-// async function createModuleFromTemplate(
-//     templatePath: string,
-//     targetPath: string,
-//     data: SubstitutionData
-// ) {
-//     const files = await getFilesAsync(templatePath);
-
-//     // Iterate through all template files.
-//     for (const file of files) {
-//         const renderedRelativePath = ejs.render(file.replace(/^\$/, ''), data, {
-//             openDelimiter: '{',
-//             closeDelimiter: '}',
-//             escape: (value: string) => value.replace(/\./g, path.sep)
-//         });
-//         const fromPath = path.join(templatePath, file);
-//         const toPath = path.join(targetPath, renderedRelativePath);
-//         const template = await fs.readFile(fromPath, { encoding: 'utf8' });
-//         const renderedContent = ejs.render(template, data);
-
-//         await fs.outputFile(toPath, renderedContent, { encoding: 'utf8' });
-//     }
-// }
 
 /**
  * Asks the user for the package slug (npm package name).
@@ -324,8 +185,6 @@ function printFurtherInstructions(
         const commands = [
             `cd ${path.relative(CWD, targetDir)}`,
             'code .'
-            // formatRunCommand(packageManager, 'open:ios'),
-            // formatRunCommand(packageManager, 'open:android')
         ];
 
         console.log();
@@ -345,13 +204,6 @@ program
     .version(packageJson.version)
     .description(packageJson.description)
     .arguments('[path]')
-    // .option(
-    //     '-s, --source <source_dir>',
-    //     'Local path to the template. By default it downloads `trustless-sc-template` from NPM.'
-    // )
-    // .option('--with-readme', 'Whether to include README.md file.', false)
-    // .option('--with-changelog', 'Whether to include CHANGELOG.md file.', false)
-    // .option('--no-example', 'Whether to skip creating the example app.', false)
     .action(main);
 
 program.parse(process.argv);

@@ -100,7 +100,7 @@ export const reposRouter = createTRPCRouter({
                     const handle = await octokit.repos.getContent({
                         owner: repo.owner,
                         repo: repo.name,
-                        path: '.secretariumrc.json',
+                        path: '.klaverc.json',
                         mediaType: {
                             format: 'raw+json'
                         }

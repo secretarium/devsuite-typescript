@@ -22,7 +22,7 @@ const compile = () => {
             }))
         });
 
-        const configContent = fs.readFileSync(path.join(CWD, '.secretariumrc.json')).toString();
+        const configContent = fs.readFileSync(path.join(CWD, '.klaverc.json')).toString();
         const parsingOutput = schema.safeParse(JSON.parse(configContent));
 
         if (parsingOutput.success)
@@ -40,34 +40,13 @@ const compile = () => {
                         if (!fs.existsSync(appPath) || !fs.statSync(appPath).isFile())
                             console.error(`Could not read entry point for application ${chalk.green(app.name)}`);
 
-                        // const { error, /* stdout, stderr, */ stats } = await (await import('assemblyscript/dist/asc.js')).main([
-                        //     appPath,
-                        //     '--outFile', path.join(CWD, '.secretarium', index.toString(), 'out.wasm'),
-                        //     '--textFile', path.join(CWD, '.secretarium', index.toString(), 'out.wat'),
-                        //     '--bindings', ' esm',
-                        //     '--exportStart', 'trustless_main',
-                        //     '--exportTable',
-                        //     '--disable', 'mutable-globals',
-                        //     '--disable', 'sign-extension',
-                        //     '--disable', 'nontrapping-f2i',
-                        //     '--disable', 'bulk-memory',
-                        //     '--noUnsafe',
-                        //     '--sourceMap',
-                        //     '--debug',
-                        //     '--pedantic',
-                        //     '--stats'
-                        // ], {
-                        //     stdout: process.stdout,
-                        //     stderr: process.stderr
-                        // });
-
                         console.error(`Compiling ${chalk.green(app.name)} from ${path.join('.', path.relative(CWD, appPath))}...`);
                         asb.main([
                             'build',
                             appPath,
                             '--wat',
                             '--outDir',
-                            path.join(CWD, '.secretarium', index.toString())
+                            path.join(CWD, '.klave', index.toString())
                         ], {
                             stdout: process.stdout,
                             stderr: process.stderr,
@@ -79,13 +58,6 @@ const compile = () => {
                             resolve(result);
                             return 0;
                         });
-
-                        // if (error) {
-                        //     console.log('Compilation failed: ' + error.message);
-                        //     // console.log(stderr.toString());
-                        // } else {
-                        //     console.log(stats.toString());
-                        // }
                     });
                 } catch (error) {
                     console.log('Compilation failed: ' + error?.toString());
