@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-    displayName: "templator",
+    displayName: "trustless-app-creator",
     preset: "../../jest.preset.js",
     testEnvironment: "node",
     transform: {
@@ -10,5 +10,5 @@ export default {
         ],
     },
     moduleFileExtensions: ["ts", "tsx", "js", "jsx"],
-    coverageDirectory: "../../coverage/libs/templator",
+    coverageDirectory: "../../coverage/libs/trustless-app-creator",
 };

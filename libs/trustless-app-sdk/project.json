@@ -1,7 +1,7 @@
 {
-    "name": "trustless-app",
+    "name": "trustless-app-sdk",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "libs/trustless-app/src",
+    "sourceRoot": "libs/trustless-app-sdk/src",
     "projectType": "library",
     "targets": {
         "build": {
@@ -11,14 +11,14 @@
             ],
             "options": {
                 "buildableProjectDepsInPackageJsonType": "dependencies",
-                "outputPath": "dist/libs/trustless-app",
-                "tsConfig": "libs/trustless-app/tsconfig.lib.json",
-                "packageJson": "libs/trustless-app/package.json",
-                "main": "libs/trustless-app/src/index.ts",
+                "outputPath": "dist/libs/trustless-app-sdk",
+                "tsConfig": "libs/trustless-app-sdk/tsconfig.lib.json",
+                "packageJson": "libs/trustless-app-sdk/package.json",
+                "main": "libs/trustless-app-sdk/src/index.ts",
                 "assets": [
-                    "libs/trustless-app/bin/*",
-                    "libs/trustless-app/assembly/**",
-                    "libs/trustless-app/*.md"
+                    "libs/trustless-app-sdk/bin/*",
+                    "libs/trustless-app-sdk/assembly/**",
+                    "libs/trustless-app-sdk/*.md"
                 ]
             }
         },
@@ -29,7 +29,7 @@
             ],
             "options": {
                 "lintFilePatterns": [
-                    "libs/trustless-app/**/*.ts"
+                    "libs/trustless-app-sdk/**/*.ts"
                 ]
             }
         },
@@ -39,7 +39,7 @@
                 "{workspaceRoot}/coverage/{projectRoot}"
             ],
             "options": {
-                "jestConfig": "libs/trustless-app/jest.config.ts",
+                "jestConfig": "libs/trustless-app-sdk/jest.config.ts",
                 "passWithNoTests": true
             }
         },

@@ -1,7 +1,7 @@
 {
-    "name": "templator",
+    "name": "trustless-app-creator",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "libs/templator/src",
+    "sourceRoot": "libs/trustless-app-creator/src",
     "projectType": "library",
     "targets": {
         "build": {
@@ -11,19 +11,19 @@
             ],
             "options": {
                 "buildableProjectDepsInPackageJsonType": "dependencies",
-                "outputPath": "dist/libs/templator",
-                "tsConfig": "libs/templator/tsconfig.lib.json",
-                "packageJson": "libs/templator/package.json",
-                "main": "libs/templator/src/index.ts",
+                "outputPath": "dist/libs/trustless-app-creator",
+                "tsConfig": "libs/trustless-app-creator/tsconfig.lib.json",
+                "packageJson": "libs/trustless-app-creator/package.json",
+                "main": "libs/trustless-app-creator/src/index.ts",
                 "assets": [
                     {
                         "glob": "**/(\\.*|*)",
-                        "input": "libs/templator/template",
+                        "input": "libs/trustless-app-creator/template",
                         "output": "template",
                         "ignore": []
                     },
-                    "libs/templator/bin/*",
-                    "libs/templator/*.md"
+                    "libs/trustless-app-creator/bin/*",
+                    "libs/trustless-app-creator/*.md"
                 ]
             }
         },
@@ -34,7 +34,7 @@
             ],
             "options": {
                 "lintFilePatterns": [
-                    "libs/templator/**/*.ts"
+                    "libs/trustless-app-creator/**/*.ts"
                 ]
             }
         },
@@ -44,7 +44,7 @@
                 "{workspaceRoot}/coverage/{projectRoot}"
             ],
             "options": {
-                "jestConfig": "libs/templator/jest.config.ts",
+                "jestConfig": "libs/trustless-app-creator/jest.config.ts",
                 "passWithNoTests": true
             }
         },

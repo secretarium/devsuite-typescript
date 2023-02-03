@@ -42,7 +42,7 @@
                 "packages/react/src/index.ts"
             ],
             "@secretarium/trustless-app": [
-                "libs/trustless-app/src/index.ts"
+                "libs/trustless-app-sdk/src/index.ts"
             ]
         }
     },
