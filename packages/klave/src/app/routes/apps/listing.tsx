@@ -5,7 +5,7 @@ import { FC } from 'react';
 export const AppListing: FC = () => {
 
     return <div className="flex w-full items-center mb-7">
-        No store publishing
+        No blocks publishing
     </div>;
 };
 

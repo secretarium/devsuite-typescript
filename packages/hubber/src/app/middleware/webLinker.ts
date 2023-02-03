@@ -6,7 +6,7 @@ import { v4 as uuid } from 'uuid';
 export const webLinkerMiddlware: RequestHandler = async (req, res, next) => {
 
     const { headers, session, sessionID } = req;
-    const ephemeralTag = headers['x-trustless-store-ephemeral-tag']?.toString();
+    const ephemeralTag = headers['x-trustless-klave-ephemeral-tag']?.toString();
     const { localId } = session as any as Record<string, string>;
 
     const web = await prisma.web.findFirst({

@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-    displayName: "store",
+    displayName: "klave",
     testEnvironment: 'jsdom',
     preset: "../../jest.preset.js",
     transform: {
@@ -11,5 +11,5 @@ export default {
         ],
     },
     moduleFileExtensions: ["ts", "tsx", "js", "jsx"],
-    coverageDirectory: "../../coverage/packages/store",
+    coverageDirectory: "../../coverage/packages/klave",
 };

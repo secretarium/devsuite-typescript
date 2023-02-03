@@ -20,7 +20,7 @@
 //     };
 
 //     baseConfig.ignoreWarnings?.push({
-//         module: /packages\/store\/src\/styles.css/,
+//         module: /packages\/klave\/src\/styles.css/,
 //         message: /@import must precede all other statements/
 //     });
 

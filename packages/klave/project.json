@@ -1,7 +1,7 @@
 {
-    "name": "store",
+    "name": "klave",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "packages/store/src",
+    "sourceRoot": "packages/klave/src",
     "projectType": "application",
     "targets": {
         "build": {
@@ -12,21 +12,21 @@
             "defaultConfiguration": "production",
             "options": {
                 "compiler": "swc",
-                "outputPath": "dist/packages/store",
-                "index": "packages/store/src/index.html",
+                "outputPath": "dist/packages/klave",
+                "index": "packages/klave/src/index.html",
                 "baseHref": "/",
-                "main": "packages/store/src/main.tsx",
-                "polyfills": "packages/store/src/polyfills.ts",
-                "tsConfig": "packages/store/tsconfig.app.json",
+                "main": "packages/klave/src/main.tsx",
+                "polyfills": "packages/klave/src/polyfills.ts",
+                "tsConfig": "packages/klave/tsconfig.app.json",
                 "assets": [
-                    "packages/store/src/favicon.svg",
-                    "packages/store/src/assets"
+                    "packages/klave/src/favicon.svg",
+                    "packages/klave/src/assets"
                 ],
                 "styles": [
-                    "packages/store/src/styles.css"
+                    "packages/klave/src/styles.css"
                 ],
                 "scripts": [],
-                "webpackConfig": "packages/store/webpack.config"
+                "webpackConfig": "packages/klave/webpack.config"
             },
             "configurations": {
                 "development": {
@@ -38,8 +38,8 @@
                 "production": {
                     "fileReplacements": [
                         {
-                            "replace": "packages/store/src/environments/environment.ts",
-                            "with": "packages/store/src/environments/environment.prod.ts"
+                            "replace": "packages/klave/src/environments/environment.ts",
+                            "with": "packages/klave/src/environments/environment.prod.ts"
                         }
                     ],
                     "subresourceIntegrity": true,
@@ -55,17 +55,17 @@
         "serve": {
             "executor": "@nrwl/webpack:dev-server",
             "options": {
-                "proxyConfig": "packages/store/proxy.config.js",
-                "buildTarget": "store:build",
+                "proxyConfig": "packages/klave/proxy.config.js",
+                "buildTarget": "klave:build",
                 "hmr": true,
                 "port": 4220
             },
             "configurations": {
                 "development": {
-                    "buildTarget": "store:build:development"
+                    "buildTarget": "klave:build:development"
                 },
                 "production": {
-                    "buildTarget": "store:build:production",
+                    "buildTarget": "klave:build:production",
                     "hmr": false,
                     "port": 4220
                 }
@@ -79,7 +79,7 @@
             ],
             "options": {
                 "lintFilePatterns": [
-                    "packages/store/**/*.{ts,tsx,js,jsx}"
+                    "packages/klave/**/*.{ts,tsx,js,jsx}"
                 ]
             }
         },
@@ -89,7 +89,7 @@
                 "{workspaceRoot}/coverage/{projectRoot}"
             ],
             "options": {
-                "jestConfig": "packages/store/jest.config.ts",
+                "jestConfig": "packages/klave/jest.config.ts",
                 "passWithNoTests": true
             }
         }

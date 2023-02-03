@@ -1,19 +1,19 @@
 {
-    "name": "store-e2e",
+    "name": "klave-e2e",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "packages/store-e2e/src",
+    "sourceRoot": "packages/klave-e2e/src",
     "projectType": "application",
     "targets": {
         "e2e": {
             "executor": "@nrwl/cypress:cypress",
             "options": {
-                "cypressConfig": "packages/store-e2e/cypress.config.ts",
-                "devServerTarget": "store:serve:development",
+                "cypressConfig": "packages/klave-e2e/cypress.config.ts",
+                "devServerTarget": "klave:serve:development",
                 "testingType": "e2e"
             },
             "configurations": {
                 "production": {
-                    "devServerTarget": "store:serve:production"
+                    "devServerTarget": "klave:serve:production"
                 }
             }
         },
@@ -24,13 +24,13 @@
             ],
             "options": {
                 "lintFilePatterns": [
-                    "packages/store-e2e/**/*.{js,ts,json}"
+                    "packages/klave-e2e/**/*.{js,ts,json}"
                 ]
             }
         }
     },
     "tags": [],
     "implicitDependencies": [
-        "store"
+        "klave"
     ]
 }

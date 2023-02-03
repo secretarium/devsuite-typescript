@@ -15,7 +15,7 @@
                 "*.jsx"
             ],
             "parserOptions": {
-                "project": "packages/store-e2e/tsconfig.*?.json"
+                "project": "packages/klave-e2e/tsconfig.*?.json"
             },
             "rules": {}
         }
