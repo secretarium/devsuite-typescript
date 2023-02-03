@@ -64,12 +64,12 @@ export const applicationRouter = createTRPCRouter({
                             }
                         },
                         update: {
-                            config: newConfig
+                            config: JSON.parse(newConfig)
                         },
                         create: {
                             owner: deployableRepoData.owner,
                             name: deployableRepoData.name,
-                            config: newConfig
+                            config: JSON.parse(newConfig)
                         }
                     });
                     const application = await tx.application.create({
@@ -90,7 +90,7 @@ export const applicationRouter = createTRPCRouter({
                             author: emphemeralSessionTag ?? sessionID
                         }
                     });
-                    const deployment = await tx.deployement.create({
+                    const deployment = await tx.deployment.create({
                         data: {
                             locations: ['FR'],
                             application: {

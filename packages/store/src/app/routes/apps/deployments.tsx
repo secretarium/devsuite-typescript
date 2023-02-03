@@ -1,22 +1,97 @@
 import { FC } from 'react';
 import { useParams } from 'react-router-dom';
+import * as AlertDialog from '@radix-ui/react-alert-dialog';
 import { UilSpinner, UilTrash } from '@iconscout/react-unicons';
 import api from '../../utils/api';
-import { Deployement } from '@prisma/client';
+import { Deployment } from '@prisma/client';
 import { formatTimeAgo } from '../../utils/formatTimeAgo';
 
-export const AppListing: FC = () => {
+type DeploymentContextProps = {
+    deployment: Deployment
+}
 
-    const { appId } = useParams();
-    const { data: deploymentList, isLoading: isLoadingDeployments } = api.v0.deployements.getByApplication.useQuery({ appId: appId || '' });
+const DeploymentPromotion: FC<DeploymentContextProps> = ({ deployment: { id } }) => {
 
-    const promoteDeployment = (deploymentId: Deployement['id']) => {
+    const promoteDeployment = (deploymentId: Deployment['id']) => {
         return deploymentId;
     };
 
+    return <AlertDialog.Root>
+        <AlertDialog.Trigger asChild>
+            <button className="h-8 inline-flex items-center justify-center font-normal text-gray-400 ml-auto" onClick={() => promoteDeployment(id)}>
+                Promote
+            </button>
+        </AlertDialog.Trigger>
+        <AlertDialog.Portal>
+            <AlertDialog.Overlay className="AlertDialogOverlay" />
+            <AlertDialog.Content className="AlertDialogContent">
+                <AlertDialog.Title className="AlertDialogTitle">Are you absolutely sure?</AlertDialog.Title>
+                <AlertDialog.Description className="AlertDialogDescription">
+                    This action cannot be undone. This will permanently delete your account and remove your
+                    data from our servers.
+                </AlertDialog.Description>
+                <div style={{ display: 'flex', gap: 25, justifyContent: 'flex-end' }}>
+                    <AlertDialog.Cancel asChild>
+                        <button className="Button mauve">Cancel</button>
+                    </AlertDialog.Cancel>
+                    <AlertDialog.Action asChild>
+                        <button className="Button red">Yes, delete account</button>
+                    </AlertDialog.Action>
+                </div>
+            </AlertDialog.Content>
+        </AlertDialog.Portal>
+    </AlertDialog.Root>;
+};
+
+const DeploymentDeletion: FC<DeploymentContextProps> = ({ deployment: { id } }) => {
+
+    const utils = api.useContext().v0.deployments;
+    const mutation = api.v0.deployments.delete.useMutation({
+        onSuccess: async () => {
+            await utils.getByApplication.invalidate();
+            await utils.getAll.invalidate();
+        }
+    });
+
+    const deleteDeployment = async (deploymentId: Deployment['id']) => {
+        await mutation.mutateAsync({ deploymentId });
+    };
+
+    return <AlertDialog.Root>
+        <AlertDialog.Trigger asChild>
+            <button title='Delete' className="h-8 inline-flex items-center justify-center font-normal text-red-400 mt-auto">
+                <UilTrash className='inline-block h-full' />
+            </button>
+        </AlertDialog.Trigger>
+        <AlertDialog.Portal>
+            <AlertDialog.Overlay className="AlertDialogOverlay" />
+            <AlertDialog.Content className="AlertDialogContent">
+                <AlertDialog.Title className="AlertDialogTitle">Are you absolutely sure?</AlertDialog.Title>
+                <AlertDialog.Description className="AlertDialogDescription">
+                    This action cannot be undone. This will permanently delete your account and remove your
+                    data from our servers.
+                </AlertDialog.Description>
+                <div style={{ display: 'flex', gap: 25, justifyContent: 'flex-end' }}>
+                    <AlertDialog.Cancel asChild>
+                        <button className="Button">Cancel</button>
+                    </AlertDialog.Cancel>
+                    <AlertDialog.Action asChild>
+                        <button className="Button bg-red-700 text-white" onClick={() => deleteDeployment(id)}>Yes, delete deployment</button>
+                    </AlertDialog.Action>
+                </div>
+            </AlertDialog.Content>
+        </AlertDialog.Portal>
+    </AlertDialog.Root>;
+};
+
+export const Deployments: FC = () => {
+
+    const { appId } = useParams();
+    const { data: deploymentList, isLoading: isLoadingDeployments } = api.v0.deployments.getByApplication.useQuery({ appId: appId || '' });
+
     if (isLoadingDeployments || !deploymentList)
         return <>
-            We are fetching data about your deployements.<br />
+            We are fetching data about your deployments.<br />
             It will only take a moment...<br />
             <br />
             <UilSpinner className='inline-block animate-spin' />
@@ -51,8 +126,9 @@ export const AppListing: FC = () => {
                 </tr>
             </thead>
             <tbody className="text-gray-600 dark:text-gray-100">
-                {deploymentList.map(({ id, createdAt, life, status }) => {
-                    return <tr key={id}>
+                {deploymentList.map(deployment => {
+                    const { id, createdAt, life, status } = deployment;
+                    return <tr key={id} className={['created', 'deploying', 'terminating'].includes(status) ? 'stripe-progress' : ''}>
                         {/* <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 md:table-cell hidden">
                             <div className="flex items-center">
                                 <UilServerNetworkAlt className='inline-block h-4' />
@@ -81,13 +157,11 @@ export const AppListing: FC = () => {
                             </div>
                         </td>
                         <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 text-right">
-                            <button className="h-8 inline-flex items-center justify-center font-normal text-gray-400 ml-auto" onClick={() => promoteDeployment(id)}>
-                                Promote
-                            </button>
-                            &nbsp;&nbsp;
-                            <button title='Delete' className="h-8 inline-flex items-center justify-center font-normal text-red-400 mt-auto">
-                                <UilTrash className='inline-block h-full' />
-                            </button>
+                            <div className='flex align-middle'>
+                                <DeploymentPromotion deployment={deployment} />
+                                &nbsp;&nbsp;
+                                <DeploymentDeletion deployment={deployment} />
+                            </div>
                         </td>
                     </tr>;
                 })}
@@ -96,4 +170,4 @@ export const AppListing: FC = () => {
     </>;
 };
 
-export default AppListing;
+export default Deployments;

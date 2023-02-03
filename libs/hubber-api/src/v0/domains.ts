@@ -68,6 +68,20 @@ export const domainRouter = createTRPCRouter({
                     token: `secretarium=v1 trustless-bundle-verification=${uuid()}`
                 }
             });
+        }),
+    delete: publicProcedure
+        .input(z.object({
+            domainId: z.string()
+        }))
+        .mutation(async ({ ctx: { prisma }, input: { domainId } }) => {
+
+            await prisma.domain.delete({
+                where: {
+                    id: domainId
+                }
+            });
+            return;
+
         })
 });
 

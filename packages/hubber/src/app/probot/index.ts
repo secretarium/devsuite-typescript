@@ -1,7 +1,7 @@
 import { prisma } from '@secretarium/hubber-db';
 import type { Probot } from 'probot';
 import logger from '../../utils/logger';
-import { deployToSubstrate } from '../controllers/deployementController';
+import { deployToSubstrate, updatePullRequestFromSubstrate } from '../controllers/deploymentController';
 
 const probotApp = (app: Probot) => {
 
@@ -37,7 +37,9 @@ const probotApp = (app: Probot) => {
                 commit: {
                     url: context.payload.repository.commits_url,
                     ref: context.payload.ref,
-                    sha: context.payload.after
+                    before: context.payload.before,
+                    after: context.payload.after,
+                    forced: context.payload.forced
                 },
                 pusher: {
                     login: context.payload.sender.login,
@@ -47,7 +49,7 @@ const probotApp = (app: Probot) => {
             });
 
         if (context.name === 'pull_request')
-            deployToSubstrate({
+            updatePullRequestFromSubstrate({
                 octokit: context.octokit,
                 class: context.name,
                 type: context.payload.action,
@@ -59,7 +61,8 @@ const probotApp = (app: Probot) => {
                 commit: {
                     url: context.payload.pull_request.commits_url,
                     ref: context.payload.pull_request.head.ref,
-                    sha: context.payload.pull_request.head.sha
+                    before: context.payload.action === 'synchronize' ? context.payload.before : context.payload.pull_request.base.sha,
+                    after: context.payload.action === 'synchronize' ? context.payload.after : context.payload.pull_request.head.sha
                 },
                 pusher: {
                     login: context.payload.sender.login,

@@ -3,7 +3,7 @@ import auth from './auth';
 import user from './user';
 import repos from './repos';
 import applications from './applications';
-import deployements from './deployements';
+import deployments from './deployments';
 import activities from './activities';
 import domains from './domains';
 import hooks from './hooks';
@@ -13,7 +13,7 @@ export const v0Router = createTRPCRouter({
     user,
     repos,
     applications,
-    deployements,
+    deployments,
     activities,
     domains,
     hooks

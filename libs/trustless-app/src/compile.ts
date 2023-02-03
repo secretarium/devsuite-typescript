@@ -1,26 +1,14 @@
 import * as fs from 'fs-extra';
 import * as path from 'node:path';
-import * as z from 'zod';
 import * as asb from 'asbuild';
 import * as chalk from 'chalk';
+import { klaveRcConfigurationSchema as schema } from './rc';
 
 // `yarn run` may change the current working dir, then we should use `INIT_CWD` env.
 const CWD = process.env['INIT_CWD'] || process.cwd();
 
 const compile = () => {
     try {
-        const schema = z.object({
-            version: z.string(),
-            name: z.string(),
-            branch: z.string().optional(),
-            targetSdk: z.string().optional(),
-            applications: z.array(z.object({
-                name: z.string(),
-                root: z.string().optional(),
-                branch: z.string().optional(),
-                targetSdk: z.string().optional()
-            }))
-        });
 
         const configContent = fs.readFileSync(path.join(CWD, '.klaverc.json')).toString();
         const parsingOutput = schema.safeParse(JSON.parse(configContent));
@@ -29,8 +17,8 @@ const compile = () => {
             parsingOutput.data.applications.forEach(async (app, index) => {
                 try {
                     new Promise((resolve) => {
-                        const appPathRoot = path.join(CWD, app.root ?? '.');
-                        let appPath = appPathRoot;
+                        const appPathRoot = path.join(CWD, app.rootDir ?? parsingOutput.data.rootDir ?? '.');
+                        let appPath = path.join(appPathRoot, app.index ?? '');
                         if (!fs.existsSync(appPath) || !fs.statSync(appPath).isFile())
                             appPath = path.join(appPathRoot, 'index.ssc');
                         if (!fs.existsSync(appPath) || !fs.statSync(appPath).isFile())
