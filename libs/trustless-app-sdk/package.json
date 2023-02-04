@@ -14,7 +14,6 @@
     "type": "commonjs",
     "main": "assembly/index.ts",
     "types": "assembly/index.ts",
-    "ascMain": "assembly/index.ts",
     "exports": {
         "./stac": {
             "default": "./src/compile.js",

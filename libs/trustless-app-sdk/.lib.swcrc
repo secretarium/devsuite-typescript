@@ -28,6 +28,7 @@
     },
     "sourceMaps": true,
     "exclude": [
+        "index.ts",
         "jest.config.ts",
         ".*\\.spec.tsx?$",
         ".*\\.test.tsx?$",
