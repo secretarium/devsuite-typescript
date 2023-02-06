@@ -193,7 +193,7 @@
         "babel-preset-expo": "9.2.2",
         "commitlint": "^17.4.2",
         "cross-env": "7.0.3",
-        "cypress": "^12.4.0",
+        "cypress": "^12.5.1",
         "detox": "20.1.2",
         "dotenv": "16.0.3",
         "eas-cli": "3.4.1",
