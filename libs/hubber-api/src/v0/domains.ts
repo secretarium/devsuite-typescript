@@ -55,8 +55,11 @@ export const domainRouter = createTRPCRouter({
             return txtRecords;
         }),
     add: publicProcedure
-        .input(z.object({ fqdn: z.string().regex(/^[0-9\p{L}][0-9\p{L}\-.]{1,61}[0-9\p{L}]\.[0-9\p{L}][\p{L}-]*[0-9\p{L}]+$/ugm) }))
-        .mutation(async ({ ctx: { prisma }, input: { fqdn } }) => {
+        .input(z.object({
+            applicationId: z.string().uuid(),
+            fqdn: z.string().regex(/^[0-9\p{L}][0-9\p{L}\-.]{1,61}[0-9\p{L}]\.[0-9\p{L}][\p{L}-]*[0-9\p{L}]+$/ugm)
+        }))
+        .mutation(async ({ ctx: { prisma }, input: { applicationId, fqdn } }) => {
 
             // if (fqdn.trim() === '')
             //     throw new Error('The FQDN was not the right format');
@@ -65,7 +68,12 @@ export const domainRouter = createTRPCRouter({
                 data: {
                     fqdn,
                     verified: false,
-                    token: `secretarium=v1 trustless-bundle-verification=${uuid()}`
+                    token: `secretarium=v1 trustless-bundle-verification=${uuid()}`,
+                    application: {
+                        connect: {
+                            id: applicationId
+                        }
+                    }
                 }
             });
         }),

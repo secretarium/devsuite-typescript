@@ -104,12 +104,24 @@ type DomainAddBoxProps = {
 
 const DomainAddBox: FC<DomainAddBoxProps> = ({ onClose }) => {
 
+    const { appId } = useParams();
     const utils = api.useContext().v0.domains;
-    const mutation = api.v0.domains.add.useMutation({
+    const createMutation = api.v0.domains.add.useMutation({
+        onSuccess: async () => {
+            await utils.getAll.invalidate();
+            await utils.getByApplication.invalidate();
+        }
+    });
+
+    const verifyMutation = api.v0.domains.validate.useMutation({
         onSuccess: async () => {
             await utils.getByApplication.invalidate();
         }
     });
+
+    const validate = async (domainId: Domain['id']) => {
+        await verifyMutation.mutateAsync({ domainId });
+    };
 
     const methods = useZodForm({
         schema: z.object({
@@ -117,9 +129,39 @@ const DomainAddBox: FC<DomainAddBoxProps> = ({ onClose }) => {
         })
     });
 
+    if (!appId)
+        return null;
+
+    if (createMutation.data)
+        return <div>
+            <div className='mb-4' onClick={() => navigator.clipboard.writeText(createMutation.data.token)}>
+                <span className='block'>To verify ownership of the domain please create a TXT record for <b>.{createMutation.data.fqdn}</b> on your DNS.</span>
+                <span className='block rounded-md font-mono cursor-pointer px-1 py-2 bg-slate-200 dark:bg-slate-800 border hover:border-slate-500'>{createMutation.data.token}</span>
+            </div>
+            <button
+                type="submit"
+                disabled={createMutation.isLoading}
+                className="border bg-primary-500 p-2"
+                onClick={() => validate(createMutation.data.id)}
+            >
+                {createMutation.isLoading ? 'Loading' : 'Verify'}
+            </button>
+            &nbsp;&nbsp;&nbsp;
+            <button
+                type="reset"
+                onClick={onClose}
+                className="border bg-primary-500 p-2"
+            >
+                Cancel
+            </button>
+        </div>;
+
     return <form
         onSubmit={methods.handleSubmit(async (data) => {
-            await mutation.mutateAsync(data);
+            await createMutation.mutateAsync({
+                applicationId: appId,
+                ...data
+            });
             methods.reset();
         })}
         className="space-y-2"
@@ -139,10 +181,10 @@ const DomainAddBox: FC<DomainAddBoxProps> = ({ onClose }) => {
 
         <button
             type="submit"
-            disabled={mutation.isLoading}
+            disabled={createMutation.isLoading}
             className="border bg-primary-500 p-2"
         >
-            {mutation.isLoading ? 'Loading' : 'Submit'}
+            {createMutation.isLoading ? 'Loading' : 'Submit'}
         </button>
         &nbsp;&nbsp;&nbsp;
         <button
