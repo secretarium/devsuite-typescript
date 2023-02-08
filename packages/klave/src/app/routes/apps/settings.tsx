@@ -66,10 +66,16 @@ export const AppSettings: FC = () => {
 
     const methods = useZodForm({
         schema: z.object({
-            homepage: z.string()
+            homepage: z.string(),
+            description: z.string(),
+            license: z.string(),
+            webhook: z.string()
         }),
         values: {
-            homepage: application?.homepage || ''
+            homepage: application?.homepage || '',
+            description: application?.description || '',
+            license: application?.license || '',
+            webhook: application?.webhook || ''
         }
     });
 
@@ -81,7 +87,7 @@ export const AppSettings: FC = () => {
             <UilSpinner className='inline-block animate-spin' />
         </>;
 
-    return <div className="flex flex-col gap-5 w-full justify-start mb-7">
+    return <div className="flex flex-col gap-10 w-full justify-start mb-7">
         <form
             onSubmit={methods.handleSubmit(async (data) => {
                 await mutation.mutateAsync({ appId: appId || '', data });
@@ -89,11 +95,30 @@ export const AppSettings: FC = () => {
             })}
             className="space-y-2"
         >
-            <div>
+            <div className='flex flex-col gap-3'>
                 <label>
                     Homepage
                     <br />
-                    <input {...methods.register('homepage')} className="border" />
+                    <input {...methods.register('homepage')} className="border w-2/3" />
+                </label>
+                <label>
+                    Description
+                    <br />
+                    <textarea {...methods.register('description')} className="border w-2/3" />
+                </label>
+                <label>
+                    License
+                    <br />
+                    <select {...methods.register('license')} className="select select-bordered w-2/3">
+                        <option>MIT</option>
+                        <option>Apache 2.0</option>
+                        <option>BSD</option>
+                    </select>
+                </label>
+                <label>
+                    Webhook
+                    <br />
+                    <input {...methods.register('webhook')} className="border w-2/3" />
                 </label>
 
                 {methods.formState.errors.homepage?.message && (

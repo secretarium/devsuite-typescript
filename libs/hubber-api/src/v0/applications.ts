@@ -27,7 +27,9 @@ export const applicationRouter = createTRPCRouter({
                     catogories: true,
                     color: true,
                     homepage: true,
+                    description: true,
                     license: true,
+                    webhook: true,
                     name: true,
                     tags: true
                 }
