@@ -69,7 +69,7 @@ export const AppListing: FC = () => {
                 <NavLink to={'deployments'} className={({ isActive }) => `px-3 pb-1.5 border-b-2 ${isActive ? 'border-blue-500 text-blue-500 dark:text-white dark:border-white' : 'border-transparent text-gray-600 dark:text-gray-400 '}`}>Deployments</NavLink>
                 {/* <NavLink to={'environment'} className={({ isActive }) => `px-3 pb-1.5 border-b-2 ${isActive ? 'border-blue-500 text-blue-500 dark:text-white dark:border-white' : 'border-transparent text-gray-600 dark:text-gray-400 '}`}>Environment</NavLink> */}
                 <NavLink to={'domains'} className={({ isActive }) => `px-3 pb-1.5 border-b-2 ${isActive ? 'border-blue-500 text-blue-500 dark:text-white dark:border-white' : 'border-transparent text-gray-600 dark:text-gray-400 '}`}>Domains</NavLink>
-                <NavLink to={'listing'} className={({ isActive }) => `px-3 pb-1.5 border-b-2 ${isActive ? 'border-blue-500 text-blue-500 dark:text-white dark:border-white' : 'border-transparent text-gray-600 dark:text-gray-400 '}`}>Listing</NavLink>
+                {/* <NavLink to={'listing'} className={({ isActive }) => `px-3 pb-1.5 border-b-2 ${isActive ? 'border-blue-500 text-blue-500 dark:text-white dark:border-white' : 'border-transparent text-gray-600 dark:text-gray-400 '}`}>Listing</NavLink> */}
                 <NavLink to={'settings'} className={({ isActive }) => `px-3 pb-1.5 border-b-2 ${isActive ? 'border-blue-500 text-blue-500 dark:text-white dark:border-white' : 'border-transparent text-gray-600 dark:text-gray-400 '}`}>Settings</NavLink>
             </div>
         </div>
