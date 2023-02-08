@@ -2,6 +2,13 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.2.1](///compare/trustless-app-sdk@0.2.0...trustless-app-sdk@0.2.1) (2023-02-08)
+
+
+### Bug Fixes
+
+* Creator template would incorrectly validate and skeleton the config file 9778524
+
 ## 0.2.0 (2023-02-08)
 
 ### ⚠ BREAKING CHANGES
