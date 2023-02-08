@@ -79,7 +79,7 @@ export const domainRouter = createTRPCRouter({
         }),
     delete: publicProcedure
         .input(z.object({
-            domainId: z.string()
+            domainId: z.string().uuid()
         }))
         .mutation(async ({ ctx: { prisma }, input: { domainId } }) => {
 
