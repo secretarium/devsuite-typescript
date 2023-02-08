@@ -156,6 +156,20 @@ export const applicationRouter = createTRPCRouter({
                 }
             });
             return true;
+        }),
+    delete: publicProcedure
+        .input(z.object({
+            applicationId: z.string().uuid()
+        }))
+        .mutation(async ({ ctx: { prisma }, input: { applicationId } }) => {
+
+            await prisma.application.delete({
+                where: {
+                    id: applicationId
+                }
+            });
+            return;
+
         })
 });
 
