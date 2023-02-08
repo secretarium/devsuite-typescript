@@ -69,7 +69,8 @@ export const deployToSubstrate = async ({ octokit, ...context }: DeploymentConte
         const launchDeploy = async () => {
             const deployment = await prisma.deployment.create({
                 data: {
-                    version: context.commit.after.substring(0, 8),
+                    version: availableApplicationsConfig[application.name].version,
+                    build: context.commit.after.substring(0, 8),
                     locations: ['FR'],
                     application: {
                         connect: { id: application.id }
@@ -147,6 +148,7 @@ export const deployToSubstrate = async ({ octokit, ...context }: DeploymentConte
 
                 let compileBinary = new Uint8Array(0);
                 const compileOutput = await new Promise((resolve) => {
+                    console.log('starting compilation...', compilableFiles);
                     asb.main([
                         'build',
                         '.',
@@ -159,10 +161,10 @@ export const deployToSubstrate = async ({ octokit, ...context }: DeploymentConte
                             console.log(diagnostic.message);
                         },
                         readFile(filename, baseDir) {
-                            console.log('Reading the CODE CONTENT...', filename, baseDir);
+                            console.log('Reading the FILE from...', filename, baseDir);
                             if (filename === 'asconfig.json')
                                 return '{}';
-                            console.log('Reading the CODE CONTENT...', source.data.toString());
+                            console.log('CONTENT...\n', source.data.toString());
                             return source.data.toString();
                         },
                         writeFile(filename, contents) {
@@ -175,6 +177,9 @@ export const deployToSubstrate = async ({ octokit, ...context }: DeploymentConte
                         return 0;
                     });
                 });
+
+                if (compileBinary.length === 0)
+                    return;
 
                 console.log('AFTER COMPILE COMPILATION', compileOutput);
                 console.log('>>>>>>>\n', compileBinary.length);
@@ -189,9 +194,7 @@ export const deployToSubstrate = async ({ octokit, ...context }: DeploymentConte
                             id: deployment.id
                         },
                         data: {
-                            status: 'deployed',
-                            life: 'long',
-                            released: true
+                            status: 'deployed'
                         }
                     });
                 }).onError((error) => {
