@@ -2,8 +2,17 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
-## 0.1.0 (2023-01-29)
+## 0.2.0 (2023-02-08)
 
+### ⚠ BREAKING CHANGES
+
+* Rename templator and TS sdk
+
+### Miscellaneous Chores
+
+* Rename templator and TS sdk 44903f1
+
+## 0.1.0 (2023-01-29)
 
 ### Features
 
