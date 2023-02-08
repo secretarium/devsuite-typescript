@@ -88,7 +88,19 @@ export const reposRouter = createTRPCRouter({
             })).filter(Boolean);
 
             const [, , reposWithId] = await prisma.$transaction([
-                prisma.deployableRepo.deleteMany({ where: { creatorAuthToken: accessToken } }),
+                prisma.deployableRepo.deleteMany({
+                    where: {
+                        OR: [{
+                            creatorAuthToken: accessToken
+                        }, {
+                            webId: web.id
+                        }, {
+                            createdAt: {
+                                lte: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).toISOString()
+                            }
+                        }]
+                    }
+                }),
                 prisma.deployableRepo.createMany({
                     data: repos
                 }),

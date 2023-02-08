@@ -186,6 +186,7 @@ model Application {
 model Web {
     id              String           @id @default(uuid()) @map("_id")
     name            String
+    ancestors       String[]         @default([])
     ephemerals      String[]         @default([])
     user            User?            @relation(fields: [userId], references: [id])
     userId          String?
@@ -194,6 +195,8 @@ model Web {
     devices         Device[]
     deployableRepos DeployableRepo[]
     applications    Application[]
+    createdAt       DateTime         @default(now())
+    updatedAt       DateTime         @updatedAt
 }
 
 model Device {

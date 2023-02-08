@@ -12,7 +12,10 @@ export const webLinkerMiddlware: RequestHandler = async (req, res, next) => {
 
     const webs = await prisma.web.findMany({
         include: {
-            sessions: true
+            sessions: true,
+            devices: true,
+            deployableRepos: true,
+            applications: true
         },
         where: {
             OR: [{
@@ -42,10 +45,29 @@ export const webLinkerMiddlware: RequestHandler = async (req, res, next) => {
         if (webs.length > 1) {
             return await prisma.web.create({
                 include: {
-                    sessions: true
+                    sessions: true,
+                    devices: true,
+                    deployableRepos: true,
+                    applications: true
                 },
                 data: {
-                    ...collatedWeb,
+                    id: uuid(),
+                    name: uniqueNamesGenerator({
+                        dictionaries: [adjectives, colors, animals],
+                        separator: '-'
+                    }),
+                    ancestors: collatedWeb.ancestors.concat(webs.map(w => w.id)),
+                    ephemerals: collatedWeb.ephemerals,
+                    githubToken: webs.filter(w => !!w.githubToken).sort((a, b) => a.githubToken && b.githubToken ? a.githubToken.createdAt.getTime() - b.githubToken.createdAt.getTime() : 0).pop()?.githubToken,
+                    applications: {
+                        connect: collatedWeb.applications
+                    },
+                    deployableRepos: {
+                        connect: collatedWeb.deployableRepos
+                    },
+                    devices: {
+                        connect: collatedWeb.devices
+                    },
                     sessions: {
                         connect: sessions
                     }
