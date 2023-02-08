@@ -22,5 +22,8 @@
     },
     "dependencies": {
         "asbuild": "^0.2"
+    },
+    "peerDependencies": {
+        "assemblyscript": "^0.19"
     }
 }

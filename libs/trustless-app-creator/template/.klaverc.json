@@ -9,7 +9,7 @@
             "name": "Hello World",
             "version": "0.0.1",
             "targetSdk": "1.1",
-            "root": "/apps/hello_world"
+            "rootDir": "/apps/hello_world"
         }
     ]
 }
