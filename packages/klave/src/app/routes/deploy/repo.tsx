@@ -9,7 +9,7 @@ export const Select: FC = () => {
     const navigate = useNavigate();
     const repoInfo = useParams() as { owner: string, name: string };
     const { data: repoData, isLoading } = api.v0.repos.getRepo.useQuery(repoInfo);
-    const { mutate, isLoading: isTriggeringDeploy, isSuccess: hasTriggeredDeploy, error: mutationError } = api.v0.applications.deployFromRepo.useMutation({
+    const { mutate, isLoading: isTriggeringDeploy, isSuccess: hasTriggeredDeploy, error: mutationError } = api.v0.applications.register.useMutation({
         onSuccess: () => navigate('/')
     });
     const { register, handleSubmit, watch } = useForm<{ applications: string[] }>();
@@ -35,7 +35,7 @@ export const Select: FC = () => {
             </div>
         </>;
 
-    const startDeploy = ({ applications }: FieldValues) => {
+    const registerApplication = ({ applications }: FieldValues) => {
         if (hasTriggeredDeploy)
             return;
         mutate({
@@ -53,7 +53,7 @@ export const Select: FC = () => {
             Make your selection and be ready in minutes<br />
             <br />
             {/* <pre className='text-left w-1/2 bg-slate-200 m-auto p-5'>{JSON.stringify(repoData.config ?? repoData.configError, null, 4)}</pre> */}
-            <form onSubmit={handleSubmit(startDeploy)} >
+            <form onSubmit={handleSubmit(registerApplication)} >
                 {(repoData.config?.applications ?? []).map((app, index) => {
                     return <div key={index} className='a-like rounded-full bg-slate-200 hover:bg-slate-300 checked:bg-slate-500 mx-1'>
                         <input id={`application-${index}`} type="checkbox" value={app.name} {...register('applications')} className='mr-3' />

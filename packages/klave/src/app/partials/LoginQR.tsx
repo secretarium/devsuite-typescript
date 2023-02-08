@@ -12,7 +12,8 @@ export const LoginQR: FC = () => {
     const [uuidBeacon, setUuidBeacon] = useState<string>();
     const [addressDestination, setAddressDestination] = useState<string>();
     const [socketUrl] = useState(`ws://${window.location.host}/api/bridge`);
-
+    const codeValue = `cryptx_check#${addressDestination}#${uuidBeacon}#${uuidLocator}`;
+    console.log(codeValue);
     const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
         reconnectAttempts: 5,
         reconnectInterval: 1,
@@ -53,7 +54,7 @@ export const LoginQR: FC = () => {
     return <div id="login">
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-            <div className="pt-12 pb-12 md:pt-20 md:pb-20">
+            <div className="pt-8 pb-12 md:pt-12 md:pb-20">
                 <div className="text-center pb-12 md:pb-16">
                     <br />
                     <div className='pb-5' >
@@ -69,7 +70,7 @@ export const LoginQR: FC = () => {
                     {isConnected && addressDestination && uuidBeacon && uuidLocator
                         ? <div className='relative h-[300px]'>
                             <span className='absolute block overflow-hidden top-0 left-[calc(50%-150px)] w-[300px] h-[300px]'>
-                                <QRCode level='Q' value={`cryptx_check#${addressDestination}#${uuidBeacon}#${uuidLocator}`} size={300} onClick={handleClickSendMessage} />
+                                <QRCode level='Q' value={codeValue} size={300} onClick={handleClickSendMessage} />
                             </span>
                             <span className='absolute block overflow-hidden rounded-full p-5 pt-6 top-[calc(160px-55px)] left-[calc(50%-35px)] w-[80px] h-[80px] bg-white'>
                                 <img alt='Secretarium' src={secretariumLogo} />

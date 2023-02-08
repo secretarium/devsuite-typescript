@@ -25,14 +25,14 @@ export const Index: FC = () => {
     githubAuth.searchParams.append('client_id', 'Iv1.6ff39dee83590f91');
     githubAuth.searchParams.append('scope', 'read:user,read:gpg_key,read:public_key,repo');
     githubAuth.searchParams.append('state', state);
-    githubAuth.searchParams.append('redirect_uri', encodeURI('http://localhost:4220/auth'));
+    githubAuth.searchParams.append('redirect_uri', encodeURI('http://127.0.0.1:4220/auth'));
 
     const gitlabAuth = new URL('https://gitlab.com/oauth/authorize');
     githubAuth.searchParams.append('client_id', 'Iv1.6ff39dee83590f91');
     githubAuth.searchParams.append('response_type', 'code');
     githubAuth.searchParams.append('scope', 'read:user,read:gpg_key,read:public_key,repo');
     githubAuth.searchParams.append('state', state);
-    githubAuth.searchParams.append('redirect_uri', encodeURI('http://localhost:4220/auth'));
+    githubAuth.searchParams.append('redirect_uri', encodeURI('http://127.0.0.1:4220/auth'));
 
     return <>
         <div className='pb-5'>

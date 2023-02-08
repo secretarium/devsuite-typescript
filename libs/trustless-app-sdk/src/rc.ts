@@ -8,7 +8,8 @@ export const klaveRcConfigurationSchema = z.object({
     targetSdk: z.string().optional(),
     applications: z.array(z.object({
         name: z.string(),
-        index: z.string().optional(),
+        version: z.string(),
+        index: z.string().regex(/^[0-9]*?\.[0-9]*?\.[0-9]*?$/gm),
         branch: z.string().optional(),
         rootDir: z.string().optional(),
         targetSdk: z.string().optional()

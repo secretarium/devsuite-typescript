@@ -11,7 +11,7 @@ export const apiClientOptions = {
             url: '/api/trpc',
             headers() {
                 return {
-                    'X-Trustless-Store-Ephemeral-Tag': window.localStorage.getItem('emphemeralSessionTag') ?? undefined
+                    'x-trustless-klave-ephemeral-tag': window.localStorage.getItem('emphemeralSessionTag') ?? undefined
                 };
             }
         })

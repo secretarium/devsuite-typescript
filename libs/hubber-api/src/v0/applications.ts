@@ -33,7 +33,7 @@ export const applicationRouter = createTRPCRouter({
                 }
             });
         }),
-    deployFromRepo: publicProcedure
+    register: publicProcedure
         .input(z.object({
             repoId: z.string().uuid(),
             applications: z.array(z.string()),
@@ -72,7 +72,7 @@ export const applicationRouter = createTRPCRouter({
                             config: JSON.parse(newConfig)
                         }
                     });
-                    const application = await tx.application.create({
+                    /* const application = */ await tx.application.create({
                         data: {
                             web: {
                                 connect: {
@@ -90,30 +90,30 @@ export const applicationRouter = createTRPCRouter({
                             author: emphemeralSessionTag ?? sessionID
                         }
                     });
-                    const deployment = await tx.deployment.create({
-                        data: {
-                            locations: ['FR'],
-                            application: {
-                                connect: { id: application.id }
-                            }
-                        }
-                    });
-                    await tx.activityLog.create({
-                        data: {
-                            class: 'deployment',
-                            application: {
-                                connect: {
-                                    id: application.id
-                                }
-                            },
-                            context: {
-                                type: 'start',
-                                payload: {
-                                    deploymentId: deployment.id
-                                }
-                            }
-                        }
-                    });
+                    // const deployment = await tx.deployment.create({
+                    //     data: {
+                    //         locations: ['FR'],
+                    //         application: {
+                    //             connect: { id: application.id }
+                    //         }
+                    //     }
+                    // });
+                    // await tx.activityLog.create({
+                    //     data: {
+                    //         class: 'deployment',
+                    //         application: {
+                    //             connect: {
+                    //                 id: application.id
+                    //             }
+                    //         },
+                    //         context: {
+                    //             type: 'start',
+                    //             payload: {
+                    //                 deploymentId: deployment.id
+                    //             }
+                    //         }
+                    //     }
+                    // });
                 });
                 if (user === undefined)
                     await new Promise<void>((resolve, reject) => {

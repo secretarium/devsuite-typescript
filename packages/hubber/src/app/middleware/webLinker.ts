@@ -1,5 +1,6 @@
 import { RequestHandler } from 'express-serve-static-core';
 import { uniqueNamesGenerator, adjectives, colors, animals } from 'unique-names-generator';
+import deepmerge from 'deepmerge';
 import { prisma } from '@secretarium/hubber-db';
 import { v4 as uuid } from 'uuid';
 
@@ -9,7 +10,7 @@ export const webLinkerMiddlware: RequestHandler = async (req, res, next) => {
     const ephemeralTag = headers['x-trustless-klave-ephemeral-tag']?.toString();
     const { localId } = session as any as Record<string, string>;
 
-    const web = await prisma.web.findFirst({
+    const webs = await prisma.web.findMany({
         include: {
             sessions: true
         },
@@ -33,6 +34,26 @@ export const webLinkerMiddlware: RequestHandler = async (req, res, next) => {
             }]
         }
     });
+
+    const web = await (async () => {
+        if (webs.length === 1)
+            return webs[0];
+        const { sessions, ...collatedWeb } = deepmerge.all<typeof webs[number]>(webs);
+        if (webs.length > 1) {
+            return await prisma.web.create({
+                include: {
+                    sessions: true
+                },
+                data: {
+                    ...collatedWeb,
+                    sessions: {
+                        connect: sessions
+                    }
+                }
+            });
+        }
+        return null;
+    })();
 
     await new Promise(resolve => session.save(resolve));
 

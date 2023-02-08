@@ -1,5 +1,6 @@
 import { FC, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import * as AlertDialog from '@radix-ui/react-alert-dialog';
 import { UilCheckCircle, UilGlobe, UilPlus, UilSpinner, UilTimesCircle, UilTrash } from '@iconscout/react-unicons';
 import api from '../../utils/api';
 import { Domain } from '@prisma/client';
@@ -7,12 +8,57 @@ import { useZodForm } from '../../utils/useZodForm';
 import z from 'zod';
 import { formatTimeAgo } from '../../utils/formatTimeAgo';
 
+type DomainContextProps = {
+    domain: Domain
+}
+
+const DomainDeletion: FC<DomainContextProps> = ({ domain: { id } }) => {
+
+    const utils = api.useContext().v0.domains;
+    const mutation = api.v0.domains.delete.useMutation({
+        onSuccess: async () => {
+            await utils.getByApplication.invalidate();
+            await utils.getAll.invalidate();
+        }
+    });
+
+    const deleteDomain = async (domainId: Domain['id']) => {
+        await mutation.mutateAsync({ domainId });
+    };
+
+    return <AlertDialog.Root>
+        <AlertDialog.Trigger asChild>
+            <button title='Delete' className="h-8 inline-flex items-center justify-center font-normal text-red-400 mt-auto">
+                <UilTrash className='inline-block h-full' />
+            </button>
+        </AlertDialog.Trigger>
+        <AlertDialog.Portal>
+            <AlertDialog.Overlay className="AlertDialogOverlay" />
+            <AlertDialog.Content className="AlertDialogContent">
+                <AlertDialog.Title className="AlertDialogTitle">Are you absolutely sure?</AlertDialog.Title>
+                <AlertDialog.Description className="AlertDialogDescription">
+                    This action cannot be undone. This will permanently delete this domain validation.
+                </AlertDialog.Description>
+                <div style={{ display: 'flex', gap: 25, justifyContent: 'flex-end' }}>
+                    <AlertDialog.Cancel asChild>
+                        <button className="Button">Cancel</button>
+                    </AlertDialog.Cancel>
+                    <AlertDialog.Action asChild>
+                        <button className="Button bg-red-700 text-white" onClick={() => deleteDomain(id)}>Yes, delete domain</button>
+                    </AlertDialog.Action>
+                </div>
+            </AlertDialog.Content>
+        </AlertDialog.Portal>
+    </AlertDialog.Root>;
+};
+
 type DomainRecordProps = {
     domain: Domain
 }
 
-const DomainRecord: FC<DomainRecordProps> = ({ domain: { id, fqdn, verified, updatedAt } }) => {
+const DomainRecord: FC<DomainRecordProps> = ({ domain }) => {
 
+    const { id, fqdn, verified, updatedAt } = domain;
     const utils = api.useContext().v0.domains;
     const mutation = api.v0.domains.validate.useMutation({
         onSuccess: async () => {
@@ -41,14 +87,12 @@ const DomainRecord: FC<DomainRecordProps> = ({ domain: { id, fqdn, verified, upd
             </div>
         </td>
         <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 text-right">
-            <div className='flex align-middle'>
+            <div className='flex flex-row flex-nowrap justify-end'>
                 <button className="h-8 inline-flex items-center justify-center font-normal text-gray-400 ml-auto" onClick={() => validate(id)}>
                     {mutation.isLoading ? <UilSpinner className='inline-block animate-spin h-4' /> : 'Revalidate'}
                 </button>
                 &nbsp;&nbsp;
-                <button title='Delete' className="h-8 inline-flex items-center justify-center font-normal text-red-400 mt-auto" onClick={() => validate(id)}>
-                    <UilTrash className='inline-block h-full' />
-                </button>
+                <DomainDeletion domain={domain} />
             </div>
         </td>
     </tr>;

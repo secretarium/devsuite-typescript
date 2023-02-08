@@ -37,7 +37,7 @@ export const start = (port?: number) => {
     app.use(morganLoggerMiddleware);
     app.use(rateLimiterMiddleware);
     app.use(cors({
-        origin: ['chrome-extension://', `http://localhost:${port}`],
+        origin: ['chrome-extension://', `http://localhost:${port}`, `http://127.0.0.1:${port}`],
         credentials: true
     }));
     app.use(express.json());

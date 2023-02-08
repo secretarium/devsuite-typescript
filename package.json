@@ -60,6 +60,7 @@
         "cross-spawn": "7.0.3",
         "csrf-csrf": "2.2.2",
         "csrf-sync": "3.1.0",
+        "daisyui": "2.50.0",
         "expo": "47.0.13",
         "expo-barcode-scanner": "~12.1.0",
         "expo-build-properties": "~0.4.1",

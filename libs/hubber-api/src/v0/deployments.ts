@@ -48,6 +48,24 @@ export const deploymentRouter = createTRPCRouter({
             });
             return;
 
+        }),
+    release: publicProcedure
+        .input(z.object({
+            deploymentId: z.string()
+        }))
+        .mutation(async ({ ctx: { prisma }, input: { deploymentId } }) => {
+
+            await prisma.deployment.update({
+                where: {
+                    id: deploymentId
+                },
+                data: {
+                    released: true,
+                    life: 'long'
+                }
+            });
+            return;
+
         })
 });
 

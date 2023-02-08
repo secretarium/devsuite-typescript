@@ -21,9 +21,10 @@ registerInstrumentations({
     instrumentations: [
         new DocumentLoadInstrumentation(),
         new XMLHttpRequestInstrumentation({
-            ignoreUrls: [/localhost/],
+            ignoreUrls: [/localhost/, /127.0.0.1/],
             propagateTraceHeaderCorsUrls: [
-                'http://localhost:3333'
+                'http://localhost:3333',
+                'http://127.0.0.1:3333'
             ]
         })
     ]

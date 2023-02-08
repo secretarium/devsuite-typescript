@@ -13,7 +13,7 @@ export const AppDataSource = {
             return;
         } catch (e) {
             logger.error(i18n.t('errors:DB_CONNECT_ERROR'));
-            return null;
+            throw new Error(i18n.t('errors:DB_CONNECT_ERROR') || '');
         }
     },
     stop: async () => {
