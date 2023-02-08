@@ -54,7 +54,10 @@
                 "preset": "conventional",
                 "trackDeps": true,
                 "tagPrefix": "${projectName}@",
-                "commitMessageFormat": "chore(${projectName}): Release version ${version}"
+                "commitMessageFormat": "chore(${projectName}): Release version ${version}",
+                "postTargets": [
+                    "trustless-app-creator:build"
+                ]
             }
         }
     },
