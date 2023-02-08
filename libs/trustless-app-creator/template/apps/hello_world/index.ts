@@ -7,7 +7,6 @@ export const my_query: Klave.Query = (arg) => {
 
 export const my_transaction: Klave.Transaction = (arg) => {
     const s = String.UTF8.decode(arg, true);
-    console.warn('plop');
     Klave.notify(String.UTF8.encode('Hello ' + s, true));
 };
 
