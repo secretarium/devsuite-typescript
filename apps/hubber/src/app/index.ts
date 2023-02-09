@@ -48,7 +48,7 @@ export const start = (port?: number) => {
     app.disable('x-powered-by');
 
     // Plug Probot for GitHub Apps
-    app.use('/hook', probotMiddleware);
+    app.use('/api/hook', probotMiddleware);
 
     // const {
     //     generateToken,
@@ -84,7 +84,7 @@ export const start = (port?: number) => {
         sessionOptions.cookie = { secure: true }; // serve secure cookies
     }
 
-    app.get('/ping', (req, res) => {
+    app.get('/api/ping', (req, res) => {
         res.json({ pong: true });
     });
     app.use(session(sessionOptions));
@@ -96,7 +96,7 @@ export const start = (port?: number) => {
     // Contextualise user session, devices, tags, tokens
     app.use(webLinkerMiddlware);
 
-    app.ws('/bridge', (ws, { session, sessionID, sessionStore }) => {
+    app.ws('/api/bridge', (ws, { session, sessionID, sessionStore }) => {
         logger.info('Wassssup ? ...');
         (ws as any).sessionID = sessionID;
         ws.on('connection', (ws) => {
@@ -136,9 +136,9 @@ export const start = (port?: number) => {
     });
 
     app.use(passportLoginCheckMiddleware);
-    app.use('/trpc', trcpMiddlware);
-    app.use(usersRouter);
-    app.use(filesRouter);
+    app.use('/api/trpc', trcpMiddlware);
+    app.use('/api', usersRouter);
+    app.use('/api', filesRouter);
 
     app.use(sentryErrorMiddleware);
 
