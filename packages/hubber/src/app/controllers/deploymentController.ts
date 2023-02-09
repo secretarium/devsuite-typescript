@@ -95,7 +95,7 @@ export const deployToSubstrate = async ({ octokit, ...context }: DeploymentConte
             });
 
             (new Promise((resolve, reject) => {
-                setTimeout(reject, 180000);
+                setTimeout(reject, 10000);
                 return prisma.deployment.update({
                     where: {
                         id: deployment.id
@@ -123,6 +123,8 @@ export const deployToSubstrate = async ({ octokit, ...context }: DeploymentConte
 
             try {
 
+                console.log('availableApplicationsConfig', application.name, availableApplicationsConfig);
+                console.log('Fetching repo content...', `${availableApplicationsConfig[application.name].rootDir}`, context.commit.ref);
                 const handle = await octokit.repos.getContent({
                     owner: repo.owner,
                     repo: repo.name,
@@ -147,37 +149,76 @@ export const deployToSubstrate = async ({ octokit, ...context }: DeploymentConte
                 });
 
                 let compileBinary = new Uint8Array(0);
-                const compileOutput = await new Promise((resolve) => {
-                    console.log('starting compilation...', compilableFiles);
-                    asb.main([
-                        'build',
-                        '.',
-                        '--wat'
-                    ], {
-                        stdout: process.stdout,
-                        stderr: process.stderr,
-                        reportDiagnostic: (diagnostic) => {
-                            console.log(diagnostic);
-                            console.log(diagnostic.message);
-                        },
-                        readFile(filename, baseDir) {
-                            console.log('Reading the FILE from...', filename, baseDir);
-                            if (filename === 'asconfig.json')
-                                return '{}';
-                            console.log('CONTENT...\n', source.data.toString());
-                            return source.data.toString();
-                        },
-                        writeFile(filename, contents) {
-                            console.log('Writing the content off the compiler', filename);
+                // const compileOutput = await new Promise((resolve) => {
+                console.log('starting compilation...', compilableFiles);
+                // const { default: asc } = (await import('assemblyscript/dist/asc.js'));
+                // console.log('starting compilation...', asc);
+                // const compileOutput = await asc.main([
+                const compileOutput = await asb.main([
+                    'build',
+                    '.',
+                    // '--wat',
+                    // '--verbose',
+                    // '--',
+                    // '--debug',
+                    // '--bindings', 'esm',
+                    '--stats',
+                    // '--bindings', 'esm',
+                    '--disable', 'bulk-memory'
+                ], {
+                    stdout: process.stdout,
+                    stderr: process.stderr,
+                    reportDiagnostic: (diagnostic) => {
+                        console.log(diagnostic);
+                        console.log(diagnostic.message);
+                    },
+                    readFile(filename, baseDir) {
+                        console.log('Reading the FILE from...', filename, baseDir);
+                        if (filename === 'asconfig.json')
+                            // return '{}';
+                            return `
+                            {
+                                "options": {
+                                    "bindings": "esm",
+                                    "disable": "bulk-memory"
+                                }
+                            }`;
+                        // return `
+                        // {
+                        //     "targets": {
+                        //         "debug": {
+                        //             "sourceMap": true,
+                        //             "debug": true
+                        //         },
+                        //         "release": {
+                        //             "sourceMap": true,
+                        //             "optimizeLevel": 3,
+                        //             "shrinkLevel": 0,
+                        //             "converge": false,
+                        //             "noAssert": false
+                        //         }
+                        //     },
+                        //     "options": {
+                        //         "bindings": "esm",
+                        //         "disable": "bulk-memory"
+                        //     }
+                        // }`;
+                        console.log('CONTENT...\n', source.data.toString());
+                        return source.data.toString();
+                    },
+                    writeFile(filename, contents) {
+                        console.log('Writing the content off the compiler', filename);
+                        if (filename.includes('.wasm'))
                             compileBinary = contents;
-                        }
-                    }, result => {
-                        console.log('Compilation output', result);
-                        resolve(result);
-                        return 0;
-                    });
+                    }
+                    // }, result => {
+                    //     console.log('Compilation output', result);
+                    //     resolve(result);
+                    //     return 0;
                 });
+                // });
 
+                console.log('>>>>>>>\n', compileBinary.length);
                 if (compileBinary.length === 0)
                     return;
 
@@ -185,11 +226,14 @@ export const deployToSubstrate = async ({ octokit, ...context }: DeploymentConte
                 console.log('>>>>>>>\n', compileBinary.length);
 
                 await secretariumClient.newTx('wasm-app', 'register_smart_contract', `klave-deployment-${deployment.id}`, {
-                    name: `${deployment.id.split('-').pop()}.sta.klave.network`,
-                    wasm_bytes: [],
-                    wasm_bytes_b64: Utils.toBase64(compileBinary)
+                    contract: {
+                        name: `${deployment.id.split('-').pop()}.sta.klave.network`,
+                        wasm_bytes: [],
+                        wasm_bytes_b64: Utils.toBase64(compileBinary)
+                    }
                 }).onExecuted(async () => {
-                    return await prisma.deployment.update({
+                    console.log('Updating deployment status');
+                    const updated = await prisma.deployment.update({
                         where: {
                             id: deployment.id
                         },
@@ -197,14 +241,16 @@ export const deployToSubstrate = async ({ octokit, ...context }: DeploymentConte
                             status: 'deployed'
                         }
                     });
+                    console.log('updated', updated);
                 }).onError((error) => {
                     console.error('Secretarium failed', error);
                     // Timeout will eventually error this
                 }).send();
 
-                console.log('DEPLOYEMENT FINISHED', compileOutput);
+                console.log('DEPLOYEMENT FINISHED');
 
             } catch (error) {
+                console.error(error);
                 // Timeout will eventually error this
             }
         };

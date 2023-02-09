@@ -13,8 +13,10 @@ export const Select: FC = () => {
         onSuccess: () => navigate('/')
     });
     const { register, handleSubmit, watch } = useForm<{ applications: string[] }>();
-    const appSelectionWatch = watch('applications', []);
+    let appSelectionWatch = watch('applications');
+    appSelectionWatch = (Array.isArray(appSelectionWatch) ? appSelectionWatch : [appSelectionWatch]).filter(Boolean);
 
+    console.log(appSelectionWatch);
     if (isLoading || !repoData)
         return <>
             <div className='pb-5' >
@@ -38,6 +40,8 @@ export const Select: FC = () => {
     const registerApplication = ({ applications }: FieldValues) => {
         if (hasTriggeredDeploy)
             return;
+        applications = (Array.isArray(applications) ? applications : [applications]).filter(Boolean);
+        console.log(applications);
         mutate({
             repoId: repoData.id,
             applications

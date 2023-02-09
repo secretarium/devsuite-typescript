@@ -113,7 +113,7 @@ model Deployment {
     tags          String[]         @default([])
     createdAt     DateTime         @default(now())
     updatedAt     DateTime         @updatedAt
-    application   Application      @relation(fields: [applicationId], references: [id])
+    application   Application      @relation(fields: [applicationId], references: [id], onDelete: Cascade)
     applicationId String
 }
 
@@ -124,7 +124,7 @@ model Domain {
     verified      Boolean
     createdAt     DateTime     @default(now())
     updatedAt     DateTime     @updatedAt
-    application   Application? @relation(fields: [applicationId], references: [id])
+    application   Application? @relation(fields: [applicationId], references: [id], onDelete: Cascade)
     applicationId String?
 }
 
@@ -152,7 +152,7 @@ type ActivityLogRecord {
 
 model ActivityLog {
     id            String            @id @default(uuid()) @map("_id")
-    application   Application       @relation(fields: [applicationId], references: [id])
+    application   Application       @relation(fields: [applicationId], references: [id], onDelete: Cascade)
     applicationId String
     class         ActivityLogClass
     context       ActivityLogRecord

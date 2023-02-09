@@ -95,7 +95,9 @@ const DeploymentDeletion: FC<DeploymentContextProps> = ({ deployment: { id } }) 
 export const Deployments: FC = () => {
 
     const { appId } = useParams();
-    const { data: deploymentList, isLoading: isLoadingDeployments } = api.v0.deployments.getByApplication.useQuery({ appId: appId || '' });
+    const { data: deploymentList, isLoading: isLoadingDeployments } = api.v0.deployments.getByApplication.useQuery({ appId: appId || '' }, {
+        refetchInterval: 5000
+    });
 
     if (isLoadingDeployments || !deploymentList)
         return <>
@@ -147,7 +149,7 @@ export const Deployments: FC = () => {
                         <td className={'sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800'}>
                             <span className='font-mono inline-block rounded dark:text-slate-400 dark:bg-slate-800 text-slate-900 bg-slate-100 px-2 py-1 mb-1 whitespace-nowrap'>{id.split('-').pop()}.sta.klave.network</span><br />
                             <span className={`rounded inline-block text-xs px-1 py-0 mr-2 text-white ${life === 'long' ? 'bg-green-600' : 'bg-slate-500'}`}>{life === 'long' ? 'Production' : 'Preview'}</span>
-                            <span className={`rounded inline-block text-xs px-1 py-0 text-white ${status === 'errored' ? 'bg-red-700' : 'bg-blue-500'}`}>{status}</span>
+                            <span className={`rounded inline-block text-xs px-1 py-0 text-white ${status === 'errored' ? 'bg-red-700' : status === 'deployed' ? 'bg-blue-500' : 'bg-stone-300'}`}>{status}</span>
                         </td>
                         {/* <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">{life === 'long' ? 'prod' : 'dev'}</td> */}
                         {/* <td className={'sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800'}>{status}</td> */}

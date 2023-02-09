@@ -57,66 +57,68 @@ export const applicationRouter = createTRPCRouter({
                 throw (new Error('There is no configuration repo'));
 
             applications.forEach(async appName => {
-                await prisma.$transaction(async (tx) => {
-                    const repo = await tx.repo.upsert({
-                        where: {
-                            owner_name: {
-                                owner: deployableRepoData.owner,
-                                name: deployableRepoData.name
+                // await prisma.$transaction(async (tx) => {
+                // const repo = await tx.repo.upsert({
+                const repo = await prisma.repo.upsert({
+                    where: {
+                        owner_name: {
+                            owner: deployableRepoData.owner,
+                            name: deployableRepoData.name
+                        }
+                    },
+                    update: {
+                        config: JSON.parse(newConfig)
+                    },
+                    create: {
+                        owner: deployableRepoData.owner,
+                        name: deployableRepoData.name,
+                        config: JSON.parse(newConfig)
+                    }
+                });
+                    // /* const application = */ await tx.application.create({
+                    /* const application = */ await prisma.application.create({
+                    data: {
+                        web: {
+                            connect: {
+                                id: webId
                             }
                         },
-                        update: {
-                            config: JSON.parse(newConfig)
+                        name: appName,
+                        repo: {
+                            connect: {
+                                id: repo.id
+                            }
                         },
-                        create: {
-                            owner: deployableRepoData.owner,
-                            name: deployableRepoData.name,
-                            config: JSON.parse(newConfig)
-                        }
-                    });
-                    /* const application = */ await tx.application.create({
-                        data: {
-                            web: {
-                                connect: {
-                                    id: webId
-                                }
-                            },
-                            name: appName,
-                            repo: {
-                                connect: {
-                                    id: repo.id
-                                }
-                            },
-                            catogories: [],
-                            tags: [],
-                            author: emphemeralSessionTag ?? sessionID
-                        }
-                    });
-                    // const deployment = await tx.deployment.create({
-                    //     data: {
-                    //         locations: ['FR'],
-                    //         application: {
-                    //             connect: { id: application.id }
-                    //         }
-                    //     }
-                    // });
-                    // await tx.activityLog.create({
-                    //     data: {
-                    //         class: 'deployment',
-                    //         application: {
-                    //             connect: {
-                    //                 id: application.id
-                    //             }
-                    //         },
-                    //         context: {
-                    //             type: 'start',
-                    //             payload: {
-                    //                 deploymentId: deployment.id
-                    //             }
-                    //         }
-                    //     }
-                    // });
+                        catogories: [],
+                        tags: [],
+                        author: emphemeralSessionTag ?? sessionID
+                    }
                 });
+                // const deployment = await tx.deployment.create({
+                //     data: {
+                //         locations: ['FR'],
+                //         application: {
+                //             connect: { id: application.id }
+                //         }
+                //     }
+                // });
+                // await tx.activityLog.create({
+                //     data: {
+                //         class: 'deployment',
+                //         application: {
+                //             connect: {
+                //                 id: application.id
+                //             }
+                //         },
+                //         context: {
+                //             type: 'start',
+                //             payload: {
+                //                 deploymentId: deployment.id
+                //             }
+                //         }
+                //     }
+                // });
+                // });
                 if (user === undefined)
                     await new Promise<void>((resolve, reject) => {
                         sessionStore.set(sessionID, {
