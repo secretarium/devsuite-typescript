@@ -50,7 +50,7 @@ Thumbs.db
 
 # Locally scoped env
 .env*local
-packages/pocket-e2e/artifacts
+apps/pocket-e2e/artifacts
 
 # Next.js
 .next

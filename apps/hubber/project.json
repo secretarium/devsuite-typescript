@@ -1,0 +1,75 @@
+{
+    "name": "hubber",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "apps/hubber/src",
+    "projectType": "application",
+    "targets": {
+        "build": {
+            "executor": "@nrwl/node:webpack",
+            "outputs": [
+                "{options.outputPath}"
+            ],
+            "options": {
+                "outputPath": "dist/apps/hubber",
+                "main": "apps/hubber/src/main.ts",
+                "tsConfig": "apps/hubber/tsconfig.app.json",
+                "assets": [
+                    "apps/hubber/src/i18n/locales"
+                ]
+            },
+            "configurations": {
+                "production": {
+                    "optimization": true,
+                    "extractLicenses": true,
+                    "inspect": false,
+                    "fileReplacements": [
+                        {
+                            "replace": "apps/hubber/src/environments/environment.ts",
+                            "with": "apps/hubber/src/environments/environment.prod.ts"
+                        }
+                    ]
+                }
+            }
+        },
+        "serve": {
+            "executor": "@nrwl/node:node",
+            "options": {
+                "buildTarget": "hubber:build"
+            },
+            "configurations": {
+                "production": {
+                    "buildTarget": "hubber:build:production"
+                }
+            }
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "outputs": [
+                "{options.outputFile}"
+            ],
+            "options": {
+                "lintFilePatterns": [
+                    "apps/hubber/**/*.ts"
+                ]
+            }
+        },
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "outputs": [
+                "{workspaceRoot}/coverage/apps/hubber"
+            ],
+            "options": {
+                "jestConfig": "apps/hubber/jest.config.ts",
+                "passWithNoTests": true
+            }
+        },
+        "version": {
+            "executor": "@jscutlery/semver:version",
+            "options": {
+                "preset": "conventional",
+                "trackDeps": true
+            }
+        }
+    },
+    "tags": []
+}

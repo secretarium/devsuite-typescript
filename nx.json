@@ -80,6 +80,7 @@
             "application": {
                 "style": "css",
                 "linter": "eslint",
+                "bundler": "vite",
                 "babel": true
             },
             "component": {

@@ -1,0 +1,54 @@
+{
+    "name": "connector",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "libs/connector/src",
+    "projectType": "library",
+    "targets": {
+        "build": {
+            "executor": "@nrwl/js:tsc",
+            "outputs": [
+                "{options.outputPath}"
+            ],
+            "options": {
+                "outputPath": "dist/libs/connector",
+                "tsConfig": "libs/connector/tsconfig.lib.json",
+                "packageJson": "libs/connector/package.json",
+                "main": "libs/connector/src/index.ts",
+                "assets": [
+                    "libs/connector/*.md"
+                ]
+            }
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "options": {
+                "lintFilePatterns": [
+                    "libs/connector/**/*.{ts,tsx,js,jsx,json}"
+                ]
+            },
+            "outputs": [
+                "{options.outputFile}"
+            ]
+        },
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "outputs": [
+                "{workspaceRoot}/coverage/libs/connector"
+            ],
+            "options": {
+                "jestConfig": "libs/connector/jest.config.ts",
+                "passWithNoTests": true
+            }
+        },
+        "version": {
+            "executor": "@jscutlery/semver:version",
+            "options": {
+                "preset": "conventional",
+                "trackDeps": true
+            }
+        }
+    },
+    "tags": [
+        "scope:sdk"
+    ]
+}
