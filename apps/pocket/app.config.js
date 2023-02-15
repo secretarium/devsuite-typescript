@@ -145,7 +145,11 @@ export default {
                 'expo-build-properties',
                 {
                     android: {
-                        enableProguardInReleaseBuilds: true
+                        enableProguardInReleaseBuilds: true,
+                        newArchEnabled: true
+                    },
+                    ios: {
+                        newArchEnabled: true
                     }
                 }
             ]
