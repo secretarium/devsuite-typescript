@@ -54,7 +54,7 @@ module.exports = {
         ]
     },
     ignorePatterns: ['**/*', '!**/*.json', '!**/*.js', '!**/*.ts', '!scripts', '!tools', '!.vscode'],
-    plugins: ['@nrwl/nx', 'vitest-globals', 'json'],
+    plugins: ['@nrwl/nx', 'json'],
     overrides: [
         {
             files: ['*.ts', '*.tsx'],

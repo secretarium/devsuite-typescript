@@ -10,7 +10,7 @@ import {
 import { useEffect } from 'react';
 
 Sentry.init({
-    dsn: import.meta.env['NX_SENTRY_DSN'],
+    dsn: process.env['NX_SENTRY_DSN'],
     integrations: [new BrowserTracing({
         routingInstrumentation: Sentry.reactRouterV6Instrumentation(
             useEffect,

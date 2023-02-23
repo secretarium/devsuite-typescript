@@ -45,11 +45,11 @@ export const passportLoginCheckMiddleware: RequestHandler = (req, res, next) => 
     if (user !== null) {
         next();
     } else if (
-        req.path === '/api/users/login' ||
-        req.path === '/api/login/print' ||
-        req.path === '/api/get_repos' ||
-        req.path.match(/^\/api\/trpc/) ||
-        req.path === '/api/whoami') {
+        req.path === '/users/login' ||
+        req.path === '/login/print' ||
+        req.path === '/get_repos' ||
+        req.path.match(/^\/trpc/) ||
+        req.path === '/whoami') {
         next();
     } else {
         res.status(400).json({ status: 'error', message: 'Please login first' });

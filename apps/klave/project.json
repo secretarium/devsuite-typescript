@@ -5,13 +5,29 @@
     "projectType": "application",
     "targets": {
         "build": {
-            "executor": "@nrwl/vite:build",
+            "executor": "@nrwl/webpack:webpack",
             "outputs": [
                 "{options.outputPath}"
             ],
             "defaultConfiguration": "production",
             "options": {
-                "outputPath": "dist/apps/klave"
+                "compiler": "swc",
+                "outputPath": "dist/apps/klave",
+                "index": "apps/klave/src/index.html",
+                "baseHref": "/",
+                "main": "apps/klave/src/main.tsx",
+                "polyfills": "apps/klave/src/polyfills.ts",
+                "tsConfig": "apps/klave/tsconfig.app.json",
+                "assets": [
+                    "apps/klave/src/favicon.svg",
+                    "apps/klave/src/assets"
+                ],
+                "styles": [
+                    "apps/klave/src/styles.css"
+                ],
+                "scripts": [],
+                "webpackConfig": "apps/klave/webpack.config",
+                "isolatedConfig": true
             },
             "configurations": {
                 "development": {
@@ -38,12 +54,12 @@
             }
         },
         "serve": {
-            "executor": "@nrwl/vite:dev-server",
+            "executor": "@nrwl/webpack:dev-server",
             "options": {
+                "proxyConfig": "apps/klave/proxy.config.js",
                 "buildTarget": "klave:build",
                 "hmr": true,
-                "proxyConfig": "apps/klave/proxy.config.js",
-                "logLevel": "info"
+                "port": 4220
             },
             "configurations": {
                 "development": {
@@ -56,23 +72,6 @@
                 }
             },
             "defaultConfiguration": "development"
-        },
-        "preview": {
-            "executor": "@nrwl/vite:preview-server",
-            "defaultConfiguration": "development",
-            "options": {
-                "buildTarget": "klave:build",
-                "proxyConfig": "apps/klave/proxy.config.js",
-                "logLevel": "info"
-            },
-            "configurations": {
-                "development": {
-                    "buildTarget": "klave:build:development"
-                },
-                "production": {
-                    "buildTarget": "klave:build:production"
-                }
-            }
         },
         "lint": {
             "executor": "@nrwl/linter:eslint",
