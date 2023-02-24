@@ -2,6 +2,22 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.3.0](///compare/trustless-app-sdk@0.2.1...trustless-app-sdk@0.3.0) (2023-02-24)
+
+
+### ⚠ BREAKING CHANGES
+
+* Replace SDK structure
+
+### Bug Fixes
+
+* **trustless-app-sdk:** Prevent display of peer dependency warning 59c13da
+
+
+### Miscellaneous Chores
+
+* Replace SDK structure be5add9
+
 ## [0.2.1](///compare/trustless-app-sdk@0.2.0...trustless-app-sdk@0.2.1) (2023-02-08)
 
 
