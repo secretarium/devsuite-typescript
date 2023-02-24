@@ -22,6 +22,20 @@ export const deploymentRouter = createTRPCRouter({
             });
 
         }),
+    getById: publicProcedure
+        .input(z.object({
+            deploymentId: z.string().uuid()
+        }))
+        .query(async ({ ctx: { prisma }, input: { deploymentId } }) => {
+
+            const domainList = await prisma.deployment.findUnique({
+                where: {
+                    id: deploymentId
+                }
+            });
+
+            return domainList;
+        }),
     getAll: publicProcedure
         .query(async ({ ctx: { prisma, webId } }) => {
 

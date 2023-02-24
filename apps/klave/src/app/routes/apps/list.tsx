@@ -32,7 +32,7 @@ export const AppListing: FC = () => {
         </div>
         <div className="space-y-4 mt-3">
             {applicationList.map((app, index) => {
-                const destPath = lastMatch.params['appId'] ? lastMatch.pathname.replace(lastMatch.params['appId'], app.id) : `/app/${app.id}`;
+                const destPath = lastMatch.params['appId'] ? lastMatch.pathname.split('/').filter(Boolean).slice(0, 3).join('/').replace(lastMatch.params['appId'], app.id) : `/app/${app.id}`;
                 return <NavLink to={destPath} key={index} className={({ isActive }) => `${isActive ? 'shadow-lg relative ring-2 ring-blue-500 focus:outline-none' : ''} bg-white p-3 w-full flex flex-col rounded-md dark:bg-gray-800 shadow hover:bg-gray-100 dark:hover:bg-gray-700`}>
                     <div className="flex xl:flex-row flex-col items-start font-medium text-gray-900 dark:text-white pb-2 mb-2 xl:border-b border-gray-200 border-opacity-75 dark:border-gray-700 w-full">
                         {app.name}

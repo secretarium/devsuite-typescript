@@ -16,6 +16,7 @@ import AppInfo from './routes/apps/index';
 import AppActivity from './routes/apps/activity';
 import AppDomains from './routes/apps/domains';
 import AppDeployments from './routes/apps/deployments';
+import AppDeploymentDetail from './routes/apps/deploymentDetail';
 import AppEnvironment from './routes/apps/environment';
 import AppListing from './routes/apps/listing';
 import AppSettings from './routes/apps/settings';
@@ -81,7 +82,10 @@ const router = sentryCreateBrowserRouter(
                             element={<AppInfo />}
                         >
                             <Route index element={<AppActivity />} />
-                            <Route path="deployments" element={<AppDeployments />} />
+                            <Route path="deployments">
+                                <Route path=":deploymentId" element={<AppDeploymentDetail />} />
+                                <Route index element={<AppDeployments />} />
+                            </Route>
                             <Route path="environment" element={<AppEnvironment />} />
                             <Route path="domains" element={<AppDomains />} />
                             <Route path="listing" element={<AppListing />} />

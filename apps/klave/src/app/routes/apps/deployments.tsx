@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
 import { UilSpinner, UilTrash } from '@iconscout/react-unicons';
 import api from '../../utils/api';
@@ -10,7 +10,7 @@ type DeploymentContextProps = {
     deployment: Deployment
 }
 
-const DeploymentPromotion: FC<DeploymentContextProps> = ({ deployment: { id } }) => {
+export const DeploymentPromotion: FC<DeploymentContextProps> = ({ deployment: { id } }) => {
 
     const utils = api.useContext().v0.deployments;
     const mutation = api.v0.deployments.release.useMutation({
@@ -51,7 +51,7 @@ const DeploymentPromotion: FC<DeploymentContextProps> = ({ deployment: { id } })
     </AlertDialog.Root>;
 };
 
-const DeploymentDeletion: FC<DeploymentContextProps> = ({ deployment: { id } }) => {
+export const DeploymentDeletion: FC<DeploymentContextProps> = ({ deployment: { id } }) => {
 
     const utils = api.useContext().v0.deployments;
     const mutation = api.v0.deployments.delete.useMutation({
@@ -94,6 +94,7 @@ const DeploymentDeletion: FC<DeploymentContextProps> = ({ deployment: { id } }) 
 
 export const Deployments: FC = () => {
 
+    const navigate = useNavigate();
     const { appId } = useParams();
     const { data: deploymentList, isLoading: isLoadingDeployments } = api.v0.deployments.getByApplication.useQuery({ appId: appId || '' }, {
         refetchInterval: 5000
@@ -140,7 +141,7 @@ export const Deployments: FC = () => {
             <tbody className="text-gray-600 dark:text-gray-100">
                 {deploymentList.map(deployment => {
                     const { id, createdAt, life, status, version, build } = deployment;
-                    return <tr key={id} className={['created', 'deploying', 'terminating'].includes(status) ? 'stripe-progress' : ''}>
+                    return <tr key={id} className={['created', 'deploying', 'terminating'].includes(status) ? 'stripe-progress' : 'hover:bg-slate-50 hover:cursor-pointer'} onClick={() => navigate(`./${id}`)}>
                         {/* <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 md:table-cell hidden">
                             <div className="flex items-center">
                                 <UilServerNetworkAlt className='inline-block h-4' />
