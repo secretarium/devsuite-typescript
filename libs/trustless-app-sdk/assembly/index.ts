@@ -16,10 +16,10 @@ declare function runtime_write_ledger_raw(table: ArrayBuffer, key: ArrayBuffer, 
 
 export class Router {
     static addQuery(queryFunctionName: ArrayBuffer): void {
-        return runtime_add_user_query(queryFunctionName);
+        runtime_add_user_query(queryFunctionName);
     }
     static addTransaction(transactionFunctionName: ArrayBuffer): void {
-        return runtime_add_user_transaction(transactionFunctionName);
+        runtime_add_user_transaction(transactionFunctionName);
     }
 }
 
