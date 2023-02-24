@@ -22,6 +22,6 @@
     },
     "dependencies": {
         "asbuild": "^0.2",
-        "assemblyscript": "^0.19"
+        "assemblyscript": "^0.19.3"
     }
 }
