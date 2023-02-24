@@ -86,6 +86,7 @@
         "i18next-http-middleware": "3.2.2",
         "ip": "1.1.8",
         "js-base64": "3.7.4",
+        "latest-version": "7.0.0",
         "localforage": "1.10.0",
         "match-sorter": "6.3.1",
         "mongodb": "4.13.0",

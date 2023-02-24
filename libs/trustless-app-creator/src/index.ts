@@ -13,6 +13,7 @@ import {
 import type { CommandOptions, SubstitutionData } from './lib/types';
 import { newStep } from './lib/utils';
 import packageJson from '../package.json';
+import latestVersion from 'latest-version';
 
 // `yarn run` may change the current working dir, then we should use `INIT_CWD` env.
 const CWD = process.env.INIT_CWD || process.cwd();
@@ -92,6 +93,13 @@ async function createTemplateAsync(targetDir: string, data: SubstitutionData): P
             files: path.join(targetDir, '.klaverc.json'),
             from: [/{{SMART_CONTRACT_NAME}}/g, /{{SMART_CONTRACT_SLUG}}/g],
             to: [data.project.name, data.project.slug]
+        });
+
+        const latestSDK = await latestVersion('@secretarium/trustless-app');
+        await replaceInFile({
+            files: path.join(targetDir, '.klaverc.json'),
+            from: [/{{SMART_CONTRACT_SDK_CURRENT_VERSION}}/g],
+            to: [latestSDK ?? '*']
         });
 
         step.succeed('Creating template files');

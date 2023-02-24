@@ -3,7 +3,7 @@
         "build": "stac ."
     },
     "devDependencies": {
-        "@secretarium/trustless-app": "*",
+        "@secretarium/trustless-app": "{{SMART_CONTRACT_SDK_CURRENT_VERSION}}",
         "assemblyscript": "^0.19.3"
     }
 }
