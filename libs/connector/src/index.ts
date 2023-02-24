@@ -19,4 +19,4 @@ export { SCP } from './secretarium.connector';
 export { SecretariumConnector } from './secretariumConnector';
 export * from './types';
 
-export { default as crypto, Utils } from '@secretarium/crypto';
+export { crypto, Utils } from '@secretarium/crypto';

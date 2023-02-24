@@ -37,28 +37,48 @@ const gulpTask = `
 const replace = require('gulp-replace');
 
 const secretariumBuild = [
-    "scripts/bundleHead.js",
+    "../../tools/fixtures/_msrBundleHead.js",
     "scripts/operations.js",
     "scripts/global.js",
     "scripts/utilities.js",
     "scripts/asn1.js",
     "scripts/worker.js",
+    "scripts/jwk.js",
     "scripts/cryptoMath.js",
+    "scripts/cryptoECC.js",
+    "scripts/curves_NIST.js",
+    "scripts/curves_BN.js",
+    "scripts/curves_NUMS.js",
     "scripts/sha.js",
+    "scripts/sha1.js",
     "scripts/sha256.js",
+    "scripts/sha512.js",
+    "scripts/hmac.js",
     "scripts/aes.js",
+    "scripts/aes-cbc.js",
     "scripts/aes-gcm.js",
+    "scripts/aes-kw.js",
     "scripts/random.js",
     "scripts/entropy.js",
+    "scripts/prime.js",
+    "scripts/rsa-base.js",
+    "scripts/rsa-oaep.js",
+    "scripts/rsa-pkcs1.js",
+    "scripts/rsa-pss.js",
+    "scripts/rsa.js",
+    "scripts/concat.js",
+    "scripts/pbkdf2.js",
+    "scripts/hkdf.js",
+    "scripts/hkdf-ctr.js",
     "scripts/ecdh.js",
     "scripts/ecdsa.js",
     "scripts/subtle.js",
-    "scripts/bundleTail.js",
-    "scripts/subtle/promises.js"
+    "scripts/wrapKey.js",
+    "../../tools/fixtures/_msrBundleTail.js"
 ];
 
 function compile() {
-    return gulp.src(fullBuild)
+    return gulp.src(secretariumBuild)
         .pipe(concat("msrcrypto.js"))
         .pipe(replace(/(Sometimes the result[\\s\\S]*?array \\) {)[\\s\\S]*?(return msrcryptoUtilities)/m, '$1$2'))
         .pipe(gulp.dest("lib"));
