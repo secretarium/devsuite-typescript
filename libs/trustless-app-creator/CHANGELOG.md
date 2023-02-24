@@ -2,6 +2,11 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.2.2](///compare/trustless-app-creator@0.2.1...trustless-app-creator@0.2.2) (2023-02-24)
+
+### Dependency Updates
+
+* `trustless-app-sdk` updated to version `0.3.0`
 ## [0.2.1](///compare/trustless-app-creator@0.2.0...trustless-app-creator@0.2.1) (2023-02-08)
 
 ### Dependency Updates
