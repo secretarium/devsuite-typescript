@@ -97,7 +97,7 @@ async function createTemplateAsync(targetDir: string, data: SubstitutionData): P
 
         const latestSDK = await latestVersion('@secretarium/trustless-app');
         await replaceInFile({
-            files: path.join(targetDir, '.klaverc.json'),
+            files: path.join(targetDir, 'package.json'),
             from: [/{{SMART_CONTRACT_SDK_CURRENT_VERSION}}/g],
             to: [latestSDK ?? '*']
         });
