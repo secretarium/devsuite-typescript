@@ -44,7 +44,6 @@ function useSecretariumQuery(app: string, route: string, args?: unknown) {
     }, []);
 
     useEffect(() => {
-        console.log(config.app, app);
         if (config.app !== app)
             setStatus({ loading: false, error: undefined });
         setConfig({
@@ -65,7 +64,7 @@ export const RunCommand: FC<RunCommandProps> = ({ address }) => {
 
     const [route, setRoute] = useState('');
     const [args, setArgs] = useState('');
-    const { data, loading, error, refetch } = useSecretariumQuery('jj-smart-contract', route, args);
+    const { data, loading, error, refetch } = useSecretariumQuery(address, route, args);
 
     return <>
         <h2 className='font-bold mb-3'>Command runner</h2>
@@ -78,7 +77,11 @@ export const RunCommand: FC<RunCommandProps> = ({ address }) => {
             key={`args.${address}`}
             options={{
                 minimap: { enabled: false },
-                hover: { enabled: false }
+                hover: { enabled: false },
+                suggest: {
+                    showFields: false,
+                    showFunctions: false
+                }
             }}
             theme='vs-dark'
             height="10vh"
@@ -89,12 +92,16 @@ export const RunCommand: FC<RunCommandProps> = ({ address }) => {
         <h3 className='my-3 h-5'>Application response {loading ? <UilSpinner className='inline-block animate-spin h-5' /> : ''}</h3>
         <Editor
             key={`result.${address}`}
-            value={loading ? '// executing...' : data ?? error ? `// error: ${error}` : ''}
+            value={loading ? '// executing...' : data ? JSON.stringify(data, null, 4) : error ? `// error: ${error}` : ''}
             options={{
                 minimap: { enabled: false },
                 semanticHighlighting: { enabled: false },
                 hover: { enabled: false },
-                readOnly: true
+                readOnly: true,
+                suggest: {
+                    showFields: false,
+                    showFunctions: false
+                }
             }}
             theme='vs-dark'
             height="10vh"
