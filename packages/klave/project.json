@@ -26,7 +26,8 @@
                     "packages/klave/src/styles.css"
                 ],
                 "scripts": [],
-                "webpackConfig": "packages/klave/webpack.config"
+                "webpackConfig": "packages/klave/webpack.config",
+                "isolatedConfig": true
             },
             "configurations": {
                 "development": {

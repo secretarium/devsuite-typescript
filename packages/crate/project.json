@@ -26,7 +26,8 @@
                     "packages/crate/src/styles.css"
                 ],
                 "scripts": [],
-                "webpackConfig": "packages/crate/webpack.config"
+                "webpackConfig": "packages/crate/webpack.config",
+                "isolatedConfig": true
             },
             "configurations": {
                 "production": {
