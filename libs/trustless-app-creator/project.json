@@ -1,0 +1,65 @@
+{
+    "name": "trustless-app-creator",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "libs/trustless-app-creator/src",
+    "projectType": "library",
+    "targets": {
+        "build": {
+            "executor": "@nrwl/js:swc",
+            "outputs": [
+                "{options.outputPath}"
+            ],
+            "options": {
+                "buildableProjectDepsInPackageJsonType": "dependencies",
+                "outputPath": "dist/libs/trustless-app-creator",
+                "tsConfig": "libs/trustless-app-creator/tsconfig.lib.json",
+                "packageJson": "libs/trustless-app-creator/package.json",
+                "main": "libs/trustless-app-creator/src/index.ts",
+                "assets": [
+                    {
+                        "glob": "**/(\\.*|*)",
+                        "input": "libs/trustless-app-creator/template",
+                        "output": "template",
+                        "ignore": []
+                    },
+                    "libs/trustless-app-creator/bin/*",
+                    "libs/trustless-app-creator/*.md"
+                ]
+            }
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "outputs": [
+                "{options.outputFile}"
+            ],
+            "options": {
+                "lintFilePatterns": [
+                    "libs/trustless-app-creator/**/*.ts"
+                ]
+            }
+        },
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "outputs": [
+                "{workspaceRoot}/coverage/{projectRoot}"
+            ],
+            "options": {
+                "jestConfig": "libs/trustless-app-creator/jest.config.ts",
+                "passWithNoTests": true
+            }
+        },
+        "version": {
+            "executor": "@jscutlery/semver:version",
+            "options": {
+                "preset": "conventional",
+                "trackDeps": true,
+                "tagPrefix": "${projectName}@",
+                "commitMessageFormat": "chore(${projectName}): Release version ${version}",
+                "postTargets": [
+                    "trustless-app-creator:build"
+                ]
+            }
+        }
+    },
+    "tags": []
+}

@@ -21,7 +21,7 @@ jobs:
           fetch-depth: 0
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
-        uses: nrwl/nx-set-shas@v2
+        uses: nrwl/nx-set-shas@v3
 
       - run: |
           echo "Nx base: ${{ env.NX_BASE }}"
@@ -54,11 +54,11 @@ jobs:
 
       - name: Check for lint
         run: |
-          yarn run nx affected --target=lint --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
+          yarn run nx affected --target=lint --exclude=pocket --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
 
       - name: Build the Dev Suite
         run: |
-          yarn run nx affected --target=build --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
+          yarn run nx affected --target=build --exclude=pocket --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
 
       - name: Build the Mobile Dev Client
         if: matrix.os == 'ubuntu-latest' && matrix.node == '16.x'
@@ -76,8 +76,12 @@ jobs:
 
       - name: Unit test the Dev Suite
         run: |
-          yarn run nx affected --target=test --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
+          yarn run nx affected --target=test --exclude=pocket --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
+        env:
+          CI: true
 
       - name: Execute end-to-end tests
         run: |
-          yarn run nx affected --target=e2e --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
+          yarn run nx affected --target=e2e --exclude=pocket --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
+        env:
+          CI: true

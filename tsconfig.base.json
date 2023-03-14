@@ -7,33 +7,27 @@
         "moduleResolution": "node",
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
+        "noFallthroughCasesInSwitch": true,
         "importHelpers": true,
-        "target": "es2015",
+        "target": "es2017",
         "module": "esnext",
-        "lib": [
-            "es2017",
-            "dom"
-        ],
+        "lib": ["es2017", "dom"],
         "skipLibCheck": true,
         "skipDefaultLibCheck": true,
         "forceConsistentCasingInFileNames": true,
         "resolveJsonModule": true,
         "strict": true,
+        "strictNullChecks": true,
         "baseUrl": ".",
         "paths": {
-            "@secretarium/connector": [
-                "packages/connector/src/index.ts"
-            ],
-            "@secretarium/crypto": [
-                "packages/crypto/src/index.ts"
-            ],
-            "@secretarium/react": [
-                "packages/react/src/index.ts"
+            "@secretarium/connector": ["libs/connector/src/index.ts"],
+            "@secretarium/crypto": ["libs/crypto/src/index.ts"],
+            "@secretarium/hubber-api": ["libs/hubber-api/src/index.ts"],
+            "@secretarium/hubber-db": ["libs/hubber-db/src/index.ts"],
+            "@secretarium/trustless-app": [
+                "libs/trustless-app-sdk/src/index.ts"
             ]
         }
     },
-    "exclude": [
-        "node_modules",
-        "tmp"
-    ]
+    "exclude": ["node_modules", "tmp"]
 }

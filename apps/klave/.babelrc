@@ -1,0 +1,12 @@
+{
+    "presets": [
+        [
+            "@nrwl/react/babel",
+            {
+                "runtime": "automatic",
+                "importSource": "@welldone-software/why-did-you-render"
+            }
+        ]
+    ],
+    "plugins": []
+}

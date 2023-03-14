@@ -22,28 +22,19 @@ node_modules
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
-!.vscode/extensions.json
+**/.vscode
 
 # misc
 /.sass-cache
 /connect.lock
 /coverage
 /libpeerconnection.log
-npm-debug.*
-yarn-error.*
+npm-debug.log
+yarn-error.log
 testem.log
 /typings
 /.swc
-.env.local*
-packages/pocket-e2e/artifacts
-
-# System Files
-.DS_Store
-Thumbs.db
-
-# Expo
 .expo/
-dist/
 *.jks
 *.p8
 *.p12
@@ -51,4 +42,15 @@ dist/
 *.mobileprovision
 *.orig.*
 web-build/
-apps/pocket-e2e/artifacts
+logs
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Locally scoped env
+.env*local
+packages/pocket-e2e/artifacts
+
+# Next.js
+.next

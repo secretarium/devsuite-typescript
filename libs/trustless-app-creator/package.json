@@ -1,0 +1,14 @@
+{
+    "name": "create-trustless-app",
+    "description": "The script to create Trustless application",
+    "version": "0.2.4",
+    "license": "MIT",
+    "private": false,
+    "author": {
+        "email": "florian@secretarium.com",
+        "name": "Florian Guitton"
+    },
+    "bin": {
+        "create-trustless-app": "./bin/create-trustless-app"
+    }
+}
