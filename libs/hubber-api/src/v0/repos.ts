@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import { Octokit } from '@octokit/rest';
 import { createTRPCRouter, publicProcedure } from '../trpc';
 import { z } from 'zod';
