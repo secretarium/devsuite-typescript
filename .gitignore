@@ -6,7 +6,7 @@
 /out-tsc
 
 # dependencies
-/node_modules
+node_modules
 
 # IDEs and editors
 /.idea
@@ -22,7 +22,7 @@
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
-!.vscode/extensions.json
+**/.vscode
 
 # misc
 /.sass-cache
@@ -34,7 +34,23 @@ yarn-error.log
 testem.log
 /typings
 /.swc
+.expo/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+logs
 
 # System Files
 .DS_Store
 Thumbs.db
+
+# Locally scoped env
+.env*local
+apps/pocket-e2e/artifacts
+
+# Next.js
+.next

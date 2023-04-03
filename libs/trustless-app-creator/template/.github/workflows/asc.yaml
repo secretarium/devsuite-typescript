@@ -1,0 +1,31 @@
+name: Commit from workflow
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - file.txt
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      - name: Use Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+          cache: yarn
+
+      - name: Compile Trustless Typescript Contract
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.email "bot@secretarium.com"
+          git config user.name "Secretarium Trustless Bot"
+          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          git checkout main
+          node .github/fixtures/asc-compile.js
+          git push origin main

@@ -1,0 +1,65 @@
+{
+    "name": "hubber-db",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "libs/hubber-db/src",
+    "projectType": "library",
+    "targets": {
+        "build": {
+            "executor": "@nrwl/js:swc",
+            "outputs": [
+                "{options.outputPath}"
+            ],
+            "options": {
+                "outputPath": "dist/libs/hubber-db",
+                "main": "libs/hubber-db/src/index.ts",
+                "tsConfig": "libs/hubber-db/tsconfig.lib.json",
+                "assets": [
+                    "libs/hubber-db/*.md"
+                ]
+            }
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "outputs": [
+                "{options.outputFile}"
+            ],
+            "options": {
+                "lintFilePatterns": [
+                    "libs/hubber-db/**/*.ts"
+                ]
+            }
+        },
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "outputs": [
+                "{workspaceRoot}/coverage/{projectRoot}"
+            ],
+            "options": {
+                "jestConfig": "libs/hubber-db/jest.config.ts",
+                "passWithNoTests": true
+            }
+        },
+        "studio": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "prisma studio --port 5556 --schema src/prisma/schema.prisma",
+                "cwd": "libs/hubber-db"
+            }
+        },
+        "compile": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "prisma generate --schema src/prisma/schema.prisma",
+                "cwd": "libs/hubber-db"
+            }
+        },
+        "push": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "prisma db push --schema src/prisma/schema.prisma",
+                "cwd": "libs/hubber-db"
+            }
+        }
+    },
+    "tags": []
+}

@@ -1,0 +1,10 @@
+apiVersion: v2
+kubeVersion: ">=1.19.0-0"
+name: podinfo
+description: A Helm chart for Secretarium Kubernetes
+home: https://github.com/secretarium/podinfo
+sources:
+  - https://github.com/secretarium/podinfo
+type: application
+version: 0.0.1
+appVersion: "__VERSION__"

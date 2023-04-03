@@ -1,0 +1,67 @@
+{
+    "name": "crypto",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "libs/crypto/src",
+    "projectType": "library",
+    "targets": {
+        "build": {
+            "dependsOn": [
+                {
+                    "target": "build-upstream",
+                    "projects": "self"
+                }
+            ],
+            "executor": "@nrwl/js:tsc",
+            "outputs": [
+                "{options.outputPath}"
+            ],
+            "options": {
+                "outputPath": "dist/libs/crypto",
+                "tsConfig": "libs/crypto/tsconfig.lib.json",
+                "packageJson": "libs/crypto/package.json",
+                "main": "libs/crypto/src/index.ts",
+                "assets": [
+                    "libs/crypto/*.md"
+                ]
+            }
+        },
+        "build-upstream": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "node tools/scripts/buildMsRCrypto.mjs",
+                "outputPath": "libs/crypto/vendor"
+            }
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "options": {
+                "lintFilePatterns": [
+                    "libs/crypto/**/*.{ts,tsx,js,jsx,json}"
+                ]
+            },
+            "outputs": [
+                "{options.outputFile}"
+            ]
+        },
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "outputs": [
+                "{workspaceRoot}/coverage/libs/crypto"
+            ],
+            "options": {
+                "jestConfig": "libs/crypto/jest.config.ts",
+                "passWithNoTests": true
+            }
+        },
+        "version": {
+            "executor": "@jscutlery/semver:version",
+            "options": {
+                "preset": "conventional",
+                "trackDeps": true
+            }
+        }
+    },
+    "tags": [
+        "scope:sdk"
+    ]
+}

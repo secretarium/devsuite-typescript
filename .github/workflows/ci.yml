@@ -1,59 +1,73 @@
 name: SDK
 
 on:
-    push:
-        branches: [main, develop, 'fix/*']
-    pull_request:
-        branches: [main, develop]
+  push:
+    branches: [main, develop, "fix/*"]
+  pull_request:
+    branches: [main, develop]
 
 jobs:
-    build:
-        runs-on: ${{ matrix.os }}
+  build:
+    runs-on: ${{ matrix.os }}
 
-        strategy:
-            matrix:
-                os: [ubuntu-latest, windows-latest, macOS-latest]
-                node: [14.x, 16.x]
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node: [16.x]
 
-        steps:
-            - uses: actions/checkout@v2
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-            - name: Use Node.js ${{ matrix.node }}
-              uses: actions/setup-node@v2
-              with:
-                  node: ${{ matrix.node }}
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        uses: nrwl/nx-set-shas@v3
 
-            - name: Disable TCP/UDP Offloading
-              shell: bash
-              run: |
-                  if [ "$RUNNER_OS" == "Linux" ]; then
-                    sudo ethtool -K eth0 tx off rx off
-                    exit 0
-                  elif [ "$RUNNER_OS" == "macOS" ]; then
-                    sudo sysctl -w net.link.generic.system.hwcksum_tx=0
-                    sudo sysctl -w net.link.generic.system.hwcksum_rx=0
-                    exit 0
-                  else
-                    echo "$RUNNER_OS not supported"
-                    exit 0
-                  fi
+      - run: |
+          echo "Nx base: ${{ env.NX_BASE }}"
+          echo "Git head: ${{ env.NX_HEAD }}"
 
-            - name: Install repo dependencies
-              run: |
-                  yarn install --network-timeout 1000000 --forzen-lockfile
+      - name: Use Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+          cache: yarn
 
-            - name: Check for lint
-              run: |
-                  yarn run lint-check
+      - name: Disable TCP/UDP Offloading
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" == "Linux" ]; then
+            sudo ethtool -K eth0 tx off rx off
+            exit 0
+          elif [ "$RUNNER_OS" == "macOS" ]; then
+            sudo sysctl -w net.link.generic.system.hwcksum_tx=0
+            sudo sysctl -w net.link.generic.system.hwcksum_rx=0
+            exit 0
+          else
+            echo "$RUNNER_OS not supported"
+            exit 0
+          fi
 
-            - name: Build the Dev Suite
-              run: |
-                  yarn run build
+      - name: Install repo dependencies
+        run: |
+          yarn install --network-timeout 1000000 --forzen-lockfile
 
-            - name: Unit test the Dev Suite
-              run: |
-                  yarn run test
+      - name: Check for lint
+        run: |
+          yarn run nx affected --target=lint --exclude=pocket --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
 
-            - name: Execute end-to-end tests
-              run: |
-                  yarn run e2e
+      - name: Build the Dev Suite
+        run: |
+          yarn run nx affected --target=build --exclude=pocket --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
+
+      - name: Unit test the Dev Suite
+        run: |
+          yarn run nx affected --target=test --exclude=pocket --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
+        env:
+          CI: true
+
+      - name: Execute end-to-end tests
+        run: |
+          yarn run nx affected --target=e2e --exclude=pocket --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
+        env:
+          CI: true

@@ -1,0 +1,36 @@
+{
+    "extends": [
+        "../../.eslintrc.js"
+    ],
+    "ignorePatterns": [
+        "!**/*"
+    ],
+    "globals": {
+        "__TEARDOWN_MESSAGE__": true
+    },
+    "overrides": [
+        {
+            "files": [
+                "*.ts",
+                "*.tsx",
+                "*.js",
+                "*.jsx"
+            ],
+            "rules": {}
+        },
+        {
+            "files": [
+                "*.ts",
+                "*.tsx"
+            ],
+            "rules": {}
+        },
+        {
+            "files": [
+                "*.js",
+                "*.jsx"
+            ],
+            "rules": {}
+        }
+    ]
+}
