@@ -17,22 +17,28 @@ export const Index: FC = () => {
     }, [hasRedirected, navigate, user.hasGithubToken]);
 
     const state = JSON.stringify({
+        referer: window.location.origin,
         source: 'github',
         redirectUri: '/deploy/select'
     });
+
+    console.log(import.meta);
+    console.log(process.env);
+    console.log(process.env['NX_KLAVE_AUTHSTATE_URL']);
+    console.log(encodeURI(process.env['NX_KLAVE_AUTHSTATE_URL'] ?? `${window.location.origin}/auth`));
 
     const githubAuth = new URL('https://github.com/login/oauth/authorize');
     githubAuth.searchParams.append('client_id', 'Iv1.6ff39dee83590f91');
     githubAuth.searchParams.append('scope', 'read:user,read:gpg_key,read:public_key,repo');
     githubAuth.searchParams.append('state', state);
-    githubAuth.searchParams.append('redirect_uri', encodeURI('http://localhost:4220/auth'));
+    githubAuth.searchParams.append('redirect_uri', encodeURI(process.env['NX_KLAVE_AUTHSTATE_URL'] ?? `${window.location.origin}/auth`));
 
     const gitlabAuth = new URL('https://gitlab.com/oauth/authorize');
     githubAuth.searchParams.append('client_id', 'Iv1.6ff39dee83590f91');
     githubAuth.searchParams.append('response_type', 'code');
     githubAuth.searchParams.append('scope', 'read:user,read:gpg_key,read:public_key,repo');
     githubAuth.searchParams.append('state', state);
-    githubAuth.searchParams.append('redirect_uri', encodeURI('http://localhost:4220/auth'));
+    githubAuth.searchParams.append('redirect_uri', encodeURI(process.env['NX_KLAVE_AUTHSTATE_URL'] ?? `${window.location.origin}/auth`));
 
     return <>
         <div className='pb-5'>

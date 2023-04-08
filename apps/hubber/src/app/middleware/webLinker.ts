@@ -88,16 +88,16 @@ export const webLinkerMiddlware: RequestHandler = async (req, res, next) => {
                         id: sessionID
                     }
                 }
-            }, {
-                ephemerals: ephemeralTag ? {
-                    has: ephemeralTag
-                } : undefined
-            }, {
-                devices: {
-                    some: {
-                        localId
-                    }
-                }
+                // }, {
+                //     ephemerals: ephemeralTag ? {
+                //         has: ephemeralTag
+                //     } : undefined
+                // }, {
+                //     devices: {
+                //         some: {
+                //             localId
+                //         }
+                //     }
             }]
         }
     });

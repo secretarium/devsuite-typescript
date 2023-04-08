@@ -5,8 +5,21 @@ import { v4 as uuid } from 'uuid';
 import { httpApi } from '../utils/api';
 
 export const loader: LoaderFunction = async ({ request }) => {
-    const { search } = new URL(request.url);
+    const { host, search, pathname } = new URL(request.url);
     const { code, state } = qs.parse(search);
+    const parsedState: {
+        referer: string;
+        source: string;
+        redirectUri: string;
+    } = typeof state === 'string' ? JSON.parse(state) : {};
+
+    const refererUrl = new URL(parsedState.referer);
+    if (host !== refererUrl.host) {
+        refererUrl.pathname = pathname;
+        refererUrl.search = search;
+        window.location.replace(refererUrl.toString());
+        return;
+    }
     let data = null;
     if (code) {
         data = await httpApi.v0.repos.registerGitHubCredentials.query({
@@ -26,9 +39,9 @@ export const Index: FC = () => {
     useEffect(() => {
         if (!hasRedirected && redirectUri && !data.error) {
             setHasRedirected(true);
-            const emphemeralSessionTag = window.localStorage.getItem('emphemeralSessionTag');
-            if (!emphemeralSessionTag)
-                window.localStorage.setItem('emphemeralSessionTag', uuid());
+            const emphemeralKlaveTag = window.localStorage.getItem('emphemeralKlaveTag');
+            if (!emphemeralKlaveTag)
+                window.localStorage.setItem('emphemeralKlaveTag', uuid());
             navigate(redirectUri);
         }
     }, [data.error, hasRedirected, navigate, redirectUri]);

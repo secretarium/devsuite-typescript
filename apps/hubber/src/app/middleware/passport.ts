@@ -48,8 +48,8 @@ export const passportLoginCheckMiddleware: RequestHandler = (req, res, next) => 
         req.path === '/users/login' ||
         req.path === '/login/print' ||
         req.path === '/get_repos' ||
-        req.path.match(/^\/trpc/) ||
-        req.path === '/whoami') {
+        req.path === '/whoami' ||
+        req.path.match(/^\/trpc/)) {
         next();
     } else {
         res.status(400).json({ status: 'error', message: 'Please login first' });

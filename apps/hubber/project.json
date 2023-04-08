@@ -6,6 +6,11 @@
     "targets": {
         "build": {
             "executor": "@nrwl/node:webpack",
+            "inputs": [
+                {
+                    "fileset": "{workspaceRoot}/node_modules/.prisma/**/*.ts"
+                }
+            ],
             "outputs": [
                 "{options.outputPath}"
             ],
@@ -21,6 +26,7 @@
                 "production": {
                     "optimization": true,
                     "extractLicenses": true,
+                    "generatePackageJson": true,
                     "inspect": false,
                     "fileReplacements": [
                         {
@@ -33,6 +39,11 @@
         },
         "serve": {
             "executor": "@nrwl/node:node",
+            "inputs": [
+                {
+                    "fileset": "{workspaceRoot}/node_modules/.prisma/**/*.ts"
+                }
+            ],
             "options": {
                 "buildTarget": "hubber:build"
             },
@@ -69,7 +80,28 @@
                 "preset": "conventional",
                 "trackDeps": true
             }
+        },
+        "docker-build": {
+            "dependsOn": [
+                {
+                    "projects": "self",
+                    "target": "build"
+                },
+                {
+                    "projects": "dependencies",
+                    "target": "build"
+                }
+            ],
+            "executor": "nx:run-commands",
+            "options": {
+                "commands": [
+                    "docker build -f apps/hubber/Dockerfile . -t hubber:latest"
+                ]
+            }
         }
     },
+    "implicitDependencies": [
+        "klave"
+    ],
     "tags": []
 }

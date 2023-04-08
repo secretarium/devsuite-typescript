@@ -27,6 +27,14 @@
         },
         "build-upstream": {
             "executor": "nx:run-commands",
+            "inputs": [
+                {
+                    "runtime": "curl -s https://api.github.com/repos/microsoft/MSR-JavaScript-Crypto/git/refs/heads/master"
+                }
+            ],
+            "outputs": [
+                "libs/crypto/vendor"
+            ],
             "options": {
                 "command": "node tools/scripts/buildMsRCrypto.mjs",
                 "outputPath": "libs/crypto/vendor"

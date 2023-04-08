@@ -17,7 +17,7 @@ export const AppLedgerSource = {
     initialize: async () => {
         try {
             const key = await Key.createKey();
-            client.connect('wss://ovh-fr-gra-2388-2.node.secretarium.org:5001', key, '3KYI/qGoh0xW4DEQ/2G8GzuFGJ4r/X4CUi81UkCtrVnkW7bfSvsiKNBsQhCcVMFGZduTHt/0C+fMH3btntBSCA==');
+            await client.connect('wss://wasm-dev.node.secretarium.org:5001', key, 'eOx//L640C1WcBKKuxL7Uy6EehF2rL0Ir+PqVeZKzomyJHbfEeceqftHQSnJAhaYCMO5Du5GqpNTaRdUJp46xA==');
             return;
         } catch (e) {
             logger.error(i18n.t('errors:SCT_CONNECT_ERROR'));

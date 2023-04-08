@@ -1,8 +1,8 @@
 import { NodeTracerProvider } from '@opentelemetry/sdk-trace-node';
 import { registerInstrumentations } from '@opentelemetry/instrumentation';
 import { DnsInstrumentation } from '@opentelemetry/instrumentation-dns';
-import { ExpressInstrumentation } from '@opentelemetry/instrumentation-express';
-import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
+// import { ExpressInstrumentation } from '@opentelemetry/instrumentation-express';
+// import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
 import { MongoDBInstrumentation } from '@opentelemetry/instrumentation-mongodb';
 import { NetInstrumentation } from '@opentelemetry/instrumentation-net';
 import { WinstonInstrumentation } from '@opentelemetry/instrumentation-winston';
@@ -24,9 +24,9 @@ registerInstrumentations({
             ignoreHostnames: []
         }),
         // MongoDB instrumentation
-        new MongoDBInstrumentation(),
+        new MongoDBInstrumentation()
         // Express instrumentation expects HTTP layer to be instrumented
-        new HttpInstrumentation(),
-        new ExpressInstrumentation()
+        // new HttpInstrumentation(),
+        // new ExpressInstrumentation()
     ]
 });

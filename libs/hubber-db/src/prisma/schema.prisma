@@ -42,6 +42,28 @@ model User {
     web       Web[]
 }
 
+enum CredentialDeviceType {
+    singleDevice
+    multiDevice
+}
+
+enum AuthenticatorTransport {
+    usb
+    ble
+    nfc
+    internal
+}
+
+model Authenticator {
+    id                   String                   @id @default(uuid()) @map("_id")
+    credentialID         String
+    credentialPublicKey  String
+    counter              Int
+    credentialDeviceType CredentialDeviceType
+    credentialBackedUp   Boolean
+    transports           AuthenticatorTransport[] @default([])
+}
+
 enum HookSource {
     github
 }

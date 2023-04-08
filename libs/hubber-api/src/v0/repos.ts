@@ -1,3 +1,4 @@
+// import { CipherGCM } from 'node:crypto';
 import { Octokit } from '@octokit/rest';
 import { createTRPCRouter, publicProcedure } from '../trpc';
 import { z } from 'zod';
@@ -159,8 +160,16 @@ export const reposRouter = createTRPCRouter({
     registerGitHubCredentials: publicProcedure
         .input(z.object({
             code: z.string()
+            // state: z.string()
         }))
         .query(async ({ ctx: { session, sessionStore, sessionID, prisma, webId }, input: { code } }) => {
+
+            // const secret = '1000060000000000';
+
+            // const cipher = crypto.createCipher('aes-128-ecb', secret);
+
+            // const ciphertext = cipher.update('9', 'utf8', 'base64') + cipher.final('base64');
+
 
             const result = await fetch('https://github.com/login/oauth/access_token', {
                 method: 'POST',

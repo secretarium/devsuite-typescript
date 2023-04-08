@@ -39,9 +39,9 @@ export const applicationRouter = createTRPCRouter({
         .input(z.object({
             repoId: z.string().uuid(),
             applications: z.array(z.string()),
-            emphemeralSessionTag: z.string().optional()
+            emphemeralKlaveTag: z.string().optional()
         }))
-        .mutation(async ({ ctx: { prisma, session, sessionStore, sessionID, user, webId }, input: { repoId, applications, emphemeralSessionTag } }) => {
+        .mutation(async ({ ctx: { prisma, session, sessionStore, sessionID, user, webId }, input: { repoId, applications, emphemeralKlaveTag } }) => {
 
             const deployableRepoData = await prisma.deployableRepo.findFirst({
                 where: {
@@ -91,7 +91,7 @@ export const applicationRouter = createTRPCRouter({
                         },
                         catogories: [],
                         tags: [],
-                        author: emphemeralSessionTag ?? sessionID
+                        author: emphemeralKlaveTag ?? sessionID
                     }
                 });
                 // const deployment = await tx.deployment.create({

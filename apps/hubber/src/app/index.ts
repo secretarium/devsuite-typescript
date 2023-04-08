@@ -1,5 +1,6 @@
 import './opentelemetry';
 import ip from 'ip';
+import path from 'node:path';
 import express from 'express';
 import session from 'express-session';
 import ews from 'express-ws';
@@ -24,20 +25,95 @@ import { usersRouter, filesRouter } from './routes';
 import logger from '../utils/logger';
 import { webLinkerMiddlware } from './middleware/webLinker';
 
-const { app, getWss } = ews(express(), undefined, {
+const eapp = express();
+const { app, getWss } = ews(eapp, undefined, {
+    // leaveRouterUntouched: true,
     wsOptions: {
+        path: '/api/bridge',
+        // noServer: true,
         clientTracking: true
     }
 });
 
-export const start = (port?: number) => {
+const getApiRouter = (/*port: number*/) => {
+    const router = express();
+    // const { app: router, getWss } = ews(express(), undefined, {
+    //     // leaveRouterUntouched: true,
+    //     wsOptions: {
+    //         path: '/api/bridge'
+    //         // noServer: true,
+    //         // clientTracking: true
+    //     }
+    // });
+
+    // app.ws('/api/bridge', (ws, { session, sessionID, sessionStore }) => {
+    //     logger.info('Wassssup ? ...');
+    //     (ws as any).sessionID = sessionID;
+    //     ws.on('connection', (ws) => {
+    //         ws.isAlive = true;
+    //         logger.info('Client is alive !');
+    //     });
+    //     ws.on('upgrade', () => {
+    //         logger.info('Client is upgrading ...');
+    //     });
+    //     ws.on('message', (msg) => {
+    //         // if (!session)
+    //         //     return;
+    //         const [verb, ...data] = msg.toString().split('#');
+    //         console.log(session, sessionID, sessionStore);
+    //         if (verb === 'request') {
+    //             logger.info('New bridge client request ...');
+    //             const [locator] = data;
+    //             (session as any).locator = locator;
+    //             session.save(() => {
+    //                 ws.send(`sid#${sessionID}#ws://${ip.address('public')}:${port}/bridge`);
+    //             });
+    //             return;
+    //         } else if (verb === 'confirm') {
+    //             logger.info('New remote device confirmation ...');
+    //             const [sid, locator, localId] = data;
+    //             sessionStore.get(sid, (err, rsession) => {
+    //                 if (!rsession)
+    //                     return;
+    //                 if ((rsession as any).locator !== locator)
+    //                     return;
+    //                 (rsession as any).localId = localId;
+    //                 sessionStore.set(sid, rsession, () => {
+    //                     const browserTarget = Array.from(getWss().clients.values()).find(w => (w as any).sessionID === sid);
+    //                     browserTarget?.send('confirmed');
+    //                 });
+    //             });
+    //         }
+    //         ws.send(msg);
+    //     });
+    // });
+
+    router.use(passportLoginCheckMiddleware);
+    router.use('/trpc', trcpMiddlware);
+    router.use(usersRouter);
+    router.use(filesRouter);
+
+    router.all('*', (req, res) => {
+        res.json({
+            path: req.path,
+            hubber: true,
+            ok: true
+        });
+    });
+
+    return router;
+};
+
+export const start = (port: number) => {
+
+    const apiRouter = getApiRouter(/*port*/);
 
     app.use(sentryRequestMiddleware);
     app.use(sentryTracingMiddleware);
     app.use(morganLoggerMiddleware);
     app.use(rateLimiterMiddleware);
     app.use(cors({
-        origin: ['chrome-extension://', `http://localhost:${port}`, `http://127.0.0.1:${port}`],
+        origin: ['chrome-extension://', `http://localhost:${port}`, `http://127.0.0.1:${port}`, /\.klave\.network$/, /\.klave\.dev$/],
         credentials: true
     }));
     app.use(express.json());
@@ -87,7 +163,9 @@ export const start = (port?: number) => {
     app.get('/ping', (req, res) => {
         res.json({ pong: true });
     });
+
     app.use(session(sessionOptions));
+    app.use('/', express.static(path.join(__dirname, 'public')));
     // app.get('/csrf-token', (req, res) => res.json({ token: generateToken(req) }));
     // app.use(csrfSynchronisedProtection);
     app.use(passport.initialize());
@@ -96,7 +174,7 @@ export const start = (port?: number) => {
     // Contextualise user session, devices, tags, tokens
     app.use(webLinkerMiddlware);
 
-    app.ws('/bridge', (ws, { session, sessionID, sessionStore }) => {
+    app.ws('/api/bridge', (ws, { session, sessionID, sessionStore }) => {
         logger.info('Wassssup ? ...');
         (ws as any).sessionID = sessionID;
         ws.on('connection', (ws) => {
@@ -134,21 +212,12 @@ export const start = (port?: number) => {
             ws.send(msg);
         });
     });
-
-    app.use(passportLoginCheckMiddleware);
-    app.use('/trpc', trcpMiddlware);
-    app.use(usersRouter);
-    app.use(filesRouter);
+    app.use('/api', apiRouter);
+    // app.use(apiRouter);
 
     app.use(sentryErrorMiddleware);
 
-    app.all('*', (req, res) => {
-        res.json({
-            path: req.path,
-            hubber: true,
-            ok: true
-        });
-    });
+    app.use('*', express.static(path.join(__dirname, 'public'), { index: 'index.html' }));
 
     return app;
 };

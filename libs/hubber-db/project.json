@@ -6,6 +6,12 @@
     "targets": {
         "build": {
             "executor": "@nrwl/js:swc",
+            "dependsOn": [
+                {
+                    "target": "compile",
+                    "projects": "self"
+                }
+            ],
             "outputs": [
                 "{options.outputPath}"
             ],

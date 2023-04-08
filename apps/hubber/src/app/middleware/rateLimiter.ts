@@ -3,7 +3,7 @@ import { RateLimiterMemory } from 'rate-limiter-flexible';
 
 const rateLimiter = new RateLimiterMemory({
     keyPrefix: 'middleware',
-    points: 10,
+    points: 1000,
     duration: 1
 });
 
