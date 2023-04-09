@@ -91,7 +91,7 @@ export const applicationRouter = createTRPCRouter({
                         },
                         catogories: [],
                         tags: [],
-                        author: emphemeralKlaveTag ?? sessionID
+                        author: webId ?? emphemeralKlaveTag ?? sessionID
                     }
                 });
                 // const deployment = await tx.deployment.create({
