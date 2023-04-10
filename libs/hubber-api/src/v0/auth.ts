@@ -45,14 +45,7 @@ export const authRouter = createTRPCRouter({
                         }
                     });
                 const temporaryCode = `${Math.random()}`.substring(2, 11);
-                const transporter = createTransport({
-                    host: 'localhost',
-                    port: 1025,
-                    auth: {
-                        user: 'project.1',
-                        pass: 'secret.1'
-                    }
-                });
+                const transporter = createTransport(process.env['NX_SMTP_HOST']);
                 await prisma.user.update({
                     where: {
                         id: user.id
