@@ -1,16 +1,9 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
     provider = "prisma-client-js"
 }
 
 datasource db {
     provider = "mongodb"
-    // NOTE: When using postgresql, mysql or sqlserver, uncomment the @db.Text annotations in model Account below
-    // Further reading:
-    // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-    // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
     url      = env("NX_MONGODB_URL")
 }
 
@@ -34,12 +27,13 @@ type GitHubToken {
 }
 
 model User {
-    id        String   @id @default(uuid()) @map("_id")
-    login     String   @unique
-    emails    String[] @default([])
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    web       Web[]
+    id                 String    @id @default(uuid()) @map("_id")
+    loginCode          String?
+    loginCodeCreatedAt DateTime?
+    emails             String[]  @default([])
+    createdAt          DateTime  @default(now())
+    updatedAt          DateTime  @updatedAt
+    webs               Web[]
 }
 
 enum CredentialDeviceType {
@@ -238,6 +232,7 @@ model Web {
     devices         Device[]
     deployableRepos DeployableRepo[]
     applications    Application[]
+    deletedAt       DateTime?
     createdAt       DateTime         @default(now())
     updatedAt       DateTime         @updatedAt
 }
@@ -250,41 +245,3 @@ model Device {
     web       Web?     @relation(fields: [webId], references: [id])
     webId     String?
 }
-
-// NextAuth.js Models
-// NOTE: When using postgresql, mysql or sqlserver, 
-// uncomment the @db.Text annotations below
-// @see https://next-auth.js.org/schemas/models
-// model Account {
-//     id                       String  @id @default(uuid()) @map("_id")
-//     userId                   String
-//     type                     String
-//     provider                 String
-//     providerAccountId        String
-//     refreshToken            String? // @db.Text
-//     refreshTokenExpiresIn Int? // @db.Text
-//     accessToken             String? // @db.Text
-//     expires_at               Int?
-//     tokenType               String?
-//     scope                    String?
-//     id_token                 String? // @db.Text
-//     session_state            String?
-//     user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-//     @@unique([provider, providerAccountId])
-// }
-// model Session {
-//     id           String   @id @default(uuid()) @map("_id")
-//     sessionToken String   @unique
-//     userId       String
-//     expires      DateTime
-//     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-// }
-// model User {
-//     id            String    @id @default(uuid()) @map("_id")
-//     name          String?
-//     email         String?   @unique
-//     emailVerified DateTime?
-//     image         String?
-//     accounts      Account[]
-//     sessions      Session[]
-// }

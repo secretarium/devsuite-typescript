@@ -58,7 +58,7 @@ import { type CreateExpressContextOptions } from '@trpc/server/adapters/express'
 
 export const createContext = async (opts: CreateExpressContextOptions) => {
     const { req } = opts;
-    const { session, sessionID, sessionStore, user, web, webId, body } = req;
+    const { session, sessionID, sessionStore, user, web, webId, body, login } = req;
 
     return {
         session,
@@ -68,7 +68,9 @@ export const createContext = async (opts: CreateExpressContextOptions) => {
         prisma,
         web,
         webId,
-        body
+        body,
+        login,
+        req
     };
 };
 

@@ -5,13 +5,11 @@ import { z } from 'zod';
 export const applicationRouter = createTRPCRouter({
     getAll: publicProcedure
         .query(async ({ ctx: { prisma, webId } }) => {
-
             const manifest = await prisma.application.findMany({
                 where: {
                     webId
                 }
             });
-
             return manifest;
         }),
     getById: publicProcedure

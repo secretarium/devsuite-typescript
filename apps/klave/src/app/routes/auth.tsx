@@ -1,7 +1,6 @@
 import { FC, useState, useEffect } from 'react';
 import { LoaderFunction, useLoaderData, useNavigate } from 'react-router-dom';
 import qs from 'query-string';
-import { v4 as uuid } from 'uuid';
 import { httpApi } from '../utils/api';
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -39,9 +38,6 @@ export const Index: FC = () => {
     useEffect(() => {
         if (!hasRedirected && redirectUri && !data.error) {
             setHasRedirected(true);
-            const emphemeralKlaveTag = window.localStorage.getItem('emphemeralKlaveTag');
-            if (!emphemeralKlaveTag)
-                window.localStorage.setItem('emphemeralKlaveTag', uuid());
             navigate(redirectUri);
         }
     }, [data.error, hasRedirected, navigate, redirectUri]);

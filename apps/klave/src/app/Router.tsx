@@ -9,6 +9,7 @@ import AppLayout from './AppLayout';
 import { ProtectedLayout } from './ProtectedLayout';
 import Dashboard from './routes/dashboard';
 import Login from './routes/login';
+import Logout from './routes/logout';
 import Deploy from './routes/deploy';
 import RepoSelect from './routes/deploy/select';
 import RepoSheet from './routes/deploy/repo';
@@ -40,6 +41,10 @@ const router = sentryCreateBrowserRouter(
                 <Route
                     path="login"
                     element={<Login />}
+                />
+                <Route
+                    path="logout"
+                    element={<Logout />}
                 />
                 <Route
                     path="blocks"

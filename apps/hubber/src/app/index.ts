@@ -9,6 +9,7 @@ import multer from 'multer';
 import cors from 'cors';
 // import { csrfSync } from 'csrf-sync';
 import passport from 'passport';
+// import { Strategy as LocalStrategy } from 'passport-local';
 // import MongoStore from 'connect-mongo';
 import { v4 as uuid } from 'uuid';
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
@@ -170,6 +171,46 @@ export const start = (port: number) => {
     // app.use(csrfSynchronisedProtection);
     app.use(passport.initialize());
     app.use(passport.session());
+
+
+    // passport.serializeUser((user, done) => {
+    //     logger.debug(`serializeUser ${typeof user} >> ${JSON.stringify(user)}`);
+    //     process.nextTick(function () {
+    //         done(null, user.id);
+    //     });
+    // });
+
+    // passport.deserializeUser((id: string, done) => {
+    //     logger.debug(`deserializeUser ${typeof id} >> ${id}`);
+    //     prisma.user.findUnique({ where: { id } })
+    //         .then((user) => {
+    //             process.nextTick(function () {
+    //                 done(null, user);
+    //             });
+    //         })
+    //         .catch((err) => {
+    //             process.nextTick(function () {
+    //                 done(err, null);
+    //             });
+    //         });
+    // });
+
+    // passport.use(new LocalStrategy({
+    //     passReqToCallback: true
+    // }, (req, username, password, done) => {
+    //     const { web, session, user } = req;
+    //     console.log('COUCOU >>>', web, session, user, username, password);
+    //     prisma.user.findUnique({ where: { id: user?.id } })
+    //         .then((user) => {
+    //             if (!user) return done(null, false);
+    //             if (password !== (user as any).password) {
+    //                 return done(null, false);
+    //             } else {
+    //                 return done(null, user);
+    //             }
+    //         })
+    //         .catch((err) => { return done(err); });
+    // }));
 
     // Contextualise user session, devices, tags, tokens
     app.use(webLinkerMiddlware);

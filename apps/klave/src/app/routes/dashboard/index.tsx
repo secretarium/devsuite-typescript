@@ -21,7 +21,7 @@ export const Dashboard: FC = () => {
          */}
         <div className="flex-grow overflow-hidden h-full flex flex-col">
             <div className="flex-grow flex overflow-x-hidden">
-                <div className="w-72 flex-shrink-0 border-r border-gray-200 dark:border-gray-800 h-full min-h-[50vh] overflow-y-auto lg:block hidden p-5">
+                <div className="w-72 flex-shrink-0 border-r border-gray-200 dark:border-gray-800 h-full min-h-[50vh] overflow-y-auto sm:block hidden p-5">
                     <AppListing />
                 </div>
                 <div className="flex-grow bg-white dark:bg-gray-900 overflow-y-auto">

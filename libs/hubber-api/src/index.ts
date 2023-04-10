@@ -7,6 +7,7 @@ declare module 'express-session' {
     interface SessionData {
         githubToken?: GitHubToken;
         currentChallenge?: string;
+        user?: UserEntity;
     }
 }
 
