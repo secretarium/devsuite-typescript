@@ -24,7 +24,8 @@
                     "outExtension": {
                         ".js": ".js"
                     }
-                }
+                },
+                "generatePackageJson": true
             },
             "configurations": {
                 "production": {
