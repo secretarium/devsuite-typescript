@@ -85,7 +85,6 @@ async function createTemplateAsync(targetDir: string, data: SubstitutionData): P
     return await newStep('Creating template files', async (step) => {
 
         await fs.copy(path.join(__dirname, '..', 'template', '.'), targetDir, {
-            recursive: true,
             filter: () => true
         });
 
