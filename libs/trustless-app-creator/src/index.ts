@@ -48,6 +48,18 @@ async function main(target: string | undefined, options: CommandOptions) {
         // : await downloadPackageAsync(targetDir);
         : await createTemplateAsync(targetDir, data);
 
+    await newStep('Installing dependencies', async (step) => {
+        try {
+            await spawnAsync('yarn', [], {
+                cwd: targetDir,
+                stdio: 'ignore'
+            });
+            step.succeed('Installing dependencies');
+        } catch (e: any) {
+            step.fail(e.toString());
+        }
+    });
+
     await newStep('Creating an empty Git repository', async (step) => {
         try {
             await spawnAsync('git', ['init'], {
