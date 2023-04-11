@@ -1,4 +1,3 @@
-import './opentelemetry';
 import ip from 'ip';
 import path from 'node:path';
 import express from 'express';
@@ -25,6 +24,7 @@ import { trcpMiddlware } from './middleware/trpc';
 import { usersRouter, filesRouter } from './routes';
 import logger from '../utils/logger';
 import { webLinkerMiddlware } from './middleware/webLinker';
+import { opentelemetrySdk } from './opentelemetry';
 
 const eapp = express();
 const { app, getWss } = ews(eapp, undefined, {
@@ -105,7 +105,7 @@ const getApiRouter = (/*port: number*/) => {
     return router;
 };
 
-export const start = (port: number) => {
+export const start = async (port: number) => {
 
     const apiRouter = getApiRouter(/*port*/);
 
@@ -259,6 +259,8 @@ export const start = (port: number) => {
     app.use(sentryErrorMiddleware);
 
     app.use('*', express.static(path.join(__dirname, 'public'), { index: 'index.html' }));
+
+    await opentelemetrySdk;
 
     return app;
 };
