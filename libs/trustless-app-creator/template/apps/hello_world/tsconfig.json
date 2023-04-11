@@ -1,8 +1,5 @@
 {
-    "extends": "assemblyscript/std/assembly.json",
-    "compilerOptions": {
-        "forceConsistentCasingInFileNames": true
-    },
+    "extends": "../../node_modules/@secretarium/trustless-app/sdk.json",
     "include": [
         "./**/*.ts"
     ]

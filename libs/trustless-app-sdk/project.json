@@ -19,6 +19,7 @@
                     "libs/trustless-app-sdk/bin/*",
                     "libs/trustless-app-sdk/assembly/**",
                     "libs/trustless-app-sdk/index.ts",
+                    "libs/trustless-app-sdk/sdk.json",
                     "libs/trustless-app-sdk/*.md"
                 ]
             }
