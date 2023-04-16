@@ -1,6 +1,6 @@
-
-
 # Secretarium Dev Suite
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fsecretarium%2Fdevsuite-typescript.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fsecretarium%2Fdevsuite-typescript?ref=badge_shield)
+
 
 This repo contains the Secretarium Dev Suite for Typescript
 
@@ -23,3 +23,7 @@ Run `nx affected:e2e` to execute the end-to-end tests affected by a change.
 ## Understand the suite
 
 Run `nx dep-graph` to see a diagram of the dependencies of this suite.
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fsecretarium%2Fdevsuite-typescript.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fsecretarium%2Fdevsuite-typescript?ref=badge_large)
