@@ -65,8 +65,8 @@ export class BuildMiniVM {
         dummyMap['..ts'] = rootContent.data.toString();
 
         let compiledBinary = new Uint8Array(0);
-        // const compileStdOut = new stream.Duplex();
-        // const compileStdErr = new stream.Duplex();
+        const compileStdOut = new stream.Duplex();
+        const compileStdErr = new stream.Duplex();
 
         // console.log(asc.main)
         return new Promise((resolve) => {
@@ -98,8 +98,8 @@ export class BuildMiniVM {
                 }
             }, () => {
                 resolve({
-                    // stdout: compileStdOut,
-                    // stderr: compileStdErr,
+                    stdout: compileStdOut,
+                    stderr: compileStdErr,
                     binary: compiledBinary
                 });
                 return 0;
