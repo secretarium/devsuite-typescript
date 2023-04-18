@@ -30,7 +30,7 @@ if (process.env.NODE_ENV === 'production') {
     provider.addSpanProcessor(new BatchSpanProcessor(traceExporter));
 } else {
     provider.addSpanProcessor(new SimpleSpanProcessor(traceExporter));
-    provider.addSpanProcessor(new SimpleSpanProcessor(new ConsoleSpanExporter));
+    // provider.addSpanProcessor(new SimpleSpanProcessor(new ConsoleSpanExporter));
 }
 
 provider.addSpanProcessor(new SentrySpanProcessor());
