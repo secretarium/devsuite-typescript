@@ -26,8 +26,8 @@ function useSecretariumQuery(app: string, route: string, args?: unknown) {
     async function refetch() {
         setStatus({ loading: true });
         const key = await Key.createKey();
-        // await client.connect('wss://wasm-dev.node.secretarium.org:6001', key, 'rliD/CISqPEeYKbWYdwa+L+8oytAPvdGmbLC0KdvsH+OVMraarm1eo+q4fte0cWJ7+kmsq8wekFIJK0a83/yCg==');
-        await client.connect('wss://wasm-dev.node.secretarium.org:5001', key, 'eOx//L640C1WcBKKuxL7Uy6EehF2rL0Ir+PqVeZKzomyJHbfEeceqftHQSnJAhaYCMO5Du5GqpNTaRdUJp46xA==');
+        const [node, trustKey] = process.env['NX_SECRETARIUM_NODE']?.split('|') ?? [];
+        await client.connect(node, key, trustKey);
         client.newTx(config.app, config.route, `klave-deployment-${config.app}`, config.args as any)
             .onResult(result => {
                 setStatus({ loading: false, data: result });
