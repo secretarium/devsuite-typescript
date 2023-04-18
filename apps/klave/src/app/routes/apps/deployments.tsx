@@ -25,14 +25,14 @@ export const DeploymentPromotion: FC<DeploymentContextProps> = ({ deployment: { 
     };
 
     return <AlertDialog.Root>
-        <AlertDialog.Trigger asChild>
+        <AlertDialog.Trigger asChild onClick={e => e.stopPropagation()}>
             <button className="h-8 inline-flex items-center justify-center font-normal text-gray-400 ml-auto">
                 Release
             </button>
         </AlertDialog.Trigger>
         <AlertDialog.Portal>
-            <AlertDialog.Overlay className="AlertDialogOverlay" />
-            <AlertDialog.Content className="AlertDialogContent">
+            <AlertDialog.Overlay className="AlertDialogOverlay" onClick={e => { e.stopPropagation(); }} />
+            <AlertDialog.Content className="AlertDialogContent" onClick={e => { e.stopPropagation(); }}>
                 <AlertDialog.Title className="AlertDialogTitle">Are you absolutely sure?</AlertDialog.Title>
                 <AlertDialog.Description className="AlertDialogDescription">
                     This will promote the deployment to a production status and will trigger the migration of
@@ -53,6 +53,8 @@ export const DeploymentPromotion: FC<DeploymentContextProps> = ({ deployment: { 
 
 export const DeploymentDeletion: FC<DeploymentContextProps> = ({ deployment: { id } }) => {
 
+    const navigate = useNavigate();
+    const { appId } = useParams();
     const utils = api.useContext().v0.deployments;
     const mutation = api.v0.deployments.delete.useMutation({
         onSuccess: async () => {
@@ -63,17 +65,18 @@ export const DeploymentDeletion: FC<DeploymentContextProps> = ({ deployment: { i
 
     const deleteDeployment = async (deploymentId: Deployment['id']) => {
         await mutation.mutateAsync({ deploymentId });
+        navigate(`/app/${appId}/deployments`);
     };
 
     return <AlertDialog.Root>
-        <AlertDialog.Trigger asChild>
+        <AlertDialog.Trigger asChild onClick={e => { e.stopPropagation(); }}>
             <button title='Delete' className="h-8 inline-flex items-center justify-center font-normal text-red-400 mt-auto">
                 <UilTrash className='inline-block h-full' />
             </button>
         </AlertDialog.Trigger>
         <AlertDialog.Portal>
-            <AlertDialog.Overlay className="AlertDialogOverlay" />
-            <AlertDialog.Content className="AlertDialogContent">
+            <AlertDialog.Overlay className="AlertDialogOverlay" onClick={e => { e.stopPropagation(); }} />
+            <AlertDialog.Content className="AlertDialogContent" onClick={e => { e.stopPropagation(); }}>
                 <AlertDialog.Title className="AlertDialogTitle">Are you absolutely sure?</AlertDialog.Title>
                 <AlertDialog.Description className="AlertDialogDescription">
                     This action cannot be undone. This will permanently delete this deployment and remove the
