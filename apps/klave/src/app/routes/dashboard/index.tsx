@@ -6,7 +6,7 @@ export const Dashboard: FC = () => {
 
     const outlet = useOutlet();
 
-    return <div className="bg-gray-100 dark:bg-gray-900 dark:text-white text-gray-600 max-w-6xl mx-auto flex-grow flex overflow-hidden text-sm mt-14 border-t dark:border-gray-800">
+    return <div className="bg-gray-100 dark:bg-gray-900 dark:text-white text-gray-600 flex-grow flex overflow-hidden text-sm border-t dark:border-gray-800">
         {/*
         <div className="bg-white dark:bg-gray-900 dark:border-gray-800 w-20 flex-shrink-0 border-r border-gray-200 flex-col hidden sm:flex">
             <div className="flex mx-auto flex-grow mt-4 flex-col text-gray-400 space-y-4">
@@ -20,7 +20,7 @@ export const Dashboard: FC = () => {
         </div>
          */}
         <div className="flex-grow overflow-hidden h-full flex flex-col">
-            <div className="flex-grow flex overflow-x-hidden">
+            <div className="flex-grow flex overflow-x-hidden max-h-[100vh]">
                 <div className="w-72 flex-shrink-0 border-r border-gray-200 dark:border-gray-800 h-full min-h-[50vh] overflow-y-auto sm:block hidden p-5">
                     <AppListing />
                 </div>
