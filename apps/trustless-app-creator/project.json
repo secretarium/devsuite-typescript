@@ -1,7 +1,7 @@
 {
     "name": "trustless-app-creator",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "libs/trustless-app-creator/src",
+    "sourceRoot": "apps/trustless-app-creator/src",
     "projectType": "library",
     "targets": {
         "build": {
@@ -11,19 +11,19 @@
             ],
             "options": {
                 "buildableProjectDepsInPackageJsonType": "dependencies",
-                "outputPath": "dist/libs/trustless-app-creator",
-                "tsConfig": "libs/trustless-app-creator/tsconfig.lib.json",
-                "packageJson": "libs/trustless-app-creator/package.json",
-                "main": "libs/trustless-app-creator/src/index.ts",
+                "outputPath": "dist/apps/trustless-app-creator",
+                "tsConfig": "apps/trustless-app-creator/tsconfig.lib.json",
+                "packageJson": "apps/trustless-app-creator/package.json",
+                "main": "apps/trustless-app-creator/src/index.ts",
                 "assets": [
                     {
                         "glob": "**/(\\.*|*)",
-                        "input": "libs/trustless-app-creator/template",
+                        "input": "apps/trustless-app-creator/template",
                         "output": "template",
                         "ignore": []
                     },
-                    "libs/trustless-app-creator/bin/*",
-                    "libs/trustless-app-creator/*.md"
+                    "apps/trustless-app-creator/bin/*",
+                    "apps/trustless-app-creator/*.md"
                 ]
             }
         },
@@ -34,7 +34,7 @@
             ],
             "options": {
                 "lintFilePatterns": [
-                    "libs/trustless-app-creator/**/*.ts"
+                    "apps/trustless-app-creator/**/*.ts"
                 ]
             }
         },
@@ -44,7 +44,7 @@
                 "{workspaceRoot}/coverage/{projectRoot}"
             ],
             "options": {
-                "jestConfig": "libs/trustless-app-creator/jest.config.ts",
+                "jestConfig": "apps/trustless-app-creator/jest.config.ts",
                 "passWithNoTests": true
             }
         },

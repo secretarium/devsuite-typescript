@@ -9,5 +9,5 @@ export default {
         ]
     },
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-    coverageDirectory: '../../coverage/libs/trustless-app-creator'
+    coverageDirectory: '../../coverage/apps/trustless-app-creator'
 };
