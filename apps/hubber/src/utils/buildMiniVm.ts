@@ -1,7 +1,8 @@
 import stream from 'node:stream';
+import { writeFile } from 'fs-extra';
 // import { loopWhile } from 'deasync';
-import * as asb from 'asbuild';
-// import * as asc from 'assemblyscript/cli/asc';
+// import * as asb from 'asbuild';
+import * as asc from 'assemblyscript/cli/asc';
 import type { Context } from 'probot';
 import { KlaveRcConfiguration } from '@secretarium/trustless-app';
 import { DeploymentPushPayload } from '@secretarium/hubber-api';
@@ -70,12 +71,23 @@ export class BuildMiniVM {
 
         // console.log(asc.main)
         return new Promise((resolve) => {
-            asb.main([
-                'build',
+            asc.main([
                 '.',
                 '--stats',
+                // '--noUnsafe',
                 '--exportRuntime',
-                '--disable', 'bulk-memory'
+                '--traceResolution',
+                '-O', '--noAssert',
+                '--optimizeLevel', '3',
+                '--shrinkLevel', '2',
+                '--converge',
+                '--binaryFile', 'out.wasm',
+                '--textFile', 'out.wat',
+                '--tsdFile', 'out.d.ts',
+                '--idlFile', 'out.idl',
+                '--',
+                '--title="Klave WASM Compiler"',
+                '--enable-fips'
             ], {
                 // stdout: compileStdOut,
                 // stderr: compileStdErr,
@@ -93,10 +105,15 @@ export class BuildMiniVM {
                 },
                 writeFile: (filename, contents) => {
                     console.log('Compiler providing output', filename);
-                    if (filename.includes('.wasm'))
+                    if (filename.includes('.wasm')) {
                         compiledBinary = contents;
+                        const path = `${process.cwd()}/tmp/out.${Math.random().toString().substring(3, 9)}.wasm`;
+                        console.log('WASM copy export:', path);
+                        writeFile(path, contents);
+                    }
                 }
-            }, () => {
+            }, (error) => {
+                console.error(error);
                 resolve({
                     stdout: compileStdOut,
                     stderr: compileStdErr,
