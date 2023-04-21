@@ -18,7 +18,6 @@ FROM docker.io/node:lts-alpine AS final
 
 ENV HOST=0.0.0.0
 ENV PORT=3333
-ENV DEBUG=express:*
 
 WORKDIR /app
 
