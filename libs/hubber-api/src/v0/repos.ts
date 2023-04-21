@@ -91,7 +91,9 @@ export const reposRouter = createTRPCRouter({
                 prisma.deployableRepo.deleteMany({
                     where: {
                         OR: [{
-                            creatorAuthToken: accessToken
+                            creatorAuthToken: {
+                                in: [accessToken, lookupAccessToken]
+                            }
                         }, {
                             webId: web.id
                         }, {
