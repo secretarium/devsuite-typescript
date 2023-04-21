@@ -24,7 +24,7 @@ import { trcpMiddlware } from './middleware/trpc';
 import { usersRouter, filesRouter } from './routes';
 import logger from '../utils/logger';
 import { webLinkerMiddlware } from './middleware/webLinker';
-import { opentelemetrySdk } from './opentelemetry';
+// import { opentelemetrySdk } from './opentelemetry';
 
 const eapp = express();
 const { app, getWss } = ews(eapp, undefined, {
@@ -114,14 +114,28 @@ export const start = async (port: number) => {
     app.use(morganLoggerMiddleware);
     app.use(rateLimiterMiddleware);
     app.use(cors({
-        origin: ['chrome-extension://', `http://localhost:${port}`, `http://127.0.0.1:${port}`, /\.klave\.network$/, /\.klave\.dev$/],
+        origin: ['chrome-extension://', `http://localhost:${port}`, `http://127.0.0.1:${port}`, /\.klave\.network$/, /\.klave\.dev$/, /\.secretarium\.com$/],
         credentials: true
     }));
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
     // app.use(i18nextMiddleware);
     app.use(multer().none());
-    app.use(helmet());
+    app.use(helmet({
+        crossOriginEmbedderPolicy: {
+            policy: 'credentialless'
+        },
+        // crossOriginOpenerPolicy: false,
+        contentSecurityPolicy: false
+        // {
+        //     useDefaults: true,
+        //     directives: {
+        //         'img-src': ['"self"', 'data:', 'blob:', '"https://*.githubusercontent.com"'],
+        //         'frame-src': ['"self"', '"https://*.klave.dev"', '"https://*.klave.network"', '"https://klave.network"'],
+        //         'connect-src': ['"self"', '"https://*.klave.dev"', '"https://*.klave.network"', '"https://*.ingest.sentry.io"']
+        //     }
+        // }
+    }));
     app.disable('x-powered-by');
 
     // Plug Probot for GitHub Apps
@@ -260,7 +274,7 @@ export const start = async (port: number) => {
 
     app.use('*', express.static(path.join(__dirname, 'public'), { index: 'index.html' }));
 
-    await opentelemetrySdk;
+    // await opentelemetrySdk;
 
     return app;
 };
