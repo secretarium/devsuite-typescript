@@ -71,6 +71,8 @@ export const authRouter = createTRPCRouter({
                     ok: true
                 };
             } catch (e) {
+                // TODO Move to logging service
+                console.error(e);
                 return {
                     ok: false
                 };
