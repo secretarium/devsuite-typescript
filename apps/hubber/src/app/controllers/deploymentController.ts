@@ -9,14 +9,24 @@ import BuildMiniVM, { DeploymentContext } from '../../utils/buildMiniVm';
 export const deployToSubstrate = async (deploymentContext: DeploymentContext<DeploymentPushPayload>) => {
 
     const { octokit, ...context } = deploymentContext;
-    const { data: { files } } = await octokit.repos.compareCommits({
-        owner: context.repo.owner,
-        repo: context.repo.name,
-        base: context.commit.before,
-        head: context.commit.after
-    });
+    let files: Awaited<ReturnType<typeof octokit.repos.compareCommits>>['data']['files'];
 
-    if (!files)
+    try {
+        const { data: { files: filesManifest } } = await octokit.repos.compareCommits({
+            owner: context.repo.owner,
+            repo: context.repo.name,
+            base: context.commit.before,
+            head: context.commit.after
+        });
+
+        files = filesManifest;
+
+    } catch (e) {
+        console.error(e);
+        return;
+    }
+
+    if (!files?.length)
         return;
 
     const repo = await prisma.repo.findUnique({
@@ -41,9 +51,12 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
 
     repo.applications.forEach(async application => {
 
+        // TODO There is typing error in this location
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         if (files.filter(({ filename }) => {
             const commitFileDir = path.normalize(path.join('/', filename));
-            const appPath = path.normalize(path.join('/', availableApplicationsConfig[application.name].rootDir ?? ''));
+            const appPath = path.normalize(path.join('/', availableApplicationsConfig[application.name]?.rootDir ?? ''));
             return commitFileDir.startsWith(appPath) || filename === '.klaverc.json';
         }).length === 0)
             return;
@@ -124,8 +137,12 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                     repo,
                     application: availableApplicationsConfig[application.name]
                 });
-                const { binary: compileBinary } = await buildVm.build();
+                const buildResult = await buildVm.build();
 
+                if (buildResult.success === false)
+                    return;
+
+                const { binary: compileBinary } = buildResult;
                 if (compileBinary.length === 0)
                     return;
 
@@ -165,12 +182,22 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
 
 export const updatePullRequestFromSubstrate = async ({ octokit, ...context }: DeploymentContext<DeploymentPullRequestPayload>) => {
 
-    const { data: { files } } = await octokit.repos.compareCommits({
-        owner: context.repo.owner,
-        repo: context.repo.name,
-        base: context.commit.before,
-        head: context.commit.after
-    });
+    let files: Awaited<ReturnType<typeof octokit.repos.compareCommits>>['data']['files'];
+
+    try {
+        const { data: { files: filesManifest } } = await octokit.repos.compareCommits({
+            owner: context.repo.owner,
+            repo: context.repo.name,
+            base: context.commit.before,
+            head: context.commit.after
+        });
+
+        files = filesManifest;
+
+    } catch (e) {
+        console.error(e);
+        return;
+    }
 
     if (!files?.length)
         return;
@@ -197,8 +224,9 @@ export const updatePullRequestFromSubstrate = async ({ octokit, ...context }: De
 
     repo.applications.forEach(async application => {
 
-        // console.log(application, files, repo);
-
+        // TODO There is typing error in this location
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         if (files.filter(({ filename }) => {
             const commitFileDir = path.normalize(path.join('/', filename));
             const appPath = path.normalize(path.join('/', availableApplicationsConfig[application.name].rootDir ?? ''));
