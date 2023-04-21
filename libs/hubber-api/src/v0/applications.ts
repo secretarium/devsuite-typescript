@@ -73,8 +73,9 @@ export const applicationRouter = createTRPCRouter({
                         config: JSON.parse(newConfig)
                     }
                 });
-                    // /* const application = */ await tx.application.create({
-                    /* const application = */ await prisma.application.create({
+                // /* const application = */ await tx.application.create({
+                /* const application = */
+                await prisma.application.create({
                     data: {
                         web: {
                             connect: {
@@ -117,6 +118,38 @@ export const applicationRouter = createTRPCRouter({
                 //     }
                 // });
                 // });
+                // try {
+                //     const lastEventsHandle = await fetch(`https://api.github.com/users/${deployableRepoData.owner}/events/public`);
+                //     const lastEvents = await lastEventsHandle.json();
+
+                //     if (lastEvents.length > 0) {
+                //         deployToSubstrate({
+                //             octokit: context.octokit,
+                //             class: context.name,
+                //             type: context.name,
+                //             repo: {
+                //                 url: context.payload.repository.html_url,
+                //                 owner: context.payload.repository.owner.login,
+                //                 name: context.payload.repository.name
+                //             },
+                //             commit: {
+                //                 url: context.payload.repository.commits_url,
+                //                 ref: context.payload.ref,
+                //                 before: context.payload.before,
+                //                 after: context.payload.after,
+                //                 forced: context.payload.forced
+                //             },
+                //             pusher: {
+                //                 login: context.payload.sender.login,
+                //                 avatarUrl: context.payload.sender.avatar_url,
+                //                 htmlUrl: context.payload.sender.html_url
+                //             }
+                //         });
+                //     }
+                // } catch (e) {
+                //     console.error(e);
+                // }
+
                 if (user === undefined)
                     await new Promise<void>((resolve, reject) => {
                         sessionStore.set(sessionID, {
