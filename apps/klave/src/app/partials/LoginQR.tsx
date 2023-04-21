@@ -11,7 +11,7 @@ export const LoginQR: FC = () => {
     const [uuidLocator, setUuidLocator] = useState<string>();
     const [uuidBeacon, setUuidBeacon] = useState<string>();
     const [addressDestination, setAddressDestination] = useState<string>();
-    const [socketUrl] = useState(`ws://${window.location.host}/api/bridge`);
+    const [socketUrl] = useState(`${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/api/bridge`);
     const codeValue = `cryptx_check#${addressDestination}#${uuidBeacon}#${uuidLocator}`;
     console.log(codeValue);
     const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
@@ -57,7 +57,7 @@ export const LoginQR: FC = () => {
             <h1 className='text-xl font-bold'>Secretarium Pocket</h1>
             {isConnected
                 ? <span>Open and scan to connect</span>
-                : <span>There seems to be an issue connecting.<br />Please refresh the page to try again</span>
+                : <span>We can't connect you at the moment.<br />Please try again later.</span>
             }
             <br />
             <br />
