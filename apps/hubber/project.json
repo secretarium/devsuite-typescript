@@ -20,13 +20,13 @@
                 "tsConfig": "apps/hubber/tsconfig.app.json",
                 "assets": [
                     "apps/hubber/src/i18n/locales"
-                ]
+                ],
+                "generatePackageJson": true
             },
             "configurations": {
                 "production": {
                     "optimization": true,
                     "extractLicenses": true,
-                    "generatePackageJson": true,
                     "inspect": false,
                     "fileReplacements": [
                         {

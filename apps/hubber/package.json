@@ -1,0 +1,10 @@
+{
+    "name": "secretarium",
+    "version": "0.0.1",
+    "type": "commonjs",
+    "license": "MIT",
+    "dependencies": {
+        "@octokit/rest": "^18.0.6",
+        "@sentry/tracing": "7.29.0"
+    }
+}
