@@ -1,4 +1,4 @@
-export const dummyMap: Record<string, string> = {
+export const dummyMap: Record<string, string | null> = {
     'asconfig.json': `
         {
             "options": {
@@ -6,7 +6,7 @@ export const dummyMap: Record<string, string> = {
                 "disable": "bulk-memory"
             }
         }`,
-    'node_modules\\@secretarium\\trustless-app\\package.json': `
+    'node_modules/@secretarium/trustless-app/package.json': `
         {
             "name": "@secretarium/trustless-app",
             "description": "Secretarium Trustless Apps helpers and definitions",
@@ -33,7 +33,6 @@ export const dummyMap: Record<string, string> = {
                 }
             },
             "dependencies": {
-                "asbuild": "0.2.0",
                 "assemblyscript": "^0.19.3",
                 "chalk": "4.1.2",
                 "fs-extra": "9.1.0",
@@ -44,7 +43,7 @@ export const dummyMap: Record<string, string> = {
                 "fs-extra": "9.1.0"
             }
         }`,
-    'node_modules\\@secretarium\\trustless-app\\assembly\\index.ts': `
+    'node_modules/@secretarium/trustless-app/assembly/index.ts': `
         /**
          * Environment definitions for compiling Klave Trustless Application.
          * @module trustless/sdk

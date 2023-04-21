@@ -1,6 +1,6 @@
 import * as fs from 'fs-extra';
 import * as path from 'node:path';
-import * as asb from 'asbuild';
+import * as asc from 'assemblyscript/cli/asc';
 import * as chalk from 'chalk';
 import { klaveRcConfigurationSchema as schema } from './rc';
 
@@ -16,7 +16,7 @@ const compile = () => {
         if (parsingOutput.success)
             parsingOutput.data.applications.forEach(async (app, index) => {
                 try {
-                    new Promise((resolve) => {
+                    new Promise<void>((resolve) => {
                         const appPathRoot = path.join(CWD, app.rootDir ?? parsingOutput.data.rootDir ?? '.');
                         let appPath = path.join(appPathRoot, app.index ?? '');
                         if (!fs.existsSync(appPath) || !fs.statSync(appPath).isFile())
@@ -29,12 +29,22 @@ const compile = () => {
                             console.error(`Could not read entry point for application ${chalk.green(app.name)}`);
 
                         console.error(`Compiling ${chalk.green(app.name)} from ${path.join('.', path.relative(CWD, appPath))}...`);
-                        asb.main([
-                            'build',
-                            appPath,
-                            '--wat',
-                            '--outDir',
-                            path.join(CWD, '.klave', index.toString())
+                        asc.main([
+                            '.',
+                            // '--stats',
+                            '--exportRuntime',
+                            '--traceResolution',
+                            '-O', '--noAssert',
+                            '--optimizeLevel', '3',
+                            '--shrinkLevel', '2',
+                            '--converge',
+                            '--binaryFile', `${path.join(CWD, '.klave', index.toString())}.wasm`,
+                            '--textFile', `${path.join(CWD, '.klave', index.toString())}.wat`,
+                            '--tsdFile', `${path.join(CWD, '.klave', index.toString())}.d.ts`,
+                            '--idlFile', `${path.join(CWD, '.klave', index.toString())}.idl`
+                            // '--',
+                            // '--title="Klave WASM Compiler"',
+                            // '--enable-fips'
                         ], {
                             stdout: process.stdout,
                             stderr: process.stderr,
@@ -42,8 +52,9 @@ const compile = () => {
                                 console.log(diagnostic);
                                 console.log(diagnostic.message);
                             }
-                        }, result => {
-                            resolve(result);
+                        }, (error) => {
+                            console.error(error);
+                            resolve();
                             return 0;
                         });
                     });
