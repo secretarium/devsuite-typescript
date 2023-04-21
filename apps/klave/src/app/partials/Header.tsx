@@ -28,7 +28,7 @@ const Header: FC = () => {
                     You must sign in in order to save your work !
                 </div>
             </div> : null}
-            <div className="max-w-6xl mx-auto px-5 sm:px-6 dark:invert">
+            <div className="px-5 sm:px-6 dark:invert">
                 <div className="flex items-center justify-between h-16 md:h-20">
 
                     {/* Site branding */}
@@ -58,9 +58,14 @@ const Header: FC = () => {
                             </li>
                             */}
                             <li>
-                                <Link to="/deploy" className="btn-sm text-gray-900 bg-gray-200 hover:bg-gray-300 ml-3 a-like">
-                                    <span>Deploy now</span>
-                                </Link>
+                                {data?.me
+                                    ? <Link to="/deploy" className="btn-sm text-gray-200 bg-gray-900 hover:bg-gray-800 ml-3 a-like">
+                                        <span>Deploy now</span>
+                                    </Link>
+                                    : <Link to="/deploy" className="btn-sm text-gray-900 bg-gray-200 hover:bg-gray-300 ml-3 a-like">
+                                        <span>Deploy now</span>
+                                    </Link>
+                                }
                             </li>
                             <li>
                                 {data?.me

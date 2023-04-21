@@ -6,7 +6,7 @@ import api from '../../utils/api';
 export const Select: FC = () => {
 
     const [shouldRefresh, setShouldRefresh] = useState(false);
-    const { data: deployables, isLoading, refetch } = api.v0.repos.deployables.useQuery({
+    const { data: deployables, isLoading, isFetching, isRefetching, refetch } = api.v0.repos.deployables.useQuery({
         refreshing: shouldRefresh
     }, {
         queryKey: ['v0.repos.deployables', { refreshing: shouldRefresh }],
@@ -23,12 +23,14 @@ export const Select: FC = () => {
             setShouldRefresh(true);
     };
 
+    const isWorking = isLoading || isFetching || isRefetching;
+
     return <>
         <div className='pb-5' >
-            <h1 className='text-xl font-bold'>{isLoading ? 'Looking for your best work' : deployables?.length ? 'We found some gems' : 'Nothing to see'}</h1>
+            <h1 className='text-xl font-bold'>{isWorking ? 'Looking for your best work' : deployables?.length ? 'We found some gems' : 'Nothing to see'}</h1>
         </div>
         <div className='relative'>
-            {isLoading ? <>
+            {isWorking ? <>
                 We are looking for repositories you can deploy on the Trustless network.<br />
                 It will only take a moment...<br />
                 <br />
@@ -48,12 +50,12 @@ export const Select: FC = () => {
                 Try rescanning your repositories.
                 <br />
                 <br />
-                <button disabled={isLoading} onClick={rescanRepos} className='disabled:text-gray-300'>Rescan</button>
+                <button disabled={isWorking} onClick={rescanRepos} className='disabled:text-gray-300'>Rescan</button>
             </> : <>
                 We looked hard but could not find anyting to deploy.<br />
                 Perhaps try to rescan your repositories<br />
                 <br />
-                <button disabled={isLoading} onClick={rescanRepos} className='disabled:text-gray-300'>Rescan</button>
+                <button disabled={isWorking} onClick={rescanRepos} className='disabled:text-gray-300'>Rescan</button>
             </>
             }
         </div>

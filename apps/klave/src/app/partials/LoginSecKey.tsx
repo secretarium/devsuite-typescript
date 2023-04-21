@@ -98,8 +98,12 @@ export const LoginSecKey: FC = () => {
     return <div className="text-center pb-12 md:pb-16">
         <br />
         <div className='pb-5' >
-            <h1 className='text-xl font-bold'>Security keys</h1>
+            <h1 className='text-xl font-bold'>Email log in</h1>
+            <span>Connect via a magic code</span>
+            {/*
+             <h1 className='text-xl font-bold'>Security keys</h1>
             <span>Connect via a hardware key</span>
+             */}
             <br />
             <br />
             <br />

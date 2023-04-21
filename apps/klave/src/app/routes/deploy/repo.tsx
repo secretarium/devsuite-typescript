@@ -16,7 +16,6 @@ export const Select: FC = () => {
     let appSelectionWatch = watch('applications');
     appSelectionWatch = (Array.isArray(appSelectionWatch) ? appSelectionWatch : [appSelectionWatch]).filter(Boolean);
 
-    console.log(appSelectionWatch);
     if (isLoading || !repoData)
         return <>
             <div className='pb-5' >
@@ -41,7 +40,6 @@ export const Select: FC = () => {
         if (hasTriggeredDeploy)
             return;
         applications = (Array.isArray(applications) ? applications : [applications]).filter(Boolean);
-        console.log(applications);
         mutate({
             repoId: repoData.id,
             applications
@@ -73,7 +71,8 @@ export const Select: FC = () => {
                     </div>
                     <br />
                 </> : null}
-                <button disabled={!appSelectionWatch.length || isTriggeringDeploy || hasTriggeredDeploy} type="submit" className='disabled:text-gray-300'>Deploy</button>
+                <Link to="/deploy/select" className='button-like mr-5 disabled:text-gray-300'>Go back</Link>
+                <button disabled={!appSelectionWatch.length || isTriggeringDeploy || hasTriggeredDeploy} type="submit" className='disabled:text-gray-300'>Enable</button>
             </form>
         </div>
     </>;
