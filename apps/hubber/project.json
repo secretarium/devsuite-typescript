@@ -7,9 +7,8 @@
         "build": {
             "executor": "@nrwl/node:webpack",
             "inputs": [
-                {
-                    "fileset": "{workspaceRoot}/node_modules/.prisma/**/*.ts"
-                }
+                "production",
+                "{workspaceRoot}/node_modules/.prisma/**/*.ts"
             ],
             "outputs": [
                 "{options.outputPath}"
@@ -40,9 +39,8 @@
         "serve": {
             "executor": "@nrwl/node:node",
             "inputs": [
-                {
-                    "fileset": "{workspaceRoot}/node_modules/.prisma/**/*.ts"
-                }
+                "production",
+                "{workspaceRoot}/node_modules/.prisma/**/*.ts"
             ],
             "options": {
                 "buildTarget": "hubber:build"
