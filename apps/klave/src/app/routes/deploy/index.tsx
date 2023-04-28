@@ -22,11 +22,6 @@ export const Index: FC = () => {
         redirectUri: '/deploy/select'
     });
 
-    console.log(import.meta);
-    console.log(process.env);
-    console.log(process.env['NX_KLAVE_AUTHSTATE_URL']);
-    console.log(encodeURI(process.env['NX_KLAVE_AUTHSTATE_URL'] ?? `${window.location.origin}/auth`));
-
     const githubAuth = new URL('https://github.com/login/oauth/authorize');
     githubAuth.searchParams.append('client_id', 'Iv1.6ff39dee83590f91');
     githubAuth.searchParams.append('scope', 'read:user,read:gpg_key,read:public_key,repo');
