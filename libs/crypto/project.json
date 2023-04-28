@@ -7,11 +7,10 @@
         "build": {
             "dependsOn": [
                 {
-                    "target": "build-upstream",
-                    "projects": "self"
+                    "target": "build-upstream"
                 }
             ],
-            "executor": "@nrwl/js:tsc",
+            "executor": "@nx/js:tsc",
             "outputs": [
                 "{options.outputPath}"
             ],
@@ -41,7 +40,7 @@
             }
         },
         "lint": {
-            "executor": "@nrwl/linter:eslint",
+            "executor": "@nx/linter:eslint",
             "options": {
                 "lintFilePatterns": [
                     "libs/crypto/**/*.{ts,tsx,js,jsx,json}"
@@ -52,7 +51,7 @@
             ]
         },
         "test": {
-            "executor": "@nrwl/jest:jest",
+            "executor": "@nx/jest:jest",
             "outputs": [
                 "{workspaceRoot}/coverage/libs/crypto"
             ],

@@ -10,6 +10,7 @@
         "typescript",
         "typescriptreact"
     ],
+    "eslint.packageManager": "yarn",
     "editor.detectIndentation": false,
     "editor.formatOnSave": true,
     "files.exclude": {

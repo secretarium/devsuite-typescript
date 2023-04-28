@@ -11,7 +11,7 @@ const jsonRules = {
 
 const javascriptRules = {
     ...jsonRules,
-    '@nrwl/nx/enforce-module-boundaries': [
+    '@nx/enforce-module-boundaries': [
         'error',
         {
             enforceBuildableLibDependency: true,
@@ -30,14 +30,20 @@ const javascriptRules = {
     'comma-dangle': ['error', 'never'],
     'no-trailing-spaces': 'error',
     'no-extra-semi': 'error',
-    'no-unused-vars': ['error', { args: 'after-used', varsIgnorePattern: '^__unused' }],
+    'no-unused-vars': [
+        'error',
+        { args: 'after-used', varsIgnorePattern: '^__unused' }
+    ],
     'semi': ['error', 'always']
 };
 
 const typescriptRules = {
     ...javascriptRules,
     'no-unused-vars': 'off',
-    '@typescript-eslint/no-unused-vars': ['error', { args: 'after-used', varsIgnorePattern: '^__unused' }]
+    '@typescript-eslint/no-unused-vars': [
+        'error',
+        { args: 'after-used', varsIgnorePattern: '^__unused' }
+    ]
 };
 
 module.exports = {
@@ -53,17 +59,25 @@ module.exports = {
             './{packages,apps,libs}/*/tsconfig.server.json'
         ]
     },
-    ignorePatterns: ['**/*', '!**/*.json', '!**/*.js', '!**/*.ts', '!scripts', '!tools', '!.vscode'],
-    plugins: ['@nrwl/nx', 'json'],
+    ignorePatterns: [
+        '**/*',
+        '!**/*.json',
+        '!**/*.js',
+        '!**/*.ts',
+        '!scripts',
+        '!tools',
+        '!.vscode'
+    ],
+    plugins: ['@nx', 'json'],
     overrides: [
         {
             files: ['*.ts', '*.tsx'],
-            extends: ['plugin:@nrwl/nx/typescript'],
+            extends: ['plugin:@nx/typescript'],
             rules: typescriptRules
         },
         {
             files: ['*.js', '*.jsx'],
-            extends: ['plugin:@nrwl/nx/javascript'],
+            extends: ['plugin:@nx/javascript'],
             rules: javascriptRules
         },
         {

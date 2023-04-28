@@ -40,6 +40,9 @@
             ]
         }
     },
+    "include": [
+        "package.json"
+    ],
     "exclude": [
         "node_modules",
         "tmp"

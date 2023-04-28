@@ -4,16 +4,15 @@
         "outDir": "../../dist/out-tsc",
         "module": "commonjs",
         "types": [
-            "node",
-            "express"
+            "node"
         ]
     },
     "exclude": [
         "jest.config.ts",
-        "**/*.spec.ts",
-        "**/*.test.ts"
+        "src/**/*.spec.ts",
+        "src/**/*.test.ts"
     ],
     "include": [
-        "**/*.ts"
+        "src/**/*.ts"
     ]
 }

@@ -13,7 +13,7 @@
         "noFallthroughCasesInSwitch": true
     },
     "files": [
-        "../../node_modules/@nrwl/expo/typings/svg.d.ts"
+        "../../node_modules/@nx/expo/typings/svg.d.ts"
     ],
     "include": [],
     "references": [

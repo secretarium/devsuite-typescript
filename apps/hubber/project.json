@@ -5,54 +5,46 @@
     "projectType": "application",
     "targets": {
         "build": {
-            "executor": "@nrwl/node:webpack",
-            "inputs": [
-                "production",
-                "{workspaceRoot}/node_modules/.prisma/**/*.ts"
-            ],
+            "executor": "@nx/webpack:webpack",
             "outputs": [
                 "{options.outputPath}"
             ],
+            "defaultConfiguration": "production",
             "options": {
+                "target": "node",
+                "compiler": "tsc",
                 "outputPath": "dist/apps/hubber",
                 "main": "apps/hubber/src/main.ts",
                 "tsConfig": "apps/hubber/tsconfig.app.json",
-                "assets": [
-                    "apps/hubber/src/i18n/locales"
-                ],
-                "generatePackageJson": true
+                "isolatedConfig": true,
+                "webpackConfig": "apps/hubber/webpack.config.js"
             },
             "configurations": {
+                "development": {},
                 "production": {
                     "optimization": true,
                     "extractLicenses": true,
-                    "inspect": false,
-                    "fileReplacements": [
-                        {
-                            "replace": "apps/hubber/src/environments/environment.ts",
-                            "with": "apps/hubber/src/environments/environment.prod.ts"
-                        }
-                    ]
+                    "generateLockfile": true
                 }
             }
         },
         "serve": {
-            "executor": "@nrwl/node:node",
-            "inputs": [
-                "production",
-                "{workspaceRoot}/node_modules/.prisma/**/*.ts"
-            ],
+            "executor": "@nx/js:node",
+            "defaultConfiguration": "development",
             "options": {
                 "buildTarget": "hubber:build"
             },
             "configurations": {
+                "development": {
+                    "buildTarget": "hubber:build:development"
+                },
                 "production": {
                     "buildTarget": "hubber:build:production"
                 }
             }
         },
         "lint": {
-            "executor": "@nrwl/linter:eslint",
+            "executor": "@nx/linter:eslint",
             "outputs": [
                 "{options.outputFile}"
             ],
@@ -63,13 +55,19 @@
             }
         },
         "test": {
-            "executor": "@nrwl/jest:jest",
+            "executor": "@nx/jest:jest",
             "outputs": [
-                "{workspaceRoot}/coverage/apps/hubber"
+                "{workspaceRoot}/coverage/{projectRoot}"
             ],
             "options": {
                 "jestConfig": "apps/hubber/jest.config.ts",
                 "passWithNoTests": true
+            },
+            "configurations": {
+                "ci": {
+                    "ci": true,
+                    "codeCoverage": true
+                }
             }
         },
         "version": {
@@ -82,20 +80,14 @@
         "docker-build": {
             "dependsOn": [
                 {
-                    "projects": "self",
                     "target": "build"
                 },
                 {
-                    "projects": "dependencies",
-                    "target": "build"
+                    "target": "build",
+                    "dependencies": true
                 }
             ],
-            "executor": "nx:run-commands",
-            "options": {
-                "commands": [
-                    "docker build -f apps/hubber/Dockerfile . -t hubber:latest"
-                ]
-            }
+            "command": "docker build -f apps/hubber/Dockerfile . -t hubber:latest"
         }
     },
     "implicitDependencies": [

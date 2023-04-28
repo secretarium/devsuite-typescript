@@ -1,8 +1,11 @@
 const { join } = require('path');
-const { createGlobPatternsForDependencies } = require('@nrwl/react/tailwind');
+const { createGlobPatternsForDependencies } = require('@nx/react/tailwind');
 
 module.exports = {
-    content: [...createGlobPatternsForDependencies(__dirname), join(__dirname, 'src/**/*.{js,ts,jsx,tsx}')],
+    content: [
+        ...createGlobPatternsForDependencies(__dirname),
+        join(__dirname, 'src/**/*.{js,ts,jsx,tsx}')
+    ],
     darkMode: 'media',
     important: true,
     theme: {
@@ -45,7 +48,8 @@ module.exports = {
             boxShadow: {
                 'xs': '0 0 0 1px rgba(0, 0, 0, 0.16)',
                 'sm': '0 1px 2px 0 rgba(0, 0, 0, 0.16)',
-                'default': '0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.03)',
+                'default':
+                    '0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.03)',
                 'md': '0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
                 'lg': '0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02)',
                 'xl': '0 20px 25px -5px rgba(0, 0, 0, 0.12), 0 10px 10px -5px rgba(0, 0, 0, 0.02)',
@@ -134,8 +138,5 @@ module.exports = {
         boxShadow: ['responsive', 'hover', 'focus', 'focus-within'],
         opacity: ['responsive', 'hover', 'focus', 'group-hover']
     },
-    plugins: [
-        require('@tailwindcss/forms'),
-        require('daisyui')
-    ]
+    plugins: [require('@tailwindcss/forms'), require('daisyui')]
 };

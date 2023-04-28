@@ -5,7 +5,7 @@
     "projectType": "application",
     "targets": {
         "build": {
-            "executor": "@nrwl/webpack:webpack",
+            "executor": "@nx/webpack:webpack",
             "outputs": [
                 "{options.outputPath}"
             ],
@@ -54,7 +54,7 @@
             }
         },
         "serve": {
-            "executor": "@nrwl/webpack:dev-server",
+            "executor": "@nx/webpack:dev-server",
             "options": {
                 "proxyConfig": "apps/klave/proxy.config.js",
                 "buildTarget": "klave:build",
@@ -74,7 +74,7 @@
             "defaultConfiguration": "development"
         },
         "lint": {
-            "executor": "@nrwl/linter:eslint",
+            "executor": "@nx/linter:eslint",
             "outputs": [
                 "{options.outputFile}"
             ],
@@ -85,7 +85,7 @@
             }
         },
         "test": {
-            "executor": "@nrwl/jest:jest",
+            "executor": "@nx/jest:jest",
             "outputs": [
                 "{workspaceRoot}/coverage/{projectRoot}"
             ],

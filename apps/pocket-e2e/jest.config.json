@@ -1,6 +1,6 @@
 {
     "preset": "../../jest.preset",
-    "testEnvironment": "./environment",
+    "testEnvironment": "./_detoxJestEnv",
     "testRunner": "jest-circus/runner",
     "testTimeout": 120000,
     "reporters": [
@@ -10,7 +10,7 @@
         "<rootDir>/test-setup.ts"
     ],
     "transform": {
-        "^(?!.*\\.(js|jsx|ts|tsx|css|json)$)": "@nrwl/react/plugins/jest",
+        "^(?!.*\\.(js|jsx|ts|tsx|css|json)$)": "@nx/react/plugins/jest",
         "^.+\\.[tj]sx?$": "babel-jest"
     }
 }
