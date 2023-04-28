@@ -3,6 +3,8 @@ import * as Tracing from '@sentry/tracing';
 
 Sentry.init({
     dsn: process.env.NX_SENTRY_DSN,
+    release: 'klave@0.0.0',
+    environment: 'development',
     integrations: [
         // enable HTTP calls tracing
         new Sentry.Integrations.Http({ tracing: true }),
