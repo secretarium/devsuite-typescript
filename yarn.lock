@@ -4494,14 +4494,14 @@
     "@opentelemetry/semantic-conventions" "^1.0.0"
     "@types/hapi__hapi" "20.0.9"
 
-"@opentelemetry/instrumentation-http@0.34.0":
-  version "0.34.0"
-  resolved "https://registry.yarnpkg.com/@opentelemetry/instrumentation-http/-/instrumentation-http-0.34.0.tgz#cafa7f2797280f471589c7fc8bac65050dcf6e7e"
-  integrity sha512-sZxpYOggRIFwdcdy1wWBGG8fwiuWWK4j3qv/rdqTwcPvrVT4iSCoPNDMZYxOcxSEP1fybq28SK43e+IKwxVElQ==
+"@opentelemetry/instrumentation-http@0.38.0":
+  version "0.38.0"
+  resolved "https://registry.yarnpkg.com/@opentelemetry/instrumentation-http/-/instrumentation-http-0.38.0.tgz#0226ff67e9f79063aae771bfdb04389da457c828"
+  integrity sha512-9kpRVnG6oVvt3/WYCzrHwW+s69BW4ap38NWFJLFB+Mcq1wmAcNSoBYUM7j2AfJB4w4y3A6r6mYgnusnxdmPYYg==
   dependencies:
-    "@opentelemetry/core" "1.8.0"
-    "@opentelemetry/instrumentation" "0.34.0"
-    "@opentelemetry/semantic-conventions" "1.8.0"
+    "@opentelemetry/core" "1.12.0"
+    "@opentelemetry/instrumentation" "0.38.0"
+    "@opentelemetry/semantic-conventions" "1.12.0"
     semver "^7.3.5"
 
 "@opentelemetry/instrumentation-http@^0.29.2":
@@ -4705,6 +4705,15 @@
   integrity sha512-VET/bOh4StOQV4vf1sAvn2JD67BhW2vPZ/ynl2gHXyafme2yB8Hs9+tr1TLzFwNGo7jwMFviFQkZjCYxMuK0AA==
   dependencies:
     require-in-the-middle "^5.0.3"
+    semver "^7.3.2"
+    shimmer "^1.2.1"
+
+"@opentelemetry/instrumentation@0.38.0":
+  version "0.38.0"
+  resolved "https://registry.yarnpkg.com/@opentelemetry/instrumentation/-/instrumentation-0.38.0.tgz#e97c6d4ea699006ec2541fd83b26a10f0edaada4"
+  integrity sha512-wr1WkIbzHGV+oz6SCme88D2c+zNG23COkCjcida8b3jIzX2lJafOpEHPDcbBF38F8ChkRSj/tVnx1wnYAXZvbA==
+  dependencies:
+    require-in-the-middle "^6.0.0"
     semver "^7.3.2"
     shimmer "^1.2.1"
 
@@ -19018,6 +19027,15 @@ require-in-the-middle@^5.0.3:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/require-in-the-middle/-/require-in-the-middle-5.2.0.tgz#4b71e3cc7f59977100af9beb76bf2d056a5a6de2"
   integrity sha512-efCx3b+0Z69/LGJmm9Yvi4cqEdxnoGnxYxGxBghkkTTFeXRtTCmmhO0AnAfHz59k957uTSuy8WaHqOs8wbYUWg==
+  dependencies:
+    debug "^4.1.1"
+    module-details-from-path "^1.0.3"
+    resolve "^1.22.1"
+
+require-in-the-middle@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/require-in-the-middle/-/require-in-the-middle-6.0.0.tgz#01cc6416286fb5e672d0fe031d996f8bc202509d"
+  integrity sha512-+dtWQ7l2lqQDxheaG3jjyN1QI37gEwvzACSgjYi4/C2y+ZTUMeRW8BIOm+9NBKvwaMBUSZfPXVOt1skB0vBkRw==
   dependencies:
     debug "^4.1.1"
     module-details-from-path "^1.0.3"
