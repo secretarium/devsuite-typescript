@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/node';
-import * as Tracing from '@sentry/tracing';
+// import { client } from '../../utils/db';
 
 Sentry.init({
     dsn: process.env.NX_SENTRY_DSN,
@@ -9,7 +9,12 @@ Sentry.init({
         // enable HTTP calls tracing
         new Sentry.Integrations.Http({ tracing: true }),
         // enable Express.js middleware tracing
-        new Tracing.Integrations.Express()
+        new Sentry.Integrations.Express(),
+        new Sentry.Integrations.Prisma(),
+        // ({
+        //     client:
+        // }),
+        new Sentry.Integrations.Mongo()
     ],
     // Set tracesSampleRate to 1.0 to capture 100%
     // of transactions for performance monitoring.

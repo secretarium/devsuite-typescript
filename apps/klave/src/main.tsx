@@ -1,5 +1,4 @@
 // import './wdyr';
-// import './opentelemetry';
 import './app/utils/sentry';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';

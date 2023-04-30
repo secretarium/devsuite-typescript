@@ -24,7 +24,6 @@ import { trcpMiddlware } from './middleware/trpc';
 import { usersRouter, filesRouter } from './routes';
 import logger from '../utils/logger';
 import { webLinkerMiddlware } from './middleware/webLinker';
-// import { opentelemetrySdk } from './opentelemetry';
 
 const eapp = express();
 const { app, getWss } = ews(eapp, undefined, {
@@ -273,8 +272,6 @@ export const start = async (port: number) => {
     app.use(sentryErrorMiddleware);
 
     app.use('*', express.static(path.join(__dirname, 'public'), { index: 'index.html' }));
-
-    // await opentelemetrySdk;
 
     return app;
 };

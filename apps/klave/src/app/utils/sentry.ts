@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/react';
-import { BrowserTracing } from '@sentry/tracing';
+import { BrowserTracing } from '@sentry/browser';
 import {
     createBrowserRouter,
     useLocation,
@@ -30,7 +30,7 @@ Sentry.init({
     // for finer control
     tracesSampleRate: 1.0,
     replaysOnErrorSampleRate: 1.0,
-    replaysSessionSampleRate: 0.1
+    replaysSessionSampleRate: 1.0
 });
 
 export const sentryCreateBrowserRouter = Sentry.wrapCreateBrowserRouter(
