@@ -25,7 +25,8 @@
                         ".js": ".js"
                     }
                 },
-                "generatePackageJson": true
+                "generatePackageJson": true,
+                "thirdParty": true
             },
             "configurations": {
                 "production": {
