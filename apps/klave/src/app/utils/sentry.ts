@@ -1,5 +1,6 @@
 import * as Sentry from '@sentry/react';
 import { BrowserTracing } from '@sentry/browser';
+import * as SecretariumInstruments from '@secretarium/intrumentation';
 import {
     createBrowserRouter,
     useLocation,
@@ -8,6 +9,7 @@ import {
     matchRoutes
 } from 'react-router-dom';
 import { useEffect } from 'react';
+import { client as scpClient } from './secretarium';
 
 Sentry.init({
     dsn: process.env['NX_SENTRY_DSN'],
@@ -22,6 +24,9 @@ Sentry.init({
                 createRoutesFromChildren,
                 matchRoutes
             )
+        }),
+        new SecretariumInstruments.Sentry.ConnectorTracing({
+            connector: scpClient
         }),
         new Sentry.Replay()
     ],

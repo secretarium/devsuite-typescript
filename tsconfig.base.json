@@ -35,6 +35,9 @@
             "@secretarium/hubber-db": [
                 "libs/hubber-db/src/index.ts"
             ],
+            "@secretarium/intrumentation": [
+                "libs/instrumentation/src/index.ts"
+            ],
             "@secretarium/trustless-app": [
                 "libs/trustless-app-sdk/src/index.ts"
             ]

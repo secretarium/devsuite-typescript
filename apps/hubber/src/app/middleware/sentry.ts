@@ -1,4 +1,6 @@
 import * as Sentry from '@sentry/node';
+import * as SecretariumInstruments from '@secretarium/intrumentation';
+import { client as scpClient } from '../../utils/secretarium';
 // import { client } from '../../utils/db';
 
 Sentry.init({
@@ -14,7 +16,10 @@ Sentry.init({
         // ({
         //     client:
         // }),
-        new Sentry.Integrations.Mongo()
+        new Sentry.Integrations.Mongo(),
+        new SecretariumInstruments.Sentry.ConnectorTracing({
+            connector: scpClient
+        })
     ],
     // Set tracesSampleRate to 1.0 to capture 100%
     // of transactions for performance monitoring.
