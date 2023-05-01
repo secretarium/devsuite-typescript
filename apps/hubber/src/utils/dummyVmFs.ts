@@ -43,7 +43,7 @@ export const dummyMap: Record<string, string | null> = {
                 "fs-extra": "9.1.0"
             }
         }`,
-    'node_modules/@secretarium/trustless-app/assembly/index.ts': `
+    'node_modules/@secretarium/trustless-app/index.ts': `
         /**
          * Environment definitions for compiling Klave Trustless Application.
          * @module trustless/sdk

@@ -142,7 +142,7 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                 if (buildResult.success === false)
                     return;
 
-                const { binary: compileBinary } = buildResult;
+                const { result: { binary: compileBinary } } = buildResult;
                 if (compileBinary.length === 0)
                     return;
 

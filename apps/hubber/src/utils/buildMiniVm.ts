@@ -2,7 +2,9 @@ import stream from 'node:stream';
 import nodePath from 'node:path';
 // import { writeFile } from 'fs-extra';
 // import { loopWhile } from 'deasync';
-import * as asc from 'assemblyscript/cli/asc';
+import { ErrorObject, serializeError } from 'serialize-error';
+import type { Stats } from 'assemblyscript/dist/asc';
+import { createCompilter } from '../utils/compilerWorker';
 import type { Context } from 'probot';
 import { KlaveRcConfiguration } from '@secretarium/trustless-app';
 import { DeploymentPushPayload } from '@secretarium/hubber-api';
@@ -11,18 +13,28 @@ import { dummyMap } from './dummyVmFs';
 
 type BuildOutput = {
     success: true;
+    result: {
+        stats: Stats;
+        binary: Uint8Array;
+    };
     stdout: stream.Duplex;
     stderr: stream.Duplex;
-    binary: Uint8Array;
 } | {
     success: false;
+    error?: Error | ErrorObject;
 }
+
+type BuildMiniVMEvent = 'start' | 'error' | 'done'
+type BuildMiniVMEventHandler = (result?: BuildOutput) => void;
 
 export type DeploymentContext<Type> = {
     octokit: Context['octokit']
 } & Type;
 
 export class BuildMiniVM {
+
+    private eventHanlders: Partial<Record<BuildMiniVMEvent, BuildMiniVMEventHandler[]>> = {};
+
     constructor(private options: {
         type: 'github';
         context: DeploymentContext<DeploymentPushPayload>;
@@ -30,25 +42,28 @@ export class BuildMiniVM {
         application: KlaveRcConfiguration['applications'][number];
     }) { }
 
-    async getContent(path: string): ReturnType<typeof octokit.repos.getContent> {
-
-        console.log(`Reading ${path}`);
-        const { context: { octokit, ...context }, repo } = this.options;
-
-        return await octokit.repos.getContent({
-            owner: repo.owner,
-            repo: repo.name,
-            ref: context.commit.ref,
-            path,
-            mediaType: {
-                format: 'raw+json'
-            }
-        });
-    }
-
     getContentSync(path: string): string | null {
         const normalisedPath = path.split(nodePath.sep).join(nodePath.posix.sep);
         return dummyMap[normalisedPath] ?? null;
+    }
+
+    async getContent(path: string): Promise<Awaited<ReturnType<typeof octokit.repos.getContent>> | { data: string | null }> {
+
+        const { context: { octokit, ...context }, repo } = this.options;
+
+        try {
+            return await octokit.repos.getContent({
+                owner: repo.owner,
+                repo: repo.name,
+                ref: context.commit.ref,
+                path,
+                mediaType: {
+                    format: 'raw+json'
+                }
+            });
+        } catch {
+            return { data: this.getContentSync(path) };
+        }
     }
 
     async getRootContent() {
@@ -61,83 +76,74 @@ export class BuildMiniVM {
                 return content;
         } catch (e) {
             console.error(e);
-            return null;
+            return { data: null };
         }
+    }
+
+    on(event: BuildMiniVMEvent, callback: BuildMiniVMEventHandler) {
+        this.eventHanlders[event] = [
+            ...(this.eventHanlders[event] ?? []),
+            callback
+        ];
     }
 
     async build(): Promise<BuildOutput> {
 
-        const { application, context: { commit } } = this.options;
-
-        console.log(`Building ${application.name} from ${application.rootDir} @ ${commit.ref} ...`);
-
         const rootContent = await this.getRootContent();
-        dummyMap['..ts'] = rootContent?.data.toString() ?? null;
+        dummyMap['..ts'] = rootContent?.data?.toString() ?? null;
 
         let compiledBinary = new Uint8Array(0);
-        const compileStdOut = new stream.Duplex();
-        const compileStdErr = new stream.Duplex();
-
+        const compiler = createCompilter();
         try {
-            return new Promise((resolve) => {
-                asc.main([
-                    '.',
-                    // '--stats',
-                    // '--noUnsafe',
-                    '--exportRuntime',
-                    '--traceResolution',
-                    '-O', '--noAssert',
-                    '--optimizeLevel', '3',
-                    '--shrinkLevel', '2',
-                    '--converge',
-                    '--binaryFile', 'out.wasm',
-                    '--textFile', 'out.wat',
-                    '--tsdFile', 'out.d.ts',
-                    '--idlFile', 'out.idl'
-                    // '--',
-                    // '--title="Klave WASM Compiler"',
-                    // '--enable-fips'
-                ], {
-                    // stdout: compileStdOut,
-                    // stderr: compileStdErr,
-                    reportDiagnostic: (diagnostic) => {
-                        console.log(diagnostic);
-                        console.log(diagnostic.message);
-                    },
-                    readFile: (filename) => {
-                        console.log(`Compiler requests file '${filename}'`);
-                        return this.getContentSync(filename);
-                        // const source = this.getContentSync(filename);
-                        // console.log('Content for', filename, source, typeof source.data, `'${source?.data.toString()}'`);
-                        // if (source.status !== 200)
-                        //     return null;
-                        // return source?.data.toString();
-                    },
-                    writeFile: (filename, contents) => {
-                        console.log('Compiler providing output', filename);
-                        if (filename.includes('.wasm')) {
-                            compiledBinary = contents;
-                            //     const path = `${process.cwd()}/tmp/out.${Math.random().toString().substring(3, 9)}.wasm`;
-                            //     console.log('WASM copy export:', path);
-                            //     writeFile(path, contents);
+            return new Promise<BuildOutput>((resolve) => {
+                compiler.on('message', (message) => {
+                    if (message.type === 'start') {
+                        this.eventHanlders['start']?.forEach(handler => handler());
+                    } else if (message.type === 'read') {
+                        this.getContent(message.filename).then(contents => {
+                            compiler.postMessage({
+                                type: 'read',
+                                filename: message.filename,
+                                contents: contents.data
+                            });
+                        });
+                    } else if (message.type === 'write') {
+                        if (message.filename.includes('.wasm')) {
+                            compiledBinary = message.contents;
                         }
+                    } else if (message.type === 'diagnostic') {
+                        console.log(message.diagnostics);
+                    } else if (message.type === 'errored') {
+                        console.error(message.error);
+                        this.eventHanlders['error']?.forEach(handler => handler());
+                        compiler.terminate().finally(() => {
+                            resolve({
+                                success: false,
+                                error: message.error
+                            });
+                        });
+                    } else if (message.type === 'done') {
+                        const output = {
+                            success: true,
+                            result: {
+                                stats: message.stats,
+                                binary: compiledBinary
+                            },
+                            stdout: message.stdout,
+                            stderr: message.stderr
+                        };
+                        this.eventHanlders['done']?.forEach(handler => handler(output));
+                        compiler.terminate().finally(() => {
+                            resolve(output);
+                        });
                     }
-                }, (error) => {
-                    if (error)
-                        console.error(error);
-                    resolve({
-                        success: true,
-                        stdout: compileStdOut,
-                        stderr: compileStdErr,
-                        binary: compiledBinary
-                    });
-                    return 0;
                 });
             });
         } catch (error) {
-            console.error(error);
+            console.error(serializeError(error));
             return {
-                success: false
+                success: false,
+                error: serializeError(error)
             };
         }
     }
