@@ -1,7 +1,6 @@
 import stream from 'node:stream';
 import nodePath from 'node:path';
-// import { writeFile } from 'fs-extra';
-// import { loopWhile } from 'deasync';
+import { sigstore } from 'sigstore';
 import { ErrorObject, serializeError } from 'serialize-error';
 import type { Stats } from 'assemblyscript/dist/asc';
 import { createCompilter } from '../utils/compilerWorker';
@@ -16,6 +15,7 @@ type BuildOutput = {
     result: {
         stats: Stats;
         binary: Uint8Array;
+        signature?: sigstore.Bundle;
     };
     stdout: stream.Duplex;
     stderr: stream.Duplex;
@@ -123,19 +123,29 @@ export class BuildMiniVM {
                             });
                         });
                     } else if (message.type === 'done') {
-                        const output = {
-                            success: true,
-                            result: {
-                                stats: message.stats,
-                                binary: compiledBinary
-                            },
-                            stdout: message.stdout,
-                            stderr: message.stderr
-                        };
-                        this.eventHanlders['done']?.forEach(handler => handler(output));
-                        compiler.terminate().finally(() => {
-                            resolve(output);
-                        });
+                        let signature: sigstore.Bundle;
+                        // TODO Add OIDC token
+                        sigstore.sign(Buffer.from(compiledBinary), { identityToken: '' })
+                            .then(bundle => {
+                                signature = bundle;
+                            })
+                            .catch(() => { return; })
+                            .finally(() => {
+                                const output = {
+                                    success: true,
+                                    result: {
+                                        stats: message.stats,
+                                        binary: compiledBinary,
+                                        signature
+                                    },
+                                    stdout: message.stdout,
+                                    stderr: message.stderr
+                                };
+                                this.eventHanlders['done']?.forEach(handler => handler(output));
+                                compiler.terminate().finally(() => {
+                                    resolve(output);
+                                });
+                            });
                     }
                 });
             });
