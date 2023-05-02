@@ -3,19 +3,15 @@ import type { Probot } from 'probot';
 import logger from '../../utils/logger';
 import { deployToSubstrate, updatePullRequestFromSubstrate } from '../controllers/deploymentController';
 
-const processedEvents: Record<string, boolean> = {};
 const probotApp = (app: Probot) => {
     app.on([
         'ping',
         'pull_request.opened',
         'pull_request.synchronize',
         'check_run.rerequested',
-        'push'
+        'push',
+        'check_suite'
     ], async (context) => {
-
-        if (processedEvents[context.id])
-            return;
-        processedEvents[context.id] = true;
 
         // TODO Revisit this to use tRCP router with express context
         const hook = await prisma.hook.create({
@@ -26,7 +22,8 @@ const probotApp = (app: Probot) => {
                 payload: context.payload as any
             }
         });
-        logger.info(`New record of hook ${hook.id}`);
+        
+        logger.info(`New record of hook '${context.name}' ${hook.id}`);
 
         if (context.name === 'push')
             deployToSubstrate({
