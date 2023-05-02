@@ -7,7 +7,7 @@ import assemblyscript from 'assemblyscript/asc';
 
 /** @type {import('assemblyscript/dist/asc.d.ts')} */
 const asc = assemblyscript;
-const pendingResolves = {}
+const pendingResolves = {};
 
 const compileStdOut = new PassThrough();
 const compileStdErr = new PassThrough();
@@ -17,7 +17,7 @@ parentPort.on('message', (message) => {
         parentPort.postMessage({
             type: 'start',
             version: asc.version
-        })
+        });
         asc.main([
             '.',
             '--exportRuntime',
@@ -43,11 +43,11 @@ parentPort.on('message', (message) => {
                     parentPort.postMessage({
                         type: 'read',
                         filename
-                    })
+                    });
                 }).catch(() => {
-                    pendingResolves[filename](null)
+                    pendingResolves[filename](null);
                     delete pendingResolves[message.filename];
-                })
+                });
             },
             writeFile: async (filename, contents) => {
                 parentPort.postMessage({
@@ -60,7 +60,7 @@ parentPort.on('message', (message) => {
             if (result.error) {
                 parentPort.postMessage({
                     type: 'errored',
-                    error: serializeError(error)
+                    error: serializeError(result.error)
                 });
             } else
                 parentPort.postMessage({
@@ -81,4 +81,4 @@ parentPort.on('message', (message) => {
             delete pendingResolves[message.filename];
         }
     }
-})
+});

@@ -81,6 +81,15 @@ module.exports = {
             rules: javascriptRules
         },
         {
+            files: ['*.mjs'],
+            extends: ['plugin:@nx/javascript'],
+            rules: javascriptRules,
+            parserOptions: {
+                sourceType: 'module',
+                ecmaVersion: 2021
+            }
+        },
+        {
             files: ['*.json'],
             extends: ['plugin:json/recommended'],
             rules: jsonRules
