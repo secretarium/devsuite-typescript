@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/node';
 import * as SecretariumInstruments from '@secretarium/intrumentation';
+import { client as prismaClient } from '../../utils/db';
 import { client as scpClient } from '../../utils/secretarium';
-// import { client } from '../../utils/db';
 
 Sentry.init({
     dsn: process.env.NX_SENTRY_DSN,
@@ -12,10 +12,9 @@ Sentry.init({
         new Sentry.Integrations.Http({ tracing: true }),
         // enable Express.js middleware tracing
         new Sentry.Integrations.Express(),
-        new Sentry.Integrations.Prisma(),
-        // ({
-        //     client:
-        // }),
+        new Sentry.Integrations.Prisma({
+            client: prismaClient
+        }),
         new Sentry.Integrations.Mongo(),
         new SecretariumInstruments.Sentry.ConnectorTracing({
             connector: scpClient
