@@ -1,16 +1,16 @@
-import * as Klave from '@secretarium/trustless-app';
+import { Notifier, Router } from '@secretarium/trustless-app';
 
-export const my_query: Klave.Query = (arg) => {
+export const my_query = (arg: ArrayBuffer): void => {
     const s = String.UTF8.decode(arg, true);
-    Klave.notify(String.UTF8.encode('Hello ' + s, true));
+    Notifier.notify(String.UTF8.encode('Hello ' + s, true));
 };
 
-export const my_transaction: Klave.Transaction = (arg) => {
+export const my_transaction = (arg: ArrayBuffer): void => {
     const s = String.UTF8.decode(arg, true);
-    Klave.notify(String.UTF8.encode('Hello ' + s, true));
+    Notifier.notify(String.UTF8.encode('Hello ' + s, true));
 };
 
 export function register_routes(): void {
-    Klave.addUserQuery(String.UTF8.encode('my_query', true));
-    Klave.addUserTransaction(String.UTF8.encode('my_transaction', true));
+    Router.addQuery(String.UTF8.encode('my_query', true));
+    Router.addTransaction(String.UTF8.encode('my_transaction', true));
 }
