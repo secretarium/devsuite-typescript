@@ -2,6 +2,13 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.4.2](///compare/trustless-app-sdk@0.4.1...trustless-app-sdk@0.4.2) (2023-05-10)
+
+
+### Bug Fixes
+
+* **trustless-app-sdk:** Fixing crash on file absence b3c3535
+
 ## [0.4.1](///compare/trustless-app-sdk@0.4.0...trustless-app-sdk@0.4.1) (2023-05-10)
 
 ### Dependency Updates
