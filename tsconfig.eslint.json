@@ -7,11 +7,8 @@
         ".eslintrc.js",
         "*.js*",
         "*.ts*",
-        "apps/**/*.js*",
-        "apps/**/*.ts*",
-        "libs/**/*.js*",
-        "libs/**/*.ts*",
-        "tools/**/*.js",
-        "tools/**/*.ts"
+        "apps/*/*.{js,mjs,ts,json}",
+        "libs/*/*.{js,mjs,ts,json}",
+        "tools/**/*.{js,mjs,ts,json}"
     ]
 }

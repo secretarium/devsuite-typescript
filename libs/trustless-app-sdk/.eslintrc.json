@@ -3,7 +3,9 @@
         "../../.eslintrc.js"
     ],
     "ignorePatterns": [
-        "!**/*"
+        "!**/*",
+        "index.ts",
+        "assembly"
     ],
     "overrides": [
         {

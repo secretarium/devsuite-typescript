@@ -11,6 +11,8 @@
         ]
     },
     "include": [
+        "_detoxJestEnv.js",
+        "test-setup.ts",
         "src/**/*.ts",
         "src/**/*.js"
     ]

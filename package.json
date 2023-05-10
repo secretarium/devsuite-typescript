@@ -9,7 +9,7 @@
         "build": "nx affected --target=build",
         "test": "nx affected --target=test",
         "e2e": "nx affected --target=e2e",
-        "lint": "eslint . --ext .ts,.tsx,.js,.jsx,.json",
+        "lint": "eslint .",
         "lint-check": "nx affected --target=lint && yarn lint",
         "lint-fix": "nx affected --target=lint --fix && yarn lint --fix",
         "lint-commit": "commitlint -c false --edit",
