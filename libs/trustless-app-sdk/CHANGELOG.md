@@ -2,6 +2,11 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.4.1](///compare/trustless-app-sdk@0.4.0...trustless-app-sdk@0.4.1) (2023-05-10)
+
+### Dependency Updates
+
+* `hubber-compiler` updated to version `0.0.1`
 ## [0.4.0](///compare/trustless-app-sdk@0.3.2...trustless-app-sdk@0.4.0) (2023-05-10)
 
 ### Dependency Updates
