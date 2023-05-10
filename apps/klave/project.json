@@ -93,6 +93,18 @@
                 "jestConfig": "apps/klave/jest.config.ts",
                 "passWithNoTests": true
             }
+        },
+        "version": {
+            "executor": "@jscutlery/semver:version",
+            "options": {
+                "preset": "conventional",
+                "trackDeps": true,
+                "tagPrefix": "${projectName}@",
+                "commitMessageFormat": "chore(${projectName}): Release version ${version}",
+                "postTargets": [
+                    "klave:build"
+                ]
+            }
         }
     },
     "tags": []

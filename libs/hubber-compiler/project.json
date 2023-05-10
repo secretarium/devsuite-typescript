@@ -51,6 +51,18 @@
                     "codeCoverage": true
                 }
             }
+        },
+        "version": {
+            "executor": "@jscutlery/semver:version",
+            "options": {
+                "preset": "conventional",
+                "trackDeps": true,
+                "tagPrefix": "${projectName}@",
+                "commitMessageFormat": "chore(${projectName}): Release version ${version}",
+                "postTargets": [
+                    "hubber-compiler:build"
+                ]
+            }
         }
     },
     "tags": []
