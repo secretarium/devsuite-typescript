@@ -1,5 +1,5 @@
 {
-    "extends": "../../node_modules/@secretarium/trustless-app/sdk.json",
+    "extends": "../../node_modules/@klave/sdk/sdk.json",
     "include": [
         "./**/*.ts"
     ]

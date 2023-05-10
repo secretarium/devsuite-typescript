@@ -1,4 +1,4 @@
-import { Notifier, Router } from '@secretarium/trustless-app';
+import { Notifier, Router } from '@klave/sdk';
 
 export const my_query = (arg: ArrayBuffer): void => {
     const s = String.UTF8.decode(arg, true);

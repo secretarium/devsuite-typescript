@@ -3,7 +3,8 @@
         "build": "stac ."
     },
     "devDependencies": {
-        "@secretarium/trustless-app": "{{SMART_CONTRACT_SDK_CURRENT_VERSION}}",
-        "assemblyscript": "^0.27.5"
+        "@klave/sdk": "{{KLAVE_SDK_CURRENT_VERSION}}",
+        "assemblyscript": "^0.27.5",
+        "tslib": "^2.5.0"
     }
 }

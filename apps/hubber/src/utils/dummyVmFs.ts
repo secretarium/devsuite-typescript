@@ -6,11 +6,11 @@ export const dummyMap: Record<string, string | null> = {
                 "disable": "bulk-memory"
             }
         }`,
-    'node_modules/@secretarium/trustless-app/package.json': `
+    'node_modules/@klave/sdk/package.json': `
         {
-            "name": "@secretarium/trustless-app",
+            "name": "@klave/sdk",
             "description": "Secretarium Trustless Apps helpers and definitions",
-            "version": "0.3.2",
+            "version": "0.4.1",
             "license": "MIT",
             "private": false,
             "author": {
@@ -35,15 +35,13 @@ export const dummyMap: Record<string, string | null> = {
             "dependencies": {
                 "assemblyscript": "^0.27.5",
                 "chalk": "4.1.2",
-                "fs-extra": "9.1.0",
-                "zod": "3.20.2"
+                "fs-extra": "11.1.1",
             },
             "devDependencies": {
-                "chalk": "4.1.2",
-                "fs-extra": "9.1.0"
+                "fs-extra": "11.1.1"
             }
         }`,
-    'node_modules/@secretarium/trustless-app/index.ts': `
+    'node_modules/@klave/sdk/index.ts': `
         /**
          * Environment definitions for compiling Klave Trustless Application.
          * @module trustless/sdk

@@ -106,10 +106,10 @@ async function createTemplateAsync(targetDir: string, data: SubstitutionData): P
             to: [data.project.name, data.project.slug]
         });
 
-        const latestSDK = await latestVersion('@secretarium/trustless-app');
+        const latestSDK = await latestVersion('@klave/sdk');
         await replaceInFile({
             files: path.join(targetDir, 'package.json'),
-            from: [/{{SMART_CONTRACT_SDK_CURRENT_VERSION}}/g],
+            from: [/{{KLAVE_SDK_CURRENT_VERSION}}/g],
             to: [latestSDK ?? '*']
         });
 

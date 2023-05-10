@@ -5,7 +5,7 @@ import { ErrorObject, serializeError } from 'serialize-error';
 import type { Stats } from 'assemblyscript/dist/asc';
 import { createCompilter } from '@klave/compiler';
 import type { Context } from 'probot';
-import { KlaveRcConfiguration } from '@secretarium/trustless-app';
+import { KlaveRcConfiguration } from '@klave/sdk';
 import { DeploymentPushPayload } from '@secretarium/hubber-api';
 import { Repo } from '@prisma/client';
 import { dummyMap } from './dummyVmFs';

@@ -1,6 +1,6 @@
 {
-    "name": "create-trustless-app",
-    "description": "The script to create Trustless application",
+    "name": "create-on-klave",
+    "description": "The tool to bootstrap trustless apps on Klave",
     "version": "0.3.1",
     "license": "MIT",
     "private": false,
@@ -9,6 +9,7 @@
         "name": "Florian Guitton"
     },
     "bin": {
+        "create-on-klave": "./bin/create-on-klave",
         "create-trustless-app": "./bin/create-trustless-app"
     }
 }

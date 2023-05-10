@@ -1,6 +1,6 @@
 import { DeploymentPushPayload, DeploymentPullRequestPayload } from '@secretarium/hubber-api';
 import { prisma } from '@secretarium/hubber-db';
-import type { KlaveRcConfiguration } from '@secretarium/trustless-app';
+import type { KlaveRcConfiguration } from '@klave/sdk';
 import { Utils } from '@secretarium/connector';
 import path from 'node:path';
 import secretariumClient from '../../utils/secretarium';

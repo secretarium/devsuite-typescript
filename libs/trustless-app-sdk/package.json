@@ -1,5 +1,5 @@
 {
-    "name": "@secretarium/trustless-app",
+    "name": "@klave/sdk",
     "description": "Secretarium Trustless Apps helpers and definitions",
     "version": "0.4.1",
     "license": "MIT",
@@ -22,8 +22,8 @@
     },
     "dependencies": {
         "assemblyscript": "^0.27.5",
-        "fs-extra": "11.1.1",
-        "chalk": "4.1.2"
+        "chalk": "4.1.2",
+        "fs-extra": "11.1.1"
     },
     "devDependencies": {
         "@types/fs-extra": "11.0.1"

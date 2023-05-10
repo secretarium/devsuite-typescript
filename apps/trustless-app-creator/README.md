@@ -1,11 +1,11 @@
-# create-trustless-app
+# create-on-klave
 
-Initializes a new [Secretarium Trustless application](https://secretarium.com/) project with scaffolding for TypeScript.
+Initializes a new [Trustless application](https://klave.network/) project with scaffolding for TypeScript. Ready to run on the Klave Network
 
 ### Usage
 
 ```
-yarn create trustless-app
+yarn create on-klave
 ```
 
-To test beta releases, run `TRUSTLESS_BETA=1 yarn create trustless-app`.
+To test beta releases, run `TRUSTLESS_BETA=1 yarn create on-klave`.

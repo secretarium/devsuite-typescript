@@ -26,6 +26,9 @@
             "@klave/compiler": [
                 "libs/hubber-compiler/src/index.ts"
             ],
+            "@klave/sdk": [
+                "libs/trustless-app-sdk/src/index.ts"
+            ],
             "@secretarium/connector": [
                 "libs/connector/src/index.ts"
             ],
@@ -40,9 +43,6 @@
             ],
             "@secretarium/intrumentation": [
                 "libs/instrumentation/src/index.ts"
-            ],
-            "@secretarium/trustless-app": [
-                "libs/trustless-app-sdk/src/index.ts"
             ]
         }
     },
