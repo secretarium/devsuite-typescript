@@ -2,6 +2,16 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.4.0](///compare/trustless-app-sdk@0.3.2...trustless-app-sdk@0.4.0) (2023-05-10)
+
+### Dependency Updates
+
+* `hubber-compiler` updated to version `0.1.0`
+
+### Features
+
+* **hubber-compiler:** Split off the wasm compiler into separate library package 36e1f02
+
 ## [0.3.2](///compare/trustless-app-sdk@0.3.1...trustless-app-sdk@0.3.2) (2023-02-24)
 
 
