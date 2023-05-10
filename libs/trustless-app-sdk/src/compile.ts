@@ -14,59 +14,65 @@ const compile = () => {
         const parsingOutput = schema.safeParse(JSON.parse(configContent));
 
         if (parsingOutput.success)
-            parsingOutput.data.applications.forEach(async (app, index) => {
-                try {
-                    new Promise<void>((resolve) => {
-                        const appPathRoot = path.join(CWD, app.rootDir ?? parsingOutput.data.rootDir ?? '.');
-                        let appPath = path.join(appPathRoot, app.index ?? '');
-                        if (!fs.existsSync(appPath) || !fs.statSync(appPath).isFile())
-                            appPath = path.join(appPathRoot, 'index.ssc');
-                        if (!fs.existsSync(appPath) || !fs.statSync(appPath).isFile())
-                            appPath = path.join(appPathRoot, 'index.ssc.ts');
-                        if (!fs.existsSync(appPath) || !fs.statSync(appPath).isFile())
-                            appPath = path.join(appPathRoot, 'index.ts');
-                        if (!fs.existsSync(appPath) || !fs.statSync(appPath).isFile())
-                            console.error(`Could not read entry point for application ${chalk.green(app.name)}`);
+            Promise.allSettled(parsingOutput.data.applications.map((app, index) =>
+                new Promise<void>((resolve, reject) => {
+                    const appPathRoot = path.join(CWD, app.rootDir ?? parsingOutput.data.rootDir ?? '.');
+                    let appPath = path.join(appPathRoot, app.index ?? '');
+                    if (!fs.existsSync(appPath) || !fs.statSync(appPath).isFile())
+                        appPath = path.join(appPathRoot, 'index.ssc');
+                    if (!fs.existsSync(appPath) || !fs.statSync(appPath).isFile())
+                        appPath = path.join(appPathRoot, 'index.ssc.ts');
+                    if (!fs.existsSync(appPath) || !fs.statSync(appPath).isFile())
+                        appPath = path.join(appPathRoot, 'index.ts');
+                    if (!fs.existsSync(appPath) || !fs.statSync(appPath).isFile())
+                        console.error(`Could not read entry point for application ${chalk.green(app.name)}`);
 
-                        console.error(`Compiling ${chalk.green(app.name)} from ${path.join('.', path.relative(CWD, appPath))}...`);
+                    console.error(`Compiling ${chalk.green(app.name)} from ${path.join('.', path.relative(CWD, appPath))}...`);
+                    fs.mkdirSync(path.join(CWD, '.klave'), { recursive: true });
 
-                        const compiler = createCompilter();
+                    const compiler = createCompilter();
 
-                        compiler.on('message', (message) => {
-                            // if (message.type === 'start') {
-                            //     ...
-                            // }
-                            if (message.type === 'read') {
-                                console.log('Requested file: ' + message.filename);
-                                console.log('Trying ...' + path.resolve(appPathRoot, message.filename));
-                                fs.readFile(path.resolve(appPathRoot, message.filename)).then(contents => {
-                                    compiler.postMessage({
-                                        type: 'read',
-                                        filename: message.filename,
-                                        contents: contents
-                                    });
+                    compiler.on('message', (message) => {
+                        // if (message.type === 'start') {
+                        //     ...
+                        // }
+                        if (message.type === 'read') {
+                            if (process.env['DEBUG'] === 'true')
+                                console.debug('file_read_try:' + path.resolve(appPathRoot, message.filename));
+                            fs.readFile(path.resolve(appPathRoot, message.filename)).then(contents => {
+                                compiler.postMessage({
+                                    type: 'read',
+                                    filename: message.filename,
+                                    contents: contents.toString()
                                 });
-                            } else if (message.type === 'write') {
-                                fs.writeFile(`${path.join(CWD, '.klave', index.toString())}.${path.extname(message.filename)}`, message.contents);
-                            } else if (message.type === 'diagnostic') {
-                                console.log(message.diagnostics);
-                            } else if (message.type === 'errored') {
-                                console.error(message.error);
-                                compiler.terminate().finally(() => {
-                                    resolve();
-                                    return 1;
+                            }).catch(() => {
+                                compiler.postMessage({
+                                    type: 'read',
+                                    filename: message.filename,
+                                    contents: null
                                 });
-                            } else if (message.type === 'done') {
-                                resolve();
-                                return 0;
-                            }
-                        });
+                            });
+                        } else if (message.type === 'write') {
+                            fs.writeFile(`${path.join(CWD, '.klave', `${index.toString()}-${app.name.toLocaleLowerCase().replace(/\s/g, '-')}`)}${path.extname(message.filename)}`, message.contents);
+                        } else if (message.type === 'diagnostic') {
+                            console.log(message.diagnostics);
+                        } else if (message.type === 'errored') {
+                            compiler.terminate().finally(() => {
+                                reject(message.error);
+                            });
+                        } else if (message.type === 'done') {
+                            resolve();
+                        }
                     });
-                } catch (error) {
-                    console.log('Compilation failed: ' + error?.toString());
-                    console.error(error);
-                }
-            });
+                })))
+                .then((results) => {
+                    const erroredList = results.filter((result): result is PromiseRejectedResult => result.status === 'rejected');
+                    if (erroredList.length > 0) {
+                        erroredList.forEach(result => console.error(result.reason));
+                        process.exit(1);
+                    } else
+                        process.exit(0);
+                });
         else
             console.error(parsingOutput.error.flatten());
     } catch (e) {
