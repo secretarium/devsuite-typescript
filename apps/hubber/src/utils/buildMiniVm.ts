@@ -3,7 +3,7 @@ import nodePath from 'node:path';
 import { sigstore } from 'sigstore';
 import { ErrorObject, serializeError } from 'serialize-error';
 import type { Stats } from 'assemblyscript/dist/asc';
-import { createCompilter } from '../utils/compilerWorker';
+import { createCompilter } from '@klave/compiler';
 import type { Context } from 'probot';
 import { KlaveRcConfiguration } from '@secretarium/trustless-app';
 import { DeploymentPushPayload } from '@secretarium/hubber-api';

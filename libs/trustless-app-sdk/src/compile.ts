@@ -1,7 +1,7 @@
 import * as fs from 'fs-extra';
 import * as path from 'node:path';
-import * as asc from 'assemblyscript/cli/asc';
 import * as chalk from 'chalk';
+import { createCompilter } from '@klave/compiler';
 import { klaveRcConfigurationSchema as schema } from './rc';
 
 // `yarn run` may change the current working dir, then we should use `INIT_CWD` env.
@@ -29,33 +29,37 @@ const compile = () => {
                             console.error(`Could not read entry point for application ${chalk.green(app.name)}`);
 
                         console.error(`Compiling ${chalk.green(app.name)} from ${path.join('.', path.relative(CWD, appPath))}...`);
-                        asc.main([
-                            '.',
-                            // '--stats',
-                            '--exportRuntime',
-                            '--traceResolution',
-                            '-O', '--noAssert',
-                            '--optimizeLevel', '3',
-                            '--shrinkLevel', '2',
-                            '--converge',
-                            '--binaryFile', `${path.join(CWD, '.klave', index.toString())}.wasm`,
-                            '--textFile', `${path.join(CWD, '.klave', index.toString())}.wat`,
-                            '--tsdFile', `${path.join(CWD, '.klave', index.toString())}.d.ts`,
-                            '--idlFile', `${path.join(CWD, '.klave', index.toString())}.idl`
-                            // '--',
-                            // '--title="Klave WASM Compiler"',
-                            // '--enable-fips'
-                        ], {
-                            stdout: process.stdout,
-                            stderr: process.stderr,
-                            reportDiagnostic: (diagnostic) => {
-                                console.log(diagnostic);
-                                console.log(diagnostic.message);
+
+                        const compiler = createCompilter();
+
+                        compiler.on('message', (message) => {
+                            // if (message.type === 'start') {
+                            //     ...
+                            // }
+                            if (message.type === 'read') {
+                                console.log('Requested file: ' + message.filename);
+                                console.log('Trying ...' + path.resolve(appPathRoot, message.filename));
+                                fs.readFile(path.resolve(appPathRoot, message.filename)).then(contents => {
+                                    compiler.postMessage({
+                                        type: 'read',
+                                        filename: message.filename,
+                                        contents: contents
+                                    });
+                                });
+                            } else if (message.type === 'write') {
+                                fs.writeFile(`${path.join(CWD, '.klave', index.toString())}.${path.extname(message.filename)}`, message.contents);
+                            } else if (message.type === 'diagnostic') {
+                                console.log(message.diagnostics);
+                            } else if (message.type === 'errored') {
+                                console.error(message.error);
+                                compiler.terminate().finally(() => {
+                                    resolve();
+                                    return 1;
+                                });
+                            } else if (message.type === 'done') {
+                                resolve();
+                                return 0;
                             }
-                        }, (error) => {
-                            console.error(error);
-                            resolve();
-                            return 0;
                         });
                     });
                 } catch (error) {

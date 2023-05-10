@@ -4,6 +4,6 @@
     },
     "devDependencies": {
         "@secretarium/trustless-app": "{{SMART_CONTRACT_SDK_CURRENT_VERSION}}",
-        "assemblyscript": "^0.19.3"
+        "assemblyscript": "^0.27.5"
     }
 }

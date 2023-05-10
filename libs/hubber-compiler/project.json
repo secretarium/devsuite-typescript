@@ -1,0 +1,57 @@
+{
+    "name": "hubber-compiler",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "libs/hubber-compiler/src",
+    "projectType": "library",
+    "targets": {
+        "build": {
+            "executor": "@nx/js:tsc",
+            "outputs": [
+                "{options.outputPath}"
+            ],
+            "options": {
+                "outputPath": "dist/libs/hubber-compiler",
+                "main": "libs/hubber-compiler/src/index.ts",
+                "tsConfig": "libs/hubber-compiler/tsconfig.lib.json",
+                "assets": [
+                    "libs/hubber-compiler/*.md",
+                    "libs/hubber-compiler/src/*.mjs"
+                ]
+            }
+        },
+        "publish": {
+            "command": "node tools/scripts/publish.mjs hubber-compiler {args.ver} {args.tag}",
+            "dependsOn": [
+                "build"
+            ]
+        },
+        "lint": {
+            "executor": "@nx/linter:eslint",
+            "outputs": [
+                "{options.outputFile}"
+            ],
+            "options": {
+                "lintFilePatterns": [
+                    "libs/hubber-compiler/**/*.ts"
+                ]
+            }
+        },
+        "test": {
+            "executor": "@nx/jest:jest",
+            "outputs": [
+                "{workspaceRoot}/coverage/{projectRoot}"
+            ],
+            "options": {
+                "jestConfig": "libs/hubber-compiler/jest.config.ts",
+                "passWithNoTests": true
+            },
+            "configurations": {
+                "ci": {
+                    "ci": true,
+                    "codeCoverage": true
+                }
+            }
+        }
+    },
+    "tags": []
+}

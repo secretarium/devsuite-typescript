@@ -33,7 +33,7 @@ export const dummyMap: Record<string, string | null> = {
                 }
             },
             "dependencies": {
-                "assemblyscript": "^0.19.3",
+                "assemblyscript": "^0.27.5",
                 "chalk": "4.1.2",
                 "fs-extra": "9.1.0",
                 "zod": "3.20.2"

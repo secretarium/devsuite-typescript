@@ -17,14 +17,7 @@
                 "main": "apps/hubber/src/main.ts",
                 "tsConfig": "apps/hubber/tsconfig.app.json",
                 "isolatedConfig": true,
-                "webpackConfig": "apps/hubber/webpack.config.js",
-                "assets": [
-                    {
-                        "glob": "compilerModule.mjs",
-                        "input": "apps/hubber/src/utils",
-                        "output": "."
-                    }
-                ]
+                "webpackConfig": "apps/hubber/webpack.config.js"
             },
             "configurations": {
                 "development": {},
