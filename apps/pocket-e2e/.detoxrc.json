@@ -14,12 +14,12 @@
         },
         "ios.eas": {
             "type": "ios.app",
-            "build": "yarn nx run pocket:download --platform ios --distribution simulator --output=apps/pocket/dist/",
+            "build": "yarn nx run pocket-e2e:download --platform ios --distribution simulator --output=../../apps/pocket-e2e/dist/",
             "binaryPath": "../../apps/pocket/dist/pocket.app"
         },
         "ios.local": {
             "type": "ios.app",
-            "build": "yarn nx run pocket:build --platform ios --profile preview --wait --local --no-interactive --output=apps/pocket/dist/",
+            "build": "yarn nx run pocket-e2e:build --platform ios --configuration=debug --output=../../apps/pocket-e2e/dist/PocketE2e.tar.gz",
             "binaryPath": "../../apps/pocket/dist/pocket.app"
         },
         "android.debug": {
@@ -33,13 +33,13 @@
             "binaryPath": "../../apps/pocket/android/app/build/outputs/apk/release/app-release.apk"
         },
         "android.eas": {
-            "type": "ios.app",
-            "build": "yarn nx run pocket:download --platform android --output=apps/pocket/dist/",
+            "type": "android.apk",
+            "build": "yarn nx run pocket-e2e:download --platform android --distribution simulator --output=../../apps/pocket-e2e/dist/",
             "binaryPath": "../../apps/pocket/dist/pocket.apk"
         },
         "android.local": {
-            "type": "ios.app",
-            "build": "yarn nx run pocket:build --platform android --profile preview --wait --local --no-interactive --output=apps/pocket/dist/",
+            "type": "android.apk",
+            "build": "yarn nx run pocket-e2e:build --platform android --configuration=debug --output=../../apps/pocket-e2e/dist/PocketE2e.apk",
             "binaryPath": "../../apps/pocket/dist/pocket.apk"
         }
     },

@@ -4,6 +4,6 @@
     "type": "commonjs",
     "license": "MIT",
     "dependencies": {
-        "@octokit/rest": "^18.0.6"
+        "@octokit/rest": "^19.0.7"
     }
 }

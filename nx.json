@@ -103,5 +103,5 @@
             "analyzeSourceFiles": true
         }
     },
-    "defaultProject": "crate"
+    "defaultProject": "hubber"
 }
