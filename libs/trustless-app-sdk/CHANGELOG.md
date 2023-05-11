@@ -2,6 +2,17 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.4.4](///compare/trustless-app-sdk@0.4.3...trustless-app-sdk@0.4.4) (2023-05-11)
+
+### Dependency Updates
+
+* `hubber-compiler` updated to version `0.0.3`
+
+### Bug Fixes
+
+* **hubber-compiler,trustless-app-sdk:** Problem leading to compiler freeze + Add bailing e124be5
+* **hubber-compiler:** Ensure proper export of ESM bindings 147aa09
+
 ## [0.4.3](///compare/trustless-app-sdk@0.4.2...trustless-app-sdk@0.4.3) (2023-05-11)
 
 ### Dependency Updates
