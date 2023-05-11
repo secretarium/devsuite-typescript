@@ -2,6 +2,8 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.3.6](///compare/trustless-app-creator@0.3.5...trustless-app-creator@0.3.6) (2023-05-11)
+
 ## [0.3.5](///compare/trustless-app-creator@0.3.4...trustless-app-creator@0.3.5) (2023-05-11)
 
 ## [0.3.4](///compare/trustless-app-creator@0.3.3...trustless-app-creator@0.3.4) (2023-05-11)
