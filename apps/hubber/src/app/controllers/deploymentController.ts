@@ -139,18 +139,46 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                 });
                 const buildResult = await buildVm.build();
 
+                const { stdout, stderr } = buildResult;
+
+                await prisma.deployment.update({
+                    where: {
+                        id: deployment.id
+                    },
+                    data: {
+                        status: 'compiled',
+                        buildOutputStdOut: stdout,
+                        buildOutputStdErr: stderr
+                    }
+                });
+
+                // TODO - Populate reasons why deployment failed
                 if (buildResult.success === false)
                     return;
 
-                const { result: { binary: compileBinary } } = buildResult;
-                if (compileBinary.length === 0)
+                const { result: { wasm, wat, dts } } = buildResult;
+
+                await prisma.deployment.update({
+                    where: {
+                        id: deployment.id
+                    },
+                    data: {
+                        status: 'compiled',
+                        buildOutputWASM: Utils.toBase64(wasm),
+                        buildOutputWAT: wat,
+                        buildOutputDTS: dts
+                    }
+                });
+
+                // TODO - Populate reasons we fail on empty wasm
+                if (wasm.length === 0)
                     return;
 
                 await secretariumClient.newTx('wasm-manager', 'register_smart_contract', `klave-deployment-${deployment.id}`, {
                     contract: {
                         name: `${deployment.id.split('-').pop()}.sta.klave.network`,
                         wasm_bytes: [],
-                        wasm_bytes_b64: Utils.toBase64(compileBinary)
+                        wasm_bytes_b64: Utils.toBase64(wasm)
                     }
                 }).onExecuted(async () => {
                     console.log('Updating deployment status...');

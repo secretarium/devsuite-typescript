@@ -126,6 +126,7 @@ model DeploymentStage {
 
 enum DeploymentStatus {
     created
+    compiled
     deploying
     deployed
     terminating
@@ -139,20 +140,25 @@ enum DeploymentLifespan {
 }
 
 model Deployment {
-    id            String             @id @default(uuid()) @map("_id")
-    version       String?
-    build         String?
-    locations     String[]           @default([])
-    status        DeploymentStatus   @default(created)
-    life          DeploymentLifespan @default(short)
-    sealed        Boolean            @default(false)
-    released      Boolean            @default(false)
-    tags          String[]           @default([])
-    stages        DeploymentStage[]
-    createdAt     DateTime           @default(now())
-    updatedAt     DateTime           @updatedAt
-    application   Application        @relation(fields: [applicationId], references: [id], onDelete: Cascade)
-    applicationId String
+    id                String             @id @default(uuid()) @map("_id")
+    version           String?
+    build             String?
+    locations         String[]           @default([])
+    status            DeploymentStatus   @default(created)
+    life              DeploymentLifespan @default(short)
+    sealed            Boolean            @default(false)
+    released          Boolean            @default(false)
+    tags              String[]           @default([])
+    stages            DeploymentStage[]
+    createdAt         DateTime           @default(now())
+    updatedAt         DateTime           @updatedAt
+    application       Application        @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+    applicationId     String
+    buildOutputDTS    String?
+    buildOutputWAT    String?
+    buildOutputWASM   String?
+    buildOutputStdOut String?
+    buildOutputStdErr String?
 }
 
 model Domain {

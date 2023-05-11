@@ -68,7 +68,9 @@ parentPort.on('message', (message) => {
             if (result.error) {
                 parentPort.postMessage({
                     type: 'errored',
-                    error: serializeError(result.error)
+                    error: serializeError(result.error),
+                    stdout: compileStdOut.read(),
+                    stderr: compileStdErr.read()
                 });
             } else
                 parentPort.postMessage({

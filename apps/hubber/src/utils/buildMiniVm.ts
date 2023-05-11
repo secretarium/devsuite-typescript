@@ -1,4 +1,3 @@
-import stream from 'node:stream';
 import nodePath from 'node:path';
 import { sigstore } from 'sigstore';
 import { ErrorObject, serializeError } from 'serialize-error';
@@ -11,20 +10,23 @@ import { Repo } from '@prisma/client';
 import { dummyMap } from './dummyVmFs';
 
 type BuildOutput = {
+    stdout: string;
+    stderr: string;
+} & ({
     success: true;
     result: {
         stats: Stats;
-        binary: Uint8Array;
+        wasm: Uint8Array;
+        wat?: string;
+        dts?: string;
         signature?: sigstore.Bundle;
     };
-    stdout: stream.Duplex;
-    stderr: stream.Duplex;
 } | {
     success: false;
     error?: Error | ErrorObject;
-}
+})
 
-type BuildMiniVMEvent = 'start' | 'error' | 'done'
+type BuildMiniVMEvent = 'start' | 'emit' | 'error' | 'done'
 type BuildMiniVMEventHandler = (result?: BuildOutput) => void;
 
 export type DeploymentContext<Type> = {
@@ -93,6 +95,8 @@ export class BuildMiniVM {
         dummyMap['..ts'] = rootContent?.data?.toString() ?? null;
 
         let compiledBinary = new Uint8Array(0);
+        let compiledWAT: string | undefined;
+        let compiledDTS: string | undefined;
         const compiler = createCompilter();
         try {
             return new Promise<BuildOutput>((resolve) => {
@@ -108,9 +112,13 @@ export class BuildMiniVM {
                             });
                         });
                     } else if (message.type === 'write') {
-                        if (message.filename.includes('.wasm')) {
+                        this.eventHanlders['emit']?.forEach(handler => handler(message));
+                        if ((message.filename as string).endsWith('.wasm'))
                             compiledBinary = message.contents;
-                        }
+                        if ((message.filename as string).endsWith('.wat'))
+                            compiledWAT = message.contents;
+                        if ((message.filename as string).endsWith('.d.ts'))
+                            compiledDTS = message.contents;
                     } else if (message.type === 'diagnostic') {
                         console.log(message.diagnostics);
                     } else if (message.type === 'errored') {
@@ -119,7 +127,9 @@ export class BuildMiniVM {
                         compiler.terminate().finally(() => {
                             resolve({
                                 success: false,
-                                error: message.error
+                                error: message.error,
+                                stdout: message.stdout ?? '',
+                                stderr: message.stderr ?? ''
                             });
                         });
                     } else if (message.type === 'done') {
@@ -135,11 +145,13 @@ export class BuildMiniVM {
                                     success: true,
                                     result: {
                                         stats: message.stats,
-                                        binary: compiledBinary,
+                                        wasm: compiledBinary,
+                                        wat: compiledWAT,
+                                        dts: compiledDTS,
                                         signature
                                     },
-                                    stdout: message.stdout,
-                                    stderr: message.stderr
+                                    stdout: message.stdout ?? '',
+                                    stderr: message.stderr ?? ''
                                 };
                                 this.eventHanlders['done']?.forEach(handler => handler(output));
                                 compiler.terminate().finally(() => {
@@ -153,7 +165,9 @@ export class BuildMiniVM {
             console.error(serializeError(error));
             return {
                 success: false,
-                error: serializeError(error)
+                error: serializeError(error),
+                stdout: '',
+                stderr: ''
             };
         }
     }
