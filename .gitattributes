@@ -14,6 +14,10 @@
 # in Unix via a file share from Windows, the scripts will work.
 *.sh text eol=lf
 
+
+# Force node "binaries" to always use LF line endings
+**/bin/* text eol=lf
+
 ###############################
 # Git Large File System (LFS) #
 ###############################
