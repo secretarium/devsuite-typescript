@@ -8,6 +8,7 @@ import assemblyscript from 'assemblyscript/asc';
 /** @type {import('assemblyscript/dist/asc.d.ts')} */
 const asc = assemblyscript;
 const pendingResolves = {};
+let pendingReadIdentifier = 0;
 
 const compileStdOut = new PassThrough();
 const compileStdErr = new PassThrough();
@@ -38,15 +39,22 @@ parentPort.on('message', (message) => {
                 });
             },
             readFile: async (filename) => {
+                const currentReadIdentifier = pendingReadIdentifier++;
                 return await new Promise((resolve) => {
-                    pendingResolves[filename] = resolve;
+                    setTimeout(() => {
+                        if (process.env['DEBUG'] === 'true')
+                            console.debug('faile_read_bail:' + filename);
+                        resolve(null);
+                    }, 5000);
+                    pendingResolves[currentReadIdentifier] = resolve;
                     parentPort.postMessage({
                         type: 'read',
-                        filename
+                        filename,
+                        id: currentReadIdentifier
                     });
                 }).catch(() => {
-                    pendingResolves[filename](null);
-                    delete pendingResolves[message.filename];
+                    pendingResolves[currentReadIdentifier](null);
+                    delete pendingResolves[currentReadIdentifier];
                 });
             },
             writeFile: async (filename, contents) => {
@@ -76,9 +84,9 @@ parentPort.on('message', (message) => {
             });
         });
     } else if (message.type === 'read') {
-        if (pendingResolves[message.filename]) {
-            pendingResolves[message.filename](message.contents);
-            delete pendingResolves[message.filename];
+        if (pendingResolves[message.id]) {
+            pendingResolves[message.id](message.contents);
+            delete pendingResolves[message.id];
         }
     }
 });

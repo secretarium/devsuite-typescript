@@ -42,13 +42,13 @@ const compile = () => {
                             fs.readFile(path.resolve(appPathRoot, message.filename)).then(contents => {
                                 compiler.postMessage({
                                     type: 'read',
-                                    filename: message.filename,
+                                    id: message.id,
                                     contents: contents.toString()
                                 });
                             }).catch(() => {
                                 compiler.postMessage({
                                     type: 'read',
-                                    filename: message.filename,
+                                    id: message.id,
                                     contents: null
                                 });
                             });
