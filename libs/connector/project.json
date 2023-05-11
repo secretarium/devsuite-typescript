@@ -44,7 +44,24 @@
             "executor": "@jscutlery/semver:version",
             "options": {
                 "preset": "conventional",
-                "trackDeps": true
+                "trackDeps": true,
+                "tagPrefix": "${projectName}@",
+                "commitMessageFormat": "chore(${projectName}): Release version ${version}",
+                "postTargets": [
+                    "connector:build"
+                ]
+            }
+        },
+        "publish": {
+            "dependsOn": [
+                "build"
+            ],
+            "executor": "nx:run-commands",
+            "options": {
+                "cwd": "dist/libs/connector",
+                "commands": [
+                    "yarn publish --access public"
+                ]
             }
         }
     },

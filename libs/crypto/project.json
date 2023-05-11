@@ -64,7 +64,24 @@
             "executor": "@jscutlery/semver:version",
             "options": {
                 "preset": "conventional",
-                "trackDeps": true
+                "trackDeps": true,
+                "tagPrefix": "${projectName}@",
+                "commitMessageFormat": "chore(${projectName}): Release version ${version}",
+                "postTargets": [
+                    "crypto:build"
+                ]
+            }
+        },
+        "publish": {
+            "dependsOn": [
+                "build"
+            ],
+            "executor": "nx:run-commands",
+            "options": {
+                "cwd": "dist/libs/crypto",
+                "commands": [
+                    "yarn publish --access public"
+                ]
             }
         }
     },
