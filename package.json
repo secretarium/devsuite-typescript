@@ -24,6 +24,7 @@
     "dependencies": {
         "@d-fischer/isomorphic-ws": "7.0.0",
         "@expo/metro-config": "0.7.1",
+        "@expo/spawn-async": "1.7.2",
         "@fastify/autoload": "~5.7.1",
         "@fastify/helmet": "10.1.1",
         "@fastify/rate-limit": "8.0.0",
@@ -54,6 +55,7 @@
         "axios": "^1.4.0",
         "base64url": "3.0.1",
         "broadcast-channel": "5.1.0",
+        "chalk": "^4.1.0",
         "connect-mongo": "5.0.0",
         "container-query-polyfill": "1.0.2",
         "core-js": "^3.30.2",
@@ -200,6 +202,7 @@
         "@welldone-software/why-did-you-render": "7.0.1",
         "babel-jest": "29.5.0",
         "babel-preset-expo": "9.3.2",
+        "commander": "7.2.0",
         "commitlint": "^17.6.3",
         "cross-env": "7.0.3",
         "cypress": "^12.12.0",

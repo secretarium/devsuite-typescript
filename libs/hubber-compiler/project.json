@@ -10,6 +10,7 @@
                 "{options.outputPath}"
             ],
             "options": {
+                "buildableProjectDepsInPackageJsonType": "dependencies",
                 "outputPath": "dist/libs/hubber-compiler",
                 "main": "libs/hubber-compiler/src/index.ts",
                 "tsConfig": "libs/hubber-compiler/tsconfig.lib.json",
