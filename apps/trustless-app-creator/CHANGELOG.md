@@ -2,6 +2,16 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.3.7](///compare/trustless-app-creator@0.3.6...trustless-app-creator@0.3.7) (2023-05-11)
+
+### Dependency Updates
+
+* `trustless-app-sdk` updated to version `0.4.4`
+
+### Bug Fixes
+
+* **hubber-compiler:** Ensure proper export of ESM bindings 147aa09
+
 ## [0.3.6](///compare/trustless-app-creator@0.3.5...trustless-app-creator@0.3.6) (2023-05-11)
 
 ## [0.3.5](///compare/trustless-app-creator@0.3.4...trustless-app-creator@0.3.5) (2023-05-11)
