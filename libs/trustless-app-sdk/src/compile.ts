@@ -1,6 +1,7 @@
 import * as fs from 'fs-extra';
 import * as path from 'node:path';
 import * as chalk from 'chalk';
+import * as  pathCompleteExtname from 'path-complete-extname';
 import { createCompilter } from '@klave/compiler';
 import { klaveRcConfigurationSchema as schema } from './rc';
 
@@ -53,7 +54,10 @@ const compile = () => {
                                 });
                             });
                         } else if (message.type === 'write') {
-                            fs.writeFile(`${path.join(CWD, '.klave', `${index.toString()}-${app.name.toLocaleLowerCase().replace(/\s/g, '-')}`)}${path.extname(message.filename)}`, message.contents);
+                            const ext = pathCompleteExtname(message.filename);
+                            if (ext.endsWith('.js'))
+                                return;
+                            fs.writeFile(`${path.join(CWD, '.klave', `${index.toString()}-${app.name.toLocaleLowerCase().replace(/\s/g, '-')}`)}${ext}`, message.contents);
                         } else if (message.type === 'diagnostic') {
                             console.log(message.diagnostics);
                         } else if (message.type === 'errored') {

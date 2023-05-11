@@ -2708,7 +2708,7 @@
   dependencies:
     cross-spawn "^7.0.3"
 
-"@expo/spawn-async@^1.5.0", "@expo/spawn-async@^1.7.0":
+"@expo/spawn-async@1.7.2", "@expo/spawn-async@^1.5.0", "@expo/spawn-async@^1.7.0":
   version "1.7.2"
   resolved "https://registry.yarnpkg.com/@expo/spawn-async/-/spawn-async-1.7.2.tgz#fcfe66c3e387245e72154b1a7eae8cada6a47f58"
   integrity sha512-QdWi16+CHB9JYP7gma19OVVg0BFkvU8zNj9GjWorYI8Iv8FUxjOCcYRuAmX4s/h91e4e7BPsskc8cSrZYho9Ew==
@@ -5884,6 +5884,11 @@
   integrity sha512-QFdJ2TiAEoXfEQSNDISJR1Tm51I78CymqcBa8imbjo6dNNu+l2huDxxbDEIoFIwOSKMkOfHEikyDuZ38WwWsmw==
   dependencies:
     "@types/express" "*"
+
+"@types/path-complete-extname@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@types/path-complete-extname/-/path-complete-extname-1.0.0.tgz#73e6f30b5c0c885dd7b168eaf9d2d7ca722b4977"
+  integrity sha512-lC4EeVKzaqyJgBvS2+rqqxCQyC8oO5EJbhNlkhj60FgueWz5ddAIJ/od5GXBNJyUWoifz3ao7PUFL/FFnEcFhQ==
 
 "@types/pino-http@^5.0.6":
   version "5.8.1"
@@ -16063,7 +16068,7 @@ ora@5.1.0:
     strip-ansi "^6.0.0"
     wcwidth "^1.0.1"
 
-ora@^5.4.1:
+ora@^5.4.0, ora@^5.4.1:
   version "5.4.1"
   resolved "https://registry.yarnpkg.com/ora/-/ora-5.4.1.tgz#1b2678426af4ac4a509008e5e4ac9e9959db9e18"
   integrity sha512-5b6Y85tPxZZ7QytO+BQzysW31HJku27cRIlkbAXaNx+BdcVi+LlRFmVXzeF6a7JCwJpyw5c4b+YSVImQIrBpuQ==
@@ -16335,6 +16340,11 @@ path-browserify@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/path-browserify/-/path-browserify-1.0.1.tgz#d98454a9c3753d5790860f16f68867b9e46be1fd"
   integrity sha512-b7uo2UCUOYZcnF/3ID0lulOJi/bafxa1xPe7ZPsammBSpjSWQkjNxlt635YGS2MiR9GjvuXCtz2emr3jbsz98g==
+
+path-complete-extname@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/path-complete-extname/-/path-complete-extname-1.0.0.tgz#f889985dc91000c815515c0bfed06c5acda0752b"
+  integrity sha512-CVjiWcMRdGU8ubs08YQVzhutOR5DEfO97ipRIlOGMK5Bek5nQySknBpuxVAVJ36hseTNs+vdIcv57ZrWxH7zvg==
 
 path-dirname@^1.0.2:
   version "1.0.2"

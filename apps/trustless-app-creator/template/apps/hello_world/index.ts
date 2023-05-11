@@ -1,11 +1,11 @@
 import { Notifier, Router } from '@klave/sdk';
 
-export const my_query = (arg: ArrayBuffer): void => {
+export function my_query(arg: ArrayBuffer): void {
     const s = String.UTF8.decode(arg, true);
     Notifier.notify(String.UTF8.encode('Hello ' + s, true));
 };
 
-export const my_transaction = (arg: ArrayBuffer): void => {
+export function my_transaction(arg: ArrayBuffer): void {
     const s = String.UTF8.decode(arg, true);
     Notifier.notify(String.UTF8.encode('Hello ' + s, true));
 };

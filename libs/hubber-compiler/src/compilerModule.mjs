@@ -22,11 +22,11 @@ parentPort.on('message', (message) => {
         asc.main([
             '.',
             '--exportRuntime',
-            '--traceResolution',
             '-O', '--noAssert',
             '--optimizeLevel', '3',
             '--shrinkLevel', '2',
             '--converge',
+            '--bindings', 'esm',
             '--outFile', 'out.wasm',
             '--textFile', 'out.wat'
         ], {
