@@ -99,6 +99,7 @@
         "next": "13.4.1",
         "next-auth": "4.22.1",
         "nodemailer": "6.9.1",
+        "ora": "^5.4.0",
         "passport": "0.6.0",
         "passport-local": "1.0.0",
         "probot": "12.3.0",
