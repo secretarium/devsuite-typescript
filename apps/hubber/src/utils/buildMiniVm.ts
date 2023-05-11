@@ -26,7 +26,7 @@ type BuildOutput = {
     error?: Error | ErrorObject;
 })
 
-type BuildMiniVMEvent = 'start' | 'emit' | 'error' | 'done'
+type BuildMiniVMEvent = 'start' | 'emit' | 'diagnostic' | 'error' | 'done'
 type BuildMiniVMEventHandler = (result?: BuildOutput) => void;
 
 export type DeploymentContext<Type> = {
@@ -77,7 +77,7 @@ export class BuildMiniVM {
             } else
                 return content;
         } catch (e) {
-            console.error(e);
+            console.error('BuildMiniVm:getRootContent', e);
             return { data: null };
         }
     }
@@ -107,7 +107,7 @@ export class BuildMiniVM {
                         this.getContent(message.filename).then(contents => {
                             compiler.postMessage({
                                 type: 'read',
-                                filename: message.filename,
+                                id: message.id,
                                 contents: contents.data
                             });
                         });
@@ -120,10 +120,9 @@ export class BuildMiniVM {
                         if ((message.filename as string).endsWith('.d.ts'))
                             compiledDTS = message.contents;
                     } else if (message.type === 'diagnostic') {
-                        console.log(message.diagnostics);
+                        this.eventHanlders['diagnostic']?.forEach(handler => handler(message));
                     } else if (message.type === 'errored') {
-                        console.error(message.error);
-                        this.eventHanlders['error']?.forEach(handler => handler());
+                        this.eventHanlders['error']?.forEach(handler => handler(message));
                         compiler.terminate().finally(() => {
                             resolve({
                                 success: false,
@@ -162,7 +161,7 @@ export class BuildMiniVM {
                 });
             });
         } catch (error) {
-            console.error(serializeError(error));
+            console.error('BuildMiniVm:build', serializeError(error));
             return {
                 success: false,
                 error: serializeError(error),

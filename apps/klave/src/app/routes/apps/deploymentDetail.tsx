@@ -58,9 +58,28 @@ export const AppDeploymentDetail: FC = () => {
             </> : null}
             <DeploymentDeletion deployment={deployment} />
         </div>
-        <div>
-            <RunCommand address={`${id.split('-').pop()}.sta.klave.network`} />
-        </div>
+        {status === 'deployed'
+            ? <>
+                <div>
+                    <RunCommand address={`${id.split('-').pop()}.sta.klave.network`} functions={deployment.contractFunctions} />
+                </div>
+                <div className='mt-10'>
+                    <h2 className='font-bold mb-3'>Code Explorer</h2>
+                    <h3 className='mb-3'>Type declarations</h3>
+                    <pre className='overflow-auto whitespace-pre-wrap break-words w-full max-w-full bg-slate-100 p-3'>
+                        {deployment.buildOutputDTS}
+                    </pre>
+                    <h3 className='mt-5 mb-3'>WASM</h3>
+                    <pre className='overflow-auto whitespace-pre-wrap break-words w-full max-w-full bg-slate-100 p-3'>
+                        {deployment.buildOutputWASM}
+                    </pre>
+                </div>
+            </>
+            : status === 'errored'
+                ? <pre className='overflow-auto whitespace-pre-wrap break-words w-full max-w-full bg-red-100 p-3'>
+                    {(deployment.buildOutputErrorObj as any)?.stack ?? JSON.stringify(deployment.buildOutputErrorObj ?? {}, null, 4)}
+                </pre>
+                : null}
     </div >;
 };
 

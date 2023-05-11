@@ -28,18 +28,18 @@ export const deploymentRouter = createTRPCRouter({
         }))
         .query(async ({ ctx: { prisma }, input: { deploymentId } }) => {
 
-            const domainList = await prisma.deployment.findUnique({
+            const deployment = await prisma.deployment.findUnique({
                 where: {
                     id: deploymentId
                 }
             });
 
-            return domainList;
+            return deployment;
         }),
     getAll: publicProcedure
         .query(async ({ ctx: { prisma, webId } }) => {
 
-            const domainList = await prisma.deployment.findMany({
+            const deploymentList = await prisma.deployment.findMany({
                 where: {
                     application: {
                         webId
@@ -47,7 +47,7 @@ export const deploymentRouter = createTRPCRouter({
                 }
             });
 
-            return domainList;
+            return deploymentList;
         }),
     delete: publicProcedure
         .input(z.object({

@@ -146,15 +146,24 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                         id: deployment.id
                     },
                     data: {
-                        status: 'compiled',
                         buildOutputStdOut: stdout,
                         buildOutputStdErr: stderr
                     }
                 });
 
                 // TODO - Populate reasons why deployment failed
-                if (buildResult.success === false)
+                if (buildResult.success === false) {
+                    await prisma.deployment.update({
+                        where: {
+                            id: deployment.id
+                        },
+                        data: {
+                            status: 'errored',
+                            buildOutputErrorObj: buildResult.error as any
+                        }
+                    });
                     return;
+                }
 
                 const { result: { wasm, wat, dts } } = buildResult;
 
@@ -169,6 +178,19 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                         buildOutputDTS: dts
                     }
                 });
+
+                if (dts) {
+                    const matches = Array.from(dts.matchAll(/^export declare function (.*)\(/gm));
+                    const validMatches = matches.map(match => match[1]).filter(match => !['__new', '__pin', '__unpin', '__collect', 'register_routes'].includes(match));
+                    await prisma.deployment.update({
+                        where: {
+                            id: deployment.id
+                        },
+                        data: {
+                            contractFunctions: validMatches
+                        }
+                    });
+                }
 
                 // TODO - Populate reasons we fail on empty wasm
                 if (wasm.length === 0)

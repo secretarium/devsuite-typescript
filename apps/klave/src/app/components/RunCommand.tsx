@@ -5,9 +5,10 @@ import { useSecretariumQuery } from '../utils/secretarium';
 
 type RunCommandProps = {
     address: string;
+    functions?: string[];
 }
 
-export const RunCommand: FC<RunCommandProps> = ({ address }) => {
+export const RunCommand: FC<RunCommandProps> = ({ address, functions = [] }) => {
 
     const [route, setRoute] = useState('');
     const [args, setArgs] = useState('');
@@ -17,7 +18,10 @@ export const RunCommand: FC<RunCommandProps> = ({ address }) => {
         <h2 className='font-bold mb-3'>Command runner</h2>
         <h3 className='mb-3'>Execution input</h3>
         <div className='flex'>
-            <input type="text" name='klave-route-name' className="h-9 font-mono mb-2 bg-gray-900 text-gray-100 border border-gray-300 dark:border-gray-700 dark:text-white w-full text-sm" placeholder="Route name" onChange={({ target }) => setRoute(target.value)} />
+            {/* <input type="text" name='klave-route-name' className="h-9 font-mono mb-2 bg-gray-900 text-gray-100 border border-gray-300 dark:border-gray-700 dark:text-white w-full text-sm" placeholder="Route name" onChange={({ target }) => setRoute(target.value)} /> */}
+            <select name='klave-route-name' placeholder="Route name" onChange={({ target }) => setRoute(target.value)} className="h-9 font-mono mb-2 bg-gray-900 text-gray-100 border border-gray-300 dark:border-gray-700 dark:text-white w-full text-sm" >
+                {functions.map((f, i) => <option key={`function.${i}`} value={f}>{f}</option>)}
+            </select>
             <button onClick={() => refetch()} className='h-9 mb-2 bg-gray-800 hover:bg-gray-600 text-gray-100 border border-gray-300 dark:border-gray-700 dark:text-white rounded-none text-sm font-normal'>Go</button>
         </div>
         <Editor
