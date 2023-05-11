@@ -19,7 +19,7 @@ import latestVersion from 'latest-version';
 const CWD = process.env.INIT_CWD || process.cwd();
 
 // Docs URL
-const DOCS_URL = 'https://secretarium.com';
+const DOCS_URL = 'https://klave.network';
 
 /**
  * The main function of the command.
