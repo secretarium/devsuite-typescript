@@ -8,7 +8,7 @@ let reconnectionTimeout: NodeJS.Timeout | undefined;
 let lastSCPState = Constants.ConnectionState.closed;
 
 const planReconnection = () => {
-    if (lastSCPState !== Constants.ConnectionState.secure && !reconnectionTimeout) {
+    if (!reconnectionTimeout) {
         reconnectionTimeout = setTimeout(() => {
             clearTimeout(reconnectionTimeout);
             reconnectionTimeout = undefined;
@@ -19,7 +19,8 @@ const planReconnection = () => {
 
 client.onStateChange((state) => {
     lastSCPState = state;
-    planReconnection();
+    if (lastSCPState !== Constants.ConnectionState.secure && lastSCPState !== Constants.ConnectionState.connecting)
+        planReconnection();
 });
 
 export const AppLedgerSource = {
