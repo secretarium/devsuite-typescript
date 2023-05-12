@@ -22,6 +22,7 @@
                         "output": "template",
                         "ignore": []
                     },
+                    "apps/trustless-app-creator/template/.gitignore",
                     "apps/trustless-app-creator/bin/*",
                     "apps/trustless-app-creator/*.md"
                 ]
