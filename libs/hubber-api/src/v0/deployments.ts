@@ -63,6 +63,39 @@ export const deploymentRouter = createTRPCRouter({
             return;
 
         }),
+    terminateDeployment: publicProcedure
+        .input(z.object({
+            deploymentId: z.string()
+        }))
+        .mutation(async ({ ctx, input: { deploymentId } }) => {
+            // TODO The Secretarium connection should be ambient in the server
+            const { prisma, scp } = ctx as any as { prisma: (typeof ctx)['prisma'], scp: any };
+            await prisma.deployment.update({
+                where: {
+                    id: deploymentId
+                },
+                data: {
+                    status: 'terminating'
+                }
+            });
+            await scp.newTx('wasm-manager', 'unregister_smart_contract', `klave-termination-${deploymentId}`, {
+                contract: {
+                    name: `${deploymentId.split('-').pop()}.sta.klave.network`
+                }
+            }).onExecuted(async () => {
+                await prisma.deployment.update({
+                    where: {
+                        id: deploymentId
+                    },
+                    data: {
+                        status: 'terminated'
+                    }
+                });
+            }).onError((error: any) => {
+                console.error('Secretarium failed', error);
+                // Timeout will eventually error this
+            }).send();
+        }),
     release: publicProcedure
         .input(z.object({
             deploymentId: z.string()

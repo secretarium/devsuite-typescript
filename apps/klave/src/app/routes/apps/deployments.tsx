@@ -170,7 +170,7 @@ export const Deployments: FC = () => {
                             <div className="flex items-center">
                                 <div className="sm:flex hidden flex-col">
                                     <span className='block' title={createdAt.toDateString()}>{formatTimeAgo(createdAt)}</span>
-                                    {life === 'short' ? <span className={'block text-xs text-slate-500'}>Expires {formatTimeAgo(new Date(createdAt.getTime() + 1000 * 60 * 60 * 24 * 15))}</span> : <span></span>}
+                                    {life === 'short' ? <span className={'block text-xs text-slate-500'}>Expires {formatTimeAgo(deployment.expiresOn)}</span> : <span></span>}
                                 </div>
                             </div>
                         </td>

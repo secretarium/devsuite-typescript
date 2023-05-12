@@ -95,6 +95,7 @@ export const applicationRouter = createTRPCRouter({
                 });
                 // const deployment = await tx.deployment.create({
                 //     data: {
+                //         expiresOn: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14),
                 //         locations: ['FR'],
                 //         application: {
                 //             connect: { id: application.id }

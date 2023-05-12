@@ -78,6 +78,7 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
         const launchDeploy = async () => {
             const deployment = await prisma.deployment.create({
                 data: {
+                    expiresOn: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14),
                     version: availableApplicationsConfig[application.name].version,
                     build: context.commit.after.substring(0, 8),
                     locations: ['FR'],
@@ -203,7 +204,6 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                         wasm_bytes_b64: Utils.toBase64(wasm)
                     }
                 }).onExecuted(async () => {
-                    console.log('Updating deployment status...');
                     await prisma.deployment.update({
                         where: {
                             id: deployment.id
