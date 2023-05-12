@@ -10,9 +10,7 @@ import logger from './logger';
 //     }
 // });
 
-export const client = new SCP({
-    logger: console
-});
+export const client = new SCP();
 
 export const AppLedgerSource = {
     initialize: async () => {
