@@ -51,9 +51,9 @@ export function fromBase64(enc: string): Uint8Array {
     return bytes;
 }
 
-const byteToHex = new Array(256).map((n) => n.toString(16).padStart(2, '0'));
+const byteToHex = new Array(256).fill(0).map((_, n) => n.toString(16).padStart(2, '0'));
 export function toHex(src: Uint8Array, delimiter = ''): string {
-    return src.map((n) => byteToHex[n]).join(delimiter);
+    return Array.from(src).map((n) => byteToHex[n]).join(delimiter);
 }
 
 export function getRandomBytes(size = 32): Uint8Array {
