@@ -1,6 +1,7 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { UilSpinner } from '@iconscout/react-unicons';
+import { Utils } from '@secretarium/crypto';
 import api from '../../utils/api';
 import { formatTimeAgo } from '../../utils/formatTimeAgo';
 import { DeploymentPromotion, DeploymentDeletion } from './deployments';
@@ -9,9 +10,21 @@ import RunCommand from '../../components/RunCommand';
 export const AppDeploymentDetail: FC = () => {
 
     const { deploymentId } = useParams();
+    const [WASMFingerprint, setWASMFingerprint] = useState<string>();
     const { data: deployment, isLoading: isLoadingDeployments } = api.v0.deployments.getById.useQuery({ deploymentId: deploymentId || '' }, {
         refetchInterval: 5000
     });
+
+    useEffect(() => {
+
+        if (!deployment?.buildOutputWASM)
+            return;
+
+        crypto.subtle.digest('SHA-256', Utils.fromBase64(deployment.buildOutputWASM)).then((hash) => {
+            setWASMFingerprint(Utils.toHex(new Uint8Array(hash)));
+        });
+
+    }, [deployment?.buildOutputWASM]);
 
     if (isLoadingDeployments || !deployment)
         return <>
@@ -71,6 +84,9 @@ export const AppDeploymentDetail: FC = () => {
                     </pre>
                     <h3 className='mt-5 mb-3'>WASM</h3>
                     <pre className='overflow-auto whitespace-pre-wrap break-words w-full max-w-full bg-slate-100 p-3'>
+                        SHA256:{WASMFingerprint}
+                    </pre>
+                    <pre className='overflow-auto whitespace-pre-wrap break-words w-full max-w-full bg-slate-100 p-3 mt-2'>
                         {deployment.buildOutputWASM}
                     </pre>
                 </div>
