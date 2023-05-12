@@ -190,17 +190,19 @@ export const Deployments: FC = () => {
                         </td> */}
                         <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 text-right">
                             <div className='flex flex-row flex-nowrap justify-end'>
-                                {status === 'deployed' && life !== 'long' ? <>
-                                    <DeploymentPromotion deployment={deployment} />
-                                    &nbsp;&nbsp;
-                                </> : null}
+                                {/*
+                                    {status === 'deployed' && life !== 'long' ? <>
+                                        <DeploymentPromotion deployment={deployment} />
+                                        &nbsp;&nbsp;
+                                    </> : null}
+                                 */}
                                 <DeploymentDeletion deployment={deployment} />
                             </div>
                         </td>
                     </tr>;
                 })}
             </tbody>
-        </table>
+        </table >
     </>;
 };
 
