@@ -26,6 +26,9 @@
             "@klave/compiler": [
                 "libs/hubber-compiler/src/index.ts"
             ],
+            "@klave/pruner": [
+                "libs/pruner/src/index.ts"
+            ],
             "@klave/sdk": [
                 "libs/trustless-app-sdk/src/index.ts"
             ],
