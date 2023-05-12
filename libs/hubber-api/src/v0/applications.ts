@@ -8,7 +8,8 @@ export const applicationRouter = createTRPCRouter({
             const manifest = await prisma.application.findMany({
                 where: {
                     webId
-                }
+                },
+                include: { deployments: true }
             });
             return manifest;
         }),
