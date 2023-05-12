@@ -38,10 +38,11 @@ export const Index: FC = () => {
     return <>
         <div className='pb-5'>
             <h1 className='text-xl font-bold'>Look for your code</h1>
+            <p>To deploy a new Project, import an existing Git repository</p>
         </div>
         <div className='relative h-[300px]'>
             <a href={githubAuth.toString()} className='a-like mb-3 rounded-full bg-black hover:bg-gray-900 text-white'><UilGithub color='white' />&nbsp;Connect to GitHub</a><br />
-            <a href={gitlabAuth.toString()} className='a-like rounded-full bg-[#db7130] hover:bg-[#bb472d] text-white'><UilGitlab color='white' />&nbsp;Connect to GitHub</a>
+            <a href={gitlabAuth.toString()} className='a-like rounded-full bg-[#db7130] hover:bg-[#bb472d] text-white hidden'><UilGitlab color='white' />&nbsp;Connect to GitHub</a>
         </div>
     </>;
 };
