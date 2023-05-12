@@ -32,15 +32,16 @@ export const AppListing: FC = () => {
         </div> */}
         <div className="space-y-4 mt-3">
             {applicationList.map((app, index) => {
+                const deployedCount = app.deployments?.filter(d => d.status === 'deployed').length ?? 0;
+                const erroredCount = app.deployments?.filter(d => d.status === 'errored').length ?? 0;
                 const destPath = lastMatch.params['appId'] ? lastMatch.pathname.split('/').filter(Boolean).slice(0, 3).join('/').replace(lastMatch.params['appId'], app.id) : `/app/${app.id}`;
                 return <NavLink to={destPath} key={index} className={({ isActive }) => `${isActive ? 'shadow-lg relative ring-2 ring-blue-500 focus:outline-none' : ''} bg-white p-3 w-full flex flex-col rounded-md dark:bg-gray-800 shadow hover:bg-gray-100 dark:hover:bg-gray-700`}>
                     <div className="flex xl:flex-row flex-col items-start font-medium text-gray-900 dark:text-white pb-2 mb-2 xl:border-b border-gray-200 border-opacity-75 dark:border-gray-700 w-full">
                         {app.name}
                     </div>
                     <div className="flex flex-col items-start justify-start flex-grow-0 gap-2 w-full">
-                        <div className="text-xs py-1 px-2 leading-none dark:bg-gray-900 bg-green-100 text-green-600 rounded-md">{app.deployments?.filter(d => d.status === 'deployed').length ?? 0} active deployments</div>
-                        <div className="text-xs py-1 px-2 leading-none dark:bg-gray-900 bg-red-100 text-red-600 rounded-md">{app.deployments?.filter(d => d.status === 'errored').length ?? 0} errors</div>
-                        {/* <div className="ml-auto text-xs text-gray-400">$0.00</div> */}
+                        {deployedCount ? <div className="text-xs py-1 px-2 leading-none dark:bg-gray-900 bg-green-100 text-green-600 rounded-md">{deployedCount} active deployments</div> : null}
+                        {erroredCount ? <div className="text-xs py-1 px-2 leading-none dark:bg-gray-900 bg-red-100 text-red-600 rounded-md">{erroredCount} errors</div> : null}
                     </div>
                 </NavLink>;
             })}
