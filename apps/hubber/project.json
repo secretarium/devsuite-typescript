@@ -24,7 +24,8 @@
                 "production": {
                     "optimization": true,
                     "extractLicenses": true,
-                    "generateLockfile": true
+                    "generateLockfile": true,
+                    "generatePackageJson": true
                 }
             }
         },

@@ -10,8 +10,9 @@ COPY dist/apps/hubber/yarn.lock hubber/
 COPY libs/hubber-db/src/prisma hubber/prisma
 
 RUN chown -R hubber:hubber .
-RUN cd hubber && yarn install --frozen-lockfile
-RUN cd hubber && yarn add prisma smee-client
+RUN cd hubber && yarn install
+# RUN cd hubber && yarn install --frozen-lockfile
+RUN cd hubber && yarn add prisma smee-client @klave/compiler
 RUN cd hubber && yarn run prisma generate
 
 FROM docker.io/node:lts-alpine AS final
