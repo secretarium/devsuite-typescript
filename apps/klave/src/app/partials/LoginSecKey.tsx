@@ -29,9 +29,14 @@ export const LoginSecKey: FC = () => {
             email
         }, {
             onSettled(data, error) {
-                if (error)
-                    setError(JSON.parse(error.message)[0]?.message ?? error.message ?? 'An error occured while trying to send your email code. Please try again later.');
-                else if (data?.ok)
+                if (error) {
+                    try {
+                        const parsedError = JSON.parse(error.message);
+                        setError(parsedError?.message ?? 'An error occured while trying to send your email code. Please try again later.');
+                    } catch (e) {
+                        setError(error.message ?? 'An error occured while trying to send your email code. Please try again later.');
+                    }
+                } else if (data?.ok)
                     setScreen('code');
                 else
                     setError('An error occured while trying to send your email code. Please try again later.');
@@ -125,7 +130,7 @@ export const LoginSecKey: FC = () => {
                 <button onClick={onAuth} type='button' className='mx-1'>Sign In</button>
                 <button onClick={resetLogin} type='button' className='mx-1'>Cancel</button>
             </> : null}
-            {error ? <><br /><br /><div className='bg-red-200 p-2'>{error}</div></> : null}
+            {error ? <><br /><br /><div className='bg-red-200 p-2 w-full'>{error}</div></> : null}
         </div>
     </div>;
 };

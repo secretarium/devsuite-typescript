@@ -27,6 +27,12 @@ export const authRouter = createTRPCRouter({
             email: z.string().email()
         }))
         .mutation(async ({ ctx: { prisma, webId }, input: { email } }) => {
+
+            const betaDomainsAllowed = process.env['NX_BETA_DOMAIN_FILTER']?.split(',') ?? [];
+            const emailDomain = email.split('@')[1];
+            if (!betaDomainsAllowed.includes(emailDomain))
+                throw new Error('It looks like you are not part of Klave\'s beta program');
+
             try {
                 let user = await prisma.user.findFirst({
                     where: {
