@@ -53,6 +53,9 @@
         },
         "compile": {
             "executor": "nx:run-commands",
+            "inputs": [
+                "{projectRoot}/src/prisma/schema.prisma"
+            ],
             "options": {
                 "command": "prisma generate --schema src/prisma/schema.prisma",
                 "cwd": "libs/hubber-db"
