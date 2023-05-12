@@ -1,9 +1,8 @@
-import { DeploymentPushPayload, DeploymentPullRequestPayload } from '@secretarium/hubber-api';
+import { DeploymentPushPayload, DeploymentPullRequestPayload, scp } from '@secretarium/hubber-api';
 import { prisma } from '@secretarium/hubber-db';
 import type { KlaveRcConfiguration } from '@klave/sdk';
 import { Utils } from '@secretarium/connector';
 import path from 'node:path';
-import secretariumClient from '../../utils/secretarium';
 import BuildMiniVM, { DeploymentContext } from '../../utils/buildMiniVm';
 
 export const deployToSubstrate = async (deploymentContext: DeploymentContext<DeploymentPushPayload>) => {
@@ -197,7 +196,7 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                 if (wasm.length === 0)
                     return;
 
-                await secretariumClient.newTx('wasm-manager', 'register_smart_contract', `klave-deployment-${deployment.id}`, {
+                await scp.client.newTx('wasm-manager', 'register_smart_contract', `klave-deployment-${deployment.id}`, {
                     contract: {
                         name: `${deployment.id.split('-').pop()}.sta.klave.network`,
                         wasm_bytes: [],

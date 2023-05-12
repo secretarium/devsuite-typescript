@@ -1,8 +1,6 @@
 import { prisma } from '@secretarium/hubber-db';
 import { router } from '@secretarium/hubber-api';
-import { type SCP } from '@secretarium/connector';
 
-let currentSCPConnection: SCP | undefined;
 let intervalTimer: NodeJS.Timeout;
 
 async function errorLongDeployingDeployments() {
@@ -38,8 +36,7 @@ async function terminateExpiredDeployments() {
     });
     return Promise.allSettled(expiredDeploymentList.map((deployment) => {
         const caller = router.v0.deployments.createCaller({
-            prisma,
-            scp: currentSCPConnection
+            prisma
         } as any);
         return caller.terminateDeployment({
             deploymentId: deployment.id
@@ -57,13 +54,11 @@ export async function prune() {
 }
 
 type PrunerOptions = {
-    scpConnection?: SCP;
     interval?: number;
 }
 
-export function startPruner(options: PrunerOptions) {
-    const { scpConnection, interval = 6000 } = options;
-    currentSCPConnection = scpConnection;
+export function startPruner(options?: PrunerOptions) {
+    const { interval = 6000 } = options ?? {};
     prune();
     intervalTimer = setInterval(() => {
         prune();

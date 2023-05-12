@@ -2,11 +2,11 @@ import { startPruner } from '@klave/pruner';
 import { start } from './app';
 import './i18n';
 import { AppDataSource } from './utils/db';
-import { AppLedgerSource, client } from './utils/secretarium';
+import { scp } from '@secretarium/hubber-api';
 import logger from './utils/logger';
 
 AppDataSource.initialize()
-    .then(AppLedgerSource.initialize)
+    .then(scp.AppLedgerSource.initialize)
     .then(async () => {
 
         const port = Number(process.env.PORT) || 3333;
@@ -22,9 +22,7 @@ AppDataSource.initialize()
             AppDataSource.stop();
         });
 
-        startPruner({
-            scpConnection: client
-        });
+        startPruner();
 
     }).catch(error => {
         logger.error(error);

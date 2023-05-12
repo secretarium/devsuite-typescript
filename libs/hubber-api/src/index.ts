@@ -30,3 +30,5 @@ export { router } from './router';
 
 export type { Context } from './context';
 export { createContext } from './context';
+
+export * as scp from './secretarium';

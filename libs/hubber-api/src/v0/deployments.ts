@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { createTRPCRouter, publicProcedure } from '../trpc';
+import { client as scp } from '../secretarium';
 
 export const deploymentRouter = createTRPCRouter({
     getByApplication: publicProcedure
@@ -67,9 +68,8 @@ export const deploymentRouter = createTRPCRouter({
         .input(z.object({
             deploymentId: z.string()
         }))
-        .mutation(async ({ ctx, input: { deploymentId } }) => {
+        .mutation(async ({ ctx: { prisma }, input: { deploymentId } }) => {
             // TODO The Secretarium connection should be ambient in the server
-            const { prisma, scp } = ctx as any as { prisma: (typeof ctx)['prisma'], scp: any };
             await prisma.deployment.update({
                 where: {
                     id: deploymentId
