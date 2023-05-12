@@ -7,6 +7,7 @@ import deployments from './deployments';
 import activities from './activities';
 import domains from './domains';
 import hooks from './hooks';
+import system from './system';
 
 export const v0Router = createTRPCRouter({
     auth,
@@ -16,7 +17,8 @@ export const v0Router = createTRPCRouter({
     deployments,
     activities,
     domains,
-    hooks
+    hooks,
+    system
 });
 
 export type V0Router = typeof v0Router;

@@ -1,10 +1,28 @@
 
 import { useState, useEffect } from 'react';
 import { SCP, Key } from '@secretarium/connector';
+import { httpApi } from './api';
 
 export const client = new SCP({
     logger: console
 });
+
+let connectionKey: Key | undefined;
+let connectionInfo: Array<string> | undefined;
+
+const syncNodeInfo = async () => {
+    return httpApi.v0.system.getSecretariumNode.query().then(node => {
+        if (node)
+            connectionInfo = node?.split('|') ?? [];
+        else
+            connectionInfo = process.env['NX_SECRETARIUM_NODE']?.split('|') ?? [];
+        return node;
+    });
+};
+
+setInterval(() => {
+    syncNodeInfo();
+}, 1000 * 60 * 5);
 
 export function useSecretariumQuery(app: string, route: string, args?: unknown) {
 
@@ -26,18 +44,25 @@ export function useSecretariumQuery(app: string, route: string, args?: unknown) 
     async function refetch() {
         const localAccu: Array<any> = [];
         setStatus({ loading: true, data: localAccu });
-        const key = await Key.createKey();
-        const [node, trustKey] = process.env['NX_SECRETARIUM_NODE']?.split('|') ?? [];
-        await client.connect(node, key, trustKey);
-        client.newTx(config.app, config.route, `klave-deployment-${config.app}`, config.args as any)
-            .onResult(result => {
-                localAccu.push(result);
-                setStatus({ loading: false, data: localAccu });
-            }).onError(error => {
-                setStatus({ loading: false, error: error as any, data: [] });
-            }).send().catch(error => {
-                setStatus({ loading: false, error: error as any, data: [] });
-            });
+        if (!connectionInfo)
+            await syncNodeInfo();
+        if (!connectionKey)
+            connectionKey = await Key.createKey();
+        const [node, trustKey] = connectionInfo ?? [];
+        try {
+            await client.connect(node, connectionKey, trustKey);
+            client.newTx(config.app, config.route, `klave-deployment-${config.app}`, config.args as any)
+                .onResult(result => {
+                    localAccu.push(result);
+                    setStatus({ loading: false, data: localAccu });
+                }).onError(error => {
+                    setStatus({ loading: false, error: error as any, data: [] });
+                }).send().catch(error => {
+                    setStatus({ loading: false, error: error as any, data: [] });
+                });
+        } catch (error) {
+            setStatus({ loading: false, error: error as any, data: [] });
+        }
     }
 
     // useEffect(() => {
