@@ -1,15 +1,18 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
 import { UilSpinner, UilTrash } from '@iconscout/react-unicons';
 import api from '../../utils/api';
 import { useZodForm } from '../../utils/useZodForm';
 import z from 'zod';
+import { useEffect } from 'react';
 
 const ApplicationDeletion = () => {
 
     const navigate = useNavigate();
     const { appId } = useParams();
+    const [nameCopy, setNameCopy] = useState('');
+    const [canSubmit, setCanSubmit] = useState(false);
     const utils = api.useContext().v0.applications;
     const mutation = api.v0.applications.delete.useMutation({
         onSuccess: async () => {
@@ -18,6 +21,10 @@ const ApplicationDeletion = () => {
             navigate('/app');
         }
     });
+
+    useEffect(() => {
+        setCanSubmit(nameCopy === appId);
+    }, [nameCopy, appId]);
 
     const deleteApplication = async () => {
         if (appId)
@@ -37,14 +44,23 @@ const ApplicationDeletion = () => {
             <AlertDialog.Content className="AlertDialogContent">
                 <AlertDialog.Title className="AlertDialogTitle">Are you absolutely sure?</AlertDialog.Title>
                 <AlertDialog.Description className="AlertDialogDescription">
-                    This action cannot be undone. This will permanently delete this application and all attached data.
+                    <p className='my-2'>
+                        This action cannot be undone. This will permanently delete this application and all attached data.
+                    </p>
+                    <p className='my-2'>
+                        If you are really sure you want to delete this application, please type the application ID below.
+                    </p>
+                    <p className='my-2'>
+                        <code className='font-bold'>{appId}</code>
+                    </p>
+                    <input placeholder='Application ID' className='w-full' onChange={e => setNameCopy(e.target.value)} />
                 </AlertDialog.Description>
                 <div style={{ display: 'flex', gap: 25, justifyContent: 'flex-end' }}>
                     <AlertDialog.Cancel asChild>
                         <button className="Button">Cancel</button>
                     </AlertDialog.Cancel>
-                    <AlertDialog.Action asChild>
-                        <button className="Button bg-red-700 text-white" onClick={() => deleteApplication()}>Yes, delete domain</button>
+                    <AlertDialog.Action asChild disabled={!canSubmit}>
+                        <button disabled={!canSubmit} className={`Button ${canSubmit ? 'bg-red-700' : 'bg-slate-300'} text-white`} onClick={() => deleteApplication()}>Yes, delete application</button>
                     </AlertDialog.Action>
                 </div>
             </AlertDialog.Content>
@@ -93,7 +109,7 @@ export const AppSettings: FC = () => {
                 await mutation.mutateAsync({ appId: appId || '', data });
                 methods.reset();
             })}
-            className="space-y-2"
+            className="space-y-2 hidden"
         >
             <div className='flex flex-col gap-3'>
                 <label>
@@ -137,7 +153,7 @@ export const AppSettings: FC = () => {
             </button>
         </form>
         <div>
-            <h1 className='text-red-700 font-bold text-xl'>Danger zone</h1>
+            <h1 className='text-red-700 font-bold text-xl mb-5'>Danger zone</h1>
             <ApplicationDeletion />
         </div>
     </div>;
