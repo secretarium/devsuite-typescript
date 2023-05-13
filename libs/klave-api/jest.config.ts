@@ -13,11 +13,11 @@ if (swcJestConfig.swcrc === undefined) {
 }
 
 export default {
-    displayName: 'hubber-api',
+    displayName: 'klave-api',
     preset: '../../jest.preset.js',
     transform: {
         '^.+\\.[tj]s$': ['@swc/jest', swcJestConfig]
     },
     moduleFileExtensions: ['ts', 'js', 'html'],
-    coverageDirectory: '../../coverage/libs/hubber-api'
+    coverageDirectory: '../../coverage/libs/klave-api'
 };

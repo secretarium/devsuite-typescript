@@ -24,7 +24,7 @@
         "baseUrl": ".",
         "paths": {
             "@klave/api": [
-                "libs/hubber-api/src/index.ts"
+                "libs/klave-api/src/index.ts"
             ],
             "@klave/compiler": [
                 "libs/klave-compiler/src/index.ts"

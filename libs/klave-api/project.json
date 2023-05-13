@@ -1,7 +1,7 @@
 {
-    "name": "hubber-api",
+    "name": "klave-api",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "libs/hubber-api/src",
+    "sourceRoot": "libs/klave-api/src",
     "projectType": "library",
     "targets": {
         "build": {
@@ -10,11 +10,11 @@
                 "{options.outputPath}"
             ],
             "options": {
-                "outputPath": "dist/libs/hubber-api",
-                "main": "libs/hubber-api/src/index.ts",
-                "tsConfig": "libs/hubber-api/tsconfig.lib.json",
+                "outputPath": "dist/libs/klave-api",
+                "main": "libs/klave-api/src/index.ts",
+                "tsConfig": "libs/klave-api/tsconfig.lib.json",
                 "assets": [
-                    "libs/hubber-api/*.md"
+                    "libs/klave-api/*.md"
                 ]
             }
         },
@@ -25,7 +25,7 @@
             ],
             "options": {
                 "lintFilePatterns": [
-                    "libs/hubber-api/**/*.ts"
+                    "libs/klave-api/**/*.ts"
                 ]
             }
         },
@@ -35,7 +35,7 @@
                 "{workspaceRoot}/coverage/{projectRoot}"
             ],
             "options": {
-                "jestConfig": "libs/hubber-api/jest.config.ts",
+                "jestConfig": "libs/klave-api/jest.config.ts",
                 "passWithNoTests": true
             }
         },
@@ -47,7 +47,7 @@
                 "tagPrefix": "${projectName}@",
                 "commitMessageFormat": "chore(${projectName}): Release version ${version}",
                 "postTargets": [
-                    "hubber-api:build"
+                    "klave-api:build"
                 ]
             }
         }
