@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        node: [16.x]
+        node: [18.x]
 
     steps:
       - uses: actions/checkout@v3
@@ -54,20 +54,20 @@ jobs:
 
       - name: Check for lint
         run: |
-          yarn run nx affected --target=lint --exclude=pocket --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
+          yarn run nx affected --target=lint --parallel=1 --exclude=pocket --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
 
       - name: Build the Dev Suite
         run: |
-          yarn run nx affected --target=build --exclude=pocket --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
+          yarn run nx affected --target=build --parallel=1 --exclude=pocket --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
 
       - name: Unit test the Dev Suite
         run: |
-          yarn run nx affected --target=test --exclude=pocket --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
+          yarn run nx affected --target=test --parallel=1 --exclude=pocket --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
         env:
           CI: true
 
       - name: Execute end-to-end tests
         run: |
-          yarn run nx affected --target=e2e --exclude=pocket --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
+          yarn run nx affected --target=e2e --parallel=1 --exclude=pocket --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
         env:
           CI: true
