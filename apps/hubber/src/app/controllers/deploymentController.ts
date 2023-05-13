@@ -3,6 +3,7 @@ import { prisma } from '@secretarium/hubber-db';
 import type { KlaveRcConfiguration } from '@klave/sdk';
 import { Utils } from '@secretarium/connector';
 import path from 'node:path';
+import ts from 'typescript';
 import BuildMiniVM, { DeploymentContext } from '../../utils/buildMiniVm';
 
 export const deployToSubstrate = async (deploymentContext: DeploymentContext<DeploymentPushPayload>) => {
@@ -167,6 +168,30 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
 
                 const { result: { wasm, wat, dts } } = buildResult;
 
+                let filteredDTS = '';
+                if (dts) {
+                    // parse the d.ts file
+                    const sourceFile = ts.createSourceFile(
+                        `${deployment.id}.d.ts`,
+                        dts,
+                        ts.ScriptTarget.Latest,
+                        true
+                    );
+                    ts.forEachChild(sourceFile, node => {
+                        if (ts.isFunctionDeclaration(node)) {
+                            if (node.name && ![
+                                'register_routes',
+                                '__new',
+                                '__pin',
+                                '__unpin',
+                                '__collect'
+                            ].includes(node.name?.text)) {
+                                filteredDTS += `${node.getFullText().trim()}\n`;
+                            }
+                        }
+                    });
+                }
+
                 await prisma.deployment.update({
                     where: {
                         id: deployment.id
@@ -175,7 +200,7 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                         status: 'compiled',
                         buildOutputWASM: Utils.toBase64(wasm),
                         buildOutputWAT: wat,
-                        buildOutputDTS: dts
+                        buildOutputDTS: filteredDTS
                     }
                 });
 
