@@ -1,6 +1,6 @@
 // import { getServerAuthSession, type Session } from '@secretarium/hubber-auth';
 // import { getServerAuthSession } from './get-session';
-import { prisma } from '@secretarium/hubber-db';
+import { prisma } from '@klave/db';
 import { type inferAsyncReturnType } from '@trpc/server';
 // import { type CreateNextContextOptions } from '@trpc/server/adapters/next';
 import { type CreateExpressContextOptions } from '@trpc/server/adapters/express';

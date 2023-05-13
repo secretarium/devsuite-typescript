@@ -1,5 +1,5 @@
-import { prisma } from '@secretarium/hubber-db';
-import { router } from '@secretarium/hubber-api';
+import { prisma } from '@klave/db';
+import { router } from '@klave/api';
 
 let intervalTimer: NodeJS.Timeout;
 

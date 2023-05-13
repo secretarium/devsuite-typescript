@@ -12,7 +12,7 @@ import passport from 'passport';
 // import MongoStore from 'connect-mongo';
 import { v4 as uuid } from 'uuid';
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
-import { prisma } from '@secretarium/hubber-db';
+import { prisma } from '@klave/db';
 import { rateLimiterMiddleware } from './middleware/rateLimiter';
 import { morganLoggerMiddleware } from './middleware/morganLogger';
 import { probotMiddleware } from './middleware/probot';

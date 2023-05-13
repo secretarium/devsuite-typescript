@@ -23,8 +23,14 @@
         "strictNullChecks": true,
         "baseUrl": ".",
         "paths": {
+            "@klave/api": [
+                "libs/hubber-api/src/index.ts"
+            ],
             "@klave/compiler": [
                 "libs/hubber-compiler/src/index.ts"
+            ],
+            "@klave/db": [
+                "libs/hubber-db/src/index.ts"
             ],
             "@klave/pruner": [
                 "libs/pruner/src/index.ts"
@@ -37,12 +43,6 @@
             ],
             "@secretarium/crypto": [
                 "libs/crypto/src/index.ts"
-            ],
-            "@secretarium/hubber-api": [
-                "libs/hubber-api/src/index.ts"
-            ],
-            "@secretarium/hubber-db": [
-                "libs/hubber-db/src/index.ts"
             ],
             "@secretarium/intrumentation": [
                 "libs/instrumentation/src/index.ts"

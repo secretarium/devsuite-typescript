@@ -14,7 +14,7 @@ import {
 } from '@simplewebauthn/server';
 import { AuthenticatorDevice } from '@simplewebauthn/typescript-types';
 import { isoUint8Array } from '@simplewebauthn/server/helpers';
-import type { Authenticator } from '@secretarium/hubber-db';
+import type { Authenticator } from '@klave/db';
 
 const rpID = 'localhost';
 const devices: Authenticator[] = [];

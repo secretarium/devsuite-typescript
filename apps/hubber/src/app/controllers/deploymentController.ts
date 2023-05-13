@@ -1,5 +1,5 @@
-import { DeploymentPushPayload, DeploymentPullRequestPayload, scp } from '@secretarium/hubber-api';
-import { prisma } from '@secretarium/hubber-db';
+import { DeploymentPushPayload, DeploymentPullRequestPayload, scp } from '@klave/api';
+import { prisma } from '@klave/db';
 import type { KlaveRcConfiguration } from '@klave/sdk';
 import { Utils } from '@secretarium/connector';
 import path from 'node:path';

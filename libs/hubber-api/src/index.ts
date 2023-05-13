@@ -1,7 +1,7 @@
 import 'express';
 import 'express-session';
 import 'passport';
-import { type User as UserEntity, GitHubToken, Web } from '@secretarium/hubber-db';
+import { type User as UserEntity, GitHubToken, Web } from '@klave/db';
 
 declare module 'express-session' {
     interface SessionData {

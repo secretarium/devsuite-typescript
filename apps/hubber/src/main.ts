@@ -2,7 +2,7 @@ import { startPruner } from '@klave/pruner';
 import { start } from './app';
 import './i18n';
 import { AppDataSource } from './utils/db';
-import { scp } from '@secretarium/hubber-api';
+import { scp } from '@klave/api';
 import logger from './utils/logger';
 
 AppDataSource.initialize()

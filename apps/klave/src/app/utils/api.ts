@@ -1,6 +1,6 @@
 import { createTRPCReact } from '@trpc/react-query';
 import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
-import type { Router } from '@secretarium/hubber-api';
+import type { Router } from '@klave/api';
 import superjson from 'superjson';
 import { v4 as uuid } from 'uuid';
 
@@ -9,7 +9,7 @@ if (!emphemeralKlaveTag)
     window.localStorage.setItem('emphemeralKlaveTag', uuid());
 
 export const apiClientOptions = {
-    // TODO: To be replaced by import from `@secretarium/hubber-api`
+    // TODO: To be replaced by import from `@klave/api`
     transformer: superjson,
     links: [
         httpBatchLink({

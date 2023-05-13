@@ -5,7 +5,7 @@ import type { Stats } from 'assemblyscript/dist/asc';
 import { createCompilter } from '@klave/compiler';
 import type { Context } from 'probot';
 import { KlaveRcConfiguration } from '@klave/sdk';
-import { DeploymentPushPayload } from '@secretarium/hubber-api';
+import { DeploymentPushPayload } from '@klave/api';
 import { Repo } from '@prisma/client';
 import { dummyMap } from './dummyVmFs';
 

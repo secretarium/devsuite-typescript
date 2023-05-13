@@ -1,4 +1,4 @@
-import { prisma } from '@secretarium/hubber-db';
+import { prisma } from '@klave/db';
 import type { Probot } from 'probot';
 import logger from '../../utils/logger';
 import { deployToSubstrate, updatePullRequestFromSubstrate } from '../controllers/deploymentController';
@@ -22,7 +22,7 @@ const probotApp = (app: Probot) => {
                 payload: context.payload as any
             }
         });
-        
+
         logger.info(`New record of hook '${context.name}' ${hook.id}`);
 
         if (context.name === 'push')

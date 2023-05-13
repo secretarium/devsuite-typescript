@@ -1,6 +1,6 @@
 import { UilSpinner } from '@iconscout/react-unicons';
 import { ActivityLog } from '@prisma/client';
-import type { DeploymentPullRequestPayload, DeploymentPushPayload } from '@secretarium/hubber-api';
+import type { DeploymentPullRequestPayload, DeploymentPushPayload } from '@klave/api';
 import { FC } from 'react';
 import { useParams } from 'react-router-dom';
 import api from '../../utils/api';
