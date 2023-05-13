@@ -6,13 +6,13 @@ This file was generated using [@jscutlery/semver](https://github.com/jscutlery/s
 
 ### Dependency Updates
 
-* `trustless-app-sdk` updated to version `0.4.5`
+* `klave-sdk` updated to version `0.4.5`
 
 ## [0.3.7](///compare/trustless-app-creator@0.3.6...trustless-app-creator@0.3.7) (2023-05-11)
 
 ### Dependency Updates
 
-* `trustless-app-sdk` updated to version `0.4.4`
+* `klave-sdk` updated to version `0.4.4`
 
 ### Bug Fixes
 
@@ -26,7 +26,7 @@ This file was generated using [@jscutlery/semver](https://github.com/jscutlery/s
 
 ### Dependency Updates
 
-* `trustless-app-sdk` updated to version `0.4.3`
+* `klave-sdk` updated to version `0.4.3`
 
 ## [0.3.3](///compare/trustless-app-creator@0.3.2...trustless-app-creator@0.3.3) (2023-05-11)
 
@@ -34,19 +34,19 @@ This file was generated using [@jscutlery/semver](https://github.com/jscutlery/s
 
 ### Dependency Updates
 
-* `trustless-app-sdk` updated to version `0.4.2`
+* `klave-sdk` updated to version `0.4.2`
 
 ## [0.3.1](///compare/trustless-app-creator@0.3.0...trustless-app-creator@0.3.1) (2023-05-10)
 
 ### Dependency Updates
 
-* `trustless-app-sdk` updated to version `0.4.1`
+* `klave-sdk` updated to version `0.4.1`
 
 ## [0.3.0](///compare/trustless-app-creator@0.2.4...trustless-app-creator@0.3.0) (2023-05-10)
 
 ### Dependency Updates
 
-* `trustless-app-sdk` updated to version `0.4.0`
+* `klave-sdk` updated to version `0.4.0`
 
 ### Features
 
@@ -64,13 +64,13 @@ This file was generated using [@jscutlery/semver](https://github.com/jscutlery/s
 
 ### Dependency Updates
 
-* `trustless-app-sdk` updated to version `0.3.0`
+* `klave-sdk` updated to version `0.3.0`
 
 ## [0.2.1](///compare/trustless-app-creator@0.2.0...trustless-app-creator@0.2.1) (2023-02-08)
 
 ### Dependency Updates
 
-* `trustless-app-sdk` updated to version `0.2.1`
+* `klave-sdk` updated to version `0.2.1`
 
 ### Bug Fixes
 
@@ -80,7 +80,7 @@ This file was generated using [@jscutlery/semver](https://github.com/jscutlery/s
 
 ### Dependency Updates
 
-* `trustless-app-sdk` updated to version `0.2.0`
+* `klave-sdk` updated to version `0.2.0`
 
 ### ⚠ BREAKING CHANGES
 

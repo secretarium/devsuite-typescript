@@ -36,7 +36,7 @@
                 "libs/pruner/src/index.ts"
             ],
             "@klave/sdk": [
-                "libs/trustless-app-sdk/src/index.ts"
+                "libs/klave-sdk/src/index.ts"
             ],
             "@secretarium/connector": [
                 "libs/connector/src/index.ts"

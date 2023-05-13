@@ -13,11 +13,11 @@ if (swcJestConfig.swcrc === undefined) {
 }
 
 export default {
-    displayName: 'trustless-app-sdk',
+    displayName: 'klave-sdk',
     preset: '../../jest.preset.js',
     transform: {
         '^.+\\.[tj]s$': ['@swc/jest', swcJestConfig]
     },
     moduleFileExtensions: ['ts', 'js', 'html'],
-    coverageDirectory: '../../coverage/libs/trustless-app-sdk'
+    coverageDirectory: '../../coverage/libs/klave-sdk'
 };

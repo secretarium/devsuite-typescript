@@ -1,7 +1,7 @@
 {
-    "name": "trustless-app-sdk",
+    "name": "klave-sdk",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "libs/trustless-app-sdk/src",
+    "sourceRoot": "libs/klave-sdk/src",
     "projectType": "library",
     "targets": {
         "build": {
@@ -11,16 +11,16 @@
             ],
             "options": {
                 "buildableProjectDepsInPackageJsonType": "dependencies",
-                "outputPath": "dist/libs/trustless-app-sdk",
-                "tsConfig": "libs/trustless-app-sdk/tsconfig.lib.json",
-                "packageJson": "libs/trustless-app-sdk/package.json",
-                "main": "libs/trustless-app-sdk/src/index.ts",
+                "outputPath": "dist/libs/klave-sdk",
+                "tsConfig": "libs/klave-sdk/tsconfig.lib.json",
+                "packageJson": "libs/klave-sdk/package.json",
+                "main": "libs/klave-sdk/src/index.ts",
                 "assets": [
-                    "libs/trustless-app-sdk/bin/*",
-                    "libs/trustless-app-sdk/assembly/**",
-                    "libs/trustless-app-sdk/index.ts",
-                    "libs/trustless-app-sdk/sdk.json",
-                    "libs/trustless-app-sdk/*.md"
+                    "libs/klave-sdk/bin/*",
+                    "libs/klave-sdk/assembly/**",
+                    "libs/klave-sdk/index.ts",
+                    "libs/klave-sdk/sdk.json",
+                    "libs/klave-sdk/*.md"
                 ]
             }
         },
@@ -31,7 +31,7 @@
             ],
             "options": {
                 "lintFilePatterns": [
-                    "libs/trustless-app-sdk/**/*.ts"
+                    "libs/klave-sdk/**/*.ts"
                 ]
             }
         },
@@ -41,7 +41,7 @@
                 "{workspaceRoot}/coverage/{projectRoot}"
             ],
             "options": {
-                "jestConfig": "libs/trustless-app-sdk/jest.config.ts",
+                "jestConfig": "libs/klave-sdk/jest.config.ts",
                 "passWithNoTests": true
             }
         },
@@ -53,7 +53,7 @@
                 "tagPrefix": "${projectName}@",
                 "commitMessageFormat": "chore(${projectName}): Release version ${version}",
                 "postTargets": [
-                    "trustless-app-sdk:build"
+                    "klave-sdk:build"
                 ]
             }
         },
@@ -63,7 +63,7 @@
             ],
             "executor": "nx:run-commands",
             "options": {
-                "cwd": "dist/libs/trustless-app-sdk",
+                "cwd": "dist/libs/klave-sdk",
                 "commands": [
                     "yarn publish --access public"
                 ]
