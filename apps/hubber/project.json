@@ -75,7 +75,13 @@
             "executor": "@jscutlery/semver:version",
             "options": {
                 "preset": "conventional",
-                "trackDeps": true
+                "trackDeps": true,
+                "changelogHeader": "# Changelog",
+                "tagPrefix": "${projectName}@",
+                "commitMessageFormat": "chore(${projectName}): Release version ${version}",
+                "postTargets": [
+                    "hubber:build"
+                ]
             }
         },
         "docker-build": {
