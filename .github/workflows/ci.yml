@@ -53,21 +53,27 @@ jobs:
           yarn install --network-timeout 1000000 --forzen-lockfile
 
       - name: Check for lint
+        env:
+          NODE_OPTIONS: "--max_old_space_size=4096"
         run: |
           yarn run nx affected --target=lint --parallel=1 --exclude=pocket --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
 
       - name: Build the Dev Suite
+        env:
+          NODE_OPTIONS: "--max_old_space_size=4096"
         run: |
           yarn run nx affected --target=build --parallel=1 --exclude=pocket --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
 
       - name: Unit test the Dev Suite
+        env:
+          NODE_OPTIONS: "--max_old_space_size=4096"
+          CI: true
         run: |
           yarn run nx affected --target=test --parallel=1 --exclude=pocket --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
-        env:
-          CI: true
 
       - name: Execute end-to-end tests
+        env:
+          NODE_OPTIONS: "--max_old_space_size=4096"
+          CI: true
         run: |
           yarn run nx affected --target=e2e --parallel=1 --exclude=pocket --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
-        env:
-          CI: true
