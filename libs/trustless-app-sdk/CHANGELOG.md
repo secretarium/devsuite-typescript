@@ -8,20 +8,20 @@ This file was generated using [@jscutlery/semver](https://github.com/jscutlery/s
 
 ### Dependency Updates
 
-* `hubber-compiler` updated to version `0.0.3`
+* `klave-compiler` updated to version `0.0.3`
 
 ### Bug Fixes
 
-* **hubber-compiler,trustless-app-sdk:** Problem leading to compiler freeze + Add bailing e124be5
-* **hubber-compiler:** Ensure proper export of ESM bindings 147aa09
+* **klave-compiler,trustless-app-sdk:** Problem leading to compiler freeze + Add bailing e124be5
+* **klave-compiler:** Ensure proper export of ESM bindings 147aa09
 
 ## [0.4.3](///compare/trustless-app-sdk@0.4.2...trustless-app-sdk@0.4.3) (2023-05-11)
 
 ### Dependency Updates
 
-* `hubber-compiler` updated to version `0.0.2`
-## [0.4.2](///compare/trustless-app-sdk@0.4.1...trustless-app-sdk@0.4.2) (2023-05-10)
+* `klave-compiler` updated to version `0.0.2`
 
+## [0.4.2](///compare/trustless-app-sdk@0.4.1...trustless-app-sdk@0.4.2) (2023-05-10)
 
 ### Bug Fixes
 
@@ -31,19 +31,19 @@ This file was generated using [@jscutlery/semver](https://github.com/jscutlery/s
 
 ### Dependency Updates
 
-* `hubber-compiler` updated to version `0.0.1`
+* `klave-compiler` updated to version `0.0.1`
+
 ## [0.4.0](///compare/trustless-app-sdk@0.3.2...trustless-app-sdk@0.4.0) (2023-05-10)
 
 ### Dependency Updates
 
-* `hubber-compiler` updated to version `0.1.0`
+* `klave-compiler` updated to version `0.1.0`
 
 ### Features
 
-* **hubber-compiler:** Split off the wasm compiler into separate library package 36e1f02
+* **klave-compiler:** Split off the wasm compiler into separate library package 36e1f02
 
 ## [0.3.2](///compare/trustless-app-sdk@0.3.1...trustless-app-sdk@0.3.2) (2023-02-24)
-
 
 ### Bug Fixes
 
@@ -53,7 +53,6 @@ This file was generated using [@jscutlery/semver](https://github.com/jscutlery/s
 
 ## [0.3.0](///compare/trustless-app-sdk@0.2.1...trustless-app-sdk@0.3.0) (2023-02-24)
 
-
 ### ⚠ BREAKING CHANGES
 
 * Replace SDK structure
@@ -62,13 +61,11 @@ This file was generated using [@jscutlery/semver](https://github.com/jscutlery/s
 
 * **trustless-app-sdk:** Prevent display of peer dependency warning 59c13da
 
-
 ### Miscellaneous Chores
 
 * Replace SDK structure be5add9
 
 ## [0.2.1](///compare/trustless-app-sdk@0.2.0...trustless-app-sdk@0.2.1) (2023-02-08)
-
 
 ### Bug Fixes
 

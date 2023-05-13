@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-    displayName: 'hubber-compiler',
+    displayName: 'klave-compiler',
     preset: '../../jest.preset.js',
     transform: {
         '^.+\\.[tj]s$': [
@@ -9,5 +9,5 @@ export default {
         ],
     },
     moduleFileExtensions: ['ts', 'js', 'html'],
-    coverageDirectory: '../../coverage/libs/hubber-compiler',
+    coverageDirectory: '../../coverage/libs/klave-compiler',
 };

@@ -27,7 +27,7 @@
                 "libs/hubber-api/src/index.ts"
             ],
             "@klave/compiler": [
-                "libs/hubber-compiler/src/index.ts"
+                "libs/klave-compiler/src/index.ts"
             ],
             "@klave/db": [
                 "libs/klave-db/src/index.ts"

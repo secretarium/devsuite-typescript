@@ -1,7 +1,7 @@
 {
-    "name": "hubber-compiler",
+    "name": "klave-compiler",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "libs/hubber-compiler/src",
+    "sourceRoot": "libs/klave-compiler/src",
     "projectType": "library",
     "targets": {
         "build": {
@@ -11,17 +11,17 @@
             ],
             "options": {
                 "buildableProjectDepsInPackageJsonType": "dependencies",
-                "outputPath": "dist/libs/hubber-compiler",
-                "main": "libs/hubber-compiler/src/index.ts",
-                "tsConfig": "libs/hubber-compiler/tsconfig.lib.json",
+                "outputPath": "dist/libs/klave-compiler",
+                "main": "libs/klave-compiler/src/index.ts",
+                "tsConfig": "libs/klave-compiler/tsconfig.lib.json",
                 "assets": [
-                    "libs/hubber-compiler/*.md",
-                    "libs/hubber-compiler/src/*.mjs"
+                    "libs/klave-compiler/*.md",
+                    "libs/klave-compiler/src/*.mjs"
                 ]
             }
         },
         "publish": {
-            "command": "node tools/scripts/publish.mjs hubber-compiler {args.ver} {args.tag}",
+            "command": "node tools/scripts/publish.mjs klave-compiler {args.ver} {args.tag}",
             "dependsOn": [
                 "build"
             ]
@@ -33,7 +33,7 @@
             ],
             "options": {
                 "lintFilePatterns": [
-                    "libs/hubber-compiler/**/*.ts"
+                    "libs/klave-compiler/**/*.ts"
                 ]
             }
         },
@@ -43,7 +43,7 @@
                 "{workspaceRoot}/coverage/{projectRoot}"
             ],
             "options": {
-                "jestConfig": "libs/hubber-compiler/jest.config.ts",
+                "jestConfig": "libs/klave-compiler/jest.config.ts",
                 "passWithNoTests": true
             },
             "configurations": {
@@ -61,7 +61,7 @@
                 "tagPrefix": "${projectName}@",
                 "commitMessageFormat": "chore(${projectName}): Release version ${version}",
                 "postTargets": [
-                    "hubber-compiler:build"
+                    "klave-compiler:build"
                 ]
             }
         }
