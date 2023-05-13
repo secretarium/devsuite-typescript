@@ -1,7 +1,7 @@
 {
-    "name": "hubber-db",
+    "name": "klave-db",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "libs/hubber-db/src",
+    "sourceRoot": "libs/klave-db/src",
     "projectType": "library",
     "targets": {
         "build": {
@@ -15,11 +15,11 @@
                 "{options.outputPath}"
             ],
             "options": {
-                "outputPath": "dist/libs/hubber-db",
-                "main": "libs/hubber-db/src/index.ts",
-                "tsConfig": "libs/hubber-db/tsconfig.lib.json",
+                "outputPath": "dist/libs/klave-db",
+                "main": "libs/klave-db/src/index.ts",
+                "tsConfig": "libs/klave-db/tsconfig.lib.json",
                 "assets": [
-                    "libs/hubber-db/*.md"
+                    "libs/klave-db/*.md"
                 ]
             }
         },
@@ -30,7 +30,7 @@
             ],
             "options": {
                 "lintFilePatterns": [
-                    "libs/hubber-db/**/*.ts"
+                    "libs/klave-db/**/*.ts"
                 ]
             }
         },
@@ -40,7 +40,7 @@
                 "{workspaceRoot}/coverage/{projectRoot}"
             ],
             "options": {
-                "jestConfig": "libs/hubber-db/jest.config.ts",
+                "jestConfig": "libs/klave-db/jest.config.ts",
                 "passWithNoTests": true
             }
         },
@@ -48,7 +48,7 @@
             "executor": "nx:run-commands",
             "options": {
                 "command": "prisma studio --port 5556 --schema src/prisma/schema.prisma",
-                "cwd": "libs/hubber-db"
+                "cwd": "libs/klave-db"
             }
         },
         "compile": {
@@ -58,14 +58,14 @@
             ],
             "options": {
                 "command": "prisma generate --schema src/prisma/schema.prisma",
-                "cwd": "libs/hubber-db"
+                "cwd": "libs/klave-db"
             }
         },
         "push": {
             "executor": "nx:run-commands",
             "options": {
                 "command": "prisma db push --schema src/prisma/schema.prisma",
-                "cwd": "libs/hubber-db"
+                "cwd": "libs/klave-db"
             }
         }
     },

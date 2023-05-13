@@ -13,11 +13,11 @@ if (swcJestConfig.swcrc === undefined) {
 }
 
 export default {
-    displayName: 'hubber-db',
+    displayName: 'klave-db',
     preset: '../../jest.preset.js',
     transform: {
         '^.+\\.[tj]s$': ['@swc/jest', swcJestConfig]
     },
     moduleFileExtensions: ['ts', 'js', 'html'],
-    coverageDirectory: '../../coverage/libs/hubber-db'
+    coverageDirectory: '../../coverage/libs/klave-db'
 };

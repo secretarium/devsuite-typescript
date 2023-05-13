@@ -30,7 +30,7 @@
                 "libs/hubber-compiler/src/index.ts"
             ],
             "@klave/db": [
-                "libs/hubber-db/src/index.ts"
+                "libs/klave-db/src/index.ts"
             ],
             "@klave/pruner": [
                 "libs/pruner/src/index.ts"

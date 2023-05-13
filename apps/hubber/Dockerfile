@@ -7,7 +7,7 @@ RUN addgroup --system hubber && \
 
 COPY dist/apps/hubber/package.json hubber/
 COPY dist/apps/hubber/yarn.lock hubber/
-COPY libs/hubber-db/src/prisma hubber/prisma
+COPY libs/klave-db/src/prisma hubber/prisma
 
 RUN chown -R hubber:hubber .
 RUN cd hubber && yarn install
