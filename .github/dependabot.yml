@@ -14,3 +14,10 @@ updates:
     target-branch: "develop"
     labels:
       - "actions"
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    target-branch: "develop"
+    labels:
+      - "docker"
