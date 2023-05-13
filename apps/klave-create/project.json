@@ -1,7 +1,7 @@
 {
-    "name": "trustless-app-creator",
+    "name": "klave-create",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "apps/trustless-app-creator/src",
+    "sourceRoot": "apps/klave-create/src",
     "projectType": "library",
     "targets": {
         "build": {
@@ -11,20 +11,20 @@
             ],
             "options": {
                 "buildableProjectDepsInPackageJsonType": "dependencies",
-                "outputPath": "dist/apps/trustless-app-creator",
-                "tsConfig": "apps/trustless-app-creator/tsconfig.lib.json",
-                "packageJson": "apps/trustless-app-creator/package.json",
-                "main": "apps/trustless-app-creator/src/index.ts",
+                "outputPath": "dist/apps/klave-create",
+                "tsConfig": "apps/klave-create/tsconfig.lib.json",
+                "packageJson": "apps/klave-create/package.json",
+                "main": "apps/klave-create/src/index.ts",
                 "assets": [
                     {
                         "glob": "**/(\\.*|*)",
-                        "input": "apps/trustless-app-creator/template",
+                        "input": "apps/klave-create/template",
                         "output": "template",
                         "ignore": []
                     },
-                    "apps/trustless-app-creator/template/.gitignore",
-                    "apps/trustless-app-creator/bin/*",
-                    "apps/trustless-app-creator/*.md"
+                    "apps/klave-create/template/.gitignore",
+                    "apps/klave-create/bin/*",
+                    "apps/klave-create/*.md"
                 ]
             }
         },
@@ -35,7 +35,7 @@
             ],
             "options": {
                 "lintFilePatterns": [
-                    "apps/trustless-app-creator/**/*.ts"
+                    "apps/klave-create/**/*.ts"
                 ]
             }
         },
@@ -45,7 +45,7 @@
                 "{workspaceRoot}/coverage/{projectRoot}"
             ],
             "options": {
-                "jestConfig": "apps/trustless-app-creator/jest.config.ts",
+                "jestConfig": "apps/klave-create/jest.config.ts",
                 "passWithNoTests": true
             }
         },
@@ -57,7 +57,7 @@
                 "tagPrefix": "${projectName}@",
                 "commitMessageFormat": "chore(${projectName}): Release version ${version}",
                 "postTargets": [
-                    "trustless-app-creator:build"
+                    "klave-create:build"
                 ]
             }
         },
@@ -67,7 +67,7 @@
             ],
             "executor": "nx:run-commands",
             "options": {
-                "cwd": "dist/apps/trustless-app-creator",
+                "cwd": "dist/apps/klave-create",
                 "commands": [
                     "yarn publish --access public"
                 ]

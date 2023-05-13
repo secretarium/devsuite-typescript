@@ -56,7 +56,7 @@ This file was generated using [@jscutlery/semver](https://github.com/jscutlery/s
 
 ### Bug Fixes
 
-* **trustless-app-creator:** Problem with target file change for SDK version 82107e3
+* **klave-create:** Problem with target file change for SDK version 82107e3
 
 ## [0.2.3](///compare/trustless-app-creator@0.2.2...trustless-app-creator@0.2.3) (2023-02-24)
 

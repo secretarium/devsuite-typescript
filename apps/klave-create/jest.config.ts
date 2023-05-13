@@ -1,5 +1,5 @@
 export default {
-    displayName: 'trustless-app-creator',
+    displayName: 'klave-create',
     preset: '../../jest.preset.js',
     testEnvironment: 'node',
     transform: {
@@ -9,5 +9,5 @@ export default {
         ]
     },
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-    coverageDirectory: '../../coverage/apps/trustless-app-creator'
+    coverageDirectory: '../../coverage/apps/klave-create'
 };
