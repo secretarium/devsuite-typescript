@@ -97,7 +97,7 @@ export class BuildMiniVM {
         let compiledBinary = new Uint8Array(0);
         let compiledWAT: string | undefined;
         let compiledDTS: string | undefined;
-        const compiler = createCompilter();
+        const compiler = await createCompilter();
         try {
             return new Promise<BuildOutput>((resolve) => {
                 compiler.on('message', (message) => {
