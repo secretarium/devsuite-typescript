@@ -1,4 +1,4 @@
-import { DeploymentPushPayload, DeploymentPullRequestPayload, scp } from '@klave/api';
+import { DeploymentPushPayload, scp } from '@klave/api';
 import { prisma } from '@klave/db';
 import type { KlaveRcConfiguration } from '@klave/sdk';
 import { Utils } from '@secretarium/connector';
@@ -34,7 +34,8 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
             applications: true
         },
         where: {
-            owner_name: {
+            source_owner_name: {
+                source: 'github',
                 name: context.repo.name,
                 owner: context.repo.owner
             }
@@ -76,6 +77,7 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
             }
         });
         const launchDeploy = async () => {
+
             const deployment = await prisma.deployment.create({
                 data: {
                     expiresOn: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14),
@@ -87,6 +89,7 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                     }
                 }
             });
+
             await prisma.activityLog.create({
                 data: {
                     class: 'deployment',
@@ -249,79 +252,6 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
 
         if (context.class === 'push')
             launchDeploy().finally(() => { return; });
-    });
-
-    return;
-};
-
-export const updatePullRequestFromSubstrate = async ({ octokit, ...context }: DeploymentContext<DeploymentPullRequestPayload>) => {
-
-    let files: Awaited<ReturnType<typeof octokit.repos.compareCommits>>['data']['files'];
-
-    try {
-        const { data: { files: filesManifest } } = await octokit.repos.compareCommits({
-            owner: context.repo.owner,
-            repo: context.repo.name,
-            base: context.commit.before,
-            head: context.commit.after
-        });
-
-        files = filesManifest;
-
-    } catch (e) {
-        console.error(e);
-        return;
-    }
-
-    if (!files?.length)
-        return;
-
-    const repo = await prisma.repo.findUnique({
-        include: {
-            applications: true
-        },
-        where: {
-            owner_name: {
-                name: context.repo.name,
-                owner: context.repo.owner
-            }
-        }
-    });
-
-    if (!repo)
-        return;
-
-    const availableApplicationsConfig = (repo.config as unknown as KlaveRcConfiguration).applications.reduce((prev, current) => {
-        prev[current.name] = current;
-        return prev;
-    }, {} as Record<string, KlaveRcConfiguration['applications'][number]>);
-
-    repo.applications.forEach(async application => {
-
-        // TODO There is typing error in this location
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        if (files.filter(({ filename }) => {
-            const commitFileDir = path.normalize(path.join('/', filename));
-            const appPath = path.normalize(path.join('/', availableApplicationsConfig[application.name].rootDir ?? ''));
-            return commitFileDir.startsWith(appPath) || filename === '.klaverc.json';
-        }).length === 0)
-            return;
-
-        await prisma.activityLog.create({
-            data: {
-                class: 'pullRequestHook',
-                application: {
-                    connect: {
-                        id: application.id
-                    }
-                },
-                context: {
-                    type: context.type,
-                    payload: context
-                }
-            }
-        });
     });
 
     return;

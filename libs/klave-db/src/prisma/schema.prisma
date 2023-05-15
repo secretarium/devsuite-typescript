@@ -59,7 +59,7 @@ model Authenticator {
     transports           AuthenticatorTransport[] @default([])
 }
 
-enum HookSource {
+enum CodeSource {
     github
 }
 
@@ -71,7 +71,7 @@ enum HookProcessingStatus {
 
 model Hook {
     id        String               @id @default(uuid()) @map("_id")
-    source    HookSource
+    source    CodeSource
     event     String
     remoteId  String
     status    HookProcessingStatus @default(idle)
@@ -94,6 +94,7 @@ model DeployableRepo {
 
 model Repo {
     id           String        @id @default(uuid()) @map("_id")
+    source       CodeSource
     owner        String
     name         String
     config       Json
@@ -101,7 +102,7 @@ model Repo {
     updatedAt    DateTime      @updatedAt
     applications Application[]
 
-    @@unique([owner, name])
+    @@unique([source, owner, name])
 }
 
 enum CompilationStageType {

@@ -60,7 +60,8 @@ export const applicationRouter = createTRPCRouter({
                 // const repo = await tx.repo.upsert({
                 const repo = await prisma.repo.upsert({
                     where: {
-                        owner_name: {
+                        source_owner_name: {
+                            source: 'github',
                             owner: deployableRepoData.owner,
                             name: deployableRepoData.name
                         }
@@ -69,6 +70,7 @@ export const applicationRouter = createTRPCRouter({
                         config: JSON.parse(newConfig)
                     },
                     create: {
+                        source: 'github',
                         owner: deployableRepoData.owner,
                         name: deployableRepoData.name,
                         config: JSON.parse(newConfig)
