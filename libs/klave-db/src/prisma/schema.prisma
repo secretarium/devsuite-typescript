@@ -266,18 +266,19 @@ model Installation {
 }
 
 model Repository {
-    id                  String     @id @default(uuid()) @map("_id")
-    source              CodeSource
-    installationPayload Json
-    remoteId            String
-    owner               String
-    name                String
-    fullName            String
-    private             Boolean
-    createdAt           DateTime   @default(now())
-    updatedAt           DateTime   @updatedAt
+    id                   String     @id @default(uuid()) @map("_id")
+    source               CodeSource
+    installationPayload  Json
+    installationRemoteId String
+    remoteId             String
+    owner                String
+    name                 String
+    fullName             String
+    private              Boolean
+    createdAt            DateTime   @default(now())
+    updatedAt            DateTime   @updatedAt
 
-    @@unique([source, remoteId, owner, name])
+    @@unique([source, remoteId, installationRemoteId])
 }
 
 model Web {

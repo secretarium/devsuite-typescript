@@ -29,7 +29,7 @@ const probotApp = (app: Probot) => {
         if (context.name === 'installation') {
             const { payload } = context;
             if (payload.action === 'created') {
-                // TODO: Create a new record in the database
+                // TODO: Move this to the TRPC router
                 logger.info(`Registering new GithubApp installation ${payload.installation.id}`);
                 await prisma.installation.create({
                     data: {
@@ -47,6 +47,7 @@ const probotApp = (app: Probot) => {
                             data: {
                                 source: 'github',
                                 remoteId: `${repo.id}`,
+                                installationRemoteId: `${payload.installation.id}`,
                                 name: repo.name,
                                 owner: payload.installation.account.login,
                                 fullName: repo.full_name,
@@ -61,12 +62,14 @@ const probotApp = (app: Probot) => {
         if (context.name === 'installation_repositories') {
             const { payload } = context;
             if (payload.action === 'added') {
+                // TODO: Move this to the TRPC router
                 if (payload.repositories_added && payload.repositories_added.length > 0)
                     for (const repo of payload.repositories_added) {
                         await prisma.repository.create({
                             data: {
                                 source: 'github',
                                 remoteId: `${repo.id}`,
+                                installationRemoteId: `${payload.installation.id}`,
                                 name: repo.name,
                                 owner: payload.installation.account.login,
                                 fullName: repo.full_name,
