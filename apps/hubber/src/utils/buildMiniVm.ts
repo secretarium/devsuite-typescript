@@ -2,7 +2,7 @@ import nodePath from 'node:path';
 import { sigstore } from 'sigstore';
 import { ErrorObject, serializeError } from 'serialize-error';
 import type { Stats } from 'assemblyscript/dist/asc';
-import { createCompilter } from '@klave/compiler';
+import { createCompiler } from '@klave/compiler';
 import type { Context } from 'probot';
 import { KlaveRcConfiguration } from '@klave/sdk';
 import { DeploymentPushPayload } from '@klave/api';
@@ -97,7 +97,7 @@ export class BuildMiniVM {
         let compiledBinary = new Uint8Array(0);
         let compiledWAT: string | undefined;
         let compiledDTS: string | undefined;
-        const compiler = await createCompilter();
+        const compiler = await createCompiler();
         try {
             return new Promise<BuildOutput>((resolve) => {
                 compiler.on('message', (message) => {

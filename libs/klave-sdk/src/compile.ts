@@ -2,7 +2,7 @@ import * as fs from 'fs-extra';
 import * as path from 'node:path';
 import * as chalk from 'chalk';
 import * as  pathCompleteExtname from 'path-complete-extname';
-import { createCompilter } from '@klave/compiler';
+import { createCompiler } from '@klave/compiler';
 import { klaveRcConfigurationSchema as schema } from './rc';
 
 // `yarn run` may change the current working dir, then we should use `INIT_CWD` env.
@@ -31,42 +31,42 @@ const compile = () => {
                     console.error(`Compiling ${chalk.green(app.name)} from ${path.join('.', path.relative(CWD, appPath))}...`);
                     fs.mkdirSync(path.join(CWD, '.klave'), { recursive: true });
 
-                    const compiler = createCompilter();
-
-                    compiler.on('message', (message) => {
-                        // if (message.type === 'start') {
-                        //     ...
-                        // }
-                        if (message.type === 'read') {
-                            if (process.env['DEBUG'] === 'true')
-                                console.debug('file_read_try:' + path.resolve(appPathRoot, message.filename));
-                            fs.readFile(path.resolve(appPathRoot, message.filename)).then(contents => {
-                                compiler.postMessage({
-                                    type: 'read',
-                                    id: message.id,
-                                    contents: contents.toString()
+                    createCompiler().then(compiler => {
+                        compiler.on('message', (message) => {
+                            // if (message.type === 'start') {
+                            //     ...
+                            // }
+                            if (message.type === 'read') {
+                                if (process.env['DEBUG'] === 'true')
+                                    console.debug('file_read_try:' + path.resolve(appPathRoot, message.filename));
+                                fs.readFile(path.resolve(appPathRoot, message.filename)).then(contents => {
+                                    compiler.postMessage({
+                                        type: 'read',
+                                        id: message.id,
+                                        contents: contents.toString()
+                                    });
+                                }).catch(() => {
+                                    compiler.postMessage({
+                                        type: 'read',
+                                        id: message.id,
+                                        contents: null
+                                    });
                                 });
-                            }).catch(() => {
-                                compiler.postMessage({
-                                    type: 'read',
-                                    id: message.id,
-                                    contents: null
+                            } else if (message.type === 'write') {
+                                const ext = pathCompleteExtname(message.filename);
+                                if (ext.endsWith('.js'))
+                                    return;
+                                fs.writeFile(`${path.join(CWD, '.klave', `${index.toString()}-${app.name.toLocaleLowerCase().replace(/\s/g, '-')}`)}${ext}`, message.contents);
+                            } else if (message.type === 'diagnostic') {
+                                console.log(message.diagnostics);
+                            } else if (message.type === 'errored') {
+                                compiler.terminate().finally(() => {
+                                    reject(message.error);
                                 });
-                            });
-                        } else if (message.type === 'write') {
-                            const ext = pathCompleteExtname(message.filename);
-                            if (ext.endsWith('.js'))
-                                return;
-                            fs.writeFile(`${path.join(CWD, '.klave', `${index.toString()}-${app.name.toLocaleLowerCase().replace(/\s/g, '-')}`)}${ext}`, message.contents);
-                        } else if (message.type === 'diagnostic') {
-                            console.log(message.diagnostics);
-                        } else if (message.type === 'errored') {
-                            compiler.terminate().finally(() => {
-                                reject(message.error);
-                            });
-                        } else if (message.type === 'done') {
-                            resolve();
-                        }
+                            } else if (message.type === 'done') {
+                                resolve();
+                            }
+                        });
                     });
                 })))
                 .then((results) => {

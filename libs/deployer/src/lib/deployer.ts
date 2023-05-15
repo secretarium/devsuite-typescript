@@ -5,7 +5,7 @@ import type { Stats } from 'assemblyscript/dist/asc';
 import { sigstore } from 'sigstore';
 import { ErrorObject, serializeError } from 'serialize-error';
 import { Hook, Repo, Application, prisma, Deployment } from '@klave/db';
-import { createCompilter } from '@klave/compiler';
+import { createCompiler } from '@klave/compiler';
 import { SCP, Utils } from '@secretarium/connector';
 import { RepoFs } from './repoFs';
 import GithubFs from './githubFs';
@@ -346,7 +346,7 @@ class Deployer {
         let compiledWAT: string | undefined;
         let compiledDTS: string | undefined;
 
-        const compiler = await createCompilter();
+        const compiler = await createCompiler();
 
         try {
             return new Promise<BuildOutput>((resolve) => {
