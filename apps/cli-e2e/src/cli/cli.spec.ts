@@ -7,6 +7,6 @@ describe('CLI tests', () => {
 
         const output = execSync(`node ${cliPath}`).toString();
 
-        expect(output).toMatch(/Hello World/);
+        expect(output).toMatch(/.*?Welcome to Secretarium CLI.*/gmi);
     });
 });
