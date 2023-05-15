@@ -33,6 +33,10 @@ export async function app(fastify: FastifyInstance) {
 
     fastify.all('/hook', async (req, res) => {
 
+        const newHeaders = { ...req.headers };
+        delete newHeaders.connection;
+        delete newHeaders.host;
+
         const responseRegister: Promise<[string, number]>[] = [];
         endpoints.forEach(([name, base]) => {
             responseRegister.push(new Promise(resolve => {
@@ -40,9 +44,6 @@ export async function app(fastify: FastifyInstance) {
                     resolve([name, 408]);
                 }, 3000);
                 fastify.log.debug(undefined, `Dispatching to ${name}`);
-                const newHeaders = { ...req.headers };
-                delete newHeaders.connection;
-                delete newHeaders.host;
                 fetch(base, {
                     method: req.method,
                     headers: newHeaders as Record<string, string>,
@@ -61,7 +62,10 @@ export async function app(fastify: FastifyInstance) {
             responseRegister.push(new Promise(resolve => {
                 fastify.log.debug(undefined, `Dispatching to socket ${id}`);
                 try {
-                    connection.socket.send(JSON.stringify(req.body), (err) => {
+                    connection.socket.send(JSON.stringify({
+                        headers: newHeaders,
+                        body: req.body
+                    }), (err) => {
                         if (err)
                             return resolve([id, 503]);
                         resolve([id, 200]);
