@@ -32,6 +32,9 @@
             "@klave/db": [
                 "libs/klave-db/src/index.ts"
             ],
+            "@klave/deployer": [
+                "libs/deployer/src/index.ts"
+            ],
             "@klave/pruner": [
                 "libs/pruner/src/index.ts"
             ],
