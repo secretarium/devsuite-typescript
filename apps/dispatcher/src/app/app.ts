@@ -48,7 +48,7 @@ export async function app(fastify: FastifyInstance) {
                     method: req.method,
                     headers: newHeaders as Record<string, string>,
                     body: JSON.stringify(req.body)
-                }).then((response: any) => {
+                }).then((response) => {
                     fastify.log.debug(undefined, `Receiving response from ${name}`);
                     resolve([name, response.status]);
                 }).catch(() => {
