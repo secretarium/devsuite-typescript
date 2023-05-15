@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express-serve-static-core';
 import morgan, { StreamOptions } from 'morgan';
-import logger from '../../utils/logger';
+import { logger } from '@klave/providers';
 
 const stream: StreamOptions = {
     // Use the http severity

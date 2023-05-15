@@ -2,8 +2,7 @@ import { startPruner } from '@klave/pruner';
 import { start } from './app';
 import './i18n';
 import { AppDataSource } from './utils/db';
-import { scpOps } from '@klave/providers';
-import logger from './utils/logger';
+import { scpOps, logger } from '@klave/providers';
 
 AppDataSource.initialize()
     .then(scpOps.initialize)

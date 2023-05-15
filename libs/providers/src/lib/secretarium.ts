@@ -1,4 +1,5 @@
 import { SCP, Key, Constants } from '@secretarium/connector';
+import { logger } from './logger';
 
 const client = new SCP();
 
@@ -30,10 +31,11 @@ export const scpOps = {
                 connectionKey = await Key.createKey();
             const [node, trustKey] = process.env['NX_SECRETARIUM_NODE']?.split('|') ?? [];
             await client.connect(node, connectionKey, trustKey);
+            logger.info(`Connected to Secretarium ${node}`);
             reconnectAttempt = 0;
             return;
         } catch (e) {
-            console.error(`SCP:${++reconnectAttempt}:`, e);
+            logger.error(`Connection ${++reconnectAttempt} to Secretarium failed: ${e}`);
             lastSCPState = Constants.ConnectionState.closed;
         }
     },

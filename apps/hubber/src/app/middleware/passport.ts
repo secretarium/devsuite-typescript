@@ -2,7 +2,7 @@
 // import { Strategy as LocalStrategy } from 'passport-local';
 import type { RequestHandler } from 'express';
 // import db from '../../utils/db';
-// import logger from '../../utils/logger';
+// import { logger } from '@klave/providers';
 
 // passport.serializeUser((user, cb) => {
 //     logger.debug(`serializeUser ${typeof user} >> ${JSON.stringify(user)}`);

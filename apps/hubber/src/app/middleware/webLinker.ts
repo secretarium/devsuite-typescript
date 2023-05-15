@@ -2,7 +2,7 @@ import { RequestHandler } from 'express-serve-static-core';
 import { uniqueNamesGenerator, adjectives, colors, animals } from 'unique-names-generator';
 import { Web, prisma } from '@klave/db';
 import { v4 as uuid } from 'uuid';
-import logger from '../../utils/logger';
+import { logger } from '@klave/providers';
 
 export const webLinkerMiddlware: RequestHandler = async (req, res, next) => {
 

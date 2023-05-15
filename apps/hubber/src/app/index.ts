@@ -22,7 +22,7 @@ import { trcpMiddlware } from './middleware/trpc';
 // import { i18nextMiddleware } from './middleware/i18n';
 // import { getDriverSubstrate } from '../utils/db';
 import { usersRouter, filesRouter } from './routes';
-import logger from '../utils/logger';
+import { logger } from '@klave/providers';
 import { webLinkerMiddlware } from './middleware/webLinker';
 
 const eapp = express();
@@ -138,7 +138,11 @@ export const start = async (port: number) => {
     app.disable('x-powered-by');
 
     // Plug Probot for GitHub Apps
-    app.use('/hook', probotMiddleware);
+    app.use('/hook', (req, res, next) => {
+        if (req.headers['x-github-event'])
+            return probotMiddleware(req, res);
+        next();
+    });
 
     // const {
     //     generateToken,

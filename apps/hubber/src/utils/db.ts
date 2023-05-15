@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import i18n from '../i18n';
-import logger from './logger';
+import { logger } from '@klave/providers';
 
 export * from '@prisma/client';
 

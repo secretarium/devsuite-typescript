@@ -1,6 +1,6 @@
 import { prisma } from '@klave/db';
 import type { Probot } from 'probot';
-import logger from '../../utils/logger';
+import { logger } from '@klave/providers';
 import { deployToSubstrate } from '../controllers/deploymentController';
 
 const probotApp = (app: Probot) => {
