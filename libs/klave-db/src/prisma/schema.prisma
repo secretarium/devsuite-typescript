@@ -246,6 +246,40 @@ model Project {
     applications Application[]
 }
 
+enum InstallationAccountType {
+    user
+    bot
+    organization
+}
+
+model Installation {
+    id          String                  @id @default(uuid()) @map("_id")
+    source      CodeSource
+    hookPayload Json
+    remoteId    String
+    account     String
+    accountType InstallationAccountType
+    createdAt   DateTime                @default(now())
+    updatedAt   DateTime                @updatedAt
+
+    @@unique([source, remoteId, account])
+}
+
+model Repository {
+    id                  String     @id @default(uuid()) @map("_id")
+    source              CodeSource
+    installationPayload Json
+    remoteId            String
+    owner               String
+    name                String
+    fullName            String
+    private             Boolean
+    createdAt           DateTime   @default(now())
+    updatedAt           DateTime   @updatedAt
+
+    @@unique([source, remoteId, owner, name])
+}
+
 model Web {
     id              String           @id @default(uuid()) @map("_id")
     name            String
