@@ -1,7 +1,10 @@
 import { FastifyInstance } from 'fastify';
+import type { SocketStream } from '@fastify/websocket';
+import { v4 as uuid } from 'uuid';
 
 const definitions = process.env.NX_DISPATCH_ENDPOINTS?.split(',') ?? [];
 const endpoints = definitions.map(def => def.split('#')).filter(def => def.length === 2);
+const connectionPool = new Map<string, SocketStream>();
 
 /* eslint-disable-next-line */
 export interface AppOptions { }
@@ -9,6 +12,25 @@ export interface AppOptions { }
 export async function app(fastify: FastifyInstance) {
 
     fastify.log.info(endpoints, 'Preparing for enpoints');
+
+    fastify.get('/dev', { websocket: true }, (connection) => {
+        connection.on('data', (data) => {
+            if (data.toString() === process.env.NX_DISPATCH_SECRET) {
+                const id = uuid();
+                connection.on('close', () => {
+                    connectionPool.delete(id);
+                });
+                connection.on('error', () => {
+                    connectionPool.delete(id);
+                });
+                connection.on('end', () => {
+                    connectionPool.delete(id);
+                });
+                connectionPool.set(id, connection);
+            }
+        });
+    });
+
     fastify.all('/hook', async (req, res) => {
 
         const responseRegister: Promise<[string, number]>[] = [];
@@ -32,6 +54,21 @@ export async function app(fastify: FastifyInstance) {
                     fastify.log.warn(undefined, `Failed to reach ${name}`);
                     resolve([name, 503]);
                 });
+            }));
+        });
+
+        connectionPool.forEach((connection, id) => {
+            responseRegister.push(new Promise(resolve => {
+                fastify.log.debug(undefined, `Dispatching to socket ${id}`);
+                try {
+                    connection.socket.send(JSON.stringify(req.body), (err) => {
+                        if (err)
+                            return resolve([id, 503]);
+                        resolve([id, 200]);
+                    });
+                } catch (e) {
+                    resolve([id, 503]);
+                }
             }));
         });
 

@@ -2,6 +2,7 @@ import Fastify from 'fastify';
 import rateLimiter from '@fastify/rate-limit';
 import helmet from '@fastify/helmet';
 import sensible from '@fastify/sensible';
+import websocket from '@fastify/websocket';
 import { app } from './app/app';
 
 process.on('unhandledRejection', (reason, p) => {
@@ -24,6 +25,7 @@ server.register(rateLimiter, {
 });
 server.register(helmet);
 server.register(sensible);
+server.register(websocket);
 
 // Register your application as a normal plugin.
 server.register(app);
