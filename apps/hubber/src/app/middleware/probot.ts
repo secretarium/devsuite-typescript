@@ -1,6 +1,6 @@
-import { readFileSync } from 'node:fs';
-import { createNodeMiddleware, Probot } from 'probot';
+import { createNodeMiddleware } from 'probot';
 import SmeeClient from 'smee-client';
+import { probot } from '@klave/providers';
 import probotApp from '../probot';
 
 const smeeClient = process.env.NODE_ENV !== 'test' ? new SmeeClient({
@@ -10,13 +10,6 @@ const smeeClient = process.env.NODE_ENV !== 'test' ? new SmeeClient({
 }) : null;
 
 smeeClient?.start();
-
-const probot = new Probot({
-    appId: process.env.NX_PROBOT_APPID,
-    privateKey: process.env.NX_PROBOT_PRIVATE_KEYFILE ? readFileSync(process.env.NX_PROBOT_PRIVATE_KEYFILE).toString() : undefined,
-    secret: process.env.NX_PROBOT_WEBHOOK_SECRET,
-    logLevel: process.env.NODE_ENV === 'production' ? 'error' : 'debug'
-});
 
 export const probotMiddleware = createNodeMiddleware(probotApp, {
     probot

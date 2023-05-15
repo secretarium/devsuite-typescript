@@ -1,11 +1,11 @@
-import { AppLedgerSource } from '../secretarium';
+import { scpOps } from '@klave/providers';
 import { createTRPCRouter, publicProcedure } from '../trpc';
 
 export const systemRouter = createTRPCRouter({
     isSystemReady: publicProcedure
         .query(async ({ ctx: { prisma, sessionID } }) => {
             const isDBAlive = await prisma.session.findUnique({ where: { id: sessionID } });
-            const isSecretariumAlive = AppLedgerSource.isConnected();
+            const isSecretariumAlive = scpOps.isConnected();
             return isSecretariumAlive && !!isDBAlive;
         }),
     getSecretariumNode: publicProcedure

@@ -1,4 +1,5 @@
-import { DeploymentPushPayload, scp } from '@klave/api';
+import { DeploymentPushPayload } from '@klave/api';
+import { scp } from '@klave/providers';
 import { prisma } from '@klave/db';
 import type { KlaveRcConfiguration } from '@klave/sdk';
 import { Utils } from '@secretarium/connector';
@@ -224,7 +225,7 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                 if (wasm.length === 0)
                     return;
 
-                await scp.client.newTx('wasm-manager', 'register_smart_contract', `klave-deployment-${deployment.id}`, {
+                await scp.newTx('wasm-manager', 'register_smart_contract', `klave-deployment-${deployment.id}`, {
                     contract: {
                         name: `${deployment.id.split('-').pop()}.sta.klave.network`,
                         wasm_bytes: [],

@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/node';
 import * as SecretariumInstruments from '@secretarium/intrumentation';
 import { client as prismaClient } from '../../utils/db';
-import { client as scpClient } from '../../utils/secretarium';
+import { scp as scpClient } from '@klave/providers';
 
 Sentry.init({
     dsn: process.env.NX_SENTRY_DSN,

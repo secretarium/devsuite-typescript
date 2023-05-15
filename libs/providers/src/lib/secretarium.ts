@@ -1,6 +1,6 @@
 import { SCP, Key, Constants } from '@secretarium/connector';
 
-export const client = new SCP();
+const client = new SCP();
 
 let connectionKey: Key | undefined;
 let reconnectAttempt = 0;
@@ -12,7 +12,7 @@ const planReconnection = () => {
         reconnectionTimeout = setTimeout(() => {
             clearTimeout(reconnectionTimeout);
             reconnectionTimeout = undefined;
-            AppLedgerSource.initialize().catch(() => { return; });
+            scpOps.initialize().catch(() => { return; });
         }, 3000);
     }
 };
@@ -23,7 +23,7 @@ client.onStateChange((state) => {
         planReconnection();
 });
 
-export const AppLedgerSource = {
+export const scpOps = {
     initialize: async () => {
         try {
             if (!connectionKey)
@@ -50,4 +50,4 @@ export const AppLedgerSource = {
     }
 };
 
-export default client;
+export const scp = client;

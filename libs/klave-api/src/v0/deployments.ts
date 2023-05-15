@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { createTRPCRouter, publicProcedure } from '../trpc';
-import { client as scp } from '../secretarium';
+import { scp } from '@klave/providers';
 
 export const deploymentRouter = createTRPCRouter({
     getByApplication: publicProcedure
