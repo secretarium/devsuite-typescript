@@ -6,7 +6,8 @@ import { sigstore } from 'sigstore';
 import { ErrorObject, serializeError } from 'serialize-error';
 import { Hook, Repo, Application, prisma, Deployment } from '@klave/db';
 import { createCompiler } from '@klave/compiler';
-import { SCP, Utils } from '@secretarium/connector';
+import { scp } from '@klave/providers';
+import { Utils } from '@secretarium/connector';
 import { RepoFs } from './repoFs';
 import GithubFs from './githubFs';
 import { dummyMap } from './dummyVmFs';
@@ -59,8 +60,6 @@ class Deployer {
     operatingConfig?: any;
     applications: Application[] = [];
     fs?: RepoFs;
-
-    constructor(private scp: SCP) { }
 
     async fromRepo(repo: Repo) {
         this.repo = repo;
@@ -308,7 +307,7 @@ class Deployer {
                 return;
 
             // Send the wasm to the secretarium node
-            await this.scp.newTx('wasm-manager', 'register_smart_contract', `klave-deployment-${deployment.id}`, {
+            await scp.newTx('wasm-manager', 'register_smart_contract', `klave-deployment-${deployment.id}`, {
                 contract: {
                     name: `${deployment.id.split('-').pop()}.sta.klave.network`,
                     wasm_bytes: [],
@@ -418,8 +417,8 @@ class Deployer {
     }
 }
 
-export async function createDeployer(scp: SCP, options?: DeployerOptions): Promise<Deployer> {
-    const deployer = new Deployer(scp);
+export async function createDeployer(options?: DeployerOptions): Promise<Deployer> {
+    const deployer = new Deployer();
 
     if (!options)
         return deployer;
