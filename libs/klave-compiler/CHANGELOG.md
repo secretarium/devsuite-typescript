@@ -1,6 +1,5 @@
 # Changelog
-
-This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
+## [0.0.4](///compare/klave-compiler@0.0.3...klave-compiler@0.0.4) (2023-05-16)
 
 ## [0.0.3](///compare/hubber-compiler@0.0.2...hubber-compiler@0.0.3) (2023-05-11)
 
