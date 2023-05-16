@@ -47,6 +47,9 @@ export const Select: FC = () => {
     };
 
     const state = JSON.stringify({
+        referer: window.location.origin,
+        source: 'github',
+        redirectUri: `/deploy/repo/${repoInfo.owner}/${repoInfo.name}`,
         repoFullName: deployableRepo.fullName
     });
 

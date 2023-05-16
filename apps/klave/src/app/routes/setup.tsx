@@ -32,7 +32,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     }
 };
 
-export const AuthCodeReception: FC = () => {
+export const Index: FC = () => {
 
     const navigate = useNavigate();
     const [hasRedirected, setHasRedirected] = useState(false);
@@ -55,7 +55,7 @@ export const AuthCodeReception: FC = () => {
                         <h1 className='text-xl font-bold'>We faced a problem</h1>
                     </div>
                     <div>
-                        An issue occurred while we attempted to log you into Github
+                        An issue occurred while we attempted to set you up
                     </div>
                     <br />
                     {data
@@ -81,4 +81,4 @@ export const AuthCodeReception: FC = () => {
     </div>;
 };
 
-export default AuthCodeReception;
+export default Index;

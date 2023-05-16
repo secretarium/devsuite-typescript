@@ -2,6 +2,7 @@ import { type FC } from 'react';
 import { createRoutesFromElements, Route, RouterProvider, defer } from 'react-router-dom';
 import { sentryCreateBrowserRouter } from './utils/sentry';
 import AuthCodeReception, { loader as authLoader } from './routes/auth';
+import SetupCallback, { loader as setupLoader } from './routes/setup';
 import ErrorPage from './ErrorPage';
 import Landing from './routes/landing';
 import { AuthLayout } from './AuthLayout';
@@ -62,6 +63,11 @@ const router = sentryCreateBrowserRouter(
                 path="auth"
                 loader={authLoader}
                 element={<AuthCodeReception />}
+            />
+            <Route
+                path="setup"
+                loader={setupLoader}
+                element={<SetupCallback />}
             />
             <Route path='home' element={<Landing />} />
             <Route element={<ProtectedLayout />}>
