@@ -47,7 +47,6 @@ const getApiRouter = (/*port: number*/) => {
     // });
 
     // app.ws('/api/bridge', (ws, { session, sessionID, sessionStore }) => {
-    //     logger.info('Wassssup ? ...');
     //     (ws as any).sessionID = sessionID;
     //     ws.on('connection', (ws) => {
     //         ws.isAlive = true;
@@ -233,19 +232,18 @@ export const start = async (port: number) => {
     app.use(webLinkerMiddlware);
 
     app.ws('/api/bridge', (ws, { session, sessionID, sessionStore }) => {
-        logger.info('Wassssup ? ...');
         (ws as any).sessionID = sessionID;
         ws.on('connection', (ws) => {
             ws.isAlive = true;
-            logger.info('Client is alive !');
+            logger.info('PLR: Client is alive !');
         });
         ws.on('upgrade', () => {
-            logger.info('Client is upgrading ...');
+            logger.info('PLR: Client is upgrading ...');
         });
         ws.on('message', (msg) => {
             const [verb, ...data] = msg.toString().split('#');
             if (verb === 'request') {
-                logger.info('New bridge client request ...');
+                logger.info('New Pocket login bridge client request ...');
                 const [locator] = data;
                 (session as any).locator = locator;
                 session.save(() => {
@@ -253,7 +251,7 @@ export const start = async (port: number) => {
                 });
                 return;
             } else if (verb === 'confirm') {
-                logger.info('New remote device confirmation ...');
+                logger.info('PLR: New remote device confirmation ...');
                 const [sid, locator, localId] = data;
                 sessionStore.get(sid, (err, rsession) => {
                     if (!rsession)
