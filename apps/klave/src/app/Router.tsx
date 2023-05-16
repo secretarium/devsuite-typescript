@@ -21,8 +21,6 @@ import AppDeploymentDetail from './routes/apps/deploymentDetail';
 import AppEnvironment from './routes/apps/environment';
 import AppListing from './routes/apps/listing';
 import AppSettings from './routes/apps/settings';
-import Catalog from './routes/catalog';
-import CatalogListing from './routes/catalog/listing';
 import Providers from './Providers';
 
 const getUserData = () => fetch('/api/whoami', { method: 'GET' })
@@ -46,15 +44,6 @@ const router = sentryCreateBrowserRouter(
                     path="logout"
                     element={<Logout />}
                 />
-                <Route
-                    path="blocks"
-                >
-                    <Route index element={<Catalog />} />
-                    <Route
-                        path="app/:slug"
-                        element={<CatalogListing />}
-                    />
-                </Route>
                 <Route
                     path="deploy"
                 >
