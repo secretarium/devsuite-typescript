@@ -1,4 +1,6 @@
 # Changelog
+## [0.0.5](///compare/klave-compiler@0.0.4...klave-compiler@0.0.5) (2023-05-16)
+
 ## [0.0.4](///compare/klave-compiler@0.0.3...klave-compiler@0.0.4) (2023-05-16)
 
 ## [0.0.3](///compare/hubber-compiler@0.0.2...hubber-compiler@0.0.3) (2023-05-11)
