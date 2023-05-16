@@ -1,7 +1,9 @@
 # Changelog
+## [0.4.6](///compare/klave-sdk@0.4.5...klave-sdk@0.4.6) (2023-05-16)
 
-This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
+### Dependency Updates
 
+* `klave-compiler` updated to version `0.0.4`
 ## [0.4.5](///compare/trustless-app-sdk@0.4.4...trustless-app-sdk@0.4.5) (2023-05-11)
 
 ## [0.4.4](///compare/trustless-app-sdk@0.4.3...trustless-app-sdk@0.4.4) (2023-05-11)
