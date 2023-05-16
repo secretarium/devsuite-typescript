@@ -65,19 +65,28 @@ parentPort.on('message', (message) => {
                 });
             }
         }).then((result) => {
+
+            let chunk;
+            let actualStdOut = '';
+            while (null !== (chunk = compileStdOut.read()))
+                actualStdOut += String(chunk);
+            let actualStdErr = '';
+            while (null !== (chunk = compileStdOut.read()))
+                actualStdErr += String(chunk);
+
             if (result.error) {
                 parentPort.postMessage({
                     type: 'errored',
                     error: serializeError(result.error),
-                    stdout: compileStdOut.read(),
-                    stderr: compileStdErr.read()
+                    stdout: actualStdOut,
+                    stderr: actualStdErr
                 });
             } else
                 parentPort.postMessage({
                     type: 'done',
                     stats: result.stats.toString(),
-                    stdout: compileStdOut.read(),
-                    stderr: compileStdErr.read()
+                    stdout: actualStdOut,
+                    stderr: actualStdErr
                 });
         }).catch((error) => {
             parentPort.postMessage({
