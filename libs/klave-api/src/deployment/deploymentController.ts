@@ -1,7 +1,7 @@
 import { DeploymentPushPayload } from '../types';
 import { scp } from '@klave/providers';
 import { prisma } from '@klave/db';
-import type { KlaveRcConfiguration } from '@klave/sdk';
+// import type { KlaveRcConfiguration } from '@klave/sdk';
 import { Utils } from '@secretarium/connector';
 import * as path from 'node:path';
 import * as ts from 'typescript';
@@ -46,11 +46,12 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
     if (!repo)
         return;
 
-    const config = repo.config as unknown as KlaveRcConfiguration;
-    const availableApplicationsConfig = config.applications.reduce((prev, current) => {
+    // TODO Reenable the KlaveRcConfiguration type
+    const config = repo.config as any;
+    const availableApplicationsConfig = config.applications.reduce((prev: any, current: any) => {
         prev[current.name] = current;
         return prev;
-    }, {} as Record<string, KlaveRcConfiguration['applications'][number]>);
+    }, {} as Record<string, any['applications'][number]>);
 
     repo.applications.forEach(async application => {
 

@@ -4,7 +4,7 @@ import { ErrorObject, serializeError } from 'serialize-error';
 import type { Stats } from 'assemblyscript/dist/asc';
 import { createCompiler } from '@klave/compiler';
 import type { Context } from 'probot';
-import { KlaveRcConfiguration } from '@klave/sdk';
+// import { KlaveRcConfiguration } from '@klave/sdk';
 import { DeploymentPushPayload } from '../types';
 import { Repo } from '@prisma/client';
 import { dummyMap } from './dummyVmFs';
@@ -41,7 +41,8 @@ export class BuildMiniVM {
         type: 'github';
         context: DeploymentContext<DeploymentPushPayload>;
         repo: Repo;
-        application: KlaveRcConfiguration['applications'][number];
+        // TODO Reenable the KlaveRcConfiguration[...] type
+        application: any;
     }) { }
 
     getContentSync(path: string): string | null {
