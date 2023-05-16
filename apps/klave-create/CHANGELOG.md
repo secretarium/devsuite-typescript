@@ -1,7 +1,9 @@
 # Changelog
+## [0.3.9](///compare/klave-create@0.3.8...klave-create@0.3.9) (2023-05-16)
 
-This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
+### Dependency Updates
 
+* `klave-sdk` updated to version `0.4.6`
 ## [0.3.8](///compare/trustless-app-creator@0.3.7...trustless-app-creator@0.3.8) (2023-05-11)
 
 ### Dependency Updates
