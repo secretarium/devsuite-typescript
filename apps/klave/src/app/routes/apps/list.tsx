@@ -1,13 +1,15 @@
 import { FC } from 'react';
 import { NavLink, useMatches } from 'react-router-dom';
-import { UilSpinner } from '@iconscout/react-unicons';
+import { UilFlask, UilSpinner } from '@iconscout/react-unicons';
 import api from '../../utils/api';
 
 export const AppListing: FC = () => {
 
     const matches = useMatches();
     const lastMatch = matches[matches.length - 1];
-    const { data: applicationList, isLoading } = api.v0.applications.getAll.useQuery();
+    const { data: applicationList, isLoading } = api.v0.applications.getAll.useQuery(undefined, {
+        refetchInterval: 5000
+    });
 
     if (isLoading || !applicationList)
         return <>
@@ -36,8 +38,8 @@ export const AppListing: FC = () => {
                 const erroredCount = app.deployments?.filter(d => d.status === 'errored').length ?? 0;
                 const destPath = lastMatch.params['appId'] ? lastMatch.pathname.split('/').filter(Boolean).slice(0, 3).join('/').replace(lastMatch.params['appId'], app.id) : `/app/${app.id}`;
                 return <NavLink to={destPath} key={index} className={({ isActive }) => `${isActive ? 'shadow-lg relative ring-2 ring-blue-500 focus:outline-none' : ''} bg-white p-3 w-full flex flex-col rounded-md dark:bg-gray-800 shadow hover:bg-gray-100 dark:hover:bg-gray-700`}>
-                    <div className="flex xl:flex-row flex-col items-start font-medium text-gray-900 dark:text-white pb-2 mb-2 xl:border-b border-gray-200 border-opacity-75 dark:border-gray-700 w-full">
-                        {app.name}
+                    <div className="flex flex-row items-start font-medium text-gray-900 dark:text-white pb-2 mb-2 xl:border-b border-gray-200 border-opacity-75 dark:border-gray-700 w-full">
+                        {app.name}&nbsp;{(app.deployments?.filter(d => d.status === 'created' || d.status === 'deploying').length ?? 0) ? <UilFlask className="inline-block animate-pulse h-5 text-blue-500" /> : <>&nbsp;</>}
                     </div>
                     <div className="flex flex-col items-start justify-start flex-grow-0 gap-2 w-full">
                         {deployedCount ? <div className="text-xs py-1 px-2 leading-none dark:bg-gray-900 bg-green-100 text-green-600 rounded-md">{deployedCount} active deployments</div> : null}
