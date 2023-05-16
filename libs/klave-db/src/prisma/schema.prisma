@@ -80,14 +80,16 @@ model Hook {
 }
 
 model DeployableRepo {
-    id               String   @id @default(uuid()) @map("_id")
-    creatorAuthToken String
-    owner            String
-    name             String
-    config           String?
-    createdAt        DateTime @default(now())
-    web              Web      @relation(fields: [webId], references: [id])
-    webId            String
+    id                   String   @id @default(uuid()) @map("_id")
+    creatorAuthToken     String
+    owner                String
+    name                 String
+    fullName             String
+    installationRemoteId String
+    config               String?
+    createdAt            DateTime @default(now())
+    web                  Web      @relation(fields: [webId], references: [id])
+    webId                String
 
     @@unique([creatorAuthToken, owner, name])
 }

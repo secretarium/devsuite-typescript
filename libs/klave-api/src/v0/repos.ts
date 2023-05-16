@@ -16,7 +16,11 @@ export const reposRouter = createTRPCRouter({
 
             let manifest: DeployableRepo[] = await prisma.deployableRepo.findMany({
                 where: {
-                    webId: web.id
+                    OR: [{
+                        webId: web.id
+                    }, {
+                        creatorAuthToken: web.githubToken?.accessToken
+                    }]
                 }
             });
 
@@ -84,8 +88,30 @@ export const reposRouter = createTRPCRouter({
                 webId: web.id,
                 creatorAuthToken: accessToken,
                 owner: repo.owner.login,
-                name: repo.name
+                fullName: repo.full_name,
+                name: repo.name,
+                installationRemoteId: ''
             })).filter(Boolean);
+
+            const repositories = await prisma.repository.findMany({
+                select: {
+                    installationRemoteId: true,
+                    fullName: true,
+                    id: true
+                },
+                where: {
+                    source: 'github',
+                    fullName: {
+                        in: repos.map(repo => repo.fullName)
+                    }
+                }
+            });
+
+            repos.forEach(repo => {
+                const installationRemoteId = repositories.find(repositories => repositories.fullName === repo.fullName)?.installationRemoteId;
+                if (installationRemoteId)
+                    repo.installationRemoteId = installationRemoteId;
+            });
 
             const [, , reposWithId] = await prisma.$transaction([
                 prisma.deployableRepo.deleteMany({
@@ -132,7 +158,7 @@ export const reposRouter = createTRPCRouter({
 
             return validRepos.filter(repo => repo?.config).filter(isTruthy);
         }),
-    getRepo: publicProcedure
+    getDeployableRepo: publicProcedure
         .input(z.object({
             owner: z.string(),
             name: z.string()
@@ -155,6 +181,8 @@ export const reposRouter = createTRPCRouter({
                 id: data.id,
                 owner: data.owner,
                 name: data.name,
+                fullName: data.fullName,
+                isAvailableToKlave: !!data.installationRemoteId && data.installationRemoteId.trim() !== '',
                 config: parsedConfig?.success ? parsedConfig.data : null,
                 configError: !parsedConfig?.success ? parsedConfig?.error.flatten() : null
             };

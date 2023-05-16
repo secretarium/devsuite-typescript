@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { UilSpinner } from '@iconscout/react-unicons';
+import { UilExclamationTriangle, UilSpinner } from '@iconscout/react-unicons';
 import api from '../../utils/api';
 
 export const Select: FC = () => {
@@ -41,13 +41,14 @@ export const Select: FC = () => {
                 <br />
                 {deployables.map((repo) => {
                     const fullName = `${repo.owner}/${repo.name}`;
-                    return <Link to={`/deploy/repo/${fullName}`} key={fullName} className='a-like rounded-full bg-slate-200 hover:bg-slate-300 mx-1'>{fullName}</Link>;
+                    return <Link to={`/deploy/repo/${fullName}`} key={fullName} className={`a-like rounded-full mx-1 ${repo.installationRemoteId === '' ? 'bg-yellow-200 hover:bg-yellow-300 text-yellow-700' : 'bg-slate-200 hover:bg-slate-300'}`}>{repo.installationRemoteId ? '' : <UilExclamationTriangle className='inline-block h-3 p-0 m-0' />}{fullName}</Link>;
                 })}
                 <br />
                 <br />
                 <br />
                 Not finding what you are looking for ?<br />
-                Try rescanning your repositories.
+                Make sure your repository contains a <code>klave.json</code> file.<br />
+                Try rescanning your repositories after.
                 <br />
                 <br />
                 <button disabled={isWorking} onClick={rescanRepos} className='disabled:text-gray-300'>Rescan</button>
