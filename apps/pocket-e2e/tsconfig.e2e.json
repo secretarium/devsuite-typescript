@@ -1,0 +1,19 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "sourceMap": false,
+        "outDir": "../../dist/out-tsc",
+        "allowJs": true,
+        "types": [
+            "node",
+            "jest",
+            "detox"
+        ]
+    },
+    "include": [
+        "_detoxJestEnv.js",
+        "test-setup.ts",
+        "src/**/*.ts",
+        "src/**/*.js"
+    ]
+}

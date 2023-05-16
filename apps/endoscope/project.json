@@ -1,0 +1,118 @@
+{
+    "name": "endoscope",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "apps/endoscope/src",
+    "projectType": "application",
+    "targets": {
+        "build": {
+            "executor": "@nx/webpack:webpack",
+            "outputs": [
+                "{options.outputPath}"
+            ],
+            "defaultConfiguration": "production",
+            "options": {
+                "compiler": "swc",
+                "generateIndexHtml": false,
+                "outputPath": "dist/apps/endoscope",
+                "index": "apps/endoscope/src/index.html",
+                "baseHref": "/",
+                "main": "apps/endoscope/src/panel.tsx",
+                "polyfills": "apps/endoscope/src/polyfills.ts",
+                "tsConfig": "apps/endoscope/tsconfig.app.json",
+                "assets": [
+                    "apps/endoscope/src/favicon.svg",
+                    {
+                        "input": "apps/endoscope/src/assets",
+                        "glob": "**/*",
+                        "output": "."
+                    }
+                ],
+                "styles": [
+                    "apps/endoscope/src/styles.css"
+                ],
+                "scripts": [],
+                "webpackConfig": "apps/endoscope/webpack.config",
+                "isolatedConfig": true
+            },
+            "configurations": {
+                "production": {
+                    "fileReplacements": [
+                        {
+                            "replace": "apps/endoscope/src/environments/environment.ts",
+                            "with": "apps/endoscope/src/environments/environment.prod.ts"
+                        }
+                    ],
+                    "optimization": true,
+                    "outputHashing": "all",
+                    "sourceMap": false,
+                    "namedChunks": false,
+                    "extractLicenses": true,
+                    "vendorChunk": false
+                },
+                "development": {
+                    "extractLicenses": false,
+                    "optimization": false,
+                    "sourceMap": true,
+                    "vendorChunk": true
+                }
+            }
+        },
+        "serve": {
+            "executor": "@nx/webpack:dev-server",
+            "options": {
+                "buildTarget": "endoscope:build",
+                "hmr": true,
+                "port": 4210
+            },
+            "configurations": {
+                "production": {
+                    "buildTarget": "endoscope:build:production",
+                    "hmr": false,
+                    "port": 4210
+                },
+                "development": {
+                    "buildTarget": "endoscope:build:development"
+                }
+            },
+            "defaultConfiguration": "development"
+        },
+        "lint": {
+            "executor": "@nx/linter:eslint",
+            "outputs": [
+                "{options.outputFile}"
+            ],
+            "options": {
+                "lintFilePatterns": [
+                    "apps/endoscope/**/*.{ts,tsx,js,jsx,json}"
+                ]
+            }
+        },
+        "test": {
+            "executor": "@nx/jest:jest",
+            "outputs": [
+                "{workspaceRoot}/coverage/apps/endoscope"
+            ],
+            "options": {
+                "jestConfig": "apps/endoscope/jest.config.ts",
+                "passWithNoTests": true
+            }
+        },
+        "version": {
+            "executor": "@jscutlery/semver:version",
+            "options": {
+                "preset": "conventional",
+                "trackDeps": true,
+                "changelogHeader": "# Changelog",
+                "tagPrefix": "${projectName}@",
+                "commitMessageFormat": "chore(${projectName}): Release version ${version}",
+                "postTargets": [
+                    "endoscope:build"
+                ]
+            }
+        }
+    },
+    "tags": [
+        "scope:ui",
+        "scope:dev"
+    ]
+}

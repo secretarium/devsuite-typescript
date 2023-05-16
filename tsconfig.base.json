@@ -7,18 +7,59 @@
         "moduleResolution": "node",
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
+        "noFallthroughCasesInSwitch": true,
         "importHelpers": true,
-        "target": "es2015",
+        "target": "es2017",
         "module": "esnext",
-        "lib": ["es2017", "dom"],
+        "lib": [
+            "es2017",
+            "dom"
+        ],
         "skipLibCheck": true,
         "skipDefaultLibCheck": true,
         "forceConsistentCasingInFileNames": true,
+        "resolveJsonModule": true,
         "strict": true,
+        "strictNullChecks": true,
         "baseUrl": ".",
         "paths": {
-            "@secretarium/connector": ["packages/connector/src/index.ts"]
+            "@klave/api": [
+                "libs/klave-api/src/index.ts"
+            ],
+            "@klave/compiler": [
+                "libs/klave-compiler/src/index.ts"
+            ],
+            "@klave/db": [
+                "libs/klave-db/src/index.ts"
+            ],
+            "@klave/deployer": [
+                "libs/deployer/src/index.ts"
+            ],
+            "@klave/providers": [
+                "libs/providers/src/index.ts"
+            ],
+            "@klave/pruner": [
+                "libs/pruner/src/index.ts"
+            ],
+            "@klave/sdk": [
+                "libs/klave-sdk/src/index.ts"
+            ],
+            "@secretarium/connector": [
+                "libs/connector/src/index.ts"
+            ],
+            "@secretarium/crypto": [
+                "libs/crypto/src/index.ts"
+            ],
+            "@secretarium/intrumentation": [
+                "libs/instrumentation/src/index.ts"
+            ]
         }
     },
-    "exclude": ["node_modules", "tmp"]
+    "include": [
+        "package.json"
+    ],
+    "exclude": [
+        "node_modules",
+        "tmp"
+    ]
 }

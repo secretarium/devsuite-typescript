@@ -1,0 +1,23 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "allowUnreachableCode": false,
+        "allowUnusedLabels": false,
+        "forceConsistentCasingInFileNames": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "module": "commonjs",
+        "outDir": "../../dist/out-tsc",
+        "declaration": true,
+        "types": [
+            "node"
+        ]
+    },
+    "exclude": [
+        "jest.config.ts",
+        "src/**/*.spec.ts"
+    ],
+    "include": [
+        "**/*.ts"
+    ]
+}

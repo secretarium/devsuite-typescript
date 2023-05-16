@@ -1,0 +1,31 @@
+{
+    "name": "@klave/sdk",
+    "description": "Secretarium Trustless Apps helpers and definitions",
+    "version": "0.4.5",
+    "license": "MIT",
+    "private": false,
+    "author": {
+        "email": "florian@secretarium.com",
+        "name": "Florian Guitton"
+    },
+    "bin": {
+        "stac": "./bin/stac"
+    },
+    "type": "commonjs",
+    "main": "assembly/index.ts",
+    "types": "assembly/index.ts",
+    "exports": {
+        "./stac": {
+            "default": "./src/compile.js",
+            "require": "./src/compile.js"
+        }
+    },
+    "dependencies": {
+        "assemblyscript": "^0.27.5",
+        "chalk": "4.1.2",
+        "fs-extra": "11.1.1"
+    },
+    "devDependencies": {
+        "@types/fs-extra": "11.0.1"
+    }
+}

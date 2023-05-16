@@ -1,0 +1,73 @@
+{
+    "name": "klave-db",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "libs/klave-db/src",
+    "projectType": "library",
+    "targets": {
+        "build": {
+            "executor": "@nx/js:swc",
+            "dependsOn": [
+                {
+                    "target": "compile"
+                }
+            ],
+            "outputs": [
+                "{options.outputPath}"
+            ],
+            "options": {
+                "outputPath": "dist/libs/klave-db",
+                "main": "libs/klave-db/src/index.ts",
+                "tsConfig": "libs/klave-db/tsconfig.lib.json",
+                "assets": [
+                    "libs/klave-db/*.md"
+                ]
+            }
+        },
+        "lint": {
+            "executor": "@nx/linter:eslint",
+            "outputs": [
+                "{options.outputFile}"
+            ],
+            "options": {
+                "lintFilePatterns": [
+                    "libs/klave-db/**/*.ts"
+                ]
+            }
+        },
+        "test": {
+            "executor": "@nx/jest:jest",
+            "outputs": [
+                "{workspaceRoot}/coverage/{projectRoot}"
+            ],
+            "options": {
+                "jestConfig": "libs/klave-db/jest.config.ts",
+                "passWithNoTests": true
+            }
+        },
+        "studio": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "prisma studio --port 5556 --schema src/prisma/schema.prisma",
+                "cwd": "libs/klave-db"
+            }
+        },
+        "compile": {
+            "executor": "nx:run-commands",
+            "inputs": [
+                "{projectRoot}/src/prisma/schema.prisma"
+            ],
+            "options": {
+                "command": "prisma generate --schema src/prisma/schema.prisma",
+                "cwd": "libs/klave-db"
+            }
+        },
+        "push": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "prisma db push --schema src/prisma/schema.prisma",
+                "cwd": "libs/klave-db"
+            }
+        }
+    },
+    "tags": []
+}

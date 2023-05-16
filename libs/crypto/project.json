@@ -1,0 +1,92 @@
+{
+    "name": "crypto",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "libs/crypto/src",
+    "projectType": "library",
+    "targets": {
+        "build": {
+            "dependsOn": [
+                {
+                    "target": "build-upstream"
+                }
+            ],
+            "executor": "@nx/js:tsc",
+            "outputs": [
+                "{options.outputPath}"
+            ],
+            "options": {
+                "outputPath": "dist/libs/crypto",
+                "tsConfig": "libs/crypto/tsconfig.lib.json",
+                "packageJson": "libs/crypto/package.json",
+                "main": "libs/crypto/src/index.ts",
+                "assets": [
+                    "libs/crypto/*.md"
+                ]
+            }
+        },
+        "build-upstream": {
+            "executor": "nx:run-commands",
+            "inputs": [
+                {
+                    "runtime": "curl -s https://api.github.com/repos/microsoft/MSR-JavaScript-Crypto/git/refs/heads/master"
+                }
+            ],
+            "outputs": [
+                "libs/crypto/vendor"
+            ],
+            "options": {
+                "command": "node tools/scripts/buildMsRCrypto.mjs",
+                "outputPath": "libs/crypto/vendor"
+            }
+        },
+        "lint": {
+            "executor": "@nx/linter:eslint",
+            "options": {
+                "lintFilePatterns": [
+                    "libs/crypto/**/*.{ts,tsx,js,jsx,json}"
+                ]
+            },
+            "outputs": [
+                "{options.outputFile}"
+            ]
+        },
+        "test": {
+            "executor": "@nx/jest:jest",
+            "outputs": [
+                "{workspaceRoot}/coverage/libs/crypto"
+            ],
+            "options": {
+                "jestConfig": "libs/crypto/jest.config.ts",
+                "passWithNoTests": true
+            }
+        },
+        "version": {
+            "executor": "@jscutlery/semver:version",
+            "options": {
+                "preset": "conventional",
+                "trackDeps": true,
+                "changelogHeader": "# Changelog",
+                "tagPrefix": "${projectName}@",
+                "commitMessageFormat": "chore(${projectName}): Release version ${version}",
+                "postTargets": [
+                    "crypto:build"
+                ]
+            }
+        },
+        "publish": {
+            "dependsOn": [
+                "build"
+            ],
+            "executor": "nx:run-commands",
+            "options": {
+                "cwd": "dist/libs/crypto",
+                "commands": [
+                    "yarn publish --access public"
+                ]
+            }
+        }
+    },
+    "tags": [
+        "scope:sdk"
+    ]
+}

@@ -10,6 +10,7 @@
         "typescript",
         "typescriptreact"
     ],
+    "eslint.packageManager": "yarn",
     "editor.detectIndentation": false,
     "editor.formatOnSave": true,
     "files.exclude": {
@@ -17,6 +18,12 @@
         "**/.project": true,
         "**/.settings": true,
         "**/.factorypath": true
+    },
+    "workbench.colorCustomizations": {
+        "titleBar.activeBackground": "#b2294c",
+        "titleBar.activeForeground": "#f8ece6",
+        "titleBar.inactiveBackground": "#7e1d36",
+        "titleBar.inactiveForeground": "#e0c4bd"
     },
     "typescript.tsdk": "node_modules\\typescript\\lib"
 }

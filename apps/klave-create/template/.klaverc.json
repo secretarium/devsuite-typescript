@@ -1,0 +1,13 @@
+{
+    "version": "1",
+    "name": "{{SMART_CONTRACT_NAME}}",
+    "slug": "{{SMART_CONTRACT_SLUG}}",
+    "branch": "*",
+    "applications": [
+        {
+            "name": "Hello World",
+            "version": "0.0.1",
+            "rootDir": "/apps/hello_world"
+        }
+    ]
+}

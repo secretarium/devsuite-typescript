@@ -1,0 +1,64 @@
+{
+    "cli": {
+        "version": ">= 2.6.0"
+    },
+    "submit": {
+        "production": {}
+    },
+    "build": {
+        "base": {
+            "env": {
+                "STAGE": "production",
+                "NODE_ENV": "development",
+                "GOOGLE_SERVICES_FILE": "_"
+            }
+        },
+        "development": {
+            "extends": "base",
+            "developmentClient": true,
+            "distribution": "internal",
+            "releaseChannel": "default",
+            "ios": {
+                "buildConfiguration": "Debug"
+            },
+            "android": {
+                "buildType": "apk",
+                "gradleCommand": ":app:assembleDebug"
+            },
+            "env": {
+                "STAGE": "development"
+            }
+        },
+        "staging": {
+            "extends": "base",
+            "distribution": "internal",
+            "releaseChannel": "staging",
+            "ios": {
+                "buildConfiguration": "Debug"
+            },
+            "android": {
+                "buildType": "apk",
+                "gradleCommand": ":app:assembleDebug"
+            },
+            "env": {
+                "STAGE": "staging"
+            }
+        },
+        "preview": {
+            "extends": "base",
+            "distribution": "store",
+            "releaseChannel": "preview",
+            "android": {
+                "buildType": "apk"
+            }
+        },
+        "production": {
+            "extends": "base",
+            "distribution": "store",
+            "releaseChannel": "stable",
+            "android": {
+                "buildType": "app-bundle"
+            }
+        }
+    }
+}

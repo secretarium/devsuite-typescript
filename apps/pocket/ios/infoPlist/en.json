@@ -1,0 +1,5 @@
+{
+    "CFBundleDisplayName": "Secretarium Key",
+    "NSCameraUsageDescription": "This application uses your camera to scan Secretarium barcodes",
+    "NSFaceIDUsageDescription": "This application uses biometrics to encrypt your data"
+}

@@ -1,0 +1,23 @@
+{
+    "extends": [
+        "plugin:cypress/recommended",
+        "../../.eslintrc.js"
+    ],
+    "ignorePatterns": [
+        "!**/*"
+    ],
+    "overrides": [
+        {
+            "files": [
+                "*.ts",
+                "*.tsx",
+                "*.js",
+                "*.jsx"
+            ],
+            "parserOptions": {
+                "project": "apps/klave-e2e/tsconfig.*?.json"
+            },
+            "rules": {}
+        }
+    ]
+}
