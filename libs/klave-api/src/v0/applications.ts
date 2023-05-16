@@ -1,6 +1,8 @@
 import { createTRPCRouter, publicProcedure } from '../trpc';
+import { probot } from '@klave/providers';
 import type { Application } from '@prisma/client';
 import { z } from 'zod';
+import { deployToSubstrate } from '../deployment/deploymentController';
 
 export const applicationRouter = createTRPCRouter({
     getAll: publicProcedure
@@ -36,22 +38,22 @@ export const applicationRouter = createTRPCRouter({
         }),
     register: publicProcedure
         .input(z.object({
-            repoId: z.string().uuid(),
+            deployableRepoId: z.string().uuid(),
             applications: z.array(z.string()),
             emphemeralKlaveTag: z.string().optional()
         }))
-        .mutation(async ({ ctx: { prisma, session, sessionStore, sessionID, user, webId }, input: { repoId, applications, emphemeralKlaveTag } }) => {
+        .mutation(async ({ ctx: { prisma, session, sessionStore, sessionID, user, webId }, input: { deployableRepoId, applications, emphemeralKlaveTag } }) => {
 
-            const deployableRepoData = await prisma.deployableRepo.findFirst({
+            const deployableRepo = await prisma.deployableRepo.findFirst({
                 where: {
-                    id: repoId
+                    id: deployableRepoId
                 }
             });
 
-            if (!deployableRepoData)
+            if (!deployableRepo)
                 throw (new Error('There is no such repo'));
 
-            const newConfig = deployableRepoData.config;
+            const newConfig = deployableRepo.config;
             if (newConfig === null)
                 throw (new Error('There is no configuration repo'));
 
@@ -62,8 +64,8 @@ export const applicationRouter = createTRPCRouter({
                     where: {
                         source_owner_name: {
                             source: 'github',
-                            owner: deployableRepoData.owner,
-                            name: deployableRepoData.name
+                            owner: deployableRepo.owner,
+                            name: deployableRepo.name
                         }
                     },
                     update: {
@@ -71,8 +73,8 @@ export const applicationRouter = createTRPCRouter({
                     },
                     create: {
                         source: 'github',
-                        owner: deployableRepoData.owner,
-                        name: deployableRepoData.name,
+                        owner: deployableRepo.owner,
+                        name: deployableRepo.name,
                         config: JSON.parse(newConfig)
                     }
                 });
@@ -94,6 +96,39 @@ export const applicationRouter = createTRPCRouter({
                         catogories: [],
                         tags: [],
                         author: webId ?? emphemeralKlaveTag ?? sessionID
+                    }
+                });
+
+                const installationOctokit = await probot.auth(parseInt(deployableRepo.installationRemoteId));
+
+                const lastCommits = await installationOctokit.repos.listCommits({
+                    owner: deployableRepo.owner,
+                    repo: deployableRepo.name,
+                    per_page: 2
+                });
+
+                const [afterCommit, beforeCommit] = lastCommits.data;
+
+                deployToSubstrate({
+                    octokit: installationOctokit,
+                    class: 'push',
+                    type: 'push',
+                    repo: {
+                        url: afterCommit.html_url,
+                        owner: deployableRepo.owner,
+                        name: deployableRepo.name
+                    },
+                    commit: {
+                        url: afterCommit.html_url,
+                        ref: afterCommit.sha, // TODO: check if this is the right ref
+                        before: beforeCommit.sha,
+                        after: afterCommit.sha,
+                        forced: true // TODO: check where to get this from
+                    },
+                    pusher: {
+                        login: afterCommit.author?.login ?? afterCommit.committer?.login ?? afterCommit.commit.author?.name ?? 'unknown',
+                        avatarUrl: afterCommit.author?.avatar_url ?? 'https://avatars.githubusercontent.com/u/583231?v=4',
+                        htmlUrl: afterCommit.author?.html_url ?? afterCommit.committer?.html_url ?? ''
                     }
                 });
                 // const deployment = await tx.deployment.create({
