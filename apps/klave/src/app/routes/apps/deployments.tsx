@@ -112,7 +112,7 @@ export const Deployments: FC = () => {
         </>;
 
     return <>
-        <div className="flex w-full items-center mb-7">
+        <div className="hidden w-full items-center mb-7">
             <button className="inline-flex mr-3 items-center h-8 pl-2.5 pr-2 rounded-md shadow dark:text-slate-400 dark:bg-slate-800 text-gray-700 dark:text-gray-400 dark:border-gray-800 border border-gray-200 leading-none py-0">
                 <svg viewBox="0 0 24 24" className="w-4 mr-2 text-gray-400 dark:text-gray-600" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
