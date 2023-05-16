@@ -1,11 +1,11 @@
-import nodePath from 'node:path';
+import * as nodePath from 'node:path';
 import { sigstore } from 'sigstore';
 import { ErrorObject, serializeError } from 'serialize-error';
 import type { Stats } from 'assemblyscript/dist/asc';
 import { createCompiler } from '@klave/compiler';
 import type { Context } from 'probot';
 import { KlaveRcConfiguration } from '@klave/sdk';
-import { DeploymentPushPayload } from '@klave/api';
+import { DeploymentPushPayload } from '../types';
 import { Repo } from '@prisma/client';
 import { dummyMap } from './dummyVmFs';
 
@@ -49,7 +49,7 @@ export class BuildMiniVM {
         return dummyMap[normalisedPath] ?? null;
     }
 
-    async getContent(path: string): Promise<Awaited<ReturnType<typeof octokit.repos.getContent>> | { data: string | null }> {
+    async getContent(path: string): Promise<Awaited<ReturnType<Context['octokit']['repos']['getContent']>> | { data: string | null }> {
 
         const { context: { octokit, ...context }, repo } = this.options;
 

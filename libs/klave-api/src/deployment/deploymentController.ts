@@ -1,11 +1,11 @@
-import { DeploymentPushPayload } from '@klave/api';
+import { DeploymentPushPayload } from '../types';
 import { scp } from '@klave/providers';
 import { prisma } from '@klave/db';
 import type { KlaveRcConfiguration } from '@klave/sdk';
 import { Utils } from '@secretarium/connector';
-import path from 'node:path';
-import ts from 'typescript';
-import BuildMiniVM, { DeploymentContext } from '../../utils/buildMiniVm';
+import * as path from 'node:path';
+import * as ts from 'typescript';
+import BuildMiniVM, { DeploymentContext } from './buildMiniVm';
 
 export const deployToSubstrate = async (deploymentContext: DeploymentContext<DeploymentPushPayload>) => {
 
@@ -27,7 +27,7 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
         return;
     }
 
-    if (!files?.length)
+    if (!files?.length && !context.commit.forced)
         return;
 
     const repo = await prisma.repo.findUnique({
@@ -46,7 +46,8 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
     if (!repo)
         return;
 
-    const availableApplicationsConfig = (repo.config as unknown as KlaveRcConfiguration).applications.reduce((prev, current) => {
+    const config = repo.config as unknown as KlaveRcConfiguration;
+    const availableApplicationsConfig = config.applications.reduce((prev, current) => {
         prev[current.name] = current;
         return prev;
     }, {} as Record<string, KlaveRcConfiguration['applications'][number]>);
@@ -60,7 +61,7 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
             const commitFileDir = path.normalize(path.join('/', filename));
             const appPath = path.normalize(path.join('/', availableApplicationsConfig[application.name]?.rootDir ?? ''));
             return commitFileDir.startsWith(appPath) || filename === '.klaverc.json';
-        }).length === 0)
+        }).length === 0 && !context.commit.forced)
             return;
 
         await prisma.activityLog.create({
