@@ -8,6 +8,7 @@ let reconnectAttempt = 0;
 let pingInterval: NodeJS.Timeout | undefined = undefined;
 
 const connectToDispatcher = () => {
+    // TODO Ensure only ever one connection is open, we see multiple connections in the wild
     const hookSocket = new WebSocket(process.env.NX_DISPATCH_WS!);
     hookSocket.addEventListener('open', () => {
         hookSocket.send(process.env.NX_DISPATCH_SECRET!);
