@@ -14,13 +14,13 @@ const planReconnection = async () => {
             reconnectionTimeout = setTimeout(() => {
                 clearTimeout(reconnectionTimeout);
                 reconnectionTimeout = undefined;
-                AppDataSource.initialize().then(resolve).catch(() => { return; });
+                dbOps.initialize().then(resolve).catch(() => { return; });
             }, 3000);
         }
     });
 };
 
-export const AppDataSource = {
+export const dbOps = {
     initialize: async () => {
         try {
             await client.$connect();

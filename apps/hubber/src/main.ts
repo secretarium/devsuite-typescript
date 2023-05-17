@@ -1,10 +1,10 @@
 import { startPruner } from '@klave/pruner';
 import { start } from './app';
 import './i18n';
-import { AppDataSource } from './utils/db';
+import { dbOps } from './utils/db';
 import { scpOps, logger } from '@klave/providers';
 
-AppDataSource.initialize()
+dbOps.initialize()
     .then(scpOps.initialize)
     .then(async () => {
 
@@ -18,7 +18,7 @@ AppDataSource.initialize()
 
         server.on('error', (error) => {
             logger.error(error);
-            AppDataSource.stop();
+            dbOps.stop();
         });
 
         startPruner();
