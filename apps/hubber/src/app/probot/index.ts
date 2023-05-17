@@ -31,10 +31,22 @@ const probotApp = (app: Probot) => {
             if (payload.action === 'created') {
                 // TODO: Move this to the TRPC router
                 logger.info(`Registering new GithubApp installation ${payload.installation.id}`);
-                await prisma.installation.create({
-                    data: {
+                await prisma.installation.upsert({
+                    where: {
+                        source_remoteId_account: {
+                            source: 'github',
+                            remoteId: `${payload.installation.id}`,
+                            account: payload.installation.account.login
+                        }
+                    },
+                    create: {
                         source: 'github',
                         remoteId: `${payload.installation.id}`,
+                        account: payload.installation.account.login,
+                        accountType: payload.installation.account.type.toLowerCase() as any,
+                        hookPayload: payload as any
+                    },
+                    update: {
                         account: payload.installation.account.login,
                         accountType: payload.installation.account.type.toLowerCase() as any,
                         hookPayload: payload as any
@@ -86,11 +98,25 @@ const probotApp = (app: Probot) => {
                 // TODO: Move this to the TRPC router
                 if (payload.repositories_added && payload.repositories_added.length > 0)
                     for (const repo of payload.repositories_added) {
-                        await prisma.repository.create({
-                            data: {
+                        await prisma.repository.upsert({
+                            where: {
+                                source_remoteId_installationRemoteId: {
+                                    source: 'github',
+                                    remoteId: `${repo.id}`,
+                                    installationRemoteId: `${payload.installation.id}`
+                                }
+                            },
+                            create: {
                                 source: 'github',
                                 remoteId: `${repo.id}`,
                                 installationRemoteId: `${payload.installation.id}`,
+                                name: repo.name,
+                                owner: payload.installation.account.login,
+                                fullName: repo.full_name,
+                                private: repo.private,
+                                installationPayload: repo as any
+                            },
+                            update: {
                                 name: repo.name,
                                 owner: payload.installation.account.login,
                                 fullName: repo.full_name,

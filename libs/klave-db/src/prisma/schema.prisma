@@ -249,6 +249,7 @@ model Project {
 }
 
 enum InstallationAccountType {
+    unknown
     user
     bot
     organization

@@ -2,10 +2,11 @@ import { startPruner } from '@klave/pruner';
 import { start } from './app';
 import './i18n';
 import { dbOps } from './utils/db';
-import { scpOps, logger } from '@klave/providers';
+import { scpOps, githubOps, logger } from '@klave/providers';
 
 dbOps.initialize()
     .then(scpOps.initialize)
+    .then(githubOps.initialize)
     .then(async () => {
 
         const port = Number(process.env.PORT) || 3333;
