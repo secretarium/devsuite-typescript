@@ -14,11 +14,10 @@
             "options": {
                 "cacheableOperations": [
                     "build",
+                    "build-upstream",
                     "lint",
                     "test",
-                    "e2e",
-                    "build-custom-server",
-                    "build-custom-server"
+                    "e2e"
                 ],
                 "accessToken": "ZTM5YThjMTctZDdiMS00ZjU1LThjN2ItNTk5ODUxODU0YzllfHJlYWQtd3JpdGU="
             }
