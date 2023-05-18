@@ -96,7 +96,11 @@ async function main(target: string | undefined, options: CommandOptions) {
 async function createTemplateAsync(targetDir: string, data: SubstitutionData): Promise<string> {
     return await newStep('Creating template files', async (step) => {
 
-        await fs.copy(path.join(__dirname, '..', 'template', '.'), targetDir, {
+        await fs.copy(path.join(__dirname, '..', 'template', '**/*'), targetDir, {
+            filter: () => true
+        });
+
+        await fs.copy(path.join(__dirname, '..', 'template', '.*'), targetDir, {
             filter: () => true
         });
 
