@@ -63,7 +63,7 @@ export const Select: FC = () => {
         {!deployableRepo.isAvailableToKlave
             ? <div className='bg-yellow-200 p-5 mb-10 w-full text-center text-yellow-800'>
                 <UilExclamationTriangle className='inline-block mb-3' /><br />
-                <span>This repository doesn&apos;t have the Klave Github App install</span><br />
+                <span>This repository doesn&apos;t have the Klave Github App installed</span><br />
                 <a href={githubAppInstall.toString()} type="submit" className='button-like mt-5 bg-yellow-800 text-white'>Install it now !</a>
             </div>
             : null}
