@@ -50,7 +50,7 @@ export class BuildMiniVM {
         return dummyMap[normalisedPath] ?? null;
     }
 
-    async getContent(path: string): Promise<Awaited<ReturnType<Context['octokit']['repos']['getContent']>> | { data: string | null }> {
+    async getContent(path?: string): Promise<Awaited<ReturnType<Context['octokit']['repos']['getContent']>> | { data: string | null }> {
 
         const { context: { octokit, ...context }, repo } = this.options;
 
@@ -59,22 +59,24 @@ export class BuildMiniVM {
                 owner: repo.owner,
                 repo: repo.name,
                 ref: context.commit.ref,
-                path,
+                path: `${this.options.application.rootDir}${path ? `/${path}` : ''}`,
                 mediaType: {
                     format: 'raw+json'
                 }
             });
         } catch {
+            if (!path)
+                return { data: null };
             return { data: this.getContentSync(path) };
         }
     }
 
     async getRootContent() {
         try {
-            const content = await this.getContent(`${this.options.application.rootDir}`);
+            const content = await this.getContent();
             if (typeof content.data === 'object' && Array.isArray(content.data)) {
                 const compilableFiles = content.data.find(file => ['index.ts'].includes(file.name));
-                return await this.getContent(`${compilableFiles?.path}`);
+                return await this.getContent(`${compilableFiles?.name}`);
             } else
                 return content;
         } catch (e) {
