@@ -4,7 +4,6 @@ import { prisma } from '@klave/db';
 // import type { KlaveRcConfiguration } from '@klave/sdk';
 import { Utils } from '@secretarium/connector';
 import * as path from 'node:path';
-import * as ts from 'typescript';
 import BuildMiniVM, { DeploymentContext } from './buildMiniVm';
 
 export const deployToSubstrate = async (deploymentContext: DeploymentContext<DeploymentPushPayload>) => {
@@ -151,6 +150,8 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                         data: {
                             status: 'errored'
                         }
+                    }).catch((reason) => {
+                        logger.error('Error while updating deployment status to error', reason);
                     });
             });
 
@@ -190,31 +191,7 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                 }
 
                 const { result: { wasm, wat, dts } } = buildResult;
-
-                let filteredDTS = '';
-                if (dts) {
-                    // parse the d.ts file
-                    const sourceFile = ts.createSourceFile(
-                        `${deployment.id}.d.ts`,
-                        dts,
-                        ts.ScriptTarget.Latest,
-                        true
-                    );
-                    ts.forEachChild(sourceFile, node => {
-                        if (ts.isFunctionDeclaration(node)) {
-                            if (node.name && ![
-                                'register_routes',
-                                '__new',
-                                '__pin',
-                                '__unpin',
-                                '__collect'
-                            ].includes(node.name?.text)) {
-                                filteredDTS += `${node.getFullText().trim()}\n`;
-                            }
-                        }
-                    });
-                }
-
+                
                 await prisma.deployment.update({
                     where: {
                         id: deployment.id
@@ -223,7 +200,7 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                         status: 'compiled',
                         buildOutputWASM: Utils.toBase64(wasm),
                         buildOutputWAT: wat,
-                        buildOutputDTS: filteredDTS
+                        buildOutputDTS: dts
                     }
                 });
 

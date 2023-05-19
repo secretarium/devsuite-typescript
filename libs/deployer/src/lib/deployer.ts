@@ -1,5 +1,4 @@
 import * as path from 'node:path';
-import * as ts from 'typescript';
 import type { Context } from 'probot';
 import type { Stats } from 'assemblyscript/dist/asc';
 import { sigstore } from 'sigstore';
@@ -290,30 +289,13 @@ class Deployer {
 
             const { result: { wasm, wat, dts } } = buildResult;
 
-            // Filter the d.ts file
-            let filteredDTS = '';
-            const validMatches: string[] = [];
+            const validMatches = [];
             if (dts) {
-                const sourceFile = ts.createSourceFile(
-                    `${application.id}.d.ts`,
-                    dts,
-                    ts.ScriptTarget.Latest,
-                    true
-                );
-                ts.forEachChild(sourceFile, node => {
-                    if (ts.isFunctionDeclaration(node)) {
-                        if (node.name && ![
-                            'register_routes',
-                            '__new',
-                            '__pin',
-                            '__unpin',
-                            '__collect'
-                        ].includes(node.name?.text)) {
-                            validMatches.push(node.name.text);
-                            filteredDTS += `${node.getFullText().trim()}\n`;
-                        }
-                    }
-                });
+                const matches = Array.from(dts.matchAll(/^export declare function (.*)\(/gm));
+                validMatches.push(...matches
+                    .map(match => match[1])
+                    .filter(Boolean)
+                    .filter(match => !['__new', '__pin', '__unpin', '__collect', 'register_routes'].includes(match)));
             }
 
             // Update the deployment with the build output
@@ -325,7 +307,7 @@ class Deployer {
                     status: 'compiled',
                     buildOutputWASM: Utils.toBase64(wasm),
                     buildOutputWAT: wat,
-                    buildOutputDTS: filteredDTS,
+                    buildOutputDTS: dts,
                     contractFunctions: validMatches
                 }
             });
