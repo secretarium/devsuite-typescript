@@ -75,7 +75,7 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
         if (files.filter(({ filename }) => {
             const commitFileDir = path.normalize(path.join('/', filename));
             const appPath = path.normalize(path.join('/', availableApplicationsConfig[application.name]?.rootDir ?? ''));
-            return commitFileDir.startsWith(appPath) || filename === '.klaverc.json';
+            return commitFileDir.startsWith(appPath) || filename === 'klave.json';
         }).length === 0 && !context.commit.forced)
             return;
 

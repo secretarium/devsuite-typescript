@@ -11,7 +11,7 @@ const CWD = process.env['INIT_CWD'] || process.cwd();
 const compile = () => {
     try {
 
-        const configContent = fs.readFileSync(path.join(CWD, '.klaverc.json')).toString();
+        const configContent = fs.readFileSync(path.join(CWD, 'klave.json')).toString();
         const parsingOutput = schema.safeParse(JSON.parse(configContent));
 
         if (parsingOutput.success)
