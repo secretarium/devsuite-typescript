@@ -113,17 +113,17 @@ export const LoginSecKey: FC = () => {
             <br />
             <br />
         </div>
-        <div className='relative'>
+        <form className='relative'>
             {screen === 'start' ? <>
                 <input key='emailField' value={email} onInput={onChangeEmail} alt='email' placeholder='Email address' type='email' className='text-center' />
                 <br />
                 <br />
-                <button onClick={getLoginCode} type='button'>Next</button>
+                <button onClick={getLoginCode} type='submit'>Next</button>
             </> : screen === 'code' ? <>
                 <input key='codeField' value={code} onInput={onChangeCode} alt='code' placeholder='Code' type='text' className='text-center' />
                 <br />
                 <br />
-                <button onClick={getLoginChallenge} type='button' className='mx-1'>Next</button>
+                <button onClick={getLoginChallenge} type='submit' className='mx-1'>Next</button>
                 <button onClick={resetLogin} type='button' className='mx-1'>Cancel</button>
             </> : screen === 'key' ? <>
                 <button onClick={onRegister} type='button' className='mx-1'>Register</button>
@@ -131,7 +131,7 @@ export const LoginSecKey: FC = () => {
                 <button onClick={resetLogin} type='button' className='mx-1'>Cancel</button>
             </> : null}
             {error ? <><br /><br /><div className='bg-red-200 p-2 w-full'>{error}</div></> : null}
-        </div>
+        </form>
     </div>;
 };
 
