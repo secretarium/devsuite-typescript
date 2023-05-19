@@ -18,6 +18,11 @@
                     "libs/klave-compiler/*.md",
                     "libs/klave-compiler/src/*.mjs"
                 ]
+            },
+            "configurations": {
+                "development": {
+                    "watch": true
+                }
             }
         },
         "publish": {
