@@ -69,13 +69,15 @@ export const applicationRouter = createTRPCRouter({
                         }
                     },
                     update: {
-                        config: JSON.parse(newConfig)
+                        // TODO: Use zod to validate the config
+                        config: JSON.parse(newConfig) as any
                     },
                     create: {
                         source: 'github',
                         owner: deployableRepo.owner,
                         name: deployableRepo.name,
-                        config: JSON.parse(newConfig)
+                        // TODO: Use zod to validate the config
+                        config: JSON.parse(newConfig) as any
                     }
                 });
                 // /* const application = */ await tx.application.create({
@@ -109,6 +111,9 @@ export const applicationRouter = createTRPCRouter({
 
                 const [afterCommit, beforeCommit] = lastCommits.data;
 
+                if (afterCommit === undefined)
+                    throw (new Error('There is no commit'));
+
                 deployToSubstrate({
                     octokit: installationOctokit,
                     class: 'push',
@@ -121,7 +126,7 @@ export const applicationRouter = createTRPCRouter({
                     commit: {
                         url: afterCommit.html_url,
                         ref: afterCommit.sha, // TODO: check if this is the right ref
-                        before: beforeCommit.sha,
+                        before: beforeCommit?.sha,
                         after: afterCommit.sha,
                         forced: true // TODO: check where to get this from
                     },
@@ -131,63 +136,6 @@ export const applicationRouter = createTRPCRouter({
                         htmlUrl: afterCommit.author?.html_url ?? afterCommit.committer?.html_url ?? ''
                     }
                 });
-                // const deployment = await tx.deployment.create({
-                //     data: {
-                //         expiresOn: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14),
-                //         locations: ['FR'],
-                //         application: {
-                //             connect: { id: application.id }
-                //         }
-                //     }
-                // });
-                // await tx.activityLog.create({
-                //     data: {
-                //         class: 'deployment',
-                //         application: {
-                //             connect: {
-                //                 id: application.id
-                //             }
-                //         },
-                //         context: {
-                //             type: 'start',
-                //             payload: {
-                //                 deploymentId: deployment.id
-                //             }
-                //         }
-                //     }
-                // });
-                // });
-                // try {
-                //     const lastEventsHandle = await fetch(`https://api.github.com/users/${deployableRepoData.owner}/events/public`);
-                //     const lastEvents = await lastEventsHandle.json();
-
-                //     if (lastEvents.length > 0) {
-                //         deployToSubstrate({
-                //             octokit: context.octokit,
-                //             class: context.name,
-                //             type: context.name,
-                //             repo: {
-                //                 url: context.payload.repository.html_url,
-                //                 owner: context.payload.repository.owner.login,
-                //                 name: context.payload.repository.name
-                //             },
-                //             commit: {
-                //                 url: context.payload.repository.commits_url,
-                //                 ref: context.payload.ref,
-                //                 before: context.payload.before,
-                //                 after: context.payload.after,
-                //                 forced: context.payload.forced
-                //             },
-                //             pusher: {
-                //                 login: context.payload.sender.login,
-                //                 avatarUrl: context.payload.sender.avatar_url,
-                //                 htmlUrl: context.payload.sender.html_url
-                //             }
-                //         });
-                //     }
-                // } catch (e) {
-                //     console.error(e);
-                // }
 
                 if (user === undefined)
                     await new Promise<void>((resolve, reject) => {

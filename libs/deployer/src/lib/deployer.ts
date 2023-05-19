@@ -6,7 +6,7 @@ import { sigstore } from 'sigstore';
 import { ErrorObject, serializeError } from 'serialize-error';
 import { Hook, Repo, Application, prisma, Deployment } from '@klave/db';
 import { createCompiler } from '@klave/compiler';
-import { scp } from '@klave/providers';
+import { logger, scp } from '@klave/providers';
 import { Utils } from '@secretarium/connector';
 import { RepoFs } from './repoFs';
 import GithubFs from './githubFs';
@@ -162,25 +162,51 @@ class Deployer {
 
         // Get the list of files that changed
         const files: Array<{ __filename: string } & unknown> = [];
-        try {
-            const { data: { files: filesManifest } } = await octokit.repos.compareCommits({
-                owner: repo.owner,
-                repo: repo.name,
-                base: before,
-                head: after
-            });
 
-            filesManifest?.forEach(fileInfo => {
-                files.push({
-                    __filename: fileInfo.filename,
-                    ...fileInfo
+        let candidateFiles: any[] = [];
+        if (before) {
+            try {
+                const { data: { files: filesManifest } } = await octokit.repos.compareCommits({
+                    owner: repo.owner,
+                    repo: repo.name,
+                    base: before,
+                    head: after
                 });
-            });
 
-        } catch (e) {
-            console.error(e);
-            return;
+                if (filesManifest)
+                    candidateFiles = filesManifest;
+            } catch (e) {
+                logger.debug('Error while comparing files from github', e);
+            }
         }
+
+        if (!candidateFiles?.length) {
+            try {
+
+                const { data: { files: filesManifest } } = await octokit.repos.getCommit({
+                    owner: repo.owner,
+                    repo: repo.name,
+                    ref: after
+                });
+
+                if (filesManifest)
+                    candidateFiles = filesManifest;
+
+            } catch (e) {
+                logger.error('Error while fetching files from github', e);
+            }
+        }
+
+        candidateFiles?.forEach(fileInfo => {
+            files.push({
+                __filename: fileInfo.filename,
+                ...fileInfo
+            });
+        });
+
+        // TODO: Make sure we track a force push
+        if (!files?.length)
+            return;
 
         // If no files are in the app, we don't deploy
         if (files.filter(({ __filename }) => {
@@ -204,6 +230,8 @@ class Deployer {
                     application: {
                         connect: { id: application.id }
                     }
+                    // TODO: Make sure we get the push event
+                    // pushEvent
                 }
             });
 
@@ -423,8 +451,8 @@ export async function createDeployer(options?: DeployerOptions): Promise<Deploye
     if (!options)
         return deployer;
 
-    const isFromHook = (opts: DeployerOptions): opts is DeployFromHookOptions => (options as DeployFromHookOptions).hook !== undefined;
-    const isFromRepo = (opts: DeployerOptions): opts is DeployFromRepoOptions => (options as DeployFromRepoOptions).repo !== undefined;
+    const isFromHook = (opts: DeployerOptions): opts is DeployFromHookOptions => (opts as DeployFromHookOptions).hook !== undefined;
+    const isFromRepo = (opts: DeployerOptions): opts is DeployFromRepoOptions => (opts as DeployFromRepoOptions).repo !== undefined;
 
     if (isFromHook(options)) {
         if (options.octokit)

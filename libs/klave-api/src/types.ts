@@ -18,7 +18,7 @@ export interface DeploymentPushPayload extends DeploymentBasePayload {
     commit: {
         url: string;
         ref: string;
-        before: string;
+        before?: string;
         after: string;
         forced: boolean;
     }
@@ -29,7 +29,7 @@ export interface DeploymentPullRequestPayload extends DeploymentBasePayload {
     commit: {
         url: string;
         ref: string;
-        before: string;
+        before?: string;
         after: string;
     },
     pullRequest: {

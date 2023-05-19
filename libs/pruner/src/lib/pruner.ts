@@ -1,5 +1,6 @@
 import { prisma } from '@klave/db';
 import { router } from '@klave/api';
+import { logger } from '@klave/providers';
 
 let intervalTimer: NodeJS.Timeout;
 
@@ -20,6 +21,8 @@ async function errorLongDeployingDeployments() {
                 message: 'Deployment timed out'
             }
         }
+    }).catch((e) => {
+        logger.error('Error while updating long deploying deployments', e);
     });
 }
 
@@ -41,7 +44,9 @@ async function terminateExpiredDeployments() {
         return caller.terminateDeployment({
             deploymentId: deployment.id
         });
-    }));
+    })).catch((e) => {
+        logger.error('Error while terminating expired deployments', e);
+    });
 }
 
 export async function prune() {
@@ -49,7 +54,7 @@ export async function prune() {
         await errorLongDeployingDeployments();
         await terminateExpiredDeployments();
     } catch (e) {
-        console.error('Error while pruning', e);
+        logger.error('Error while pruning', e);
     }
 }
 

@@ -1,5 +1,5 @@
 import { DeploymentPushPayload } from '../types';
-import { scp } from '@klave/providers';
+import { scp, logger } from '@klave/providers';
 import { prisma } from '@klave/db';
 // import type { KlaveRcConfiguration } from '@klave/sdk';
 import { Utils } from '@secretarium/connector';
@@ -10,21 +10,36 @@ import BuildMiniVM, { DeploymentContext } from './buildMiniVm';
 export const deployToSubstrate = async (deploymentContext: DeploymentContext<DeploymentPushPayload>) => {
 
     const { octokit, ...context } = deploymentContext;
-    let files: Awaited<ReturnType<typeof octokit.repos.compareCommits>>['data']['files'];
+    let files: Awaited<ReturnType<typeof octokit.repos.compareCommits>>['data']['files'] = [];
 
-    try {
-        const { data: { files: filesManifest } } = await octokit.repos.compareCommits({
-            owner: context.repo.owner,
-            repo: context.repo.name,
-            base: context.commit.before,
-            head: context.commit.after
-        });
+    if (context.commit.before) {
+        try {
+            const { data: { files: filesManifest } } = await octokit.repos.compareCommits({
+                owner: context.repo.owner,
+                repo: context.repo.name,
+                base: context.commit.before,
+                head: context.commit.after
+            });
 
-        files = filesManifest;
+            if (filesManifest)
+                files = filesManifest;
+        } catch (e) {
+            logger.debug('Error while comparing files from github', e);
+        }
+    }
 
-    } catch (e) {
-        console.error(e);
-        return;
+    if (!files?.length) {
+        try {
+            const { data: { files: filesManifest } } = await octokit.repos.getCommit({
+                owner: context.repo.owner,
+                repo: context.repo.name,
+                ref: context.commit.after
+            });
+
+            files = filesManifest;
+        } catch (e) {
+            logger.error('Error while fetching files from github', e);
+        }
     }
 
     if (!files?.length && !context.commit.forced)
@@ -90,6 +105,8 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                     application: {
                         connect: { id: application.id }
                     }
+                    // TODO: Make sure we get the push event
+                    // pushEvent
                 }
             });
 
@@ -110,7 +127,7 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                 }
             });
 
-            (new Promise((resolve, reject) => {
+            (new Promise((__unusedResolve, reject) => {
                 setTimeout(reject, 30000);
                 return prisma.deployment.update({
                     where: {
@@ -212,7 +229,10 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
 
                 if (dts) {
                     const matches = Array.from(dts.matchAll(/^export declare function (.*)\(/gm));
-                    const validMatches = matches.map(match => match[1]).filter(match => !['__new', '__pin', '__unpin', '__collect', 'register_routes'].includes(match));
+                    const validMatches = matches
+                        .map(match => match[1])
+                        .filter(Boolean)
+                        .filter(match => !['__new', '__pin', '__unpin', '__collect', 'register_routes'].includes(match));
                     await prisma.deployment.update({
                         where: {
                             id: deployment.id
