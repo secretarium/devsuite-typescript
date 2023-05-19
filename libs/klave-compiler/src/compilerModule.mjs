@@ -71,7 +71,7 @@ parentPort.on('message', (message) => {
             while (null !== (chunk = compileStdOut.read()))
                 actualStdOut += String(chunk);
             let actualStdErr = '';
-            while (null !== (chunk = compileStdOut.read()))
+            while (null !== (chunk = compileStdErr.read()))
                 actualStdErr += String(chunk);
 
             if (result.error) {
