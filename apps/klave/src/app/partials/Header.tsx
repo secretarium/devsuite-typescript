@@ -62,9 +62,10 @@ const Header: FC = () => {
                                     ? <Link to="/deploy" className="btn-sm text-gray-200 bg-gray-900 hover:bg-gray-800 ml-3 a-like">
                                         <span>Deploy now</span>
                                     </Link>
-                                    : <Link to="/deploy" className="btn-sm text-gray-900 bg-gray-200 hover:bg-gray-300 ml-3 a-like">
-                                        <span>Deploy now</span>
-                                    </Link>
+                                    : null
+                                    // <Link to="/deploy" className="btn-sm text-gray-900 bg-gray-200 hover:bg-gray-300 ml-3 a-like">
+                                    //     <span>Deploy now</span>
+                                    // </Link>
                                 }
                             </li>
                             <li>
