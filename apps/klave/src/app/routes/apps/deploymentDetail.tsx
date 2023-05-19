@@ -93,7 +93,8 @@ export const AppDeploymentDetail: FC = () => {
             </>
             : status === 'errored'
                 ? <pre className='overflow-auto whitespace-pre-wrap break-words w-full max-w-full bg-red-100 p-3'>
-                    {(deployment.buildOutputErrorObj as any)?.stack ?? JSON.stringify(deployment.buildOutputErrorObj ?? {}, null, 4)}
+                    {(deployment.buildOutputErrorObj as any)?.stack ?? JSON.stringify(deployment.buildOutputErrorObj ?? {}, null, 4)}<br />
+                    {(deployment.buildOutputStdErr as any)}
                 </pre>
                 : null}
     </div >;
