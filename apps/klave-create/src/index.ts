@@ -201,7 +201,7 @@ async function confirmTargetDirAsync(targetDir: string): Promise<void> {
  */
 function printFurtherInstructions(
     targetDir: string,
-    packageManager: PackageManagerName,
+    __unusedPackageManager: PackageManagerName,
     includesExample: boolean
 ) {
     if (includesExample) {

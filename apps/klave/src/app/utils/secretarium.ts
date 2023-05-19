@@ -48,8 +48,10 @@ export function useSecretariumQuery(app: string, route: string, args?: unknown) 
             await syncNodeInfo();
         if (!connectionKey)
             connectionKey = await Key.createKey();
-        const [node, trustKey] = connectionInfo ?? [];
         try {
+            const [node, trustKey] = connectionInfo ?? [];
+            if (!node || !trustKey)
+                throw new Error('Missing Secretarium node or trust key');
             await client.connect(node, connectionKey, trustKey);
             client.newTx(config.app, config.route, `klave-deployment-${config.app}`, config.args as any)
                 .onResult(result => {

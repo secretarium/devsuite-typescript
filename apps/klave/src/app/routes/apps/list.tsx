@@ -11,7 +11,7 @@ export const AppListing: FC = () => {
         refetchInterval: 5000
     });
 
-    if (isLoading || !applicationList)
+    if (isLoading || !applicationList || !lastMatch)
         return <>
             <div className="text-xs text-gray-400 tracking-wider">APPLICATIONS <UilSpinner className='inline-block animate-spin' /></div>
             {/* <div className="relative mt-2">

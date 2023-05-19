@@ -30,6 +30,8 @@ export const scpOps = {
             if (!connectionKey)
                 connectionKey = await Key.createKey();
             const [node, trustKey] = process.env['NX_SECRETARIUM_NODE']?.split('|') ?? [];
+            if (!node || !trustKey)
+                throw new Error('Missing Secretarium node or trust key');
             await client.connect(node, connectionKey, trustKey);
             logger.info(`Connected to Secretarium ${node}`);
             reconnectAttempt = 0;

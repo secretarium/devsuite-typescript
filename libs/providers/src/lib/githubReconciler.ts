@@ -43,11 +43,11 @@ export const githubOps = {
                 }
             );
 
-            const repos = [];
+            const repos: typeof reposData['repositories'] = [];
             if (reposData.repositories)
                 repos.push(...reposData.repositories);
             if (Array.isArray(reposData))
-                repos.push(...reposData);
+                repos.push(...reposData as any);
 
             logger.info(`Syncing ${repos.length} repositories for installation ${installation.id}`);
             for (const repo of repos) {

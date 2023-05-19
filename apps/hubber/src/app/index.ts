@@ -177,7 +177,7 @@ export const start = async (port: number) => {
         sessionOptions.cookie = { secure: true }; // serve secure cookies
     }
 
-    app.get('/ping', (req, res) => {
+    app.get('/ping', (__unusedReq, res) => {
         res.json({ pong: true });
     });
 
@@ -253,8 +253,14 @@ export const start = async (port: number) => {
             } else if (verb === 'confirm') {
                 logger.info('PLR: New remote device confirmation ...');
                 const [sid, locator, localId] = data;
+                if (sid !== sessionID)
+                    return;
                 sessionStore.get(sid, (err, rsession) => {
-                    if (!rsession)
+                    if (err) {
+                        logger.error(`Pocket API bridge experienced an issue: ${err}`);
+                        return;
+
+                    } if (!rsession)
                         return;
                     if ((rsession as any).locator !== locator)
                         return;

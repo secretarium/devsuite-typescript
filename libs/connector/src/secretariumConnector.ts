@@ -77,6 +77,10 @@ export const SecretariumConnector: ConnectorConstructor = class SecretariumConne
         // this.link = new (this.transport === 'wss' ? WebSocketLink : HTTPSLink)(this.connections[this.currentServer]);
         // return this.link.connect()
         const server = this.connections[this.currentServer];
+
+        if (server === undefined)
+            throw new Error('No server to connect to');
+
         const key = await Key.createKey();
         return await this.scp
             .reset()
@@ -118,17 +122,19 @@ export const SecretariumConnector: ConnectorConstructor = class SecretariumConne
     }
 
     private static expandServers(connections: Server | Array<Server>): ServerObject[] {
-        return (connections instanceof Array ? connections : [connections]).map<ServerObject>(connection => {
+        return (connections instanceof Array ? connections : [connections]).map<ServerObject | undefined>(connection => {
             if (typeof connection !== 'string')
                 return connection;
             const [cluster, name, url, trustKey] = connection.split('#');
+            if (url === undefined || trustKey === undefined)
+                return undefined;
             return {
                 cluster,
                 name,
                 url,
                 trustKey
             };
-        });
+        }).filter(Boolean);
     }
 
     private rotateServer() {

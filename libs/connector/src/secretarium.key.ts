@@ -165,7 +165,7 @@ export class Key {
             case 2: {
                 const encryptedKey = inputEncryptedKeyPair as EncryptedKeyPairV2;
                 const decrypted = await decryptV2(encryptedKey);
-                const obj = JSON.parse(Utils.decode(decrypted));
+                const obj = JSON.parse(Utils.decode(decrypted)) as any;
                 const publicKey = await crypto.subtle!.importKey('jwk', obj.publicKey, { name: 'ECDSA', namedCurve: 'P-256' }, true, ['verify']);
                 const privateKey = await crypto.subtle!.importKey('jwk', obj.privateKey, { name: 'ECDSA', namedCurve: 'P-256' }, true, ['sign']);
 

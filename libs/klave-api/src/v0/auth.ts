@@ -30,7 +30,7 @@ export const authRouter = createTRPCRouter({
 
             const betaDomainsAllowed = process.env['NX_BETA_DOMAIN_FILTER']?.split(',') ?? [];
             const emailDomain = email.split('@')[1];
-            if (!betaDomainsAllowed.includes(emailDomain))
+            if (!emailDomain || !betaDomainsAllowed.includes(emailDomain))
                 throw new Error('It looks like you are not part of Klave\'s beta program');
 
             try {
@@ -62,6 +62,8 @@ export const authRouter = createTRPCRouter({
                     }
                 });
                 const [keySelector, domainName] = (process.env['NX_DKIM_DOMAIN'] ?? '@').split('@');
+                if (!keySelector || !domainName)
+                    throw new Error('DKIM domain not set');
                 await transporter.sendMail({
                     from: 'noreply@klave.network',
                     to: email,

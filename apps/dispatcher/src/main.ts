@@ -31,7 +31,7 @@ server.register(websocket);
 server.register(app);
 
 // Plan for nasty error to show up
-server.setErrorHandler(function (error, request, reply) {
+server.setErrorHandler(function (error, __unusedRequest, reply) {
     // Log error
     this.log.error(error);
     // Send error response

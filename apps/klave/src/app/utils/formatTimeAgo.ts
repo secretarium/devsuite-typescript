@@ -16,7 +16,7 @@ export const formatTimeAgo = (date: Date): string => {
     let duration = (date.getTime() - new Date().getTime()) / 1000;
 
     for (let i = 0; i <= DIVISIONS.length; i++) {
-        const division = DIVISIONS[i];
+        const division = DIVISIONS[i] as typeof DIVISIONS[number];
         if (Math.abs(duration) < division.amount) {
             return formatter.format(Math.round(duration), division.name);
         }

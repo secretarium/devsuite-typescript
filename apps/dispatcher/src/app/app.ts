@@ -3,7 +3,7 @@ import type { SocketStream } from '@fastify/websocket';
 import { v4 as uuid } from 'uuid';
 
 const definitions = process.env.NX_DISPATCH_ENDPOINTS?.split(',') ?? [];
-const endpoints = definitions.map(def => def.split('#')).filter(def => def.length === 2);
+const endpoints = definitions.map(def => def.split('#') as [string, string]).filter(def => def.length === 2);
 const connectionPool = new Map<string, SocketStream>();
 
 /* eslint-disable-next-line */

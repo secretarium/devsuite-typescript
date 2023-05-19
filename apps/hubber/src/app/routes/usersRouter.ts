@@ -11,7 +11,7 @@ usersRouter.get('/whoami', async ({ user, web }, res) => {
         res.status(401).json({ who: 'An unknown unicorn', hasGithubToken: !!web.githubToken });
 });
 
-usersRouter.get('/login/print', async (req, res, next) => {
+usersRouter.get('/login/print', async (req, __unusedRes, next) => {
     req.body = {
         username: req.session.id,
         password: (req.session as any).localId
@@ -31,7 +31,7 @@ usersRouter.get('/logout', async (req, res) => {
     });
 });
 
-usersRouter.get('/users', async (req, res) => {
+usersRouter.get('/users', async (__unusedReq, res) => {
     res.status(200).json({
         users: await getUsers()
     });

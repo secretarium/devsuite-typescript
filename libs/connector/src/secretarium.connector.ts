@@ -115,9 +115,9 @@ export class SCP {
 
     private _notify(json: string): void {
         try {
-            const o = JSON.parse(json);
+            const o = JSON.parse(json) as any;
             this._options.logger?.debug?.('Secretarium received:', o);
-            if (o !== null && o.requestId) {
+            if (!!o && o.requestId) {
                 const x = this._requests[o.requestId];
                 if (!x) {
                     this._options.logger?.warn?.('Unexpected notification: ' + json);

@@ -10,7 +10,7 @@ export const loader: LoaderFunction = async ({ request }) => {
         referer: string;
         source: string;
         redirectUri: string;
-    } = typeof state === 'string' ? JSON.parse(state) : {};
+    } = typeof state === 'string' ? JSON.parse(state) as any : {};
 
     try {
         const refererUrl = new URL(parsedState.referer);
@@ -37,7 +37,7 @@ export const AuthCodeReception: FC = () => {
     const navigate = useNavigate();
     const [hasRedirected, setHasRedirected] = useState(false);
     const { data, state }: { data: any, state: string } = useLoaderData() as any ?? {};
-    const { redirectUri }: { redirectUri: string } = state ? JSON.parse(state) : { redirectUri: '/deploy/select' };
+    const { redirectUri }: { redirectUri: string } = state ? (JSON.parse(state) as any) : { redirectUri: '/deploy/select' };
 
     useEffect(() => {
         if (!hasRedirected && redirectUri && !data?.error) {

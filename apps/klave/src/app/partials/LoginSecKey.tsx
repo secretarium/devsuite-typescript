@@ -31,7 +31,7 @@ export const LoginSecKey: FC = () => {
             onSettled(data, error) {
                 if (error) {
                     try {
-                        const parsedError = JSON.parse(error.message);
+                        const parsedError = JSON.parse(error.message) as any;
                         setError(parsedError?.message ?? 'An error occured while trying to send your email code. Please try again later.');
                     } catch (e) {
                         setError(error.message ?? 'An error occured while trying to send your email code. Please try again later.');
@@ -55,7 +55,7 @@ export const LoginSecKey: FC = () => {
         }, {
             onSettled(data, error) {
                 if (error)
-                    setError(error?.message ?? JSON.parse(error.message)[0]?.message ?? error.message ?? 'An error occured while trying to log you in. Please try again later.');
+                    setError(error?.message ?? (JSON.parse(error.message) as any)[0]?.message ?? error.message ?? 'An error occured while trying to log you in. Please try again later.');
                 else if (data?.ok)
                     // setScreen('key');
                     refetchSession();

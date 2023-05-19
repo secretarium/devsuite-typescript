@@ -4,7 +4,7 @@ import { Web, prisma } from '@klave/db';
 import { v4 as uuid } from 'uuid';
 import { logger } from '@klave/providers';
 
-export const webLinkerMiddlware: RequestHandler = async (req, res, next) => {
+export const webLinkerMiddlware: RequestHandler = async (req, __unusedRes, next) => {
 
     const { headers, session } = req;
     const ephemeralTag = headers['x-trustless-klave-ephemeral-tag']?.toString();
@@ -48,7 +48,7 @@ export const webLinkerMiddlware: RequestHandler = async (req, res, next) => {
         });
 
         let currentWeb: Web;
-        if (webs.length === 1) {
+        if (webs[0]) {
 
             currentWeb = webs[0];
 

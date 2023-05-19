@@ -34,7 +34,7 @@ const connectToDispatcher = () => {
         setTimeout(connectToDispatcher, 1000);
     });
     hookSocket.addEventListener('message', (event) => {
-        const message = JSON.parse(event.data.toString());
+        const message = JSON.parse(event.data.toString()) as any;
         fetch('http://127.0.0.1:3333/hook', {
             method: 'POST',
             headers: {
