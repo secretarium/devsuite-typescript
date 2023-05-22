@@ -191,7 +191,7 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                 }
 
                 const { result: { wasm, wat, dts } } = buildResult;
-                
+
                 await prisma.deployment.update({
                     where: {
                         id: deployment.id
