@@ -6,7 +6,7 @@ import api from '../../utils/api';
 export const Select: FC = () => {
 
     const [shouldRefresh, setShouldRefresh] = useState(false);
-    const { data: deployables, isLoading, isFetching, isRefetching, refetch } = api.v0.repos.deployables.useQuery({
+    const { data: deployables, isLoading, isFetching, isRefetching, isError, refetch, error } = api.v0.repos.deployables.useQuery({
         refreshing: shouldRefresh
     }, {
         queryKey: ['v0.repos.deployables', { refreshing: shouldRefresh }],
@@ -25,17 +25,39 @@ export const Select: FC = () => {
 
     const isWorking = isLoading || isFetching || isRefetching;
 
-    return <>
-        <div className='pb-5' >
-            <h1 className='text-xl font-bold'>{isWorking ? 'Looking for your best work' : deployables?.length ? 'We found some gems' : 'Nothing to see'}</h1>
-        </div>
-        <div className='relative'>
-            {isWorking ? <>
+    if (isWorking)
+        return <>
+            <div className='pb-5' >
+                <h1 className='text-xl font-bold'>Looking for your best work</h1>
+            </div>
+            <div className='relative'>
                 We are looking for repositories you can deploy on the Trustless network.<br />
-                It will only take a moment...<br />
+                It will only take a moment...
+                <br />
                 <br />
                 <UilSpinner className='inline-block animate-spin' />
-            </> : deployables?.length ? <>
+            </div>
+        </>;
+
+    if (isError)
+        return <>
+            <div className='pb-5' >
+                <h1 className='text-xl font-bold'>Oops! Something went wrong...</h1>
+            </div>
+            <div className='relative'>
+                Error message: {error.message}
+                <br />
+                <br />
+                <button disabled={isWorking} onClick={rescanRepos} className='disabled:text-gray-300'>Rescan</button>
+            </div>
+        </>;
+
+    return <>
+        <div className='pb-5'>
+            <h1 className='text-xl font-bold'>{deployables?.length ? 'We found some gems' : 'Nothing to see'}</h1>
+        </div>
+        <div className='relative'>
+            {deployables?.length ? <>
                 Here are the repositories we found could be deployed.<br />
                 Select one to continue...<br />
                 <br />
@@ -57,8 +79,7 @@ export const Select: FC = () => {
                 Perhaps try to rescan your repositories<br />
                 <br />
                 <button disabled={isWorking} onClick={rescanRepos} className='disabled:text-gray-300'>Rescan</button>
-            </>
-            }
+            </>}
         </div>
     </>;
 };
