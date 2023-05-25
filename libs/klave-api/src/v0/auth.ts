@@ -11,7 +11,7 @@ export const authRouter = createTRPCRouter({
             // sessionID: ctx.sessionID,
             me: ctx.user ?? ctx.session.user,
             webId: ctx.webId,
-            hasUnclaimedApplications: ctx.web.userId === null && (await ctx.prisma.application.count({
+            hasUnclaimedApplications: !(ctx.user ?? ctx.session.user) && (await ctx.prisma.application.count({
                 where: {
                     webId: ctx.webId
                 }
