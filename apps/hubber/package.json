@@ -4,6 +4,7 @@
     "type": "commonjs",
     "license": "MIT",
     "dependencies": {
+        "visitor-as": "0.11.4",
         "@klave/compiler": "*",
         "typescript": "*"
     }
