@@ -1,4 +1,16 @@
 # Changelog
+## [0.1.0](///compare/klave-compiler@0.0.5...klave-compiler@0.1.0) (2023-05-30)
+
+
+### Features
+
+* **api,compiler,deployer:** Include JSON transformer for AS compilation ed72c2b
+
+
+### Bug Fixes
+
+* **compiler:** Error output not directed appropriately 8e4eb75
+
 ## [0.0.5](///compare/klave-compiler@0.0.4...klave-compiler@0.0.5) (2023-05-16)
 
 ## [0.0.4](///compare/klave-compiler@0.0.3...klave-compiler@0.0.4) (2023-05-16)
