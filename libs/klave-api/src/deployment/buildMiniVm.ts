@@ -8,6 +8,7 @@ import type { Context } from 'probot';
 import { DeploymentPushPayload } from '../types';
 import { Repo } from '@prisma/client';
 import { dummyMap } from './dummyVmFs';
+import { logger } from '@klave/providers';
 
 type BuildOutput = {
     stdout: string;
@@ -53,22 +54,46 @@ export class BuildMiniVM {
     async getContent(path?: string): Promise<Awaited<ReturnType<Context['octokit']['repos']['getContent']>> | { data: string | null }> {
 
         const { context: { octokit, ...context }, repo } = this.options;
+        const normalisedPath = path?.split(nodePath.sep).join(nodePath.posix.sep);
 
         try {
-            return await octokit.repos.getContent({
-                owner: repo.owner,
-                repo: repo.name,
-                ref: context.commit.ref,
-                path: `${this.options.application.rootDir}${path ? `/${path}` : ''}`,
-                mediaType: {
-                    format: 'raw+json'
-                }
-            });
+            if (!normalisedPath || !normalisedPath.includes('node_modules')) {
+                logger.debug(`Getting GitHub content for '${normalisedPath}'`);
+                return await octokit.repos.getContent({
+                    owner: repo.owner,
+                    repo: repo.name,
+                    ref: context.commit.ref,
+                    path: `${this.options.application.rootDir}${normalisedPath ? `/${normalisedPath}` : ''}`,
+                    mediaType: {
+                        format: 'raw+json'
+                    }
+                });
+            }
         } catch {
-            if (!path)
-                return { data: null };
-            return { data: this.getContentSync(path) };
+            //
         }
+
+        try {
+            const components = normalisedPath?.split('node_modules') ?? [];
+            const lastComponent = components.pop();
+            logger.debug(`Getting unpkg content for '${lastComponent}'`);
+            if (lastComponent) {
+                const reponse = await fetch('https://www.unpkg.com' + lastComponent);
+                const data = await reponse.text();
+                if (reponse.ok) {
+                    // TODO - Store the response in a cahing layer
+                    // response.getHeader('location');
+                    return { data };
+                }
+            }
+        } catch {
+            //
+        }
+
+        if (normalisedPath)
+            return { data: this.getContentSync(normalisedPath) };
+
+        return { data: null };
     }
 
     async getRootContent() {
@@ -80,7 +105,7 @@ export class BuildMiniVM {
             } else
                 return content;
         } catch (e) {
-            console.error('BuildMiniVm:getRootContent', e);
+            logger.error(`Error getting root content: ${e}`);
             return { data: null };
         }
     }
@@ -100,8 +125,8 @@ export class BuildMiniVM {
         let compiledBinary = new Uint8Array(0);
         let compiledWAT: string | undefined;
         let compiledDTS: string | undefined;
-        const compiler = await createCompiler();
         try {
+            const compiler = await createCompiler();
             return new Promise<BuildOutput>((resolve) => {
                 compiler.on('message', (message) => {
                     if (message.type === 'start') {

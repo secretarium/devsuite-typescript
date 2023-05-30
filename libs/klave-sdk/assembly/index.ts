@@ -1,7 +1,10 @@
 /**
- * Environment definitions for compiling Klave Trustless Application.
- * @module trustless/sdk
+ * Environment definitions for compiling Klave Trustless Applications.
+ * @module klave/sdk
  */
+
+
+export { JSON } from "json-as/assembly";
 
 // @ts-ignore: decorator
 @external("env", "add_user_query")
@@ -28,29 +31,39 @@ export class Router {
     }
 }
 
-export class Table {
-    tableName: ArrayBuffer;
-    constructor(table: ArrayBuffer) {
-        this.tableName = table;
+class Table {
+
+    table: ArrayBuffer;
+    constructor(table: string) {
+        this.table = String.UTF8.encode(table, true);
     }
-    get(key: ArrayBuffer): i32 {
-        const value = new ArrayBuffer(64);
-        const result = Ledger.readFromTableIntoBuffer(this.tableName, key, value);
-        return result;
+
+    get(key: string): string {
+        let k = String.UTF8.encode(key, true);
+        let value = new ArrayBuffer(64);
+        let result = runtime_read_ledger_raw(this.table, k, k.byteLength, value, value.byteLength);
+        if (result < 0)
+            return ""; // todo : report error (or not found ?)
+        if (result > value.byteLength) {
+            // buffer not big enough, retry with a properly sized one
+            value = new ArrayBuffer(result);
+            result = runtime_read_ledger_raw(this.table, k, k.byteLength, value, value.byteLength);
+            if (result < 0)
+                return ""; // todo : report errors
+        }
+        return String.UTF8.decode(value, true);
     }
-    set(key: ArrayBuffer, value: ArrayBuffer): i32 {
-        return runtime_write_ledger_raw(this.tableName, key, key.byteLength, value, value.byteLength);
+
+    set(key: string, value: string): i32 {
+        let k = String.UTF8.encode(key, true);
+        let v = String.UTF8.encode(value, true);
+        return runtime_write_ledger_raw(this.table, k, k.byteLength, v, v.byteLength);
     }
 }
 
 export class Ledger {
-    static readFromTableIntoBuffer(table: ArrayBuffer, key: ArrayBuffer, value: ArrayBuffer): i32 {
-        return runtime_read_ledger_raw(table, key, key.byteLength, value, value.byteLength);
-    }
-    static writeToTable(table: ArrayBuffer, key: ArrayBuffer, value: ArrayBuffer): i32 {
-        return runtime_write_ledger_raw(table, key, key.byteLength, value, value.byteLength);
-    }
-    static getTable(table: ArrayBuffer): Table {
+
+    static getTable(table: string): Table {
         return new Table(table);
     }
 }
@@ -59,4 +72,13 @@ export class Notifier {
     static notify(message: ArrayBuffer): i32 {
         return runtime_notify(message);
     }
+}
+
+export function ptr2string(ptr: i32): string {
+    let len = 0;
+    while (load<u8>(ptr + len) != 0)
+        len++;
+    let buf = new ArrayBuffer(len + 1);
+    memory.copy(changetype<usize>(buf), ptr, len + 1);
+    return String.UTF8.decode(buf, true);
 }

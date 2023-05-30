@@ -67,7 +67,7 @@ const compile = () => {
                                 resolve();
                             }
                         });
-                    });
+                    }).catch(reject);
                 })))
                 .then((results) => {
                     const erroredList = results.filter((result): result is PromiseRejectedResult => result.status === 'rejected');

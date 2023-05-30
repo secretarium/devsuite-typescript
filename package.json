@@ -92,6 +92,7 @@
         "i18next-http-middleware": "3.3.0",
         "ip": "1.1.8",
         "js-base64": "3.7.5",
+        "json-as": "^0.5.36",
         "latest-version": "5.1.0",
         "localforage": "1.10.0",
         "match-sorter": "6.3.1",
@@ -145,6 +146,7 @@
         "utility-types": "3.10.0",
         "uuid": "9.0.0",
         "validate-npm-package-name": "5.0.0",
+        "visitor-as": "^0.11.4",
         "winston": "3.8.2",
         "ws": "8.13.0",
         "zod": "3.21.4"

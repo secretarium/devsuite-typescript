@@ -355,9 +355,8 @@ class Deployer {
         let compiledWAT: string | undefined;
         let compiledDTS: string | undefined;
 
-        const compiler = await createCompiler();
-
         try {
+            const compiler = await createCompiler();
             return new Promise<BuildOutput>((resolve) => {
                 compiler.on('message', (message) => {
                     if (message.type === 'start') {
