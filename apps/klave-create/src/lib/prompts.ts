@@ -34,7 +34,7 @@ export async function getSubstitutionDataPrompts(slug: string): Promise<PromptOb
             type: 'text',
             name: 'description',
             message: 'How would you describe the trustless application?',
-            initial: 'This is a trustless application for the Trustless Network',
+            initial: 'This is a trustless application for the Klave Network',
             validate: (input) => !!input || 'The description cannot be empty'
         },
         {

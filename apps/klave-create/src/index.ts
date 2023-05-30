@@ -217,7 +217,7 @@ function printFurtherInstructions(
         commands.forEach((command) => console.log(chalk.gray('>'), chalk.bold(command)));
         console.log();
     }
-    console.log(`Visit ${chalk.blue.bold(DOCS_URL)} for the documentation on the Trustless Network`);
+    console.log(`Visit ${chalk.blue.bold(DOCS_URL)} for the documentation on the Klave Network`);
 }
 
 const program = new Command();

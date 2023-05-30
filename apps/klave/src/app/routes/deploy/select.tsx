@@ -31,7 +31,7 @@ export const Select: FC = () => {
                 <h1 className='text-xl font-bold'>Looking for your best work</h1>
             </div>
             <div className='relative'>
-                We are looking for repositories you can deploy on the Trustless network.<br />
+                We are looking for repositories you can deploy on the Klave network.<br />
                 It will only take a moment...
                 <br />
                 <br />
