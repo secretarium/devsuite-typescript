@@ -1,4 +1,14 @@
 # Changelog
+## [0.5.0](///compare/klave-sdk@0.4.6...klave-sdk@0.5.0) (2023-05-30)
+
+### Dependency Updates
+
+* `klave-compiler` updated to version `0.1.0`
+
+### Features
+
+* **api,compiler,deployer:** Include JSON transformer for AS compilation ed72c2b
+
 ## [0.4.6](///compare/klave-sdk@0.4.5...klave-sdk@0.4.6) (2023-05-16)
 
 ### Dependency Updates
