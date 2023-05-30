@@ -1,4 +1,11 @@
 # Changelog
+## [0.6.1](///compare/klave-sdk@0.6.0...klave-sdk@0.6.1) (2023-05-30)
+
+
+### Bug Fixes
+
+* **sdk:** Correcting Table getArrayBuffer export 10d21fb
+
 ## [0.6.0](///compare/klave-sdk@0.5.0...klave-sdk@0.6.0) (2023-05-30)
 
 ### Dependency Updates
