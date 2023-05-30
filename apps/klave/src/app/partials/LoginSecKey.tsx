@@ -1,4 +1,4 @@
-import { FC, useState, useCallback, ChangeEvent } from 'react';
+import { FC, useState, useCallback, ChangeEvent, MouseEvent } from 'react';
 import { useWebAuthn } from 'react-hook-webauthn';
 import api from '../utils/api';
 // import { v4 as uuid } from 'uuid';
@@ -20,7 +20,9 @@ export const LoginSecKey: FC = () => {
     const { mutate: challengeMutate } = api.v0.auth.getChallenge.useMutation();
     const { refetch: refetchSession } = api.v0.auth.getSession.useQuery();
 
-    const getLoginCode = useCallback(() => {
+    const getLoginCode = useCallback((e: MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
         if (email.length === 0) {
             setError('Please enter your email address');
             return;
@@ -44,7 +46,9 @@ export const LoginSecKey: FC = () => {
         });
     }, [email, emailCodeMutate]);
 
-    const getLoginChallenge = useCallback(() => {
+    const getLoginChallenge = useCallback((e: MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
         if (code.length === 0) {
             setError('Please enter your email code');
             return;
@@ -118,12 +122,12 @@ export const LoginSecKey: FC = () => {
                 <input key='emailField' value={email} onInput={onChangeEmail} alt='email' placeholder='Email address' type='email' className='text-center' />
                 <br />
                 <br />
-                <button onClick={getLoginCode} type='submit'>Next</button>
+                <button onClick={getLoginCode} onSubmit={getLoginCode} type='submit'>Next</button>
             </> : screen === 'code' ? <>
                 <input key='codeField' value={code} onInput={onChangeCode} alt='code' placeholder='Code' type='text' className='text-center' />
                 <br />
                 <br />
-                <button onClick={getLoginChallenge} type='submit' className='mx-1'>Next</button>
+                <button onClick={getLoginChallenge} onSubmit={getLoginChallenge} type='submit' className='mx-1'>Next</button>
                 <button onClick={resetLogin} type='button' className='mx-1'>Cancel</button>
             </> : screen === 'key' ? <>
                 <button onClick={onRegister} type='button' className='mx-1'>Register</button>
