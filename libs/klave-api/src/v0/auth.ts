@@ -1,3 +1,4 @@
+import { logger } from '@klave/providers';
 import { protectedProcedure, publicProcedure, createTRPCRouter } from '../trpc';
 import { createTransport } from 'nodemailer';
 // import * as passport from 'passport';
@@ -80,7 +81,7 @@ export const authRouter = createTRPCRouter({
                 };
             } catch (e) {
                 // TODO Move to logging service
-                console.error(e);
+                logger.error('Error sending email', e);
                 return {
                     ok: false
                 };
