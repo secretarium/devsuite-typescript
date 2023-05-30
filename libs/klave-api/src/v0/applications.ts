@@ -32,7 +32,8 @@ export const applicationRouter = createTRPCRouter({
                     license: true,
                     webhook: true,
                     name: true,
-                    tags: true
+                    tags: true,
+                    repo: true
                 }
             });
         }),

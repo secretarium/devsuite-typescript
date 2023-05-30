@@ -153,6 +153,14 @@ export const AppSettings: FC = () => {
             </button>
         </form>
         <div>
+            <h1 className='font-bold text-xl mb-5'>Repository information</h1>
+            <p>
+                Source: <b>{application.repo.source}</b><br />
+                Owner: <b>{application.repo.owner}</b><br />
+                Name: <b>{application.repo.name}</b><br />
+            </p>
+        </div>
+        <div>
             <h1 className='text-red-700 font-bold text-xl mb-5'>Danger zone</h1>
             <ApplicationDeletion />
         </div>
