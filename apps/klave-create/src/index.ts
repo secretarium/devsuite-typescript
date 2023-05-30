@@ -105,7 +105,7 @@ async function createTemplateAsync(targetDir: string, data: SubstitutionData): P
         });
 
         await replaceInFile({
-            files: path.join(targetDir, '.klaverc.json'),
+            files: path.join(targetDir, 'klave.json'),
             from: [/{{SMART_CONTRACT_NAME}}/g, /{{SMART_CONTRACT_SLUG}}/g],
             to: [data.project.name, data.project.slug]
         });

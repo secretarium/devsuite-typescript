@@ -145,7 +145,7 @@ class Deployer {
             try {
                 const fs = await this.createFs();
                 if (fs) {
-                    const configFileContent = await fs.getFileContent('.klaverc.json');
+                    const configFileContent = await fs.getFileContent('klave.json');
                     if (configFileContent)
                         // TODO: Find a way to get the config's typings
                         this.operatingConfig = JSON.parse(configFileContent); // as KlaveRcConfiguration;
@@ -211,7 +211,7 @@ class Deployer {
         if (files.filter(({ __filename }) => {
             const commitFileDir = path.normalize(path.join('/', __filename));
             const appPath = path.normalize(path.join('/', operatingConfig.rootDir ?? ''));
-            return commitFileDir.startsWith(appPath) || __filename === '.klaverc.json';
+            return commitFileDir.startsWith(appPath) || __filename === 'klave.json';
         }).length === 0)
             return;
 
