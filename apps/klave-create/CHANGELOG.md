@@ -1,4 +1,14 @@
 # Changelog
+## [0.3.11](///compare/klave-create@0.3.10...klave-create@0.3.11) (2023-05-30)
+
+### Dependency Updates
+
+* `klave-sdk` updated to version `0.6.0`
+
+### Bug Fixes
+
+* **klave-create:** Copy dotfiles from template dir 5998b58
+
 ## [0.3.10](///compare/klave-create@0.3.9...klave-create@0.3.10) (2023-05-30)
 
 ### Dependency Updates
