@@ -1,4 +1,9 @@
 # Changelog
+## [0.3.12](///compare/klave-create@0.3.11...klave-create@0.3.12) (2023-05-30)
+
+### Dependency Updates
+
+* `klave-sdk` updated to version `0.6.1`
 ## [0.3.11](///compare/klave-create@0.3.10...klave-create@0.3.11) (2023-05-30)
 
 ### Dependency Updates
