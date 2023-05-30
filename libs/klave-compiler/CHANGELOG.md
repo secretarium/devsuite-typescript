@@ -1,4 +1,11 @@
 # Changelog
+## [0.1.1](///compare/klave-compiler@0.1.0...klave-compiler@0.1.1) (2023-05-30)
+
+
+### Bug Fixes
+
+* **compiler:** Ensure `typescript` is installed with the compiler d71e835
+
 ## [0.1.0](///compare/klave-compiler@0.0.5...klave-compiler@0.1.0) (2023-05-30)
 
 
