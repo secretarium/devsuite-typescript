@@ -12,7 +12,7 @@ COPY libs/klave-db/src/prisma hubber/prisma
 RUN chown -R hubber:hubber .
 RUN cd hubber && yarn install
 # RUN cd hubber && yarn install --frozen-lockfile
-RUN cd hubber && yarn add prisma @klave/compiler
+RUN cd hubber && yarn add prisma
 RUN cd hubber && yarn run prisma generate
 
 FROM docker.io/node:lts-alpine AS final
