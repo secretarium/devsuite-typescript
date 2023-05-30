@@ -42,18 +42,18 @@ class Table {
         this.table = String.UTF8.encode(table, true);
     }
 
-    getArrayBuffer(key: string): i32 {
+    getArrayBuffer(key: string): ArrayBuffer {
         let k = String.UTF8.encode(key, true);
         let value = new ArrayBuffer(64);
         let result = runtime_read_ledger_raw(this.table, k, k.byteLength, value, value.byteLength);
         if (result < 0)
-            return ""; // todo : report error (or not found ?)
+            return new ArrayBuffer(0); // todo : report error (or not found ?)
         if (result > value.byteLength) {
             // buffer not big enough, retry with a properly sized one
             value = new ArrayBuffer(result);
             result = runtime_read_ledger_raw(this.table, k, k.byteLength, value, value.byteLength);
             if (result < 0)
-                return ""; // todo : report errors
+                return new ArrayBuffer(0); // todo : report errors
         }
         return value
     }
