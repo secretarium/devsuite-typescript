@@ -1,16 +1,86 @@
-import { Notifier, Router } from '@klave/sdk';
+import { Notifier, Ledger, Utils, JSON } from '@klave/sdk';
+@json
+class ErrorMessage {
+    success!: boolean;
+    message!: string;
+}
 
-export function my_query(arg: ArrayBuffer): void {
-    const s = String.UTF8.decode(arg, true);
-    Notifier.notify(String.UTF8.encode('Hello ' + s, true));
-};
+@json
+class FetchInput {
+    key!: string;
+}
 
-export function my_transaction(arg: ArrayBuffer): void {
-    const s = String.UTF8.decode(arg, true);
-    Notifier.notify(String.UTF8.encode('Hello ' + s, true));
-};
+@json
+class FetchOutput {
+    success!: boolean;
+    value!: string;
+}
 
-export function register_routes(): void {
-    Router.addQuery(String.UTF8.encode('my_query', true));
-    Router.addTransaction(String.UTF8.encode('my_transaction', true));
+const myTableName = "my_storage_table";
+
+/**
+ * @query
+ * @param arg - a pointer to a null-terminated c string located in linear memory
+ */
+export function fetchValue(arg: i32): void {
+
+    const inputString = Utils.pointerToString(arg);
+    if (inputString.length === 0)
+        Notifier.sendJson<ErrorMessage>({
+            success: false,
+            message: `No input was provided`
+        });
+
+    const input = JSON.parse<FetchInput>(inputString);
+    let value = Ledger.getTable(myTableName).get(input.key);
+    if (value.length === 0) {
+        Notifier.sendJson<ErrorMessage>({
+            success: false,
+            message: `key '${input.key}' not found in table`
+        });
+    } else {
+        Notifier.sendJson<FetchOutput>({
+            success: true,
+            value
+        });
+    }
+}
+
+@json
+class StoreInput {
+    key!: string;
+    value!: string;
+}
+
+@json
+class StoreOutput {
+    success!: boolean;
+}
+
+/**
+ * @transaction
+ * @param arg - a pointer to a null-terminated c string located in linear memory
+ */
+export function storeValue(arg: i32): void {
+
+    const inputString = Utils.pointerToString(arg);
+    if (inputString.length === 0)
+        Notifier.sendJson<ErrorMessage>({
+            success: false,
+            message: `No input was provided`
+        });
+
+    const input = JSON.parse<StoreInput>(inputString);
+    if (input.key && input.value) {
+        Ledger.getTable(myTableName).set(input.key, input.value);
+        Notifier.sendJson<StoreOutput>({
+            success: true
+        });
+        return;
+    }
+
+    Notifier.sendJson<ErrorMessage>({
+        success: false,
+        message: `Missing value arguments`
+    });
 }
