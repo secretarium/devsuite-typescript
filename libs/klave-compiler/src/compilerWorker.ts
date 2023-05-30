@@ -2,7 +2,7 @@ import { TransferListItem, Worker } from 'node:worker_threads';
 import * as ts from 'typescript';
 import { v4 as uuid } from 'uuid';
 
-class Compiler {
+class CompilerHost {
 
     id = uuid();
     entryFile = -1;
@@ -120,7 +120,7 @@ export const createCompiler = async () => {
         argv: []
     });
 
-    const compiler = new Compiler(worker);
+    const compiler = new CompilerHost(worker);
     compiler.postMessage({ type: 'compile' });
 
     return compiler;
