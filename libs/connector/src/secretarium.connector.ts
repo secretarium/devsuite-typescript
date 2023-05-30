@@ -100,7 +100,8 @@ export class SCP {
     }
 
     private async _encrypt(data: Uint8Array): Promise<Uint8Array> {
-        if (!this._session) throw new Error(ErrorMessage[ErrorCodes.ESCPNOTRD]);
+        if (!this._session)
+            throw new Error(ErrorMessage[ErrorCodes.ESCPNOTRE]);
         const ivOffset = Utils.getRandomBytes(16);
         const iv = Utils.incrementBy(this._session.iv, ivOffset).subarray(0, 12);
         const encrypted = new Uint8Array(await crypto.subtle!.encrypt({ name: 'AES-GCM', iv: iv, tagLength: 128 }, this._session.cryptoKey, data));
@@ -108,7 +109,8 @@ export class SCP {
     }
 
     private async _decrypt(data: Uint8Array): Promise<Uint8Array> {
-        if (!this._session) throw ErrorCodes.ESCPNOTRD;
+        if (!this._session)
+            throw new Error(ErrorMessage[ErrorCodes.ESCPNOTRD]);
         const iv = Utils.incrementBy(this._session.iv, data.subarray(0, 16)).subarray(0, 12);
         return new Uint8Array(await crypto.subtle!.decrypt({ name: 'AES-GCM', iv: iv, tagLength: 128 }, this._session.cryptoKey, data.subarray(16)));
     }
@@ -314,9 +316,15 @@ export class SCP {
                     if (!check) throw new Error(ErrorMessage[ErrorCodes.ETINSRVPI]);
 
                     socket.onmessage(async (encrypted) => {
-                        const data = await this._decrypt(encrypted);
-                        const json = Utils.decode(data);
-                        this._notify(json);
+                        try {
+                            const data = await this._decrypt(encrypted);
+                            if (!data)
+                                return;
+                            const json = Utils.decode(data);
+                            this._notify(json);
+                        } catch (e: any) {
+                            console.error(e.name, e);
+                        }
                     });
 
                     this._updateState(ConnectionState.secure);

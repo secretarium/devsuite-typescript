@@ -5,6 +5,7 @@ export const Secrets = {
 
 export enum ErrorCodes {
     EKEYISENC,
+    ESCPNOTRE,
     ESCPNOTRD,
     EINPASSWD,
     ETRANSFIL,
@@ -30,7 +31,8 @@ export enum ErrorCodes {
 
 export const ErrorMessage: Record<ErrorCodes, string> = {
     [ErrorCodes.EKEYISENC]: 'Key is encrypted',
-    [ErrorCodes.ESCPNOTRD]: 'Cannot encrypt, SCP session is not ready',
+    [ErrorCodes.ESCPNOTRE]: 'Cannot encrypt, SCP session is not ready',
+    [ErrorCodes.ESCPNOTRD]: 'Cannot decrypt, SCP session is not ready',
     [ErrorCodes.EINPASSWD]: 'Cannot decrypt, Invalid password',
     [ErrorCodes.ETRANSFIL]: 'Transaction failed',
     [ErrorCodes.ETIMOCHEL]: 'Timeout after client hello',
