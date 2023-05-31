@@ -24,7 +24,7 @@ export const dbOps = {
     initialize: async () => {
         try {
             await client.$connect();
-            logger.info(`Connected to Mongo via Prisma ${process.env['MONGO_URL']}`);
+            logger.info(`Connected to Mongo via Prisma ${process.env['NX_MONGODB_URL']}`);
             return;
         } catch (e: any) {
             logger.error(`Connection ${++reconnectAttempt} to Mongo failed: ${e.message}`);
