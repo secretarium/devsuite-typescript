@@ -1,4 +1,11 @@
 # Changelog
+## [0.2.0](///compare/klave-compiler@0.1.1...klave-compiler@0.2.0) (2023-05-31)
+
+
+### Features
+
+* **compiler:** Enable function rewrite to automate JSON input parsing 0226474
+
 ## [0.1.1](///compare/klave-compiler@0.1.0...klave-compiler@0.1.1) (2023-05-30)
 
 
