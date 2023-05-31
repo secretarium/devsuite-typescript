@@ -45,12 +45,13 @@ const compile = () => {
                                         id: message.id,
                                         contents: contents.toString()
                                     });
-                                }).catch(() => {
-                                    compiler.postMessage({
-                                        type: 'read',
-                                        id: message.id,
-                                        contents: null
-                                    });
+                                }).catch((error) => {
+                                    console.error('error' + error.message);
+                                    // compiler.postMessage({
+                                    //     type: 'read',
+                                    //     id: message.id,
+                                    //     contents: null -> causing errors
+                                    // });
                                 });
                             } else if (message.type === 'write') {
                                 const ext = pathCompleteExtname(message.filename);
