@@ -1,5 +1,7 @@
 import * as nodePath from 'node:path';
 import { sigstore } from 'sigstore';
+import fetch from 'node-fetch';
+import { HttpsProxyAgent } from 'https-proxy-agent';
 import { ErrorObject, serializeError } from 'serialize-error';
 import type { Stats } from 'assemblyscript/dist/asc';
 import { createCompiler } from '@klave/compiler';
@@ -37,6 +39,7 @@ export type DeploymentContext<Type> = {
 export class BuildMiniVM {
 
     private eventHanlders: Partial<Record<BuildMiniVMEvent, BuildMiniVMEventHandler[]>> = {};
+    private proxyAgent: HttpsProxyAgent | undefined;
 
     constructor(private options: {
         type: 'github';
@@ -44,7 +47,10 @@ export class BuildMiniVM {
         repo: Repo;
         // TODO Reenable the KlaveRcConfiguration[...] type
         application: any;
-    }) { }
+    }) {
+        if (process.env['NX_SQUID_URL'])
+            this.proxyAgent = new HttpsProxyAgent(process.env['NX_SQUID_URL']);
+    }
 
     getContentSync(path: string): string | null {
         const normalisedPath = path.split(nodePath.sep).join(nodePath.posix.sep);
@@ -77,8 +83,10 @@ export class BuildMiniVM {
             const components = normalisedPath?.split('node_modules') ?? [];
             const lastComponent = components.pop();
             logger.debug(`Getting unpkg content for '${lastComponent}'`);
-            if (lastComponent) {
-                const reponse = await fetch('https://www.unpkg.com' + lastComponent);
+            if (lastComponent?.startsWith('/')) {
+                const reponse = await fetch('https://www.unpkg.com' + lastComponent, {
+                    agent: this.proxyAgent
+                });
                 const data = await reponse.text();
                 if (reponse.ok) {
                     // TODO - Store the response in a cahing layer
