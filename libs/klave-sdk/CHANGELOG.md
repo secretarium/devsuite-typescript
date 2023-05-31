@@ -1,4 +1,9 @@
 # Changelog
+## [0.6.2](///compare/klave-sdk@0.6.1...klave-sdk@0.6.2) (2023-05-31)
+
+### Dependency Updates
+
+* `klave-compiler` updated to version `0.2.0`
 ## [0.6.1](///compare/klave-sdk@0.6.0...klave-sdk@0.6.1) (2023-05-30)
 
 
