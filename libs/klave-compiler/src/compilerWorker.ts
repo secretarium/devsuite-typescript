@@ -21,7 +21,7 @@ class CompilerHost {
         if (event === 'message') {
             this.worker.on('message', (message) => {
                 if (message.type === 'write') {
-                    if (message.filename === 'out.d.ts') {
+                    if (message.filename === 'out.d.ts' && message.contents) {
                         let filteredDTS = '';
                         // parse the d.ts file
                         const sourceFile = ts.createSourceFile(
@@ -51,7 +51,10 @@ class CompilerHost {
                     return listener(message);
                 }
                 if (message.type === 'read') {
-                    if (message.filename === '..ts')
+                    if (message.filename === '..ts' ||
+                        message.filename === 'index.ts' ||
+                        message.filename === './index.ts' ||
+                        message.filename === '.\\index.ts')
                         this.entryFile = message.id;
                 }
                 listener(message);
@@ -63,7 +66,7 @@ class CompilerHost {
 
     postMessage(value: any, transferList?: ReadonlyArray<TransferListItem>): void {
         if (value.type === 'read')
-            if (value.id === this.entryFile) {
+            if (value.id === this.entryFile && value.contents) {
 
                 let normalizedEntryFile = `
                 import { JSON as ${deferredMarker}JSON, Utils as ${deferredMarker}Utils } from '@klave/sdk';
