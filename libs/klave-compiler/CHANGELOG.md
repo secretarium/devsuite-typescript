@@ -6,6 +6,13 @@
 
 * **compiler:** Provide protection for entry file not being resolved on first trial 07fcd5e
 
+## [0.2.1](///compare/klave-compiler@0.2.0...klave-compiler@0.2.1) (2023-06-01)
+
+
+### Bug Fixes
+
+* **compiler:** Provide protection for entry file not being resolved on first trial 07fcd5e
+
 ## [0.2.0](///compare/klave-compiler@0.1.1...klave-compiler@0.2.0) (2023-05-31)
 
 
