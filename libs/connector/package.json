@@ -1,6 +1,6 @@
 {
     "name": "@secretarium/connector",
-    "version": "0.13.0",
+    "version": "0.13.1",
     "type": "commonjs",
     "repository": {
         "type": "git",
