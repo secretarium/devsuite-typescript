@@ -1,20 +1,55 @@
-import { FC } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { useForm, FieldValues } from 'react-hook-form';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { UilSpinner, UilExclamationTriangle } from '@iconscout/react-unicons';
+import qs from 'query-string';
 import api from '../../utils/api';
 
 export const Select: FC = () => {
 
     const navigate = useNavigate();
     const repoInfo = useParams() as { owner: string, name: string };
-    const { data: deployableRepo, isLoading } = api.v0.repos.getDeployableRepo.useQuery(repoInfo);
+    const { data: deployableRepo, isLoading } = api.v0.repos.getDeployableRepo.useQuery(repoInfo, {
+        refetchInterval(data) {
+            if (data?.isAvailableToKlave)
+                return false;
+            return 1000;
+        }
+    });
     const { mutate, isLoading: isTriggeringDeploy, isSuccess: hasTriggeredDeploy, error: mutationError } = api.v0.applications.register.useMutation({
         onSuccess: () => navigate('/')
     });
     const { register, handleSubmit, watch } = useForm<{ applications: string[] }>();
+    const { postInstall } = qs.parse(window.location.search);
+    const [isPostInstall, setIsPostInstall] = useState<boolean>(postInstall === 'true');
+    const [isPostInstallStuck, setIsPostInstallStuck] = useState(false);
+
     let appSelectionWatch = watch('applications');
     appSelectionWatch = (Array.isArray(appSelectionWatch) ? appSelectionWatch : [appSelectionWatch]).filter(Boolean);
+
+    useEffect(() => {
+        if (deployableRepo?.isAvailableToKlave) {
+            navigate(window.location.pathname);
+            setIsPostInstall(false);
+        } else if (postInstall === 'true') {
+            setIsPostInstall(true);
+        } else {
+            setIsPostInstall(false);
+        }
+    }, [deployableRepo?.isAvailableToKlave, navigate, postInstall]);
+
+    useEffect(() => {
+        let updateReceptionTimer: NodeJS.Timeout | undefined;
+        if (!deployableRepo?.isAvailableToKlave) {
+            updateReceptionTimer = setTimeout(() => {
+                setIsPostInstallStuck(true);
+            }, 10000);
+        }
+        return () => {
+            if (updateReceptionTimer)
+                clearTimeout(updateReceptionTimer);
+        };
+    }, []);
 
     if (isLoading || !deployableRepo)
         return <>
@@ -36,6 +71,42 @@ export const Select: FC = () => {
             </div>
         </>;
 
+    const state = JSON.stringify({
+        referer: window.location.origin,
+        source: 'github',
+        redirectUri: `/deploy/repo/${repoInfo.owner}/${repoInfo.name}?postInstall=true`,
+        repoFullName: deployableRepo.fullName
+    });
+
+    const githubAppInstall = new URL('https://github.com/apps/klave-network/installations/new');
+    githubAppInstall.searchParams.append('state', state);
+
+    if (isPostInstall)
+        return <>
+            <div className='pb-5' >
+                <h1 className='text-xl font-bold'>{isPostInstallStuck ? 'Waiting for your repo' : 'Another moment'}</h1>
+            </div>
+            <div className='relative'>
+                {isPostInstallStuck ? <>
+                    <div className='bg-yellow-200 p-5 mb-10 w-full text-center text-yellow-800'>
+                        <UilExclamationTriangle className='inline-block mb-3' /><br />
+                        <span>This is taking longer than usual</span><br />
+                        <span>Klave still does&apos;t have access to your repository</span><br />
+                        <br />
+                        <a href={githubAppInstall.toString()} type="submit" className='button-like mt-5 bg-yellow-800 text-white'>Try installing again</a>
+                    </div>
+                    We are waiting to hear from GitHub.<br />
+                    This shouldn&apos;t be very long...<br />
+                    <UilSpinner className='inline-block animate-spin' />
+                </> : <>
+                    We are waiting to hear from GitHub.<br />
+                    This shouldn&apos;t be very long...<br />
+                    <br />
+                    <UilSpinner className='inline-block animate-spin' />
+                </>}
+            </div>
+        </>;
+
     const registerApplication = ({ applications }: FieldValues) => {
         if (hasTriggeredDeploy)
             return;
@@ -45,16 +116,6 @@ export const Select: FC = () => {
             applications
         });
     };
-
-    const state = JSON.stringify({
-        referer: window.location.origin,
-        source: 'github',
-        redirectUri: `/deploy/repo/${repoInfo.owner}/${repoInfo.name}`,
-        repoFullName: deployableRepo.fullName
-    });
-
-    const githubAppInstall = new URL('https://github.com/apps/klave-network/installations/new');
-    githubAppInstall.searchParams.append('state', state);
 
     return <>
         <div className='pb-5' >
