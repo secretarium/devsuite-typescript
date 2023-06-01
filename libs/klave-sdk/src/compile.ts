@@ -56,7 +56,7 @@ const compile = () => {
                                 const ext = pathCompleteExtname(message.filename);
                                 if (ext.endsWith('.js'))
                                     return;
-                                fs.writeFile(`${path.join(CWD, '.klave', `${index.toString()}-${app.name.toLocaleLowerCase().replace(/\s/g, '-')}`)}${ext}`, message.contents);
+                                fs.writeFileSync(`${path.join(CWD, '.klave', `${index.toString()}-${app.name.toLocaleLowerCase().replace(/\s/g, '-')}`)}${ext}`, message.contents);
                             } else if (message.type === 'diagnostic') {
                                 console.log(message.diagnostics);
                             } else if (message.type === 'errored') {
