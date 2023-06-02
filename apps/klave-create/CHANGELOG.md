@@ -1,4 +1,14 @@
 # Changelog
+## [0.3.14](///compare/klave-create@0.3.13...klave-create@0.3.14) (2023-06-02)
+
+### Dependency Updates
+
+* `klave-sdk` updated to version `0.6.3`
+
+### Bug Fixes
+
+* **create:** Ensure `visitor-as` package is installed 9272fa8
+
 ## [0.3.13](///compare/klave-create@0.3.12...klave-create@0.3.13) (2023-05-31)
 
 ### Dependency Updates
