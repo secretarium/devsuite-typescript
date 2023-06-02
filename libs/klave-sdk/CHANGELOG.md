@@ -1,4 +1,14 @@
 # Changelog
+## [0.6.3](///compare/klave-sdk@0.6.2...klave-sdk@0.6.3) (2023-06-02)
+
+### Dependency Updates
+
+* `klave-compiler` updated to version `0.2.1`
+
+### Bug Fixes
+
+* **sdk:** Use synchronous file writing to prevent incomplete writes 5f58df3
+
 ## [0.6.2](///compare/klave-sdk@0.6.1...klave-sdk@0.6.2) (2023-05-31)
 
 ### Dependency Updates
