@@ -39,7 +39,7 @@ export type DeploymentContext<Type> = {
 export class BuildMiniVM {
 
     private eventHanlders: Partial<Record<BuildMiniVMEvent, BuildMiniVMEventHandler[]>> = {};
-    private proxyAgent: HttpsProxyAgent | undefined;
+    private proxyAgent: HttpsProxyAgent<string> | undefined;
 
     constructor(private options: {
         type: 'github';

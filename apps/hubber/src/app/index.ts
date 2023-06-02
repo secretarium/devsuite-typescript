@@ -1,5 +1,6 @@
 import ip from 'ip';
 import path from 'node:path';
+import expectCt from 'expect-ct';
 import express from 'express';
 import session from 'express-session';
 import ews from 'express-ws';
@@ -134,6 +135,12 @@ export const start = async (port: number) => {
         //     }
         // }
     }));
+    app.use(
+        expectCt({
+            enforce: true,
+            maxAge: 90
+        })
+    );
     app.disable('x-powered-by');
 
     // Plug Probot for GitHub Apps
