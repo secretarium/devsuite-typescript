@@ -100,6 +100,7 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                     expiresOn: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14),
                     version: availableApplicationsConfig[application.name].version,
                     build: context.commit.after.substring(0, 8),
+                    branch: context.commit.ref,
                     locations: ['FR'],
                     application: {
                         connect: { id: application.id }

@@ -135,6 +135,7 @@ export const Deployments: FC = () => {
                     {/* <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">Status</th> */}
                     {/* <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">Version</th> */}
                     <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">Version</th>
+                    <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">Branch</th>
                     <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800 hidden md:table-cell">Dates</th>
                     {/* <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800 hidden md:table-cell">Created</th> */}
                     {/* <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">Expires</th> */}
@@ -143,7 +144,7 @@ export const Deployments: FC = () => {
             </thead>
             <tbody className="text-gray-600 dark:text-gray-100">
                 {deploymentList.map(deployment => {
-                    const { id, createdAt, life, status, version, build } = deployment;
+                    const { id, createdAt, life, status, version, build, branch } = deployment;
                     return <tr key={id} className={['created', 'deploying', 'terminating'].includes(status) ? 'stripe-progress' : 'hover:bg-slate-50 hover:cursor-pointer'} onClick={() => navigate(`./${id}`)}>
                         {/* <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 md:table-cell hidden">
                             <div className="flex items-center">
@@ -163,6 +164,13 @@ export const Deployments: FC = () => {
                                 <div className="sm:flex hidden flex-col">
                                     <span className='block'>{version ?? '-'}</span>
                                     {build ? <span className={'block text-xs text-slate-500'}>{build}</span> : null}
+                                </div>
+                            </div>
+                        </td>
+                        <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 md:table-cell hidden">
+                            <div className="flex items-center">
+                                <div className="sm:flex hidden flex-col">
+                                    <span className='font-mono inline-block rounded dark:text-slate-400 dark:bg-slate-800 text-slate-900 bg-slate-100 px-2 py-1 mb-1 whitespace-nowrap' title={!branch ? undefined : branch}>{branch?.replace('refs/heads/', '')}</span><br />
                                 </div>
                             </div>
                         </td>

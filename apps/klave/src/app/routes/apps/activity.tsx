@@ -27,7 +27,7 @@ export const ActivityRecord: FC<ActivityRecordProps> = ({ activity }) => {
     if (activity.class === 'pushHook') {
         const { pusher, commit, repo } = activity.context.payload as unknown as DeploymentPushPayload;
         return <span className='h-5 block my-2'>
-            <a target='_blank' rel="noreferrer noopener" href={pusher.htmlUrl} className='font-semibold'><img alt={pusher.login} src={pusher.avatarUrl} className='h-full inline-block rounded-full' /> {pusher.login}</a> pushed commit <a target='_blank' rel="noreferrer noopener" href={repo?.url} className="font-mono rounded bg-slate-100 mx-1 px-2 py-1">{commit.after.substring(0, 8)}</a> to branch <a target='_blank' rel="noreferrer noopener" href={repo?.url} className='text-slate-400'>{commit?.ref}</a> <i>({formatTimeAgo(activity.createdAt)})</i>
+            <a target='_blank' rel="noreferrer noopener" href={pusher.htmlUrl} className='font-semibold'><img alt={pusher.login} src={pusher.avatarUrl} className='h-full inline-block rounded-full' /> {pusher.login}</a> pushed commit <a target='_blank' rel="noreferrer noopener" href={repo?.url} className="font-mono rounded bg-slate-100 mx-1 px-2 py-1">{commit.after.substring(0, 8)}</a> to branch <a target='_blank' rel="noreferrer noopener" href={repo?.url} className='text-slate-400'>{commit?.ref?.replace('refs/heads/', '')}</a> <i>({formatTimeAgo(activity.createdAt)})</i>
         </span>;
     }
     return null;

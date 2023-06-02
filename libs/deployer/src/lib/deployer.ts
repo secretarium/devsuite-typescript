@@ -51,6 +51,7 @@ class Deployer {
 
     octokit?: Octokit;
     repo?: Repo;
+    branch?: string;
     commitRange?: {
         before?: string;
         after?: string;
@@ -224,6 +225,7 @@ class Deployer {
                     expiresOn: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14),
                     version: this.operatingConfig[application.name].version,
                     build: after.substring(0, 8),
+                    branch: this.branch,
                     locations: ['FR'],
                     status: 'deploying',
                     application: {

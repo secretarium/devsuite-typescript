@@ -35,7 +35,7 @@ export const AppDeploymentDetail: FC = () => {
         </>;
 
 
-    const { id, createdAt, life, status, version, build } = deployment;
+    const { id, createdAt, life, status, version, build, branch } = deployment;
 
     return <div className="flex flex-col w-full mb-7">
         <div className="flex w-full justify-between">
@@ -60,6 +60,16 @@ export const AppDeploymentDetail: FC = () => {
                     <div className="sm:flex hidden flex-col">
                         <span className='block' title={createdAt.toDateString()}>{formatTimeAgo(createdAt)}</span>
                         {life === 'short' ? <span className={'block text-xs text-slate-500'}>Expires {formatTimeAgo(new Date(createdAt.getTime() + 1000 * 60 * 60 * 24 * 15))}</span> : <span></span>}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div className="flex w-full justify-between">
+            <div className='mb-10'>
+                <h2 className='font-bold mb-3'>Branch</h2>
+                <div className="flex items-center">
+                    <div className="sm:flex hidden flex-col">
+                        <span className='font-mono inline-block rounded dark:text-slate-400 dark:bg-slate-800 text-slate-900 bg-slate-100 px-2 py-1 mb-1 whitespace-nowrap' title={!branch ? undefined : branch}>{branch?.replace('refs/heads/', '')}</span><br />
                     </div>
                 </div>
             </div>

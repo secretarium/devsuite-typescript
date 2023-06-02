@@ -144,6 +144,7 @@ enum DeploymentLifespan {
 
 model Deployment {
     id                  String             @id @default(uuid()) @map("_id")
+    branch              String?
     version             String?
     build               String?
     locations           String[]           @default([])
