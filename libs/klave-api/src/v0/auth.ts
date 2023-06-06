@@ -94,9 +94,10 @@ export const authRouter = createTRPCRouter({
     verifyEmailCode: publicProcedure
         .input(z.object({
             email: z.string().email(),
-            code: z.string()
+            code: z.string(),
+            authenticate: z.boolean().default(true)
         }))
-        .mutation(async ({ ctx: { prisma, session, sessionStore, webId }, input: { email, code } }) => {
+        .mutation(async ({ ctx: { prisma, session, sessionStore, webId }, input: { email, code, authenticate } }) => {
             const user = await prisma.user.findFirst({
                 where: {
                     emails: {
@@ -122,28 +123,20 @@ export const authRouter = createTRPCRouter({
                     }
                 }
             });
-            await new Promise<void>((resolve, reject) => {
-                // console.log('performing passport', passport, passport.authenticate);
-                // session.user = user;
-                session.save(() => {
-                    sessionStore.set(session.id, {
-                        ...session,
-                        user
-                    }, (err) => {
-                        if (err)
-                            reject(err);
-                        resolve();
+            if (authenticate)
+                await new Promise<void>((resolve, reject) => {
+
+                    session.save(() => {
+                        sessionStore.set(session.id, {
+                            ...session,
+                            user
+                        }, (err) => {
+                            if (err)
+                                reject(err);
+                            resolve();
+                        });
                     });
                 });
-
-                // passport.authenticate('local')(req, undefined, () => {
-                //     console.log('logging in', login, user);
-                //     login(user, (err) => {
-                //         console.error('There was error', err);
-                //         resolve();
-                //     });
-                // });
-            });
             return {
                 ok: true
             };
@@ -198,7 +191,8 @@ export const authRouter = createTRPCRouter({
         }))
         .mutation(async ({ ctx: { prisma, session, sessionStore }, input: { email, data } }) => {
 
-            const credId = data.id.replace(/-/g, '+').replace(/_/g, '/').padEnd(data.id.length + 4 - data.id.length % 4, '=');
+            const credId = data.id.padEnd(data.id.length + 4 - data.id.length % 4, '=');
+            logger.debug(`wan: Seeking credID ${credId} for email ${email}`);
             const user = await prisma.user.findFirst({
                 where: {
                     emails: {
@@ -215,19 +209,23 @@ export const authRouter = createTRPCRouter({
                 }
             });
 
-            if (!user)
+            if (!user) {
+                logger.debug('wan: User could not be found');
                 return {
                     ok: false,
                     error: 'Invalid authentication response'
                 };
+            }
 
             const authenticator = user?.webauthCredentials.find(cred => cred.credentialID === credId);
 
-            if (!authenticator)
+            if (!authenticator) {
+                logger.debug('wan: Authenticator could not be found');
                 return {
                     ok: false,
                     error: 'Invalid authentication response'
                 };
+            }
 
             const { verified, authenticationInfo } = await verifyAuthenticationResponse({
                 response: data,
@@ -241,11 +239,13 @@ export const authRouter = createTRPCRouter({
                 }
             });
 
-            if (!verified)
+            if (!verified) {
+                logger.debug('wan: Authentication response could not be verified');
                 return {
                     ok: false,
                     error: 'Invalid authentication response'
                 };
+            }
 
             const { newCounter } = authenticationInfo;
 
@@ -276,6 +276,7 @@ export const authRouter = createTRPCRouter({
                     ok: true
                 };
             }
+            logger.debug('wan: General failure');
             return {
                 ok: false,
                 error: 'Invalid authentication response'

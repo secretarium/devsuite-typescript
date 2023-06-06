@@ -9,6 +9,7 @@ export const LoginSecKey: FC = () => {
     const [credentials, setCredentials] = useLocalForage<Array<string>>('enrolledCredentials', []);
     const [isRequestingWebauthnInput, setIsRequestingWebauthnInput] = useState(false);
     const [isWebauthAvailable, setIsWebauthAvailable] = useState<null | boolean>();
+    const [shouldAttemptWebauthEnroll, setShouldAttemptWebauthEnroll] = useState(true);
     const [email, setEmail] = useState('');
     const [code, setCode] = useState('');
     const [error, setError] = useState<string>();
@@ -83,56 +84,13 @@ export const LoginSecKey: FC = () => {
         });
     }, [email, emailCodeMutation]);
 
-    const verifyEmailCode = useCallback((e: MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-        e.stopPropagation();
-        if (code.length === 0) {
-            setError('Please enter your email code');
-            return;
-        }
-        verifyEmailCodeMutation({
-            email,
-            code: code.replace(/\D/g, '')
-        }, {
-            onSettled(data, error) {
-                if (error)
-                    setError(error?.message ?? (JSON.parse(error.message) as any)[0]?.message ?? error.message ?? 'An error occured while trying to log you in. Please try again later.');
-                else if (data?.ok)
-                    refetchSession();
-                else
-                    setError('An error occured while trying to log you in. Please try again later.');
-            }
-        });
-    }, [code, verifyEmailCodeMutation, email, refetchSession]);
-
-    const onChangeEmail = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-        if (error)
-            setError(undefined);
-        setEmail(e.target.value);
-    }, [error]);
-
-    const onChangeCode = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-        if (error)
-            setError(undefined);
-        setCode(e.target.value);
-    }, [error]);
-
-    const resetLogin = useCallback(() => {
-        setEmail('');
-        setCode('');
-        setError(undefined);
-        setScreen('start');
-        setIsRequestingWebauthnInput(false);
-    }, [setEmail, setCode, setError]);
-
-    const isLoading = emailCodeLoading || verifyEmailCodeLoading || wauthOptionsLoading || wregOptionsLoading || registerWebauthnLoading || isRequestingWebauthnInput || validateWebauthnLoading;
-
     const startAuth = useCallback(() => {
         if (email.length === 0) {
             setError('Please enter your email address');
             return;
         }
-        if (!isWebauthAvailable)
+
+        if (!isWebauthAvailable || (!credentials?.length && code.length === 0))
             return getLoginCode();
 
         if (credentials?.includes(email)) {
@@ -157,7 +115,9 @@ export const LoginSecKey: FC = () => {
                 .then((res: any) => {
                     if (res?.ok) {
                         refetchSession();
+                        return;
                     }
+                    setError('An error occured while trying to log you in. Please try again later.');
                 })
                 .catch(() => {
                     setIsRequestingWebauthnInput(false);
@@ -186,7 +146,9 @@ export const LoginSecKey: FC = () => {
                     if (res?.ok) {
                         setCredentials([...(credentials ?? []), email]);
                         refetchSession();
+                        return;
                     }
+                    setError('An error occured while trying to register you in. Please try again later.');
                 })
                 .catch(() => {
                     setIsRequestingWebauthnInput(false);
@@ -194,7 +156,57 @@ export const LoginSecKey: FC = () => {
                 });
         }
 
-    }, [credentials, email, getLoginCode, isWebauthAvailable, refetchAuthOptions, refetchRegistrationOptions, refetchSession, registerWebauthnMutation, setCredentials, validateWebauthnMutation]);
+    }, [code.length, credentials, email, getLoginCode, isWebauthAvailable, refetchAuthOptions, refetchRegistrationOptions, refetchSession, registerWebauthnMutation, setCredentials, validateWebauthnMutation]);
+
+    const verifyEmailCode = useCallback((e: MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (code.length === 0) {
+            setError('Please enter your email code');
+            return;
+        }
+        verifyEmailCodeMutation({
+            email,
+            code: code.replace(/\D/g, ''),
+            authenticate: !isWebauthAvailable || !!credentials?.length || !shouldAttemptWebauthEnroll
+        }, {
+            onSettled(data, error) {
+                if (error)
+                    setError(error?.message ?? (JSON.parse(error.message) as any)[0]?.message ?? error.message ?? 'An error occured while trying to log you in. Please try again later.');
+                else if (data?.ok) {
+                    if (shouldAttemptWebauthEnroll && isWebauthAvailable && !credentials?.length) {
+                        setScreen('start');
+                        startAuth();
+                    } else
+                        refetchSession();
+                } else
+                    setError('An error occured while trying to log you in. Please try again later.');
+            }
+        });
+    }, [code, verifyEmailCodeMutation, email, isWebauthAvailable, credentials?.length, shouldAttemptWebauthEnroll, refetchSession, startAuth]);
+
+    const onChangeEmail = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+        if (error)
+            setError(undefined);
+        setEmail(e.target.value);
+    }, [error]);
+
+    const onChangeCode = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+        if (error)
+            setError(undefined);
+        setCode(e.target.value);
+    }, [error]);
+
+    const resetLogin = useCallback(() => {
+        setEmail('');
+        setCode('');
+        setError(undefined);
+        setScreen('start');
+        setIsRequestingWebauthnInput(false);
+        setShouldAttemptWebauthEnroll(true);
+    }, [setEmail, setCode, setError]);
+
+    const isLoading = emailCodeLoading || verifyEmailCodeLoading || wauthOptionsLoading || wregOptionsLoading || registerWebauthnLoading || isRequestingWebauthnInput || validateWebauthnLoading;
 
     const handleLoginSubmit = useCallback((e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -205,6 +217,7 @@ export const LoginSecKey: FC = () => {
     const handleLoginCodeSubmit = useCallback((e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         e.stopPropagation();
+        setShouldAttemptWebauthEnroll(false);
         getLoginCode();
     }, [getLoginCode]);
 
@@ -231,7 +244,7 @@ export const LoginSecKey: FC = () => {
                 <br />
                 <br />
                 <button disabled={isLoading} onClick={handleLoginSubmit} onSubmit={handleLoginSubmit} type='submit'>{isLoading ? <UilSpinner className='inline-block animate-spin' /> : isWebauthAvailable ? 'Log in with secure key' : 'Log in with magic code'}</button><br />
-                <button disabled={isLoading} onClick={handleLoginCodeSubmit} className='bg-transparent border-0 shadow-none font-normal text-sm text-slate-800 hover:text-blue-600'>Use magic code instead</button>
+                <button disabled={isLoading} onClick={handleLoginCodeSubmit} className='bg-transparent border-0 shadow-none font-normal text-sm text-slate-800 hover:text-blue-600 hover:cursor-pointer'>Use magic code instead</button>
             </> : screen === 'code' ? <>
                 <input key='codeField' value={code} onInput={onChangeCode} alt='code' placeholder='Code' type='text' className='text-center' />
                 <br />
