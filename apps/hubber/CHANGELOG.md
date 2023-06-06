@@ -1,4 +1,16 @@
 # Changelog
+## [0.1.1](///compare/hubber@0.1.0...hubber@0.1.1) (2023-06-06)
+
+### Dependency Updates
+
+* `klave` updated to version `0.2.0`
+* `klave-db` updated to version `0.1.0`
+* `klave-api` updated to version `0.2.0`
+
+### Bug Fixes
+
+* **api,hubber:** Ensure parsing of RPID from origin in env 792cc48
+
 ## 0.1.0 (2023-06-01)
 
 ### Dependency Updates
