@@ -67,6 +67,19 @@
                 "command": "prisma db push --schema src/prisma/schema.prisma",
                 "cwd": "libs/klave-db"
             }
+        },
+        "version": {
+            "executor": "@jscutlery/semver:version",
+            "options": {
+                "preset": "conventional",
+                "trackDeps": true,
+                "changelogHeader": "# Changelog",
+                "tagPrefix": "${projectName}@",
+                "commitMessageFormat": "chore(${projectName}): Release version ${version}",
+                "postTargets": [
+                    "klave-db:build"
+                ]
+            }
         }
     },
     "tags": []
