@@ -1,4 +1,14 @@
 # Changelog
+## [0.2.0](///compare/klave@0.1.0...klave@0.2.0) (2023-06-06)
+
+### Dependency Updates
+
+* `klave-api` updated to version `0.2.0`
+
+### Features
+
+* **db,api,klave:** Add support for Webauthn enrollement 85aabab
+
 ## 0.1.0 (2023-06-01)
 
 ### Dependency Updates
