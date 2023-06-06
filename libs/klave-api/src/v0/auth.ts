@@ -8,8 +8,8 @@ import { Utils } from '@secretarium/connector';
 // import * as passport from 'passport';
 import { z } from 'zod';
 
-const rpID = 'localhost';
-const origin = 'http://localhost:4220';
+const origin = process.env['NX_WEBAUTHN_ORIGIN'] ?? 'http://localhost';
+const rpID = new URL(origin).hostname;
 
 export const authRouter = createTRPCRouter({
     getSession: publicProcedure.query(async ({ ctx }) => {
@@ -198,10 +198,16 @@ export const authRouter = createTRPCRouter({
         }))
         .mutation(async ({ ctx: { prisma, session, sessionStore }, input: { email, data } }) => {
 
+            const credId = data.id.replace(/-/g, '+').replace(/_/g, '/').padEnd(data.id.length + 4 - data.id.length % 4, '=');
             const user = await prisma.user.findFirst({
                 where: {
                     emails: {
                         has: email
+                    },
+                    webauthCredentials: {
+                        some: {
+                            credentialID: credId
+                        }
                     }
                 },
                 include: {
@@ -209,57 +215,67 @@ export const authRouter = createTRPCRouter({
                 }
             });
 
-            for (const authenticator of user?.webauthCredentials ?? []) {
+            if (!user)
+                return {
+                    ok: false,
+                    error: 'Invalid authentication response'
+                };
 
-                const { verified, authenticationInfo } = await verifyAuthenticationResponse({
-                    response: data,
-                    expectedChallenge: `${user?.webauthChallenge}`,
-                    expectedOrigin: origin,
-                    expectedRPID: rpID,
-                    authenticator: {
-                        credentialPublicKey: Utils.fromBase64(authenticator.credentialPublicKey),
-                        credentialID: Utils.fromBase64(authenticator.credentialID),
-                        counter: authenticator.counter
+            const authenticator = user?.webauthCredentials.find(cred => cred.credentialID === credId);
+
+            if (!authenticator)
+                return {
+                    ok: false,
+                    error: 'Invalid authentication response'
+                };
+
+            const { verified, authenticationInfo } = await verifyAuthenticationResponse({
+                response: data,
+                expectedChallenge: `${user.webauthChallenge}`,
+                expectedOrigin: origin,
+                expectedRPID: rpID,
+                authenticator: {
+                    credentialPublicKey: Utils.fromBase64(authenticator.credentialPublicKey),
+                    credentialID: Utils.fromBase64(authenticator.credentialID),
+                    counter: authenticator.counter
+                }
+            });
+
+            if (!verified)
+                return {
+                    ok: false,
+                    error: 'Invalid authentication response'
+                };
+
+            const { newCounter } = authenticationInfo;
+
+            if (user) {
+                await prisma.webauthCredential.update({
+                    where: {
+                        id: authenticator.id
+                    },
+                    data: {
+                        counter: newCounter
                     }
                 });
 
-                if (!verified)
-                    return {
-                        ok: false,
-                        error: 'Invalid authentication response'
-                    };
-
-                const { newCounter } = authenticationInfo;
-
-                if (user) {
-                    await prisma.webauthCredential.update({
-                        where: {
-                            id: authenticator.id
-                        },
-                        data: {
-                            counter: newCounter
-                        }
-                    });
-
-                    await new Promise<void>((resolve, reject) => {
-                        session.save(() => {
-                            sessionStore.set(session.id, {
-                                ...session,
-                                user
-                            }, (err) => {
-                                if (err)
-                                    reject(err);
-                                resolve();
-                            });
+                await new Promise<void>((resolve, reject) => {
+                    session.save(() => {
+                        sessionStore.set(session.id, {
+                            ...session,
+                            user
+                        }, (err) => {
+                            if (err)
+                                reject(err);
+                            resolve();
                         });
                     });
+                });
 
-                    return {
-                        ok: true
-                    };
-                }
+                return {
+                    ok: true
+                };
             }
-
             return {
                 ok: false,
                 error: 'Invalid authentication response'
@@ -285,7 +301,7 @@ export const authRouter = createTRPCRouter({
             });
 
             const options = generateRegistrationOptions({
-                rpName: 'Klave Webauthn',
+                rpName: 'Klave',
                 rpID,
                 // We pretend we found a user with this email address
                 // TODO - Ensure we compute a fake UUID not based on email to avoid revealing registration status
@@ -296,11 +312,11 @@ export const authRouter = createTRPCRouter({
                 // (Recommended for smoother UX)
                 attestationType: 'none',
                 /**
-                 * Passing in a user's list of already-registered authenticator IDs here prevents users from
-                 * registering the same device multiple times. The authenticator will simply throw an error in
-                 * the browser if it's asked to perform registration when one of these ID's already resides
-                 * on it.
-                 */
+                     * Passing in a user's list of already-registered authenticator IDs here prevents users from
+                     * registering the same device multiple times. The authenticator will simply throw an error in
+                     * the browser if it's asked to perform registration when one of these ID's already resides
+                     * on it.
+                     */
                 // excludeCredentials: user.devices.map(dev => ({
                 //     id: Buffer.from(dev.credentialID),
                 //     type: 'public-key',
@@ -365,8 +381,8 @@ export const authRouter = createTRPCRouter({
                                 id: user.id
                             }
                         },
-                        credentialPublicKey: Utils.toBase64(credentialPublicKey),
-                        credentialID: Utils.toBase64(credentialID),
+                        credentialPublicKey: Utils.toBase64(credentialPublicKey, true),
+                        credentialID: Utils.toBase64(credentialID, true),
                         counter
                     }
                 });
