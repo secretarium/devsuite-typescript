@@ -2,7 +2,6 @@ import spawnAsync from '@expo/spawn-async';
 import chalk from 'chalk';
 import { Command } from 'commander';
 import fs from 'fs-extra';
-import { glob } from 'glob';
 import path from 'path';
 import prompts from 'prompts';
 import { replaceInFile } from 'replace-in-file';
@@ -99,12 +98,13 @@ async function createTemplateAsync(targetDir: string, data: SubstitutionData): P
 
         const sourceDir = path.join(__dirname, '..', 'template', '.');
 
-        const files = glob.sync('**/*', { cwd: sourceDir }); // Find all files in the source directory
-        const dotfiles = glob.sync('**/.*', { cwd: sourceDir }); // Find all dotfiles in the source directory
-        const allFiles = files.concat(dotfiles);
+        await fs.copy(sourceDir, targetDir, {
+            filter: () => true
+        });
 
-        for (const file of allFiles) {
-            await fs.copy(`${sourceDir}/${file}`, `${targetDir}/${file}`);
+        const gitignoreFile = path.join(targetDir, 'gitignore');
+        if (fs.existsSync(gitignoreFile)) {
+            fs.renameSync(gitignoreFile, path.join(targetDir, '.gitignore'));
         }
 
         await replaceInFile({
