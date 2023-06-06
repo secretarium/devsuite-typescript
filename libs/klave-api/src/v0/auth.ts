@@ -1,8 +1,15 @@
 import { logger } from '@klave/providers';
-import { protectedProcedure, publicProcedure, createTRPCRouter } from '../trpc';
+import { publicProcedure, createTRPCRouter } from '../trpc';
+import { webcrypto } from 'node:crypto';
 import { createTransport } from 'nodemailer';
+import { generateAuthenticationOptions, generateRegistrationOptions, verifyAuthenticationResponse, verifyRegistrationResponse } from '@simplewebauthn/server';
+import { type startRegistration, type startAuthentication } from '@simplewebauthn/browser';
+import { Utils } from '@secretarium/connector';
 // import * as passport from 'passport';
 import { z } from 'zod';
+
+const rpID = 'localhost';
+const origin = 'http://localhost:4220';
 
 export const authRouter = createTRPCRouter({
     getSession: publicProcedure.query(async ({ ctx }) => {
@@ -19,10 +26,6 @@ export const authRouter = createTRPCRouter({
             // })).valueOf() > 0
             // web: ctx.web
         };
-    }),
-    getSecretMessage: protectedProcedure.query(() => {
-        // testing type validation of overridden next-auth Session in @acme/auth package
-        return 'you can see this secret message!';
     }),
     getEmailCode: publicProcedure
         .input(z.object({
@@ -88,7 +91,7 @@ export const authRouter = createTRPCRouter({
                 };
             }
         }),
-    getChallenge: publicProcedure
+    verifyEmailCode: publicProcedure
         .input(z.object({
             email: z.string().email(),
             code: z.string()
@@ -143,6 +146,252 @@ export const authRouter = createTRPCRouter({
             });
             return {
                 ok: true
+            };
+        }),
+    getWebauthAuthenticationOptions: publicProcedure
+        .input(z.object({
+            email: z.string().email()
+        }))
+        .query(async ({ ctx: { prisma }, input: { email } }) => {
+
+            const betaDomainsAllowed = process.env['NX_BETA_DOMAIN_FILTER']?.split(',') ?? [];
+            const emailDomain = email.split('@')[1];
+            if (!emailDomain || !betaDomainsAllowed.includes(emailDomain))
+                throw new Error('It looks like you are not part of Klave\'s beta program');
+
+            const user = await prisma.user.findFirst({
+                where: {
+                    emails: {
+                        has: email
+                    }
+                }
+            });
+
+            const options = generateAuthenticationOptions({
+                timeout: 60000,
+                // allowCredentials: user.devices.map(dev => ({
+                //     id: Buffer.from(dev.credentialID),
+                //     type: 'public-key' as const,
+                //     transports: dev.transports
+                // })),
+                userVerification: 'required' as const,
+                rpID
+            });
+
+            if (user)
+                await prisma.user.update({
+                    where: {
+                        id: user.id
+                    },
+                    data: {
+                        webauthChallenge: options.challenge,
+                        webauthChallengeCreatedAt: new Date()
+                    }
+                });
+
+            return options;
+        }),
+    validateWebauthn: publicProcedure
+        .input(z.object({
+            email: z.string(),
+            data: z.custom<Awaited<ReturnType<typeof startAuthentication>>>()
+        }))
+        .mutation(async ({ ctx: { prisma, session, sessionStore }, input: { email, data } }) => {
+
+            const user = await prisma.user.findFirst({
+                where: {
+                    emails: {
+                        has: email
+                    }
+                },
+                include: {
+                    webauthCredentials: true
+                }
+            });
+
+            for (const authenticator of user?.webauthCredentials ?? []) {
+
+                const { verified, authenticationInfo } = await verifyAuthenticationResponse({
+                    response: data,
+                    expectedChallenge: `${user?.webauthChallenge}`,
+                    expectedOrigin: origin,
+                    expectedRPID: rpID,
+                    authenticator: {
+                        credentialPublicKey: Utils.fromBase64(authenticator.credentialPublicKey),
+                        credentialID: Utils.fromBase64(authenticator.credentialID),
+                        counter: authenticator.counter
+                    }
+                });
+
+                if (!verified)
+                    return {
+                        ok: false,
+                        error: 'Invalid authentication response'
+                    };
+
+                const { newCounter } = authenticationInfo;
+
+                if (user) {
+                    await prisma.webauthCredential.update({
+                        where: {
+                            id: authenticator.id
+                        },
+                        data: {
+                            counter: newCounter
+                        }
+                    });
+
+                    await new Promise<void>((resolve, reject) => {
+                        session.save(() => {
+                            sessionStore.set(session.id, {
+                                ...session,
+                                user
+                            }, (err) => {
+                                if (err)
+                                    reject(err);
+                                resolve();
+                            });
+                        });
+                    });
+
+                    return {
+                        ok: true
+                    };
+                }
+            }
+
+            return {
+                ok: false,
+                error: 'Invalid authentication response'
+            };
+        }),
+    getWebauthRegistrationOptions: publicProcedure
+        .input(z.object({
+            email: z.string().email()
+        }))
+        .query(async ({ ctx: { prisma }, input: { email } }) => {
+
+            const betaDomainsAllowed = process.env['NX_BETA_DOMAIN_FILTER']?.split(',') ?? [];
+            const emailDomain = email.split('@')[1];
+            if (!emailDomain || !betaDomainsAllowed.includes(emailDomain))
+                throw new Error('It looks like you are not part of Klave\'s beta program');
+
+            const user = await prisma.user.findFirst({
+                where: {
+                    emails: {
+                        has: email
+                    }
+                }
+            });
+
+            const options = generateRegistrationOptions({
+                rpName: 'Klave Webauthn',
+                rpID,
+                // We pretend we found a user with this email address
+                // TODO - Ensure we compute a fake UUID not based on email to avoid revealing registration status
+                userID: user?.id ?? String(await webcrypto.subtle.digest('SHA-256', Buffer.from(email))),
+                userName: email,
+                timeout: 60000,
+                // Don't prompt users for additional information about the authenticator
+                // (Recommended for smoother UX)
+                attestationType: 'none',
+                /**
+                 * Passing in a user's list of already-registered authenticator IDs here prevents users from
+                 * registering the same device multiple times. The authenticator will simply throw an error in
+                 * the browser if it's asked to perform registration when one of these ID's already resides
+                 * on it.
+                 */
+                // excludeCredentials: user.devices.map(dev => ({
+                //     id: Buffer.from(dev.credentialID),
+                //     type: 'public-key',
+                //     transports: dev.transports
+                // })),
+                authenticatorSelection: {
+                    residentKey: 'discouraged'
+                },
+                // Support the two most common algorithms: ES256, and RS256
+                supportedAlgorithmIDs: [-7, -257]
+            });
+
+            if (user)
+                await prisma.user.update({
+                    where: {
+                        id: user.id
+                    },
+                    data: {
+                        webauthChallenge: options.challenge,
+                        webauthChallengeCreatedAt: new Date()
+                    }
+                });
+
+            return options;
+        }),
+    registerWebauthn: publicProcedure
+        .input(z.object({
+            email: z.string(),
+            data: z.custom<Awaited<ReturnType<typeof startRegistration>>>()
+        }))
+        .mutation(async ({ ctx: { prisma, session, sessionStore }, input: { email, data } }) => {
+
+            const user = await prisma.user.findFirst({
+                where: {
+                    emails: {
+                        has: email
+                    }
+                }
+            });
+
+            const { verified, registrationInfo } = await verifyRegistrationResponse({
+                response: data,
+                expectedChallenge: `${user?.webauthChallenge}`,
+                expectedOrigin: origin,
+                expectedRPID: rpID
+            });
+
+
+            if (!verified || !registrationInfo)
+                return {
+                    ok: false,
+                    error: 'Invalid registration response'
+                };
+
+            const { credentialPublicKey, credentialID, counter } = registrationInfo;
+
+            if (user) {
+                await prisma.webauthCredential.create({
+                    data: {
+                        user: {
+                            connect: {
+                                id: user.id
+                            }
+                        },
+                        credentialPublicKey: Utils.toBase64(credentialPublicKey),
+                        credentialID: Utils.toBase64(credentialID),
+                        counter
+                    }
+                });
+
+                await new Promise<void>((resolve, reject) => {
+                    session.save(() => {
+                        sessionStore.set(session.id, {
+                            ...session,
+                            user
+                        }, (err) => {
+                            if (err)
+                                reject(err);
+                            resolve();
+                        });
+                    });
+                });
+
+                return {
+                    ok: true
+                };
+            }
+
+            return {
+                ok: false,
+                error: 'Invalid registration response'
             };
         }),
     logOut: publicProcedure.mutation(async ({ ctx: { session } }) => {

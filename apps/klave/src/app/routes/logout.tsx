@@ -5,12 +5,17 @@ import { useNavigate } from 'react-router-dom';
 export const Logout: FC = () => {
 
     const navigate = useNavigate();
+    const { invalidate } = api.useContext().v0.auth.getSession;
     const { mutateAsync, isIdle } = api.v0.auth.logOut.useMutation();
 
     useEffect(() => {
         if (isIdle)
-            mutateAsync().then(() => navigate('/'));
-    }, [isIdle, mutateAsync, navigate]);
+            mutateAsync()
+                .then(() => invalidate())
+                .then(() => {
+                    navigate('/');
+                });
+    }, [invalidate, isIdle, mutateAsync, navigate]);
 
     return <div id="login">
 

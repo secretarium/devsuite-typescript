@@ -28,35 +28,39 @@ type GitHubToken {
 }
 
 model User {
-    id                 String    @id @default(uuid()) @map("_id")
-    loginCode          String?
-    loginCodeCreatedAt DateTime?
-    emails             String[]  @default([])
-    createdAt          DateTime  @default(now())
-    updatedAt          DateTime  @updatedAt
-    webs               Web[]
+    id                        String              @id @default(uuid()) @map("_id")
+    loginCode                 String?
+    loginCodeCreatedAt        DateTime?
+    webauthChallenge          String?
+    webauthChallengeCreatedAt DateTime?
+    emails                    String[]            @default([])
+    createdAt                 DateTime            @default(now())
+    updatedAt                 DateTime            @updatedAt
+    webs                      Web[]
+    webauthCredentials        WebauthCredential[]
 }
 
-enum CredentialDeviceType {
-    singleDevice
-    multiDevice
-}
+// enum CredentialDeviceType {
+//     singleDevice
+//     multiDevice
+// }
 
-enum AuthenticatorTransport {
-    usb
-    ble
-    nfc
-    internal
-}
-
-model Authenticator {
-    id                   String                   @id @default(uuid()) @map("_id")
-    credentialID         String
-    credentialPublicKey  String
-    counter              Int
-    credentialDeviceType CredentialDeviceType
-    credentialBackedUp   Boolean
-    transports           AuthenticatorTransport[] @default([])
+// enum AuthenticatorTransport {
+//     usb
+//     ble
+//     nfc
+//     internal
+// }
+model WebauthCredential {
+    id                  String @id @default(uuid()) @map("_id")
+    user                User   @relation(fields: [userId], references: [id])
+    userId              String
+    credentialID        String
+    credentialPublicKey String
+    counter             Int
+    // credentialDeviceType CredentialDeviceType
+    // credentialBackedUp   Boolean
+    // transports           AuthenticatorTransport[] @default([])
 }
 
 enum CodeSource {
