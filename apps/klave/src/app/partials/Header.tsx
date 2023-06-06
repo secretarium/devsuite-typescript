@@ -35,9 +35,9 @@ const Header: FC = () => {
                     <div className="flex-shrink-0 mr-4">
                         {/* Logo */}
                         <Link to={pathname === '/' && (data && (data.hasUnclaimedApplications || data.me)) ? '/home' : '/'} className="block ml-0" aria-label="Secretarium Platform">
-                            <img alt='Secretarium' src={klaveLogo} width={40} className='inline-block' />
-                            <span className='h-full px-6 font-bold text-lg'>
-                                The Klave Network
+                            <img alt='Secretarium' src={klaveLogo} width={40} className='h-8 inline-block' />
+                            <span className='h-full px-4 font-bold text-3xl font-mono align-middle'>
+                                klave
                             </span>
                         </Link>
                     </div>
