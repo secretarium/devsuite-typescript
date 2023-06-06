@@ -7,5 +7,21 @@
         "visitor-as": "0.11.4",
         "@klave/compiler": "*",
         "typescript": "*"
+    },
+    "resolutions": {
+        "**/@octokit/auth-token": "^3",
+        "**/@octokit/endpoint": "^7",
+        "**/@octokit/request": "^6",
+        "**/@octokit/request-error": "^3",
+        "**/@octokit/rest": "^19",
+        "**/@octokit/types": "^9",
+        "**/@sentry/integrations": "7.49.0",
+        "**/@sentry/node": "7.49.0",
+        "**/@sentry/react": "7.49.0",
+        "**/@sentry/react-native": "5.4.0",
+        "**/@sentry/types": "7.49.0",
+        "**/react": "^18",
+        "**/react-dom": "^18",
+        "**/typescript": "^5.1.3"
     }
 }

@@ -1,4 +1,4 @@
-FROM docker.io/node:lts-alpine AS builder
+FROM docker.io/node:20-alpine AS builder
 
 WORKDIR /app
 
