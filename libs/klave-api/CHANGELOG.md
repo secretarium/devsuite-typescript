@@ -1,4 +1,19 @@
 # Changelog
+## [0.2.0](///compare/klave-api@0.1.0...klave-api@0.2.0) (2023-06-06)
+
+### Dependency Updates
+
+* `klave-db` updated to version `0.1.0`
+
+### Features
+
+* **db,api,klave:** Add support for Webauthn enrollement 85aabab
+
+
+### Bug Fixes
+
+* **api,hubber:** Ensure parsing of RPID from origin in env 792cc48
+
 ## 0.1.0 (2023-06-01)
 
 ### Dependency Updates
