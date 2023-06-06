@@ -1,5 +1,5 @@
 {
-    "name": "secretarium",
+    "name": "@secretarium/cli",
     "version": "0.0.1",
     "type": "commonjs",
     "license": "MIT"
