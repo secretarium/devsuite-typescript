@@ -128,7 +128,7 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
             });
 
             (new Promise((__unusedResolve, reject) => {
-                setTimeout(reject, 30000);
+                setTimeout(reject, 60000);
                 return prisma.deployment.update({
                     where: {
                         id: deployment.id
@@ -138,6 +138,9 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                     }
                 });
             })).catch(async () => {
+                logger.debug(`Deployment ${deployment.id} timed out`, {
+                    parent: 'dpl'
+                });
                 const currentState = await prisma.deployment.findUnique({
                     where: {
                         id: deployment.id
@@ -152,7 +155,10 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                             status: 'errored'
                         }
                     }).catch((reason) => {
-                        logger.error('Error while updating deployment status to error', reason);
+                        logger.debug('Error while updating deployment status to error', {
+                            parent: 'dpl',
+                            reason
+                        });
                     });
             });
 
@@ -179,6 +185,9 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
 
                 // TODO - Populate reasons why deployment failed
                 if (buildResult.success === false) {
+                    logger.debug('Compilation failed', {
+                        parent: 'dpl'
+                    });
                     await prisma.deployment.update({
                         where: {
                             id: deployment.id
@@ -205,6 +214,7 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                     }
                 });
 
+                console.log('dts', dts);
                 if (dts) {
                     const matches = Array.from(dts.matchAll(/^export declare function (.*)\(/gm));
                     const validMatches = matches
@@ -222,8 +232,12 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                 }
 
                 // TODO - Populate reasons we fail on empty wasm
-                if (wasm.length === 0)
+                if (wasm.length === 0) {
+                    logger.debug('Empty wasm', {
+                        parent: 'dpl'
+                    });
                     return;
+                }
 
                 await scp.newTx('wasm-manager', 'register_smart_contract', `klave-deployment-${deployment.id}`, {
                     contract: {
@@ -241,12 +255,12 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                         }
                     });
                 }).onError((error) => {
-                    console.error('Secretarium failed', error);
+                    logger.debug('Error while registering smart contract: ' + error);
                     // Timeout will eventually error this
                 }).send();
 
             } catch (error) {
-                console.error(error);
+                logger.debug('General failure: ' + error);
                 // Timeout will eventually error this
             }
         };

@@ -138,6 +138,7 @@
         "sentry-expo": "6.1.1",
         "serialize-error": "8.1.0",
         "sigstore": "1.5.2",
+        "strip-ansi": "7.1.0",
         "styled-components": "6.0.0-rc.1",
         "superjson": "1.12.3",
         "sysend": "1.16.2",

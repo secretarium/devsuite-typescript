@@ -64,7 +64,9 @@ export class BuildMiniVM {
 
         try {
             if (!normalisedPath || !normalisedPath.includes('node_modules')) {
-                logger.debug(`Getting GitHub content for '${normalisedPath}'`);
+                logger.debug(`Getting GitHub content for '${normalisedPath}'`, {
+                    parent: 'bmv'
+                });
                 return await octokit.repos.getContent({
                     owner: repo.owner,
                     repo: repo.name,
@@ -82,7 +84,9 @@ export class BuildMiniVM {
         try {
             const components = normalisedPath?.split('node_modules') ?? [];
             const lastComponent = components.pop();
-            logger.debug(`Getting unpkg content for '${lastComponent}'`);
+            logger.debug(`Getting unpkg content for '${lastComponent}'`, {
+                parent: 'bmv'
+            });
             if (lastComponent?.startsWith('/')) {
                 const reponse = await fetch('https://www.unpkg.com' + lastComponent, {
                     agent: this.proxyAgent
@@ -113,7 +117,9 @@ export class BuildMiniVM {
             } else
                 return content;
         } catch (e) {
-            logger.error(`Error getting root content: ${e}`);
+            logger.debug(`Error getting root content: ${e}`, {
+                parent: 'bmv'
+            });
             return { data: null };
         }
     }
@@ -158,6 +164,9 @@ export class BuildMiniVM {
                     } else if (message.type === 'diagnostic') {
                         this.eventHanlders['diagnostic']?.forEach(handler => handler(message));
                     } else if (message.type === 'errored') {
+                        logger.debug('ASC Errored: ' + message.error, {
+                            parent: 'bmv'
+                        });
                         this.eventHanlders['error']?.forEach(handler => handler(message));
                         compiler.terminate().finally(() => {
                             resolve({
@@ -197,7 +206,9 @@ export class BuildMiniVM {
                 });
             });
         } catch (error) {
-            console.error('BuildMiniVm:build', serializeError(error));
+            logger.debug('General failure: ' + error, {
+                parent: 'bmv'
+            });
             return {
                 success: false,
                 error: serializeError(error),

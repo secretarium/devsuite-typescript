@@ -1,4 +1,5 @@
 import * as winston from 'winston';
+import { SentryBreadcrumb } from './winstonSentryBreadcrumTransport';
 
 // Define your severity levels.
 // With them, You can create log files,
@@ -43,7 +44,11 @@ const format = winston.format.combine(
     // Tell Winston that the logs must be colored
     winston.format.colorize({ all: true }),
     // Define the format of the message showing the timestamp, the level and the message
-    winston.format.printf((info) => `${info['timestamp']} ${process.env['NX_TASK_TARGET_PROJECT']} > ${info.level}: ${info.message}`)
+    winston.format.printf((info) => {
+        const deepLevel = info[Symbol.for('level')];
+        const meta = info[Symbol.for('splat')]?.[0] ?? {};
+        return `${info['timestamp']} ${process.env['NX_TASK_TARGET_PROJECT']} > ${meta.parent ? `${info.level.replace(deepLevel, `${deepLevel}(${meta.parent})`)}` : info.level}: ${info.message}`;
+    })
 );
 
 // Define which transports the logger must use to print out messages.
@@ -51,6 +56,8 @@ const format = winston.format.combine(
 const transports = [
     // Allow the use the console to print the messages
     new winston.transports.Console(),
+    // Allow export of Sentry Breadcrumbs
+    new SentryBreadcrumb(),
     // Allow to print all the error level messages inside the error.log file
     new winston.transports.File({
         filename: 'logs/error.log',
@@ -61,11 +68,12 @@ const transports = [
     new winston.transports.File({ filename: 'logs/all.log' })
 ];
 
-// Create the logger instance that has to be exported
-// and used to log messages.
-export const logger = winston.createLogger({
+const winstonInstance = winston.createLogger({
     level: level(),
     levels,
     format,
     transports
 });
+
+
+export const logger = winstonInstance;
