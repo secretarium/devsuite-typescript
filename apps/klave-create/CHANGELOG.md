@@ -1,4 +1,9 @@
 # Changelog
+## [0.3.15](https://github.com/secretarium/devsuite-typescript/compare/klave-create@0.3.14...klave-create@0.3.15) (2023-06-06)
+
+### Dependency Updates
+
+* `klave-sdk` updated to version `0.1.0`
 ## [0.3.14](///compare/klave-create@0.3.13...klave-create@0.3.14) (2023-06-02)
 
 ### Dependency Updates
