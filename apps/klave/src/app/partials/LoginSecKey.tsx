@@ -243,8 +243,8 @@ export const LoginSecKey: FC = () => {
                 <input key='emailField' value={email} onInput={onChangeEmail} alt='email' placeholder='Email address' type='email' className='text-center' />
                 <br />
                 <br />
-                <button disabled={isLoading} onClick={handleLoginSubmit} onSubmit={handleLoginSubmit} type='submit'>{isLoading ? <UilSpinner className='inline-block animate-spin' /> : isWebauthAvailable ? 'Log in with secure key' : 'Log in with magic code'}</button><br />
-                <button disabled={isLoading} onClick={handleLoginCodeSubmit} className='bg-transparent border-0 shadow-none font-normal text-sm text-slate-800 hover:text-blue-600 hover:cursor-pointer'>Use magic code instead</button>
+                <button disabled={isLoading} onClick={handleLoginSubmit} onSubmit={handleLoginSubmit} type='submit'>{isLoading ? <UilSpinner className='inline-block animate-spin' /> : isWebauthAvailable ? 'Log in with secure key' : 'Log in with email code'}</button><br />
+                <button disabled={isLoading} onClick={handleLoginCodeSubmit} className='bg-transparent border-0 shadow-none font-normal text-sm text-slate-800 hover:text-blue-600 hover:cursor-pointer'>Use email code instead</button>
             </> : screen === 'code' ? <>
                 <input key='codeField' value={code} onInput={onChangeCode} alt='code' placeholder='Code' type='text' className='text-center' />
                 <br />
