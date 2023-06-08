@@ -22,6 +22,11 @@
                     "libs/klave-sdk/sdk.json",
                     "libs/klave-sdk/*.md"
                 ]
+            },
+            "configurations": {
+                "development": {
+                    "watch": true
+                }
             }
         },
         "lint": {
