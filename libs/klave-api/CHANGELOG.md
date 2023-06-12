@@ -1,4 +1,20 @@
 # Changelog
+## [0.3.0](///compare/klave-api@0.2.0...klave-api@0.3.0) (2023-06-12)
+
+### Dependency Updates
+
+* `klave-db` updated to version `0.1.0`
+* `providers` updated to version `0.1.0`
+
+### Features
+
+* **providers,api:** Enable Sentry breadcrumb on logging with parent tracing f535496
+
+
+### Bug Fixes
+
+* **api,klave:** Ensure WebAuthn enrollement is triggered by default 2009c38
+
 ## [0.2.0](///compare/klave-api@0.1.0...klave-api@0.2.0) (2023-06-06)
 
 ### Dependency Updates
