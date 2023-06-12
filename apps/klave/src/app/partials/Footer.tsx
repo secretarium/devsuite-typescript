@@ -25,7 +25,7 @@ const Footer: FC = () => {
                     </div>
 
                     {/* 2nd block */}
-                    <div className="sm:col-span-5 md:col-span-4 lg:col-span-3">
+                    <div className="hidden sm:col-span-5 md:col-span-4 lg:col-span-3">
                         <h6 className="text-gray-800 font-medium mb-2">Products</h6>
                         <ul className="text-sm">
                             <li className="mb-2">
@@ -48,14 +48,14 @@ const Footer: FC = () => {
                         <h6 className="text-gray-800 font-medium mb-2">Resources</h6>
                         <ul className="text-sm">
                             <li className="mb-2">
-                                <Link to="#" className="text-gray-600 hover:text-gray-900 transition duration-150 ease-in-out">Documentation</Link>
+                                <a href="https://klave.com/docs" className="text-gray-600 hover:text-gray-900 transition duration-150 ease-in-out">Documentation</a>
                             </li>
-                            <li className="mb-2">
+                            {/* <li className="mb-2">
                                 <Link to="#" className="text-gray-600 hover:text-gray-900 transition duration-150 ease-in-out">Tutorials & Guides</Link>
                             </li>
                             <li className="mb-2">
                                 <Link to="#" className="text-gray-600 hover:text-gray-900 transition duration-150 ease-in-out">Blog</Link>
-                            </li>
+                            </li> */}
                         </ul>
                     </div>
 
@@ -64,9 +64,9 @@ const Footer: FC = () => {
                         <h6 className="text-gray-800 font-medium mb-2">Company</h6>
                         <ul className="text-sm">
                             <li className="mb-2">
-                                <Link to="#" className="text-gray-600 hover:text-gray-900 transition duration-150 ease-in-out">Home</Link>
+                                <a href="https://secretarium.com" className="text-gray-600 hover:text-gray-900 transition duration-150 ease-in-out">Home</a>
                             </li>
-                            <li className="mb-2">
+                            {/* <li className="mb-2">
                                 <Link to="#" className="text-gray-600 hover:text-gray-900 transition duration-150 ease-in-out">About us</Link>
                             </li>
                             <li className="mb-2">
@@ -77,7 +77,7 @@ const Footer: FC = () => {
                             </li>
                             <li className="mb-2">
                                 <Link to="#" className="text-gray-600 hover:text-gray-900 transition duration-150 ease-in-out">Privacy Policy</Link>
-                            </li>
+                            </li> */}
                         </ul>
                     </div>
 
@@ -136,7 +136,8 @@ const Footer: FC = () => {
 
                     {/* Copyrights note */}
                     <div className="text-sm text-gray-600 mr-4">
-                        <Link to="#" className="text-gray-600 hover:text-gray-900 hover:underline transition duration-150 ease-in-out">Terms</Link> · <Link to="#" className="text-gray-600 hover:text-gray-900 hover:underline transition duration-150 ease-in-out">Privacy Policy</Link> · <a className="text-blue-600 hover:underline pr-0" href="https://secretarium.com/">Secretarium</a> © {new Date().getFullYear()} All rights reserved
+                        {/* <Link to="#" className="text-gray-600 hover:text-gray-900 hover:underline transition duration-150 ease-in-out">Terms</Link> · <Link to="#" className="text-gray-600 hover:text-gray-900 hover:underline transition duration-150 ease-in-out">Privacy Policy</Link> ·  */}
+                        <a className="text-blue-600 hover:underline pr-0" href="https://secretarium.com/">Secretarium</a> © {new Date().getFullYear()} All rights reserved
                     </div>
 
                 </div>

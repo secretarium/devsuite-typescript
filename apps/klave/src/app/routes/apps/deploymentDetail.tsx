@@ -96,7 +96,7 @@ export const AppDeploymentDetail: FC = () => {
                     <pre className='overflow-auto whitespace-pre-wrap break-words w-full max-w-full bg-slate-100 p-3'>
                         SHA256:{WASMFingerprint}
                     </pre>
-                    <pre className='overflow-auto whitespace-pre-wrap break-words w-full max-w-full bg-slate-100 p-3 mt-2'>
+                    <pre className='overflow-auto whitespace-pre-wrap break-words w-full max-w-full max-h-[50vh] bg-slate-100 p-3 mt-2'>
                         {deployment.buildOutputWASM}
                     </pre>
                 </div>
