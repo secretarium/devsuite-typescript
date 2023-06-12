@@ -97,7 +97,7 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
 
         const launchDeploy = async () => {
 
-            const branchName = context.commit.ref.split('/').pop();
+            const branchName = context.commit.ref?.includes('/') ? context.commit.ref.split('/').pop() : 'master';
             const buildId = context.commit.after.substring(0, 8);
             const domains = await prisma.domain.findMany({
                 where: {
