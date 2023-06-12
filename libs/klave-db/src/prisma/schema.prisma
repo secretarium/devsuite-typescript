@@ -148,6 +148,8 @@ enum DeploymentLifespan {
 
 model Deployment {
     id                  String             @id @default(uuid()) @map("_id")
+    fqdn                String
+    set                 String
     branch              String?
     version             String?
     build               String?

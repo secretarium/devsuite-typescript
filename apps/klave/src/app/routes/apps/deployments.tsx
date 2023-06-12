@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, Fragment, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
 import { UilSpinner, UilTrash } from '@iconscout/react-unicons';
@@ -103,6 +103,31 @@ export const Deployments: FC = () => {
         refetchInterval: 5000
     });
 
+    // const deployments = useMemo(() => {
+    //     return deploymentList?.sort((a, b) => a.createdAt > b.createdAt ? -1 : 1) ?? [];
+    // }, [deploymentList]);
+
+    const deploymentSets = useMemo(() => {
+
+        const sets = deploymentList?.reduce((acc, deployment) => {
+            const set = acc[deployment.set];
+            if (set) {
+                set.deployments.push(deployment);
+                if (set.earliestCreation.getTime() < deployment.createdAt.getTime())
+                    set.earliestCreation = deployment.createdAt;
+            }
+            else
+                acc[deployment.set] = {
+                    deployments: [deployment],
+                    earliestCreation: deployment.createdAt
+                };
+            return acc;
+        }, {} as Record<string, { deployments: Deployment[], earliestCreation: Date }>);
+
+        return Object.values(sets ?? {}).sort((a, b) => a.earliestCreation > b.earliestCreation ? -1 : 1);
+
+    }, [deploymentList]);
+
     if (isLoadingDeployments || !deploymentList)
         return <>
             We are fetching data about your deployments.<br />
@@ -139,75 +164,162 @@ export const Deployments: FC = () => {
                     <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800 hidden md:table-cell">Dates</th>
                     {/* <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800 hidden md:table-cell">Created</th> */}
                     {/* <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">Expires</th> */}
+                    {/* <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800 sm:text-gray-400 text-white text-right">Action</th> */}
+                </tr>
+            </thead>
+            <tbody className="text-gray-600 dark:text-gray-100">
+                {deploymentSets.map(({ deployments, earliestCreation: setCreation }) => {
+                    const setId = deployments[0]?.set;
+                    const setBuild = deployments[0]?.build;
+                    const setBranch = deployments[0]?.branch;
+                    const setVersion = deployments[0]?.version;
+                    const hasDeploying = deployments.some(({ status }) => ['created', 'deploying', 'terminating'].includes(status));
+                    return <tr key={setId} className={hasDeploying ? 'stripe-progress' : ''}>
+                        <td className={'sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 grid'}>
+                            {deployments.map(deployment => {
+                                const { id, fqdn, life, status } = deployment;
+                                return <div key={id} onClick={() => navigate(`./${id}`)} className='hover:bg-slate-50 hover:cursor-pointer mb-3'>
+                                    <span className='font-mono inline-block rounded dark:text-slate-400 dark:bg-slate-800 text-slate-900 bg-slate-100 px-2 py-1 mb-1 whitespace-nowrap'>{fqdn}</span><br />
+                                    <span className={`rounded inline-block text-xs px-1 py-0 mr-2 text-white ${life === 'long' ? 'bg-green-600' : 'bg-slate-500'}`}>{life === 'long' ? 'Production' : 'Preview'}</span>
+                                    <span className={`rounded inline-block text-xs px-1 py-0 text-white ${status === 'errored' ? 'bg-red-700' : status === 'deployed' ? 'bg-blue-500' : 'bg-stone-300'}`}>{status}</span>
+                                    {life === 'short' ? <span className={'inline-block text-xs text-slate-500 px-2'}>Expires {formatTimeAgo(deployment.expiresOn)}</span> : <span></span>}
+                                </div>;
+                            })
+                            }
+                        </td>
+                        <td className="sm:p-3 py-2 px-1 align-top border-b border-gray-200 dark:border-gray-800 md:table-cell hidden">
+                            <div className="flex items-center">
+                                <div className="sm:flex hidden flex-col">
+                                    <span className='block'>{setVersion ?? '-'}</span>
+                                    {setBuild ? <span className={'block text-xs text-slate-500'}>{setBuild}</span> : null}
+                                </div>
+                            </div>
+                        </td>
+                        <td className="sm:p-3 py-2 px-1 align-top border-b border-gray-200 dark:border-gray-800 md:table-cell hidden">
+                            <div className="flex items-center">
+                                <div className="sm:flex hidden flex-col">
+                                    <span className='font-mono inline-block rounded dark:text-slate-400 dark:bg-slate-800 text-slate-900 bg-slate-100 px-2 py-1 mb-1 whitespace-nowrap' title={!setBranch ? undefined : setBranch}>{setBranch?.replace('refs/heads/', '')}</span><br />
+                                </div>
+                            </div>
+                        </td>
+                        <td className="sm:p-3 py-2 px-1 align-top border-b border-gray-200 dark:border-gray-800 md:table-cell hidden">
+                            <div className="flex items-center">
+                                <div className="sm:flex hidden flex-col">
+                                    <span className='block' title={setCreation.toDateString()}>{formatTimeAgo(setCreation)}</span>
+                                    {/* {life === 'short' ? <span className={'block text-xs text-slate-500'}>Expires {formatTimeAgo(deployment.expiresOn)}</span> : <span></span>} */}
+                                </div>
+                            </div>
+                        </td>
+                        {/*
+                                <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 md:table-cell hidden">
+                                    <div className="flex items-center">
+                                        <div className="sm:flex hidden flex-col" title={createdAt.toDateString()}>
+                                            {formatTimeAgo(createdAt)}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
+                                    <div className="flex items-center">
+                                        <div className="sm:flex hidden flex-col" title={createdAt.toDateString()}>
+                                            {formatTimeAgo(new Date(createdAt.getTime() + 1000 * 60 * 60 * 24 * 15))}
+                                        </div>
+                                    </div>
+                                </td>
+                                */}
+                    </tr>;
+                })}
+            </tbody>
+        </table >
+        <table className="hidden w-full text-left">
+            <thead>
+                <tr className="text-gray-400">
+                    {/* <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800 hidden md:table-cell"></th> */}
+                    <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">Address</th>
+                    {/* <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">Type</th> */}
+                    {/* <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">Status</th> */}
+                    {/* <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">Version</th> */}
+                    <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">Version</th>
+                    <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">Branch</th>
+                    <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800 hidden md:table-cell">Dates</th>
+                    {/* <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800 hidden md:table-cell">Created</th> */}
+                    {/* <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">Expires</th> */}
                     <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800 sm:text-gray-400 text-white text-right">Action</th>
                 </tr>
             </thead>
             <tbody className="text-gray-600 dark:text-gray-100">
-                {deploymentList.map(deployment => {
-                    const { id, createdAt, life, status, version, build, branch } = deployment;
-                    return <tr key={id} className={['created', 'deploying', 'terminating'].includes(status) ? 'stripe-progress' : 'hover:bg-slate-50 hover:cursor-pointer'} onClick={() => navigate(`./${id}`)}>
-                        {/* <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 md:table-cell hidden">
-                            <div className="flex items-center">
-                                <UilServerNetworkAlt className='inline-block h-4' />
-                            </div>
-                        </td> */}
-                        <td className={'sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800'}>
-                            <span className='font-mono inline-block rounded dark:text-slate-400 dark:bg-slate-800 text-slate-900 bg-slate-100 px-2 py-1 mb-1 whitespace-nowrap'>{id.split('-').pop()}.sta.klave.network</span><br />
-                            <span className={`rounded inline-block text-xs px-1 py-0 mr-2 text-white ${life === 'long' ? 'bg-green-600' : 'bg-slate-500'}`}>{life === 'long' ? 'Production' : 'Preview'}</span>
-                            <span className={`rounded inline-block text-xs px-1 py-0 text-white ${status === 'errored' ? 'bg-red-700' : status === 'deployed' ? 'bg-blue-500' : 'bg-stone-300'}`}>{status}</span>
-                        </td>
-                        {/* <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">{life === 'long' ? 'prod' : 'dev'}</td> */}
-                        {/* <td className={'sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800'}>{status}</td> */}
-                        {/* <td className={'sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800'}><span className='font-mono rounded bg-slate-100 px-2 py-1 whitespace-nowrap'>1.0.3</span></td> */}
-                        <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 md:table-cell hidden">
-                            <div className="flex items-center">
-                                <div className="sm:flex hidden flex-col">
-                                    <span className='block'>{version ?? '-'}</span>
-                                    {build ? <span className={'block text-xs text-slate-500'}>{build}</span> : null}
-                                </div>
-                            </div>
-                        </td>
-                        <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 md:table-cell hidden">
-                            <div className="flex items-center">
-                                <div className="sm:flex hidden flex-col">
-                                    <span className='font-mono inline-block rounded dark:text-slate-400 dark:bg-slate-800 text-slate-900 bg-slate-100 px-2 py-1 mb-1 whitespace-nowrap' title={!branch ? undefined : branch}>{branch?.replace('refs/heads/', '')}</span><br />
-                                </div>
-                            </div>
-                        </td>
-                        <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 md:table-cell hidden">
-                            <div className="flex items-center">
-                                <div className="sm:flex hidden flex-col">
-                                    <span className='block' title={createdAt.toDateString()}>{formatTimeAgo(createdAt)}</span>
-                                    {life === 'short' ? <span className={'block text-xs text-slate-500'}>Expires {formatTimeAgo(deployment.expiresOn)}</span> : <span></span>}
-                                </div>
-                            </div>
-                        </td>
-                        {/* <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 md:table-cell hidden">
-                            <div className="flex items-center">
-                                <div className="sm:flex hidden flex-col" title={createdAt.toDateString()}>
-                                    {formatTimeAgo(createdAt)}
-                                </div>
-                            </div>
-                        </td>
-                        <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                            <div className="flex items-center">
-                                <div className="sm:flex hidden flex-col" title={createdAt.toDateString()}>
-                                    {formatTimeAgo(new Date(createdAt.getTime() + 1000 * 60 * 60 * 24 * 15))}
-                                </div>
-                            </div>
-                        </td> */}
-                        <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 text-right">
-                            <div className='flex flex-row flex-nowrap justify-end'>
+                {deploymentSets.map(({ deployments }) => {
+                    return <Fragment key={deployments[0]?.set}>
+                        {deployments.map(deployment => {
+                            const { id, fqdn, createdAt, life, status, version, build, branch } = deployment;
+                            return <tr key={id} className={['created', 'deploying', 'terminating'].includes(status) ? 'stripe-progress' : 'hover:bg-slate-50 hover:cursor-pointer'} onClick={() => navigate(`./${id}`)}>
                                 {/*
-                                    {status === 'deployed' && life !== 'long' ? <>
-                                        <DeploymentPromotion deployment={deployment} />
-                                        &nbsp;&nbsp;
-                                    </> : null}
-                                 */}
-                                <DeploymentDeletion deployment={deployment} />
-                            </div>
-                        </td>
-                    </tr>;
+                                <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 md:table-cell hidden">
+                                    <div className="flex items-center">
+                                        <UilServerNetworkAlt className='inline-block h-4' />
+                                    </div>
+                                </td>
+                                */}
+                                <td className={'sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800'}>
+                                    <span className='font-mono inline-block rounded dark:text-slate-400 dark:bg-slate-800 text-slate-900 bg-slate-100 px-2 py-1 mb-1 whitespace-nowrap'>{fqdn}</span><br />
+                                    <span className={`rounded inline-block text-xs px-1 py-0 mr-2 text-white ${life === 'long' ? 'bg-green-600' : 'bg-slate-500'}`}>{life === 'long' ? 'Production' : 'Preview'}</span>
+                                    <span className={`rounded inline-block text-xs px-1 py-0 text-white ${status === 'errored' ? 'bg-red-700' : status === 'deployed' ? 'bg-blue-500' : 'bg-stone-300'}`}>{status}</span>
+                                </td>
+                                {/* <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">{life === 'long' ? 'prod' : 'dev'}</td> */}
+                                {/* <td className={'sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800'}>{status}</td> */}
+                                {/* <td className={'sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800'}><span className='font-mono rounded bg-slate-100 px-2 py-1 whitespace-nowrap'>1.0.3</span></td> */}
+                                <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 md:table-cell hidden">
+                                    <div className="flex items-center">
+                                        <div className="sm:flex hidden flex-col">
+                                            <span className='block'>{version ?? '-'}</span>
+                                            {build ? <span className={'block text-xs text-slate-500'}>{build}</span> : null}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 md:table-cell hidden">
+                                    <div className="flex items-center">
+                                        <div className="sm:flex hidden flex-col">
+                                            <span className='font-mono inline-block rounded dark:text-slate-400 dark:bg-slate-800 text-slate-900 bg-slate-100 px-2 py-1 mb-1 whitespace-nowrap' title={!branch ? undefined : branch}>{branch?.replace('refs/heads/', '')}</span><br />
+                                        </div>
+                                    </div>
+                                </td>
+                                <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 md:table-cell hidden">
+                                    <div className="flex items-center">
+                                        <div className="sm:flex hidden flex-col">
+                                            <span className='block' title={createdAt.toDateString()}>{formatTimeAgo(createdAt)}</span>
+                                            {life === 'short' ? <span className={'block text-xs text-slate-500'}>Expires {formatTimeAgo(deployment.expiresOn)}</span> : <span></span>}
+                                        </div>
+                                    </div>
+                                </td>
+                                {/*
+                                <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 md:table-cell hidden">
+                                    <div className="flex items-center">
+                                        <div className="sm:flex hidden flex-col" title={createdAt.toDateString()}>
+                                            {formatTimeAgo(createdAt)}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
+                                    <div className="flex items-center">
+                                        <div className="sm:flex hidden flex-col" title={createdAt.toDateString()}>
+                                            {formatTimeAgo(new Date(createdAt.getTime() + 1000 * 60 * 60 * 24 * 15))}
+                                        </div>
+                                    </div>
+                                </td>
+                                */}
+                                <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 text-right">
+                                    <div className='flex flex-row flex-nowrap justify-end'>
+                                        {/*
+                                        {status === 'deployed' && life !== 'long' ? <>
+                                            <DeploymentPromotion deployment={deployment} />
+                                            &nbsp;&nbsp;
+                                        </> : null}
+                                        */}
+                                        <DeploymentDeletion deployment={deployment} />
+                                    </div>
+                                </td>
+                            </tr>;
+                        })}
+                    </Fragment>;
                 })}
             </tbody>
         </table >

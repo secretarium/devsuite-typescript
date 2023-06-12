@@ -1,4 +1,5 @@
 import { DeploymentPushPayload } from '../types';
+import { v4 as uuid } from 'uuid';
 import { scp, logger } from '@klave/providers';
 import { prisma } from '@klave/db';
 // import type { KlaveRcConfiguration } from '@klave/sdk';
@@ -93,176 +94,239 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                 }
             }
         });
+
         const launchDeploy = async () => {
 
-            const deployment = await prisma.deployment.create({
-                data: {
-                    expiresOn: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14),
-                    version: availableApplicationsConfig[application.name].version,
-                    build: context.commit.after.substring(0, 8),
-                    branch: context.commit.ref,
-                    locations: ['FR'],
-                    application: {
-                        connect: { id: application.id }
-                    }
-                    // TODO: Make sure we get the push event
-                    // pushEvent
+            const branchName = context.commit.ref.split('/').pop();
+            const buildId = context.commit.after.substring(0, 8);
+            const domains = await prisma.domain.findMany({
+                where: {
+                    applicationId: application.id,
+                    verified: true
                 }
             });
 
-            await prisma.activityLog.create({
-                data: {
-                    class: 'deployment',
-                    application: {
-                        connect: {
-                            id: application.id
-                        }
-                    },
-                    context: {
-                        type: 'start',
-                        payload: {
-                            deploymentId: deployment.id
-                        }
-                    }
-                }
-            });
+            const deploymentSet = uuid();
+            const targets = domains
+                .map(domain => `${branchName}.${domain.fqdn}`)
+                .concat(`${branchName}.${application.id.split('-').shift()}.sta.klave.network`, `${buildId}.sta.klave.network`);
 
-            (new Promise((__unusedResolve, reject) => {
-                setTimeout(reject, 60000);
-                return prisma.deployment.update({
-                    where: {
-                        id: deployment.id
-                    },
+            targets.forEach(async target => {
+
+                const deployment = await prisma.deployment.create({
                     data: {
-                        status: 'deploying'
+                        fqdn: target,
+                        expiresOn: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14),
+                        version: availableApplicationsConfig[application.name].version,
+                        set: deploymentSet,
+                        build: context.commit.after.substring(0, 8),
+                        branch: branchName,
+                        locations: ['FR'],
+                        application: {
+                            connect: { id: application.id }
+                        }
+                        // TODO: Make sure we get the push event
+                        // pushEvent
                     }
                 });
-            })).catch(async () => {
-                logger.debug(`Deployment ${deployment.id} timed out`, {
-                    parent: 'dpl'
-                });
-                const currentState = await prisma.deployment.findUnique({
-                    where: {
-                        id: deployment.id
+
+                await prisma.activityLog.create({
+                    data: {
+                        class: 'deployment',
+                        application: {
+                            connect: {
+                                id: application.id
+                            }
+                        },
+                        context: {
+                            type: 'start',
+                            payload: {
+                                deploymentId: deployment.id
+                            }
+                        }
                     }
                 });
-                if (currentState?.status !== 'deployed')
-                    await prisma.deployment.update({
+
+                (new Promise((__unusedResolve, reject) => {
+                    setTimeout(reject, 60000);
+                    return prisma.deployment.update({
                         where: {
                             id: deployment.id
                         },
                         data: {
-                            status: 'errored'
+                            status: 'deploying'
                         }
-                    }).catch((reason) => {
-                        logger.debug('Error while updating deployment status to error', {
-                            parent: 'dpl',
-                            reason
+                    });
+                })).catch(async () => {
+                    const currentState = await prisma.deployment.findUnique({
+                        where: {
+                            id: deployment.id
+                        }
+                    });
+                    if (currentState?.status !== 'deployed') {
+                        logger.debug(`Deployment ${deployment.id} timed out`, {
+                            parent: 'dpl'
                         });
-                    });
-            });
-
-            try {
-                const buildVm = new BuildMiniVM({
-                    type: 'github',
-                    context: deploymentContext,
-                    repo,
-                    application: availableApplicationsConfig[application.name]
-                });
-                const buildResult = await buildVm.build();
-
-                const { stdout, stderr } = buildResult;
-
-                await prisma.deployment.update({
-                    where: {
-                        id: deployment.id
-                    },
-                    data: {
-                        buildOutputStdOut: stdout,
-                        buildOutputStdErr: stderr
+                        await prisma.deployment.update({
+                            where: {
+                                id: deployment.id
+                            },
+                            data: {
+                                status: 'errored'
+                            }
+                        }).catch((reason) => {
+                            logger.debug('Error while updating deployment status to error', {
+                                parent: 'dpl',
+                                reason
+                            });
+                        });
                     }
                 });
 
-                // TODO - Populate reasons why deployment failed
-                if (buildResult.success === false) {
-                    logger.debug('Compilation failed', {
-                        parent: 'dpl'
+                try {
+                    const buildVm = new BuildMiniVM({
+                        type: 'github',
+                        context: deploymentContext,
+                        repo,
+                        application: availableApplicationsConfig[application.name]
                     });
+                    const buildResult = await buildVm.build();
+
+                    const { stdout, stderr } = buildResult;
+
                     await prisma.deployment.update({
                         where: {
                             id: deployment.id
                         },
                         data: {
-                            status: 'errored',
-                            buildOutputErrorObj: buildResult.error as any
+                            buildOutputStdOut: stdout,
+                            buildOutputStdErr: stderr
                         }
                     });
-                    return;
-                }
 
-                const { result: { wasm, wat, dts } } = buildResult;
-
-                await prisma.deployment.update({
-                    where: {
-                        id: deployment.id
-                    },
-                    data: {
-                        status: 'compiled',
-                        buildOutputWASM: Utils.toBase64(wasm),
-                        buildOutputWAT: wat,
-                        buildOutputDTS: dts
+                    // TODO - Populate reasons why deployment failed
+                    if (buildResult.success === false) {
+                        logger.debug('Compilation failed', {
+                            parent: 'dpl'
+                        });
+                        await prisma.deployment.update({
+                            where: {
+                                id: deployment.id
+                            },
+                            data: {
+                                status: 'errored',
+                                buildOutputErrorObj: buildResult.error as any
+                            }
+                        });
+                        return;
                     }
-                });
 
-                console.log('dts', dts);
-                if (dts) {
-                    const matches = Array.from(dts.matchAll(/^export declare function (.*)\(/gm));
-                    const validMatches = matches
-                        .map(match => match[1])
-                        .filter(Boolean)
-                        .filter(match => !['__new', '__pin', '__unpin', '__collect', 'register_routes'].includes(match));
+                    const { result: { wasm, wat, dts } } = buildResult;
+
+                    // TODO - Populate reasons we fail on empty wasm
+                    if (wasm.length === 0) {
+                        logger.debug('Empty wasm', {
+                            parent: 'dpl'
+                        });
+                        await prisma.deployment.update({
+                            where: {
+                                id: deployment.id
+                            },
+                            data: {
+                                status: 'errored',
+                                buildOutputErrorObj: { error: 'Empty wasm' } as any
+                            }
+                        });
+                        return;
+                    }
+
                     await prisma.deployment.update({
                         where: {
                             id: deployment.id
                         },
                         data: {
-                            contractFunctions: validMatches
+                            status: 'compiled',
+                            buildOutputWASM: Utils.toBase64(wasm),
+                            buildOutputWAT: wat,
+                            buildOutputDTS: dts
                         }
                     });
-                }
 
-                // TODO - Populate reasons we fail on empty wasm
-                if (wasm.length === 0) {
-                    logger.debug('Empty wasm', {
-                        parent: 'dpl'
-                    });
-                    return;
-                }
-
-                await scp.newTx('wasm-manager', 'register_smart_contract', `klave-deployment-${deployment.id}`, {
-                    contract: {
-                        name: `${deployment.id.split('-').pop()}.sta.klave.network`,
-                        wasm_bytes: [],
-                        wasm_bytes_b64: Utils.toBase64(wasm)
+                    if (dts) {
+                        const matches = Array.from(dts.matchAll(/^export declare function (.*)\(/gm));
+                        const validMatches = matches
+                            .map(match => match[1])
+                            .filter(Boolean)
+                            .filter(match => !['__new', '__pin', '__unpin', '__collect', 'register_routes'].includes(match));
+                        await prisma.deployment.update({
+                            where: {
+                                id: deployment.id
+                            },
+                            data: {
+                                contractFunctions: validMatches
+                            }
+                        });
                     }
-                }).onExecuted(async () => {
-                    await prisma.deployment.update({
+
+                    const shouldUpdate = await prisma.deployment.findFirst({
                         where: {
-                            id: deployment.id
-                        },
-                        data: {
-                            status: 'deployed'
+                            fqdn: target,
+                            status: {
+                                in: ['deployed', 'deploying']
+                            }
                         }
                     });
-                }).onError((error) => {
-                    logger.debug('Error while registering smart contract: ' + error);
+
+                    await scp.newTx('wasm-manager', shouldUpdate !== null ? 'update_smart_contract' : 'register_smart_contract', `klave-deployment-${deployment.id}`, {
+                        contract: {
+                            name: target,
+                            own_enclave: false,
+                            wasm_bytes: [],
+                            wasm_bytes_b64: Utils.toBase64(wasm)
+                        }
+                    }).onExecuted(async () => {
+                        await prisma.deployment.update({
+                            where: {
+                                id: deployment.id
+                            },
+                            data: {
+                                status: 'deployed'
+                            }
+                        });
+                    }).onError(async (error) => {
+                        logger.debug('Error while registering smart contract: ' + error);
+                        if (`${error}`.includes('use register_smart_contract')) {
+                            // TODO - Remove this when we have a proper way to update smart contracts list with `list_smart_contracts`
+                            logger.debug('Retrying with register_smart_contract...');
+                            await scp.newTx('wasm-manager', 'register_smart_contract', `klave-deployment-${deployment.id}`, {
+                                contract: {
+                                    name: target,
+                                    own_enclave: false,
+                                    wasm_bytes: [],
+                                    wasm_bytes_b64: Utils.toBase64(wasm)
+                                }
+                            }).onExecuted(async () => {
+                                await prisma.deployment.update({
+                                    where: {
+                                        id: deployment.id
+                                    },
+                                    data: {
+                                        status: 'deployed'
+                                    }
+                                });
+                            }).onError((error) => {
+                                logger.debug('Error while registering smart contract: ' + error);
+                                // Timeout will eventually error this
+                            }).send();
+                        }
+                        // Timeout will eventually error this
+                    }).send();
+
+                } catch (error) {
+                    logger.debug('General failure: ' + error);
                     // Timeout will eventually error this
-                }).send();
-
-            } catch (error) {
-                logger.debug('General failure: ' + error);
-                // Timeout will eventually error this
-            }
+                }
+            });
         };
 
         if (context.class === 'push')

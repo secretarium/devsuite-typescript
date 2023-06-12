@@ -95,8 +95,7 @@ export class Context {
     }
 
     static get(variable: string): string {
-        const value = Context.getArrayBuffer(variable);
-        return String.UTF8.decode(value);
+        return String.UTF8.decode(Context.getArrayBuffer(variable), true);
     }
 }
 
