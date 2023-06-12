@@ -1,4 +1,12 @@
 # Changelog
+## [0.1.2](///compare/hubber@0.1.1...hubber@0.1.2) (2023-06-12)
+
+### Dependency Updates
+
+* `klave` updated to version `0.2.1`
+* `klave-db` updated to version `0.1.0`
+* `providers` updated to version `0.1.0`
+* `klave-api` updated to version `0.3.0`
 ## [0.1.1](///compare/hubber@0.1.0...hubber@0.1.1) (2023-06-06)
 
 ### Dependency Updates
