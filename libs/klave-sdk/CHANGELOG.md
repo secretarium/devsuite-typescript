@@ -1,4 +1,6 @@
 # Changelog
+## [0.6.4](///compare/klave-sdk@0.6.3...klave-sdk@0.6.4) (2023-06-12)
+
 ## [0.6.3](///compare/klave-sdk@0.6.2...klave-sdk@0.6.3) (2023-06-02)
 
 ### Dependency Updates
