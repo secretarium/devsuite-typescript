@@ -1,4 +1,14 @@
 # Changelog
+## [0.2.1](///compare/klave@0.2.0...klave@0.2.1) (2023-06-12)
+
+### Dependency Updates
+
+* `klave-api` updated to version `0.3.0`
+
+### Bug Fixes
+
+* **api,klave:** Ensure WebAuthn enrollement is triggered by default 2009c38
+
 ## [0.2.0](///compare/klave@0.1.0...klave@0.2.0) (2023-06-06)
 
 ### Dependency Updates
