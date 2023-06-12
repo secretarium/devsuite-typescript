@@ -138,7 +138,7 @@
         "sentry-expo": "6.1.1",
         "serialize-error": "8.1.0",
         "sigstore": "1.5.2",
-        "strip-ansi": "7.1.0",
+        "strip-ansi": "6.0.1",
         "styled-components": "6.0.0-rc.1",
         "superjson": "1.12.3",
         "sysend": "1.16.2",
@@ -284,9 +284,14 @@
         "**/jest-resolve": "^29",
         "**/jest-util": "^29",
         "**/jest-validate": "^29",
+        "**/metro-react-native-babel-preset": "0.73.10",
+        "**/metro-react-native-babel-transformer": "0.73.10",
+        "**/metro-runtime": "0.73.10",
+        "**/metro-source-map": "0.73.10",
         "**/pretty-format": "^29",
         "**/react": "^18",
         "**/react-dom": "^18",
+        "**/strip-ansi": "^6",
         "**/typescript": "^5.1.3"
     }
 }
