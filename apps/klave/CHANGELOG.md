@@ -1,4 +1,9 @@
 # Changelog
+## [0.2.2](///compare/klave@0.2.1...klave@0.2.2) (2023-06-13)
+
+### Dependency Updates
+
+* `klave-api` updated to version `0.3.1`
 ## [0.2.1](///compare/klave@0.2.0...klave@0.2.1) (2023-06-12)
 
 ### Dependency Updates
