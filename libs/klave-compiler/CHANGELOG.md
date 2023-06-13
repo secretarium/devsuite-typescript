@@ -1,4 +1,6 @@
 # Changelog
+## [0.2.2](///compare/klave-compiler@0.2.1...klave-compiler@0.2.2) (2023-06-13)
+
 ## [0.2.1](///compare/klave-compiler@0.2.0...klave-compiler@0.2.1) (2023-06-01)
 
 
