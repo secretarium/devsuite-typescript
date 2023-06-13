@@ -1,4 +1,16 @@
 # Changelog
+## [0.1.3](///compare/hubber@0.1.2...hubber@0.1.3) (2023-06-13)
+
+### Dependency Updates
+
+* `klave` updated to version `0.2.2`
+* `klave-compiler` updated to version `0.2.2`
+* `klave-api` updated to version `0.3.1`
+
+### Bug Fixes
+
+* Dependencies versions requiring pinning due to ESM 0a137ac
+
 ## [0.1.2](///compare/hubber@0.1.1...hubber@0.1.2) (2023-06-12)
 
 ### Dependency Updates
