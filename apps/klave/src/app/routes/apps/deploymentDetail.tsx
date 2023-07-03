@@ -89,14 +89,14 @@ export const AppDeploymentDetail: FC = () => {
                 <div className='mt-10'>
                     <h2 className='font-bold mb-3'>Code Explorer</h2>
                     <h3 className='mb-3'>Type declarations</h3>
-                    <pre className='overflow-auto whitespace-pre-wrap break-words w-full max-w-full bg-slate-100 p-3'>
+                    <pre className='overflow-auto whitespace-pre-wrap break-words w-full max-w-full bg-slate-100 dark:bg-gray-800 p-3'>
                         {deployment.buildOutputDTS}
                     </pre>
                     <h3 className='mt-5 mb-3'>WASM</h3>
-                    <pre className='overflow-auto whitespace-pre-wrap break-words w-full max-w-full bg-slate-100 p-3'>
+                    <pre className='overflow-auto whitespace-pre-wrap break-words w-full max-w-full bg-slate-100 dark:bg-gray-800 p-3'>
                         SHA256:{WASMFingerprint}
                     </pre>
-                    <pre className='overflow-auto whitespace-pre-wrap break-words w-full max-w-full max-h-[50vh] bg-slate-100 p-3 mt-2'>
+                    <pre className='overflow-auto whitespace-pre-wrap break-words w-full max-w-full max-h-[50vh] bg-slate-100 dark:bg-gray-800 p-3 mt-2'>
                         {deployment.buildOutputWASM}
                     </pre>
                 </div>

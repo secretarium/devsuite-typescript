@@ -136,7 +136,7 @@ export const Select: FC = () => {
                     <br />
                     {/* <pre className='text-left w-1/2 bg-slate-200 m-auto p-5'>{JSON.stringify(repoData.config ?? repoData.configError, null, 4)}</pre> */}
                     {(deployableRepo.config?.applications ?? []).map((app, index) => {
-                        return <div key={index} className={`a-like rounded-full bg-slate-200 checked:bg-slate-500 mx-1 ${deployableRepo.isAvailableToKlave ? 'hover:bg-slate-300 cursor-pointer' : 'cursor-default'}`}>
+                        return <div key={index} className={`a-like rounded-full text-white bg-blue-500 checked:bg-slate-500 font-bold mx-1 ${deployableRepo.isAvailableToKlave ? 'hover:bg-blue-400 cursor-pointer' : 'cursor-default'}`}>
                             <input disabled={!deployableRepo.isAvailableToKlave} id={`application-${index}`} type="checkbox" value={app.name} {...register('applications')} className='mr-3' />
                             <label htmlFor={`application-${index}`}>{app.name}</label>
                         </div>;
@@ -151,8 +151,8 @@ export const Select: FC = () => {
                         <br />
                     </> : null}
                 </div>
-                <Link to="/deploy/select" className='button-like mr-5 disabled:text-gray-300'>Go back</Link>
-                <button disabled={!appSelectionWatch.length || isTriggeringDeploy || hasTriggeredDeploy || !deployableRepo.isAvailableToKlave} type="submit" className='disabled:text-gray-300'>Enable</button>
+                <Link to="/deploy/select" className='mr-5 disabled:text-gray-300 hover:text-gray-500'>Go back</Link>
+                <button disabled={!appSelectionWatch.length || isTriggeringDeploy || hasTriggeredDeploy || !deployableRepo.isAvailableToKlave} type="submit" className='disabled:text-gray-300 text-white hover:text-blue-500 bg-gray-800'>Enable</button>
             </form>
         </div>
     </>;

@@ -28,14 +28,14 @@ const Header: FC = () => {
                     You must sign in in order to save your work !
                 </div>
             </div> : null}
-            <div className="px-5 sm:px-6 dark:invert">
+            <div className="px-5 sm:px-6">
                 <div className="flex items-center justify-between h-16 md:h-20">
 
                     {/* Site branding */}
                     <div className="flex-shrink-0 mr-4">
                         {/* Logo */}
                         <Link to={pathname === '/' && (data && (data.hasUnclaimedApplications || data.me)) ? '/home' : '/'} className="block ml-0" aria-label="Secretarium Platform">
-                            <img alt='Secretarium' src={klaveLogo} width={40} className='h-8 inline-block' />
+                            <img alt='Secretarium' src={klaveLogo} width={40} className='h-8 inline-block dark:invert' />
                             <span className='h-full px-4 font-bold text-3xl font-mono align-middle'>
                                 klave
                             </span>
@@ -59,7 +59,7 @@ const Header: FC = () => {
                             */}
                             <li>
                                 {data?.me
-                                    ? <Link to="/deploy" className="btn-sm text-gray-200 bg-gray-900 hover:bg-gray-800 ml-3 a-like">
+                                    ? <Link to="/deploy" className="font-medium btn-sm text-white dark:text-black dark:bg-gradient-to-r dark:from-klave-cyan dark:to-klave-light-blue bg-black dark:hover:bg-gradient-to-l hover:bg-gray-800 ml-3 a-like">
                                         <span>Deploy now</span>
                                     </Link>
                                     : null
@@ -70,10 +70,10 @@ const Header: FC = () => {
                             </li>
                             <li>
                                 {data?.me
-                                    ? <Link to="/logout" className="btn-sm text-gray-900 bg-gray-200 hover:bg-gray-300 ml-3 a-like">
+                                    ? <Link to="/logout" className="font-medium btn-sm text-black dark:text-white bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800 ml-3 a-like">
                                         <span>Log out</span>
                                     </Link>
-                                    : <Link to="/login" className="btn-sm text-gray-200 bg-gray-900 hover:bg-gray-800 ml-3 a-like">
+                                    : <Link to="/login" className="btn-sm text-gray-200 bg-gray-900 dark:bg-gray-800 dark:hover:bg-gray-700 hover:bg-gray-800 ml-3 a-like">
                                         <span>{data?.hasUnclaimedApplications ? 'Claim my work' : tag?.length ? 'Log in' : 'Sign in'}</span>
                                         <svg className="w-3 h-3 fill-current text-gray-400 flex-shrink-0 ml-2 -mr-1" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M11.707 5.293L7 .586 5.586 2l3 3H0v2h8.586l-3 3L7 11.414l4.707-4.707a1 1 0 000-1.414z" fillRule="nonzero" />

@@ -21,13 +21,13 @@ export const ActivityRecord: FC<ActivityRecordProps> = ({ activity }) => {
             </span>;
         if (activity.context.type === 'synchronize')
             return <span className='h-5 block my-2'>
-                <a target='_blank' rel="noreferrer noopener" href={pusher.htmlUrl} className='font-semibold'><img alt={pusher.login} src={pusher.avatarUrl} className='h-full inline-block rounded-full' /> {pusher.login}</a> added commit <a target='_blank' rel="noreferrer noopener" href={pullRequest?.url} className="font-mono rounded bg-slate-100 mx-1 px-2 py-1">{commit.after.substring(0, 8)}</a> to pull request <a target='_blank' rel="noreferrer noopener" href={pullRequest?.url} className='text-slate-400'>#{pullRequest?.number}</a> <i>({formatTimeAgo(activity.createdAt)})</i>
+                <a target='_blank' rel="noreferrer noopener" href={pusher.htmlUrl} className='font-semibold'><img alt={pusher.login} src={pusher.avatarUrl} className='h-full inline-block rounded-full' /> {pusher.login}</a> added commit <a target='_blank' rel="noreferrer noopener" href={pullRequest?.url} className="font-mono rounded bg-klave-light-blue text-klave-dark-blue mx-1 px-2 py-1">{commit.after.substring(0, 8)}</a> to pull request <a target='_blank' rel="noreferrer noopener" href={pullRequest?.url} className='text-slate-400'>#{pullRequest?.number}</a> <i>({formatTimeAgo(activity.createdAt)})</i>
             </span>;
     }
     if (activity.class === 'pushHook') {
         const { pusher, commit, repo } = activity.context.payload as unknown as DeploymentPushPayload;
         return <span className='h-5 block my-2'>
-            <a target='_blank' rel="noreferrer noopener" href={pusher.htmlUrl} className='font-semibold'><img alt={pusher.login} src={pusher.avatarUrl} className='h-full inline-block rounded-full' /> {pusher.login}</a> pushed commit <a target='_blank' rel="noreferrer noopener" href={repo?.url} className="font-mono rounded bg-slate-100 mx-1 px-2 py-1">{commit.after.substring(0, 8)}</a> to branch <a target='_blank' rel="noreferrer noopener" href={repo?.url} className='text-slate-400'>{commit?.ref?.replace('refs/heads/', '')}</a> <i>({formatTimeAgo(activity.createdAt)})</i>
+            <a target='_blank' rel="noreferrer noopener" href={pusher.htmlUrl} className='font-semibold'><img alt={pusher.login} src={pusher.avatarUrl} className='h-full inline-block rounded-full' /> {pusher.login}</a> pushed commit <a target='_blank' rel="noreferrer noopener" href={repo?.url} className="font-mono rounded bg-klave-light-blue text-klave-dark-blue mx-1 px-2 py-1">{commit.after.substring(0, 8)}</a> to branch <a target='_blank' rel="noreferrer noopener" href={repo?.url} className='text-slate-400'>{commit?.ref?.replace('refs/heads/', '')}</a> <i>({formatTimeAgo(activity.createdAt)})</i>
         </span>;
     }
     return null;
