@@ -36,8 +36,8 @@ export const AppListing: FC = () => {
             {applicationList.map((app, index) => {
                 const deployedCount = app.deployments?.filter(d => d.status === 'deployed').length ?? 0;
                 const erroredCount = app.deployments?.filter(d => d.status === 'errored').length ?? 0;
-                const destPath = lastMatch.params['appId'] ? lastMatch.pathname.split('/').filter(Boolean).slice(0, 3).join('/').replace(lastMatch.params['appId'], app.id) : `/app/${app.id}`;
-                return <NavLink to={destPath} key={index} className={({ isActive }) => `${isActive ? 'shadow-lg relative ring-2 ring-blue-500 focus:outline-none' : ''} bg-white p-3 w-full flex flex-col rounded-md dark:bg-gray-800 shadow hover:bg-gray-100 dark:hover:bg-gray-700`}>
+                const destPath = lastMatch.params['appId'] ? lastMatch.pathname.split('/').filter(Boolean).slice(0, 3).join('/').replace(lastMatch.params['appId'], app.id) : `/app/${app.id}/`;
+                return <NavLink to={destPath} key={index} className={({ isActive }) => `${isActive ? 'shadow-lg relative ring-2 ring-klave-light-blue hover:ring-klave-cyan focus:outline-none' : ''} bg-white p-3 w-full flex flex-col rounded-md dark:bg-gray-800 shadow hover:bg-gray-100 dark:hover:bg-gray-700`}>
                     <div className="flex flex-row items-start font-medium text-gray-900 dark:text-white pb-2 mb-2 xl:border-b border-gray-200 border-opacity-75 dark:border-gray-700 w-full">
                         {app.name}&nbsp;{(app.deployments?.filter(d => d.status === 'created' || d.status === 'deploying').length ?? 0) ? <UilFlask className="inline-block animate-pulse h-5 text-blue-500" /> : <>&nbsp;</>}
                     </div>

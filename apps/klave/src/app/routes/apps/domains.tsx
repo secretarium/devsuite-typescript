@@ -214,8 +214,8 @@ export const DomainListing: FC = () => {
     return <>
         <div className="flex flex-col w-full items-center mb-7">
             <div className='w-full mb-5'>
-                <button onClick={() => setAddingDomain(true)} className="inline-flex mr-3 items-center h-8 pl-2.5 pr-2 rounded-md shadow text-white dark:text-gray-300 bg-blue-500 hover:bg-blue-400 dark:bg-blue-900 dark:hover:bg-blue-800 dark:border-gray-800 border border-gray-200 leading-none py-0">
-                    <UilPlus className='inline-block h-5 text-white dark:text-gray-300' />Add a domain
+                <button onClick={() => setAddingDomain(true)} className="inline-flex mr-3 items-center h-8 pl-2.5 pr-2 rounded-md shadow text-white dark:text-klave-dark-blue bg-blue-500 hover:bg-blue-400 dark:bg-klave-light-blue dark:hover:bg-blue-800 dark:border-gray-800 border border-gray-200 leading-none py-0">
+                    <UilPlus className='inline-block h-5 text-white dark:text-klave-dark-blue' />Add a domain
                 </button>
             </div>
             {addingDomain ?

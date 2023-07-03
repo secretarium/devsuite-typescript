@@ -240,17 +240,17 @@ export const LoginSecKey: FC = () => {
         </div >
         <form className='relative'>
             {screen === 'start' ? <>
-                <input key='emailField' value={email} onInput={onChangeEmail} alt='email' placeholder='Email address' type='email' className='text-center' />
+                <input key='emailField' value={email} onInput={onChangeEmail} alt='email' placeholder='Email address' type='email' className='text-center rounded-md text-black' />
                 <br />
                 <br />
-                <button disabled={isLoading} onClick={handleLoginSubmit} onSubmit={handleLoginSubmit} type='submit'>{isLoading ? <UilSpinner className='inline-block animate-spin' /> : isWebauthAvailable ? 'Log in with secure key' : 'Log in with email code'}</button><br />
-                <button disabled={isLoading} onClick={handleLoginCodeSubmit} className='bg-transparent border-0 shadow-none font-normal text-sm text-slate-800 hover:text-blue-600 hover:cursor-pointer'>Use email code instead</button>
+                <button disabled={isLoading} onClick={handleLoginSubmit} onSubmit={handleLoginSubmit} type='submit' className='bg-blue-600 text-white hover:bg-blue-500 rounded-md'>{isLoading ? <UilSpinner className='inline-block animate-spin' /> : isWebauthAvailable ? 'Log in with secure key' : 'Log in with email code'}</button><br />
+                <button disabled={isLoading} onClick={handleLoginCodeSubmit} className='bg-transparent border-0 shadow-none font-normal text-sm text-blue-600 hover:text-blue-300 hover:cursor-pointer'>Use email code instead</button>
             </> : screen === 'code' ? <>
-                <input key='codeField' value={code} onInput={onChangeCode} alt='code' placeholder='Code' type='text' className='text-center' />
+                <input key='codeField' value={code} onInput={onChangeCode} alt='code' placeholder='Code' type='text' className='text-center rounded-md text-black' />
                 <br />
                 <br />
-                <button disabled={isLoading} onClick={verifyEmailCode} onSubmit={verifyEmailCode} type='submit' className='mx-1'>{isLoading ? <UilSpinner className='inline-block animate-spin' /> : 'Next'}</button>
-                <button onClick={resetLogin} type='button' className='mx-1'>Cancel</button>
+                <button disabled={isLoading} onClick={verifyEmailCode} onSubmit={verifyEmailCode} type='submit' className='mx-1 rounded-md bg-blue-600 text-white hover:bg-blue-500'>{isLoading ? <UilSpinner className='inline-block animate-spin' /> : 'Next'}</button>
+                <button onClick={resetLogin} type='button' className='mx-1 rounded-md bg-gray-500 text-white hover:bg-gray-400'>Cancel</button>
             </> : null}
             {error ? <><br /><br /><div className='bg-red-200 p-2 w-full'>{error}</div></> : null}
         </form>

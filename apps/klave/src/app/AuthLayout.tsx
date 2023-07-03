@@ -55,7 +55,7 @@ export const AuthLayout = () => {
                 }
                 children={(user) =>
                     <AuthProvider userData={user}>
-                        <div className="flex flex-col min-h-screen overflow-hidden dark:bg-gray-900">
+                        <div className="flex flex-col min-h-screen overflow-hidden dark:bg-gray-900 dark:text-white">
                             <Header />
                             <main className="flex flex-grow pt-24">
                                 {outlet}

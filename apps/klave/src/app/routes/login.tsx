@@ -13,11 +13,11 @@ export const Login: FC = () => {
 
     return <div id="login">
 
-        <div className="flex flex-col sm:flex-row max-w-6xl mx-auto px-4 sm:px-6">
-            <div className="p-5 min-w-[300px] bg-slate-100">
+        <div className="flex flex-col sm:flex-row max-w-6xl mx-auto gap-12 px-4 sm:px-6">
+            <div className="p-5 min-w-[300px] bg-slate-100 dark:bg-gray-800 rounded-md">
                 <LoginSecKey />
             </div>
-            <div className="p-5 min-w-[300px]">
+            <div className="p-5 min-w-[300px] bg-slate-100 dark:bg-gray-800 rounded-md">
                 <LoginQR />
             </div>
         </div>
