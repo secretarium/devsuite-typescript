@@ -9,7 +9,7 @@ async function errorLongDeployingDeployments() {
         where: {
             status: {
                 // TODO Figure out what to with failing termination
-                in: ['created', 'deploying']
+                in: ['created', 'compiled', 'deploying']
             },
             updatedAt: {
                 lt: new Date(Date.now() - 1000 * 60 * 5)
