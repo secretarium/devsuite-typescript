@@ -60,10 +60,13 @@ export class BuildMiniVM {
     async getContent(path?: string): Promise<Awaited<ReturnType<Context['octokit']['repos']['getContent']>> | { data: string | null }> {
 
         const { context: { octokit, ...context }, repo } = this.options;
-        const normalisedPath = path?.split(nodePath.sep).join(nodePath.posix.sep);
+        const normalisedPath = path?.split(/[\\/]/).filter((s, i) => !(i === 0 && s === '.')).join(nodePath.posix.sep);
+
+        if (!normalisedPath)
+            return { data: null };
 
         try {
-            if (!normalisedPath || !normalisedPath.includes('node_modules')) {
+            if (!normalisedPath.includes('node_modules')) {
                 logger.debug(`Getting GitHub content for '${normalisedPath}'`, {
                     parent: 'bmv'
                 });
@@ -164,7 +167,7 @@ export class BuildMiniVM {
                     } else if (message.type === 'diagnostic') {
                         this.eventHanlders['diagnostic']?.forEach(handler => handler(message));
                     } else if (message.type === 'errored') {
-                        logger.debug('ASC Errored: ' + message.error, {
+                        logger.debug('ASC Errored: ' + message.error?.message ?? message.error, {
                             parent: 'bmv'
                         });
                         this.eventHanlders['error']?.forEach(handler => handler(message));
