@@ -36,7 +36,14 @@ export function sequenceEqual(a: Uint8Array, b: Uint8Array): boolean {
 }
 
 export function toBase64(src: Uint8Array, urlSafeMode = false): string {
-    const x = btoa(String.fromCharCode.apply(null, Array.from(src)));
+    let binary = '';
+    const len = src.byteLength;
+    for (let i = 0; i < len; i++) {
+        const code = src[i];
+        if (code)
+            binary += String.fromCharCode(code);
+    }
+    const x = btoa(binary);
     return urlSafeMode ? x.replace(/\+/g, '-').replace(/\//g, '_') : x;
 }
 
