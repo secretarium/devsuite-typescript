@@ -222,6 +222,7 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                     }
 
                     const { result: { wasm, wat, dts } } = buildResult;
+                    const wasmB64 = Utils.toBase64(wasm);
 
                     // TODO - Populate reasons we fail on empty wasm
                     if (wasm.length === 0) {
@@ -246,7 +247,7 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                         },
                         data: {
                             status: 'compiled',
-                            buildOutputWASM: Utils.toBase64(wasm),
+                            buildOutputWASM: wasmB64,
                             buildOutputWAT: wat,
                             buildOutputDTS: dts
                         }
@@ -282,7 +283,7 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                             name: target,
                             own_enclave: false,
                             wasm_bytes: [],
-                            wasm_bytes_b64: Utils.toBase64(wasm)
+                            wasm_bytes_b64: wasmB64
                         }
                     }).onExecuted(async () => {
                         await prisma.deployment.update({
@@ -303,7 +304,7 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                                     name: target,
                                     own_enclave: false,
                                     wasm_bytes: [],
-                                    wasm_bytes_b64: Utils.toBase64(wasm)
+                                    wasm_bytes_b64: wasmB64
                                 }
                             }).onExecuted(async () => {
                                 await prisma.deployment.update({
@@ -322,9 +323,25 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                         // Timeout will eventually error this
                     }).send();
 
-                } catch (error) {
+                } catch (error: any) {
                     logger.debug('General failure: ' + error);
-                    // Timeout will eventually error this
+                    try {
+                        await prisma.deployment.update({
+                            where: {
+                                id: deployment.id
+                            },
+                            data: {
+                                status: 'errored',
+                                buildOutputErrorObj: {
+                                    message: error.message,
+                                    stack: error.stack
+                                }
+                            }
+                        });
+                    } catch (error) {
+                        logger.debug('General failure: ' + error);
+                        // Timeout will eventually error this
+                    }
                 }
             });
         };
