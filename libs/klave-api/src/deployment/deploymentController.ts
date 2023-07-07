@@ -2,7 +2,7 @@ import { DeploymentPushPayload } from '../types';
 import { v4 as uuid } from 'uuid';
 import { scp, logger } from '@klave/providers';
 import { prisma } from '@klave/db';
-// import type { KlaveRcConfiguration } from '@klave/sdk';
+import type { KlaveRcConfiguration } from '@klave/sdk';
 import { Utils } from '@secretarium/connector';
 import * as path from 'node:path';
 import BuildMiniVM, { DeploymentContext } from './buildMiniVm';
@@ -61,12 +61,69 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
     if (!repo)
         return;
 
-    // TODO Reenable the KlaveRcConfiguration type
-    const config = repo.config as any;
-    const availableApplicationsConfig = config.applications.reduce((prev: any, current: any) => {
+    const packageJsonResponse = await octokit.repos.getContent({
+        owner: repo.owner,
+        repo: repo.name,
+        ref: context.commit.ref,
+        path: 'package.json',
+        mediaType: {
+            format: 'raw+json'
+        }
+    });
+
+    const packageJsonData = Array.isArray(packageJsonResponse.data) ? packageJsonResponse.data[0] : packageJsonResponse.data;
+
+    if (!packageJsonData)
+        return;
+
+    let packageJson: any;
+    try {
+        packageJson = JSON.parse(packageJsonData.toString()) as any;
+    } catch (e) {
+        logger.error('Error while parsing package.json', e);
+        return;
+    }
+
+    if (!packageJson)
+        return;
+
+    const klaveConfigurationResponse = await octokit.repos.getContent({
+        owner: repo.owner,
+        repo: repo.name,
+        ref: context.commit.ref,
+        path: 'klave.json',
+        mediaType: {
+            format: 'raw+json'
+        }
+    });
+
+    const klaveConfigurationData = Array.isArray(klaveConfigurationResponse.data) ? klaveConfigurationResponse.data[0] : klaveConfigurationResponse.data;
+
+    if (!klaveConfigurationData)
+        return;
+
+    let klaveConfiguration: KlaveRcConfiguration;
+    try {
+        klaveConfiguration = JSON.parse(klaveConfigurationData.toString()) as KlaveRcConfiguration;
+    } catch (e) {
+        logger.error('Error while parsing klave.json', e);
+        return;
+    }
+
+    if (!klaveConfiguration)
+        return;
+
+    const availableApplicationsConfig = klaveConfiguration.applications.reduce((prev: any, current: any) => {
         prev[current.name] = current;
         return prev;
     }, {} as Record<string, any['applications'][number]>);
+
+    // TODO Reenable the KlaveRcConfiguration type
+    // const config = repo.config as any;
+    // const availableApplicationsConfig = config.applications.reduce((prev: any, current: any) => {
+    //     prev[current.name] = current;
+    //     return prev;
+    // }, {} as Record<string, any['applications'][number]>);
 
     repo.applications.forEach(async application => {
 
@@ -163,7 +220,7 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                             id: deployment.id
                         }
                     });
-                    if (currentState?.status !== 'deployed') {
+                    if (currentState?.status !== 'deployed' && currentState?.status !== 'errored') {
                         logger.debug(`Deployment ${deployment.id} timed out`, {
                             parent: 'dpl'
                         });
@@ -172,7 +229,8 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                                 id: deployment.id
                             },
                             data: {
-                                status: 'errored'
+                                status: 'errored',
+                                buildOutputStdErr: 'Deployment timed out'
                             }
                         }).catch((reason) => {
                             logger.debug('Error while updating deployment status to error', {
@@ -188,17 +246,24 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                         type: 'github',
                         context: deploymentContext,
                         repo,
-                        application: availableApplicationsConfig[application.name]
+                        application: availableApplicationsConfig[application.name],
+                        dependencies: {
+                            ...(packageJson.optionalDependencies ?? {}),
+                            ...(packageJson.peerDependencies ?? {}),
+                            ...(packageJson.dependencies ?? {}),
+                            ...(packageJson.devDependencies ?? {})
+                        }
                     });
                     const buildResult = await buildVm.build();
 
-                    const { stdout, stderr } = buildResult;
+                    const { stdout, stderr, dependenciesManifest } = buildResult;
 
                     await prisma.deployment.update({
                         where: {
                             id: deployment.id
                         },
                         data: {
+                            dependenciesManifest,
                             buildOutputStdOut: stdout,
                             buildOutputStdErr: stderr
                         }

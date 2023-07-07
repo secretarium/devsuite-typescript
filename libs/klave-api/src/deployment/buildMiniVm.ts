@@ -4,6 +4,7 @@ import fetch from 'node-fetch';
 import { HttpsProxyAgent } from 'https-proxy-agent';
 import { ErrorObject, serializeError } from 'serialize-error';
 import type { Stats } from 'assemblyscript/dist/asc';
+import { Utils } from '@secretarium/connector';
 import { createCompiler } from '@klave/compiler';
 import type { Context } from 'probot';
 // import { KlaveRcConfiguration } from '@klave/sdk';
@@ -12,9 +13,15 @@ import { Repo } from '@prisma/client';
 import { dummyMap } from './dummyVmFs';
 import { logger } from '@klave/providers';
 
+type BuildDependenciesManifest = Record<string, {
+    version: string;
+    digests: Record<string, string>
+}>;
+
 type BuildOutput = {
     stdout: string;
     stderr: string;
+    dependenciesManifest: BuildDependenciesManifest;
 } & ({
     success: true;
     result: {
@@ -40,6 +47,7 @@ export class BuildMiniVM {
 
     private eventHanlders: Partial<Record<BuildMiniVMEvent, BuildMiniVMEventHandler[]>> = {};
     private proxyAgent: HttpsProxyAgent<string> | undefined;
+    private usedDependencies: BuildDependenciesManifest = {};
 
     constructor(private options: {
         type: 'github';
@@ -47,6 +55,7 @@ export class BuildMiniVM {
         repo: Repo;
         // TODO Reenable the KlaveRcConfiguration[...] type
         application: any;
+        dependencies: Record<string, string>;
     }) {
         if (process.env['NX_SQUID_URL'])
             this.proxyAgent = new HttpsProxyAgent(process.env['NX_SQUID_URL']);
@@ -91,11 +100,30 @@ export class BuildMiniVM {
                 parent: 'bmv'
             });
             if (lastComponent?.startsWith('/')) {
-                const reponse = await fetch('https://www.unpkg.com' + lastComponent, {
+                const comps = lastComponent.substring(1).split('/');
+                const packageName = comps[0]?.startsWith('@') ? `${comps.shift()}/${comps.shift()}` : comps.shift() ?? '';
+                const packageVersion = packageName ? this.options.dependencies?.[packageName] : undefined;
+                const filePath = comps.join('/');
+
+                const reponse = await fetch(`https://www.unpkg.com/${packageName}${packageVersion ? `@${packageVersion}` : ''}/${filePath}`, {
                     agent: this.proxyAgent
                 });
+
+                const effectiveComps = reponse.url.replace('https://www.unpkg.com/', '').split('/');
+                const effectiveName = effectiveComps[0]?.startsWith('@') ? `${effectiveComps.shift()}/${effectiveComps.shift()}` : effectiveComps.shift() ?? '';
+                const effectiveVersion = effectiveName ? effectiveName.split('@')[2] ?? effectiveName.split('@')[1] ?? '*' : '*';
+
                 const data = await reponse.text();
                 if (reponse.ok) {
+
+                    if (!this.usedDependencies[packageName])
+                        this.usedDependencies[packageName] = {
+                            version: effectiveVersion,
+                            digests: {}
+                        };
+                    else
+                        this.usedDependencies[packageName]!.digests[filePath] = Utils.toHex(await Utils.hash(new TextEncoder().encode(data)));
+
                     // TODO - Store the response in a cahing layer
                     // response.getHeader('location');
                     return { data };
@@ -175,6 +203,7 @@ export class BuildMiniVM {
                             resolve({
                                 success: false,
                                 error: message.error,
+                                dependenciesManifest: this.usedDependencies,
                                 stdout: message.stdout ?? '',
                                 stderr: message.stderr ?? ''
                             });
@@ -197,6 +226,7 @@ export class BuildMiniVM {
                                         dts: compiledDTS,
                                         signature
                                     },
+                                    dependenciesManifest: this.usedDependencies,
                                     stdout: message.stdout ?? '',
                                     stderr: message.stderr ?? ''
                                 };
@@ -215,6 +245,7 @@ export class BuildMiniVM {
             return {
                 success: false,
                 error: serializeError(error),
+                dependenciesManifest: this.usedDependencies,
                 stdout: '',
                 stderr: ''
             };
