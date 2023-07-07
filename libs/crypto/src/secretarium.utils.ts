@@ -40,7 +40,7 @@ export function toBase64(src: Uint8Array, urlSafeMode = false): string {
     const len = src.byteLength;
     for (let i = 0; i < len; i++) {
         const code = src[i];
-        if (code)
+        if (code !== undefined)
             binary += String.fromCharCode(code);
     }
     const x = btoa(binary);
