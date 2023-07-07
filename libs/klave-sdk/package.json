@@ -15,9 +15,17 @@
     "main": "assembly/index.ts",
     "types": "assembly/index.ts",
     "exports": {
+        ".": {
+            "default": "./src/index.js",
+            "require": "./src/index.js"
+        },
         "./stac": {
             "default": "./src/compile.js",
             "require": "./src/compile.js"
+        },
+        "./assembly": {
+            "default": "./assembly/index.ts",
+            "require": "./assembly/index.ts"
         }
     },
     "dependencies": {
