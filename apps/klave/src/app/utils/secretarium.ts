@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { SCP, Key } from '@secretarium/connector';
 import { httpApi } from './api';
 
@@ -41,7 +41,7 @@ export function useSecretariumQuery(app: string, route: string, args?: unknown) 
         data: []
     });
 
-    async function refetch() {
+    const refetch = useCallback(async () => {
         const localAccu: Array<any> = [];
         setStatus({ loading: true, data: localAccu });
         if (!connectionInfo)
@@ -53,7 +53,7 @@ export function useSecretariumQuery(app: string, route: string, args?: unknown) 
             if (!node || !trustKey)
                 throw new Error('Missing Secretarium node or trust key');
             await client.connect(node, connectionKey, trustKey);
-            client.newTx(config.app, config.route, `klave-deployment-${config.app}`, config.args as any)
+            client.newTx(app, route, `klave-deployment-${app}`, args as any)
                 .onResult(result => {
                     localAccu.push(result);
                     setStatus({ loading: false, data: localAccu });
@@ -65,7 +65,7 @@ export function useSecretariumQuery(app: string, route: string, args?: unknown) 
         } catch (error) {
             setStatus({ loading: false, error: error as any, data: [] });
         }
-    }
+    }, [app, route, args]);
 
     // useEffect(() => {
     //     if (app && route) {
@@ -81,7 +81,7 @@ export function useSecretariumQuery(app: string, route: string, args?: unknown) 
             route,
             args
         });
-    }, [app, route, args, config.app]);
+    }, [app, route, args, config.app, config.route]);
 
     return { ...status, refetch };
 }
