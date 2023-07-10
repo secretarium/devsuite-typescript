@@ -2,7 +2,7 @@ import { DeploymentPushPayload } from '../types';
 import { v4 as uuid } from 'uuid';
 import { scp, logger } from '@klave/providers';
 import { prisma } from '@klave/db';
-import type { KlaveRcConfiguration } from '@klave/sdk';
+// import type { KlaveRcConfiguration } from '@klave/sdk';
 import { Utils } from '@secretarium/connector';
 import * as path from 'node:path';
 import BuildMiniVM, { DeploymentContext } from './buildMiniVm';
@@ -102,9 +102,9 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
     if (!klaveConfigurationData)
         return;
 
-    let klaveConfiguration: KlaveRcConfiguration;
+    let klaveConfiguration: any;
     try {
-        klaveConfiguration = JSON.parse(klaveConfigurationData.toString()) as KlaveRcConfiguration;
+        klaveConfiguration = JSON.parse(klaveConfigurationData.toString());
     } catch (e) {
         logger.error('Error while parsing klave.json', e);
         return;
