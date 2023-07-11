@@ -23,9 +23,9 @@ import AppEnvironment from './routes/apps/environment';
 import AppListing from './routes/apps/listing';
 import AppSettings from './routes/apps/settings';
 import Providers from './Providers';
+import { httpApi } from './utils/api';
 
-const getUserData = () => fetch('/api/whoami', { method: 'GET' })
-    .then(res => res.json());
+const getUserData = () => httpApi.v0.auth.getSession.query();
 
 const router = sentryCreateBrowserRouter(
     createRoutesFromElements(
