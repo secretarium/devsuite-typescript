@@ -1,20 +1,20 @@
 import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UilGithub, UilGitlab } from '@iconscout/react-unicons';
-import { useAuth } from '../../AuthProvider';
+import api from '../../utils/api';
 
 export const Index: FC = () => {
 
-    const { user } = useAuth();
     const navigate = useNavigate();
     const [hasRedirected, setHasRedirected] = useState(false);
+    const { data: sessionData } = api.v0.auth.getSession.useQuery();
 
     useEffect(() => {
-        if (!hasRedirected && user.hasGithubToken) {
+        if (!hasRedirected && sessionData?.hasGithubToken) {
             setHasRedirected(true);
             navigate('/deploy/select');
         }
-    }, [hasRedirected, navigate, user.hasGithubToken]);
+    }, [hasRedirected, navigate, sessionData?.hasGithubToken]);
 
     const state = JSON.stringify({
         referer: window.location.origin,

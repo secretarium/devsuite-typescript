@@ -27,8 +27,28 @@ export const reposRouter = createTRPCRouter({
             if (manifest.length && !refreshing)
                 return manifest.filter(repo => repo.config);
 
-            if (!web.githubToken)
-                return null;
+            if (!web.githubToken) {
+                await prisma.web.update({
+                    where: {
+                        id: web.id
+                    },
+                    data: {
+                        githubToken: null
+                    }
+                });
+                await new Promise<void>((resolve, reject) => {
+                    session.githubToken = undefined;
+                    sessionStore.set(sessionID, {
+                        ...session,
+                        githubToken: undefined
+                    }, (err) => {
+                        if (err)
+                            return reject(err);
+                        return resolve();
+                    });
+                });
+                throw new Error('Credentials refresh required');
+            }
 
             const { accessToken: lookupAccessToken } = web.githubToken;
             manifest = await prisma.deployableRepo.findMany({ where: { creatorAuthToken: lookupAccessToken } });
@@ -57,19 +77,44 @@ export const reposRouter = createTRPCRouter({
                         ...objectToCamel(await result.json() as any),
                         createdAt: Date.now()
                     };
-                    if (!data.error)
+                    if (data.error) {
+                        await prisma.web.update({
+                            where: {
+                                id: web.id
+                            },
+                            data: {
+                                githubToken: null
+                            }
+                        });
                         await new Promise<void>((resolve, reject) => {
-                            session.githubToken = data;
+                            session.githubToken = undefined;
                             sessionStore.set(sessionID, {
                                 ...session,
-                                githubToken: data
+                                githubToken: undefined
                             }, (err) => {
                                 if (err)
                                     return reject(err);
                                 return resolve();
                             });
                         });
-                } catch (e) {
+                        throw {
+                            refreshRequired: true
+                        };
+                    }
+                    await new Promise<void>((resolve, reject) => {
+                        session.githubToken = data;
+                        sessionStore.set(sessionID, {
+                            ...session,
+                            githubToken: data
+                        }, (err) => {
+                            if (err)
+                                return reject(err);
+                            return resolve();
+                        });
+                    });
+                } catch (e: any) {
+                    if (e.refreshRequired)
+                        throw new Error('Credentials refresh required');
                     console.error(e);
                 }
             }

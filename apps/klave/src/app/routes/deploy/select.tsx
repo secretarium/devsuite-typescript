@@ -1,11 +1,13 @@
-import { FC, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { FC, useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { UilExclamationTriangle, UilSpinner } from '@iconscout/react-unicons';
 import api from '../../utils/api';
 
 export const Select: FC = () => {
 
+    const navigate = useNavigate();
     const [shouldRefresh, setShouldRefresh] = useState(false);
+    const { invalidate } = api.useContext().v0.auth.getSession;
     const { data: deployables, isLoading, isFetching, isRefetching, isError, refetch, error } = api.v0.repos.deployables.useQuery({
         refreshing: shouldRefresh
     }, {
@@ -15,6 +17,13 @@ export const Select: FC = () => {
         refetchOnWindowFocus: false,
         refetchOnMount: false
     });
+
+    useEffect(() => {
+
+        if (error?.message === 'Credentials refresh required')
+            invalidate().then(() => navigate('/deploy'));
+
+    }, [error, invalidate, navigate]);
 
     const rescanRepos = () => {
         if (shouldRefresh)
@@ -39,7 +48,7 @@ export const Select: FC = () => {
             </div>
         </>;
 
-    if (isError)
+    if (isError) {
         return <>
             <div className='pb-5' >
                 <h1 className='text-xl font-bold'>Oops! Something went wrong...</h1>
@@ -51,6 +60,7 @@ export const Select: FC = () => {
                 <button disabled={isWorking} onClick={rescanRepos} className='disabled:text-gray-300'>Rescan</button>
             </div>
         </>;
+    }
 
     return <>
         <div className='pb-5'>
