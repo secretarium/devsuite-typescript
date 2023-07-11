@@ -22,7 +22,7 @@ import { passportLoginCheckMiddleware } from './middleware/passport';
 import { trcpMiddlware } from './middleware/trpc';
 // import { i18nextMiddleware } from './middleware/i18n';
 // import { getDriverSubstrate } from '../utils/db';
-import { usersRouter, filesRouter } from './routes';
+import { usersRouter } from './routes';
 import { logger } from '@klave/providers';
 import { webLinkerMiddlware } from './middleware/webLinker';
 
@@ -91,7 +91,6 @@ const getApiRouter = (/*port: number*/) => {
     router.use(passportLoginCheckMiddleware);
     router.use('/trpc', trcpMiddlware);
     router.use(usersRouter);
-    router.use(filesRouter);
 
     router.all('*', (req, res) => {
         res.json({
