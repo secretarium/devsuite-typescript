@@ -45,7 +45,11 @@ export const deploymentRouter = createTRPCRouter({
                     application: {
                         webId
                     }
-                }
+                },
+                orderBy: {
+                    createdAt: 'desc'
+                },
+                take: 20
             });
 
             return deploymentList;

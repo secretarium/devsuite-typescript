@@ -5,6 +5,7 @@ import { prisma } from '@klave/db';
 // import type { KlaveRcConfiguration } from '@klave/sdk';
 import { Utils } from '@secretarium/connector';
 import * as path from 'node:path';
+import prettyBytes from 'pretty-bytes';
 import BuildMiniVM, { DeploymentContext } from './buildMiniVm';
 
 export const deployToSubstrate = async (deploymentContext: DeploymentContext<DeploymentPushPayload>) => {
@@ -36,13 +37,14 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                 ref: context.commit.after
             });
 
-            files = filesManifest;
+            if (filesManifest)
+                files = filesManifest;
         } catch (e) {
             logger.error('Error while fetching files from github', e);
         }
     }
 
-    if (!files?.length && !context.commit.forced)
+    if (!files.length && !context.commit.forced)
         return;
 
     const repo = await prisma.repo.findUnique({
@@ -127,6 +129,11 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
 
     repo.applications.forEach(async application => {
 
+
+        // Bail out if the application is not in the running configuration
+        if (!availableApplicationsConfig[application.name])
+            return;
+
         // TODO There is typing error in this location
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
@@ -134,8 +141,10 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
             const commitFileDir = path.normalize(path.join('/', filename));
             const appPath = path.normalize(path.join('/', availableApplicationsConfig[application.name]?.rootDir ?? ''));
             return commitFileDir.startsWith(appPath) || filename === 'klave.json';
-        }).length === 0 && !context.commit.forced)
+        }).length === 0)
             return;
+
+        logger.info(`Deploying ${application.name} from ${context.commit.after}`);
 
         await prisma.activityLog.create({
             data: {
@@ -174,7 +183,7 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                     data: {
                         fqdn: target,
                         expiresOn: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14),
-                        version: availableApplicationsConfig[application.name].version,
+                        version: availableApplicationsConfig[application.name]?.version,
                         set: deploymentSet,
                         build: context.commit.after.substring(0, 8),
                         branch: branchName,
@@ -242,6 +251,9 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                 });
 
                 try {
+                    logger.debug(`Starting compilation ${deployment.id}`, {
+                        parent: 'dpl'
+                    });
                     const buildVm = new BuildMiniVM({
                         type: 'github',
                         context: deploymentContext,
@@ -288,6 +300,10 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
 
                     const { result: { wasm, wat, dts } } = buildResult;
                     const wasmB64 = Utils.toBase64(wasm);
+
+                    logger.debug(`Compilation was successful ${deployment.id} (${prettyBytes(wasmB64.length)})`, {
+                        parent: 'dpl'
+                    });
 
                     // TODO - Populate reasons we fail on empty wasm
                     if (wasm.length === 0) {
@@ -343,6 +359,7 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                         }
                     });
 
+                    logger.debug(`Registering smart contract: ${target}`);
                     await scp.newTx('wasm-manager', shouldUpdate !== null ? 'update_smart_contract' : 'register_smart_contract', `klave-deployment-${deployment.id}`, {
                         contract: {
                             name: target,
@@ -351,6 +368,7 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                             wasm_bytes_b64: wasmB64
                         }
                     }).onExecuted(async () => {
+                        logger.debug(`Successfully registered smart contract: ${target}`);
                         await prisma.deployment.update({
                             where: {
                                 id: deployment.id
@@ -360,7 +378,7 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                             }
                         });
                     }).onError(async (error) => {
-                        logger.debug('Error while registering smart contract: ' + error);
+                        logger.debug(`Error while registering smart contract ${target}: ${error}`);
                         if (`${error}`.includes('use register_smart_contract')) {
                             // TODO - Remove this when we have a proper way to update smart contracts list with `list_smart_contracts`
                             logger.debug('Retrying with register_smart_contract...');
@@ -372,6 +390,7 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                                     wasm_bytes_b64: wasmB64
                                 }
                             }).onExecuted(async () => {
+                                logger.debug(`Successfully registered smart contract: ${target}`);
                                 await prisma.deployment.update({
                                     where: {
                                         id: deployment.id
@@ -381,7 +400,7 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                                     }
                                 });
                             }).onError((error) => {
-                                logger.debug('Error while registering smart contract: ' + error);
+                                logger.debug(`Error while registering smart contract ${target}: ${error}`);
                                 // Timeout will eventually error this
                             }).send();
                         }
@@ -389,7 +408,7 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                     }).send();
 
                 } catch (error: any) {
-                    logger.debug('General failure: ' + error);
+                    logger.debug(`General failure processing ${target}: ${error}`);
                     try {
                         await prisma.deployment.update({
                             where: {
@@ -404,7 +423,7 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                             }
                         });
                     } catch (error) {
-                        logger.debug('General failure: ' + error);
+                        logger.debug(`General failure processing ${target}: ${error}`);
                         // Timeout will eventually error this
                     }
                 }

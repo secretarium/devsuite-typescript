@@ -15,6 +15,17 @@ const probotApp = (app: Probot) => {
         'installation_repositories'
     ], async (context) => {
 
+        const previousHook = await prisma.hook.findMany({
+            where: {
+                remoteId: context.id
+            }
+        });
+
+        if (previousHook.length > 0) {
+            logger.info(`Hook '${context.name}' ${context.id} already processed`);
+            return;
+        }
+
         // TODO Revisit this to use tRCP router with express context
         const hook = await prisma.hook.create({
             data: {
