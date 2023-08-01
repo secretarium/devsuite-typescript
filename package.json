@@ -53,6 +53,8 @@
         "@trpc/next": "10.28.2",
         "@trpc/react-query": "10.28.2",
         "@trpc/server": "10.28.2",
+        "as-base64": "0.2.0",
+        "as-uuid": "0.0.4",
         "assemblyscript": "^0.27.5",
         "autoprefixer": "10.4.14",
         "axios": "^1.4.0",
