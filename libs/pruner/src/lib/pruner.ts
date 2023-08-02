@@ -9,7 +9,7 @@ async function errorLongDeployingDeployments() {
         where: {
             status: {
                 // TODO Figure out what to with failing termination
-                in: ['created', 'compiled', 'deploying']
+                in: ['created', 'compiled', 'deploying', 'terminating']
             },
             updatedAt: {
                 lt: new Date(Date.now() - 1000 * 60 * 5)
@@ -30,7 +30,7 @@ async function terminateExpiredDeployments() {
     const expiredDeploymentList = await prisma.deployment.findMany({
         where: {
             status: {
-                in: ['deployed']
+                in: ['deployed', 'errored']
             },
             expiresOn: {
                 lt: new Date()
@@ -41,7 +41,11 @@ async function terminateExpiredDeployments() {
         const caller = router.v0.deployments.createCaller({
             prisma
         } as any);
-        return caller.terminateDeployment({
+        if (deployment.status === 'deployed')
+            return caller.terminateDeployment({
+                deploymentId: deployment.id
+            });
+        return caller.delete({
             deploymentId: deployment.id
         });
     })).catch((e) => {
