@@ -84,9 +84,10 @@ class CompilerHost {
                 };
                 ts.forEachChild(sourceFile, node => {
                     if (ts.isFunctionDeclaration(node)) {
-                        if (node.name?.text === 'register_routes')
+                        if (node.name?.text === 'register_routes') {
                             shouldAddRouting = false;
-                        else if (node.flags && node.modifiers?.some(m => m.kind === ts.SyntaxKind.ExportKeyword)) {
+                            normalizedEntryFile += `${node.getFullText().trim()}\n`;
+                        } else if (node.flags && node.modifiers?.some(m => m.kind === ts.SyntaxKind.ExportKeyword)) {
                             if (node.name?.text) {
                                 const tags = ts.getAllJSDocTagsOfKind(node, ts.SyntaxKind.JSDocTag);
                                 const tagNames = new Set(tags.map(tag => tag.tagName.text));
