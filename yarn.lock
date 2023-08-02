@@ -7923,11 +7923,6 @@ as-string-sink@^0.5.3:
   resolved "https://registry.yarnpkg.com/as-string-sink/-/as-string-sink-0.5.3.tgz#462392222e01bb4570ee0df685b7f64630fd4f56"
   integrity sha512-DN/QqfptDhi4FaBqehMN9wH5Dl/PcTSfCfzSmcdtf3OVYYIEip5iyVUcS6t40BAP/OoUwtxCCbD/dlr2kVG+3Q==
 
-as-uuid@0.0.4:
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/as-uuid/-/as-uuid-0.0.4.tgz#45a3b4e70ddaeb56849f5896685853eed473ba81"
-  integrity sha512-ZHNv0ETSzg5ZD0IWWJVyip/73LWtrWeMmvRi+16xbkpU/nZ0O8EegvgS7bgZ5xRqrUbc2NqZqHOWMOtPqbLrhg==
-
 as-variant@^0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/as-variant/-/as-variant-0.4.1.tgz#a0c6e0379e53936e9ca888114096b85d9b3d6f6e"
