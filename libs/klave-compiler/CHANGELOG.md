@@ -1,4 +1,16 @@
 # Changelog
+## [0.2.3](///compare/klave-compiler@0.2.2...klave-compiler@0.2.3) (2023-08-02)
+
+
+### Bug Fixes
+
+* **compiler:** Passthrough existing `register_routes` function 1e02877
+
+
+### Reverts
+
+* Revert "chore(compiler): Disable compiler optimisation" 8dd8aca
+
 ## [0.2.2](///compare/klave-compiler@0.2.1...klave-compiler@0.2.2) (2023-06-13)
 
 ## [0.2.1](///compare/klave-compiler@0.2.0...klave-compiler@0.2.1) (2023-06-01)
