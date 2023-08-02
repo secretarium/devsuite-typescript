@@ -1,4 +1,15 @@
 # Changelog
+## [0.7.0](///compare/klave-sdk@0.6.4...klave-sdk@0.7.0) (2023-08-02)
+
+### Dependency Updates
+
+* `klave-compiler` updated to version `0.2.3`
+
+### Features
+
+* **sdk:** Add Light GBM APIs a9217f0
+* **sdk:** Finalising Crypto SDK exposition 1de0c79
+
 ## [0.6.4](///compare/klave-sdk@0.6.3...klave-sdk@0.6.4) (2023-06-12)
 
 ## [0.6.3](///compare/klave-sdk@0.6.2...klave-sdk@0.6.3) (2023-06-02)
