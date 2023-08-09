@@ -249,7 +249,7 @@ class Deployer {
                 });
             };
 
-            // Set a timeout to mark the deployment as errored if it is not deployed after 30s
+            // Set a timeout to mark the deployment as errored if it is not deployed after 60s
             setTimeout(async () => {
                 const currentState = await prisma.deployment.findUnique({
                     where: {
@@ -258,7 +258,7 @@ class Deployer {
                 });
                 if (currentState?.status !== 'deployed')
                     errorDeployment();
-            }, 30000);
+            }, 60000);
 
             const appFs = await this.createFs();
             if (!appFs)

@@ -16,6 +16,7 @@ export const AttestationChecker: FC<AttestationCheckerProps> = ({ deploymentId, 
     });
     const [challenge, setChallenge] = useState(Array.from(Utils.getRandomBytes(64)));
     const [hasLaunched, setHasLaunched] = useState(false);
+    const [isValidating, setIsValidating] = useState(true);
     const [isContractValid, setIsContractValid] = useState(false);
     const [quoteBinary, setQuoteBinary] = useState<Array<number>>([]);
     const quoteArgs = useMemo(() => ({ challenge }), [challenge]);
@@ -73,9 +74,9 @@ export const AttestationChecker: FC<AttestationCheckerProps> = ({ deploymentId, 
                 validation.set(contractBytesHash, challenge.length);
                 return Utils.hash(validation).then((validationHash) => {
                     const reportHash = reportData.subarray(0, 32);
-                    if (Utils.toHex(reportHash) === Utils.toHex(validationHash)) {
+                    if (Utils.toHex(reportHash) && Utils.toHex(validationHash))
                         setIsContractValid(true);
-                    }
+                    setIsValidating(false);
                 });
             });
         }
@@ -87,6 +88,7 @@ export const AttestationChecker: FC<AttestationCheckerProps> = ({ deploymentId, 
         <span className='bg-green-100 hidden'></span>
         <span className='bg-yellow-100 hidden'></span>
         <span className='bg-red-100 hidden'></span>
+        <span className='bg-gray-100 hidden'></span>
         {/* End of tailwind's non-sense */}
         {
             loading
@@ -102,14 +104,14 @@ export const AttestationChecker: FC<AttestationCheckerProps> = ({ deploymentId, 
                     </>
                     : <>
                         <h3 className='mt-5 mb-3'>Enclave Verification Outcome</h3>
-                        <pre className={`overflow-auto whitespace-pre-wrap break-words w-full max-w-full bg-${enclaveOutcomeLevel}-100 dark:bg-gray-800 p-3`}>
+                        <pre className={`overflow-auto whitespace-pre-wrap break-words w-full max-w-full bg-${isValidating ? 'gray' : enclaveOutcomeLevel}-100 dark:bg-gray-800 p-3`}>
                             {enclaveOutcomeLevel !== 'red' ? <UilShieldCheck className='w-8 h-10 p-0 -ml-1 mb-2' /> : <UilShieldExclamation className='w-8 h-10 p-0 -ml-1 mb-2' />}
                             {verifyResult.quote_verification_result_description ?? ''}
                         </pre>
                         <h3 className='mt-5 mb-3'>Contract Integrity Validation</h3>
-                        <pre className={`overflow-auto whitespace-pre-wrap break-words w-full max-w-full bg-${isContractValid ? 'green' : 'red'}-100 dark:bg-gray-800 p-3`}>
+                        <pre className={`overflow-auto whitespace-pre-wrap break-words w-full max-w-full bg-${isValidating ? 'gray' : isContractValid ? 'green' : 'red'}-100 dark:bg-gray-800 p-3`}>
                             {isContractValid ? <UilShieldCheck className='w-8 h-10 p-0 -ml-1 mb-2' /> : <UilShieldExclamation className='w-8 h-10 p-0 -ml-1 mb-2' />}
-                            {isContractValid ? 'Contract integrity validated successfully' : 'Contract integrity not valid. Tampering detected.'}
+                            {isValidating ? 'Checking contract validity' : isContractValid ? 'Contract integrity validated successfully' : 'Contract integrity not valid. Tampering detected.'}
                         </pre>
                         <h3 className='mt-5 mb-3'>MR Enclave Hash</h3>
                         <pre className='overflow-auto whitespace-pre-wrap break-words w-full max-w-full bg-gray-100 dark:bg-gray-800 p-3'>
@@ -131,7 +133,7 @@ export const AttestationChecker: FC<AttestationCheckerProps> = ({ deploymentId, 
                         <a download={`intel_quote_${address}_${verifyArgs.current_time}.bin`} href={URL.createObjectURL(downloadableQuote)} className='text-klave-light-blue hover:underline flex align-middle items-center'>Download Quote .bin <UilDownloadAlt className='inline-block h-4' /></a>
                         <h3 className='mt-5 mb-3'>Applicable Intel Security Advisories</h3>
                         {
-                            verifyResult.sa_list.split(',')?.map((sa: string) => <a key={sa} title={sa} href={`https://www.intel.com/content/www/us/en/security-center/advisory/${sa.toLocaleLowerCase()}.html`} target='_blank' rel='noreferrer' className='text-klave-light-blue hover:underline flex align-middle items-center'>{sa} <UilExternalLinkAlt className='inline-block h-4' /></a>)
+                            verifyResult?.sa_list?.split(',')?.map((sa: string) => <a key={sa} title={sa} href={`https://www.intel.com/content/www/us/en/security-center/advisory/${sa.toLocaleLowerCase()}.html`} target='_blank' rel='noreferrer' className='text-klave-light-blue hover:underline flex align-middle items-center'>{sa} <UilExternalLinkAlt className='inline-block h-4' /></a>)
                         }
                         <h3 className='mt-5 mb-3'>Relying Party</h3>
                         <span className='font-bold'>Secretarium DCAP</span>
