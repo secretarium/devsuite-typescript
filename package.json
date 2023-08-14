@@ -162,7 +162,7 @@
         "@commitlint/config-conventional": "^17.6.5",
         "@commitlint/config-nx-scopes": "^17.6.4",
         "@jscutlery/semver": "3.0.0",
-        "@nx/cypress": "16.1.0",
+        "@nx/cypress": "16.6.0",
         "@nx/detox": "16.1.0",
         "@nx/esbuild": "16.1.0",
         "@nx/eslint-plugin": "16.1.0",
