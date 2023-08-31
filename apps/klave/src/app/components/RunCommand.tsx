@@ -55,7 +55,7 @@ export const RunCommand: FC<RunCommandProps> = ({ address, functions = [] }) => 
                 }
             }}
             theme='vs-dark'
-            height="20vh"
+            height="50vh"
             defaultLanguage="json"
         />
     </>;
