@@ -42,7 +42,7 @@ export const AppDeploymentDetail: FC = () => {
     return <div className="flex flex-col w-full mb-7">
         <div className="flex w-full justify-between">
             <div className='mb-10'>
-                <h2 className='font-bold mb-3'>Addresses of the trustless application</h2>
+                <h2 className='font-bold mb-3'>Addresses of the honest application</h2>
                 <span className='font-mono inline-block rounded dark:text-slate-400 dark:bg-slate-800 text-slate-900 bg-slate-100 px-2 py-1 mb-1 whitespace-nowrap'>{fqdn}</span><br />
                 <span className={`rounded inline-block text-xs px-1 py-0 mr-2 text-white ${life === 'long' ? 'bg-green-600' : 'bg-slate-500'}`}>{life === 'long' ? 'Production' : 'Preview'}</span>
                 <span className={`rounded inline-block text-xs px-1 py-0 text-white ${status === 'errored' ? 'bg-red-700' : status === 'deployed' ? 'bg-blue-500' : 'bg-stone-300'}`}>{status}</span>

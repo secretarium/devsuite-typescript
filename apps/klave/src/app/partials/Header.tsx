@@ -24,7 +24,7 @@ const Header: FC = () => {
         <header className={`fixed w-full z-30 md:bg-opacity-90 transition duration-300 ease-in-out ${!top && 'bg-white dark:bg-gray-900 backdrop-blur-sm shadow-lg'}`}>
             {data?.hasUnclaimedApplications ? <div className='text-white bg-red-500'>
                 <div className="max-w-6xl mx-auto py-3 text-center ">
-                    You have deployed a trustless app but are not logged in !<br />
+                    You have deployed a honest app but are not logged in !<br />
                     You must sign in in order to save your work !
                 </div>
             </div> : null}

@@ -1,5 +1,6 @@
 import path from 'path';
 import { Answers, PromptObject } from 'prompts';
+import sanitize from 'sanitize-filename';
 import validateNpmPackage from 'validate-npm-package-name';
 
 import { findGitHubEmail, findGitHubProfileUrl, findMyName, guessRepoUrl } from './utils';
@@ -9,15 +10,15 @@ export function getSlugPrompt(customTargetPath?: string | null): PromptObject<st
     const initial =
         targetBasename && validateNpmPackage(targetBasename).validForNewPackages
             ? targetBasename
-            : 'my-trustless-app';
+            : 'my-honest-app';
 
     return {
         type: 'text',
         name: 'slug',
-        message: 'What is the npm package name?',
+        message: 'What is the package name?',
         initial,
         validate: (input) =>
-            validateNpmPackage(input).validForNewPackages || 'Must be a valid npm package name'
+            validateNpmPackage(sanitize(input)).validForNewPackages || 'Must be a valid npm package name'
     };
 }
 
@@ -26,15 +27,15 @@ export async function getSubstitutionDataPrompts(slug: string): Promise<PromptOb
         {
             type: 'text',
             name: 'name',
-            message: 'What is the name of your trustless application?',
-            initial: 'My trustless application',
+            message: 'What is the name of your honest application?',
+            initial: 'My honest application',
             validate: (input) => !!input || 'The description cannot be empty'
         },
         {
             type: 'text',
             name: 'description',
-            message: 'How would you describe the trustless application?',
-            initial: 'This is a trustless application for the Klave Network',
+            message: 'How would you describe your honest application?',
+            initial: 'This is a honest application for the Klave Network',
             validate: (input) => !!input || 'The description cannot be empty'
         },
         {
