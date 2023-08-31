@@ -4,7 +4,7 @@ import { parentPort } from 'node:worker_threads';
 import { PassThrough } from 'node:stream'; 'node:stream';
 import { serializeError } from 'serialize-error';
 import assemblyscript from 'assemblyscript/asc';
-import JSONTranform from 'json-as/transform/lib/index.js';
+import JSONTranform from '@klave/as-json/transform/lib/index.js';
 
 /** @type {import('assemblyscript/dist/asc.d.ts')} */
 const asc = assemblyscript;
@@ -27,7 +27,7 @@ parentPort.on('message', (message) => {
             '--optimizeLevel', '3',
             '--shrinkLevel', '2',
             '--converge',
-            // '--transform', 'json-as/transform',
+            // '--transform', '@klave/as-json/transform',
             '--bindings', 'esm',
             '--outFile', 'out.wasm',
             '--textFile', 'out.wat'
