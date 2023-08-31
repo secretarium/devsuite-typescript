@@ -3,7 +3,7 @@
  * @module klave/sdk
  */
 
-import { JSON } from "json-as/assembly";
+import { JSON } from "@klave/as-json/assembly";
 export { JSON }
 import * as Crypto from "./crypto"
 export { Crypto }
@@ -65,6 +65,10 @@ declare function digest_raw(text: ArrayBuffer, text_size: i32, digest: ArrayBuff
 // @ts-ignore: decorator
 @external("env", "get_random_bytes")
 declare function get_random_bytes_raw(bytes: ArrayBuffer, size: i32): i32;
+// @ts-ignore: decorator
+@external("env", "https_query")
+declare function https_query_raw(query: ArrayBuffer, result: ArrayBuffer, result_size: i32): i32;
+
 
 
 export class Router {
@@ -156,6 +160,58 @@ export class Notifier {
     static sendJson<T = unknown>(message: T): i32 {
         let buf = String.UTF8.encode(JSON.stringify<T>(message), true);
         return runtime_notify(buf);
+    }
+}
+
+@JSON
+export class HttpRequest {
+    hostname!: string;
+    port: i32 = 443;
+    path: string = '';
+    headers: string[][] = [];
+    body: string = '';
+}
+@JSON
+export class HttpResponse {
+    statusCode: i32 = 200;
+    headers: string[][] = [];
+    body: string = '';
+}
+
+export class HTTP {
+
+    static requestAsArrayBuffer(query: HttpRequest): ArrayBuffer | null {
+        let p = String.UTF8.encode(JSON.stringify(query), true);
+        let value = new ArrayBuffer(64);
+        let result = https_query_raw(p, value, value.byteLength);
+        if (result < 0)
+            return null; // todo : report error
+        if (result > value.byteLength) {
+            // buffer not big enough, retry with a properly sized one
+            value = new ArrayBuffer(result);
+            result = https_query_raw(p, value, value.byteLength);
+            if (result < 0)
+                return null; // todo : report error
+        }
+        return value
+    }
+
+    static requestAsString(query: HttpRequest): string | null {
+        let value = HTTP.requestAsArrayBuffer(query);
+        if (value === null)
+            return null;
+        return String.UTF8.decode(value, true);
+    }
+
+    static requestJson(query: HttpRequest): HttpResponse | null {
+        let value = HTTP.requestAsString(query);
+        if (value === null)
+            return null;
+        return JSON.parse<HttpResponse>(value);
+    }
+
+    static request(query: HttpRequest): HttpResponse | null {
+        return HTTP.requestJson(query);
     }
 }
 
