@@ -226,12 +226,8 @@ export class HTTP {
 export class ML {
 
     static loadLightGBMModel(name: string, model: string): i32 {
-        // work around json-as bug : an invalid json with a "real" line feed in a string field would be parsed,
-        // but not if the string is properly formed with the two-characters escape sequence '\' followed by 'n'
-        // as we don't want to try to pass invalid json :
-        let tmodel = model.replaceAll('\\n', '\n');
         let nameBuf = String.UTF8.encode(name, true);
-        let modelBuf = String.UTF8.encode(tmodel, true);
+        let modelBuf = String.UTF8.encode(model, true);
         return runtime_load_lightgbm_model(nameBuf, modelBuf);
     }
 

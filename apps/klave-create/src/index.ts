@@ -97,9 +97,10 @@ async function createTemplateAsync(targetDir: string, data: SubstitutionData): P
     return await newStep('Creating template files', async (step) => {
 
         const sourceDir = path.join(__dirname, '..', 'template', '.');
-
         await fs.copy(sourceDir, targetDir, {
-            filter: () => true
+            filter: () => true,
+            overwrite: false,
+            errorOnExist: true
         });
 
         const gitignoreFile = path.join(targetDir, 'gitignore');
@@ -110,19 +111,21 @@ async function createTemplateAsync(targetDir: string, data: SubstitutionData): P
         await replaceInFile({
             files: path.join(targetDir, 'klave.json'),
             from: [/{{SMART_CONTRACT_NAME}}/g, /{{SMART_CONTRACT_SLUG}}/g],
-            to: [data.project.name, data.project.slug]
+            to: [data.project.name, data.project.slug],
+            disableGlobs: true
         });
 
         const latestSDK = await latestVersion('@klave/sdk');
         await replaceInFile({
             files: path.join(targetDir, 'package.json'),
             from: [/{{KLAVE_SDK_CURRENT_VERSION}}/g],
-            to: [latestSDK ?? '*']
+            to: [latestSDK ?? '*'],
+            disableGlobs: true
         });
 
         step.succeed('Creating template files');
 
-        return path.join(targetDir, 'package');
+        return path.join(targetDir, 'temp_dl_folder');
     });
 }
 
@@ -215,7 +218,7 @@ function printFurtherInstructions(
 
         console.log();
         console.log(
-            'To start developing your trustless application, navigate to the directory and open your favorite editor'
+            'To start developing your honest application, navigate to the directory and open your favorite editor'
         );
         commands.forEach((command) => console.log(chalk.gray('>'), chalk.bold(command)));
         console.log();
