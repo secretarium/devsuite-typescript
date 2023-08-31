@@ -1,0 +1,49 @@
+name: Release
+
+on:
+  push:
+    tags: ['[a-z-]+@[0-9]+.[0-9]+.[0-9]+']
+
+jobs:
+  npm:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: lts/hydrogen # 18
+          registry-url: https://registry.npmjs.org
+          always-auth: true
+
+      - name: Install repo dependencies
+        run: yarn install --network-timeout 1000000 --forzen-lockfile
+
+      - name: Publish artifacts
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: yarn nx publish `echo ${{ env.GITHUB_REF_NAME }} | cut -d'@' -f1` --configuration=production --parallel=1 --exclude=pocket
+        # run: npm publish --provenance
+
+#   github:
+#     needs:
+#       - npm
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v3
+#         with:
+#           fetch-depth: 2
+#       - name: Setup node
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: lts/hydrogen # 18
+#           cache: 'npm'
+#       - run: node .release-notes.cjs
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
