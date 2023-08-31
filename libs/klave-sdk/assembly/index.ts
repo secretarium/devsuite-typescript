@@ -24,6 +24,9 @@ declare function runtime_read_ledger_raw(table: ArrayBuffer, key: ArrayBuffer, k
 @external("env", "write_ledger")
 declare function runtime_write_ledger_raw(table: ArrayBuffer, key: ArrayBuffer, key_size: i32, value: ArrayBuffer, value_size: i32): i32;
 // @ts-ignore: decorator
+@external("env", "remove_from_ledger")
+declare function runtime_remove_from_ledger_raw(table: ArrayBuffer, key: ArrayBuffer, key_size: i32): i32;
+// @ts-ignore: decorator
 @external("env", "query_context")
 declare function runtime_query_context_raw(key: ArrayBuffer, value: ArrayBuffer, value_size: i32): i32;
 // @ts-ignore: decorator
@@ -110,6 +113,11 @@ class Table {
         let k = String.UTF8.encode(key, true);
         let v = String.UTF8.encode(value, true);
         return runtime_write_ledger_raw(this.table, k, k.byteLength, v, v.byteLength);
+    }
+
+    unset(key: string): i32 {
+        let k = String.UTF8.encode(key, true);
+        return runtime_remove_from_ledger_raw(this.table, k, k.byteLength);
     }
 }
 
