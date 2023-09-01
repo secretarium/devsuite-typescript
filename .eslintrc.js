@@ -40,6 +40,7 @@ const javascriptRules = {
 const typescriptRules = {
     ...javascriptRules,
     'no-unused-vars': 'off',
+    '@typescript-eslint/no-explicit-any': 'warn',
     '@typescript-eslint/no-unused-vars': [
         'error',
         { args: 'after-used', varsIgnorePattern: '^__unused' }
@@ -65,7 +66,8 @@ module.exports = {
         '!**/*.json',
         '!**/*.js',
         '!**/*.mjs',
-        '!**/*.ts'
+        '!**/*.ts',
+        'node_modules/**'
     ],
     plugins: ['@nx', 'json'],
     overrides: [

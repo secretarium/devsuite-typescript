@@ -12,7 +12,7 @@ export { localForage };
 export function useLocalForage<D>(key: string, initialValue: D, errorHandler?: ErrorHandler) {
     const [storedValue, setStoredValue] = useState<D | null>(initialValue);
     const _errorHandler = useRef(
-        (typeof errorHandler == undefined || errorHandler == null) ? defaultErrorHandler : errorHandler
+        (typeof errorHandler == 'undefined' || errorHandler == null) ? defaultErrorHandler : errorHandler
     );
 
     const error = (e?: Error) => {
