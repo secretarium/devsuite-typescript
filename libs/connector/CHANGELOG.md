@@ -1,4 +1,9 @@
 # Changelog
+## [0.13.2](///compare/connector@0.13.1...connector@0.13.2) (2023-09-01)
+
+### Dependency Updates
+
+* `crypto` updated to version `0.13.1`
 ## [0.13.1](///compare/connector@0.13.0...connector@0.13.1) (2023-06-01)
 
 ### Dependency Updates
