@@ -1,4 +1,24 @@
 # Changelog
+## [0.3.0](///compare/klave@0.2.2...klave@0.3.0) (2023-09-01)
+
+### Dependency Updates
+
+* `connector` updated to version `0.2.2`
+* `klave-api` updated to version `0.2.2`
+* `crypto` updated to version `0.2.2`
+* `instrumentation` updated to version `0.2.2`
+
+### Features
+
+* **klave:** Add Dependencies and Attestation tabs in Deployment interface 04a10a9
+* **klave:** Beautify UI with klave colors + dark theme 689aa60
+
+
+### Bug Fixes
+
+* **api,klave:** Forcefully expel bad cached credentials 90c1274
+* **klave:** Revert style from 689aa601 f489e04
+
 ## [0.2.2](///compare/klave@0.2.1...klave@0.2.2) (2023-06-13)
 
 ### Dependency Updates
