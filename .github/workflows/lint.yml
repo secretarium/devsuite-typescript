@@ -1,8 +1,6 @@
-name: Test
+name: Lint
 
 on:
-  push:
-    branches: [main, develop, "fix/*"]
   pull_request:
     branches: [main, develop]
 
@@ -51,19 +49,7 @@ jobs:
       - name: Install repo dependencies
         run: yarn install --network-timeout 1000000 --forzen-lockfile
 
-      - name: Build the Dev Suite
+      - name: Check for lint
         env:
           NODE_OPTIONS: "--max_old_space_size=4096"
-        run: yarn nx affected --target=build --parallel=1 --exclude=pocket --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
-
-      - name: Unit test the Dev Suite
-        env:
-          NODE_OPTIONS: "--max_old_space_size=4096"
-          CI: true
-        run: yarn nx affected --target=test --parallel=1 --exclude=pocket --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
-
-      - name: Execute end-to-end tests
-        env:
-          NODE_OPTIONS: "--max_old_space_size=4096"
-          CI: true
-        run: yarn nx affected --target=e2e --parallel=1 --exclude=pocket --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
+        run:   yarn nx affected --target=lint --parallel=1 --exclude=pocket --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
