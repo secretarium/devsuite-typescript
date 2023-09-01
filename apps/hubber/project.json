@@ -78,8 +78,8 @@
                 "preset": "conventional",
                 "trackDeps": true,
                 "changelogHeader": "# Changelog",
-                "tagPrefix": "${projectName}@",
-                "commitMessageFormat": "chore(${projectName}): Release version ${version}",
+                "tagPrefix": "{projectName}@",
+                "commitMessageFormat": "chore({projectName}): Release version ${version}",
                 "postTargets": [
                     "hubber:build"
                 ]
