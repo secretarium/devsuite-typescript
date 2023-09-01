@@ -1,4 +1,24 @@
 # Changelog
+## [0.4.0](///compare/klave-api@0.3.1...klave-api@0.4.0) (2023-09-01)
+
+### Dependency Updates
+
+* `klave-db` updated to version `0.3.1`
+* `connector` updated to version `0.3.1`
+* `klave-compiler` updated to version `0.3.1`
+* `providers` updated to version `0.3.1`
+
+### Features
+
+* **db,api:** Add compilation dependencies manifest tracking 6e51f29
+
+
+### Bug Fixes
+
+* **api,klave:** Forcefully expel bad cached credentials 90c1274
+* **api:** Compilation is non-function when importing SDK af188ed
+* **api:** Tweak building path resolution for cross-platform 6bf8af2
+
 ## [0.3.1](///compare/klave-api@0.3.0...klave-api@0.3.1) (2023-06-13)
 
 ### Dependency Updates
