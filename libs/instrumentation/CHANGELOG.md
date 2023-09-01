@@ -1,4 +1,9 @@
 # Changelog
+## [0.1.2](///compare/instrumentation@0.1.1...instrumentation@0.1.2) (2023-09-01)
+
+### Dependency Updates
+
+* `connector` updated to version `0.1.1`
 ## [0.1.1](///compare/instrumentation@0.1.0...instrumentation@0.1.1) (2023-06-01)
 
 ### Dependency Updates
