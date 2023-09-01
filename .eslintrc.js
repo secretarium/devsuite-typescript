@@ -1,12 +1,13 @@
 const jsonRules = {
-    indent: [
+    'indent': [
         'error',
         4,
         {
             SwitchCase: 1,
             ignoredNodes: ['VariableDeclaration[declarations.length=0]']
         }
-    ]
+    ],
+    '@nx/dependency-checks': 'error'
 };
 
 const javascriptRules = {
@@ -41,6 +42,7 @@ const typescriptRules = {
     ...javascriptRules,
     'no-unused-vars': 'off',
     '@typescript-eslint/no-explicit-any': 'warn',
+    '@typescript-eslint/consistent-type-assertions': 'off',
     '@typescript-eslint/no-unused-vars': [
         'error',
         { args: 'after-used', varsIgnorePattern: '^__unused' }
@@ -59,7 +61,8 @@ module.exports = {
             './{packages,apps,libs}/*/tsconfig.app.json',
             './{packages,apps,libs}/*/tsconfig.spec.json',
             './{packages,apps,libs}/*/tsconfig.server.json'
-        ]
+        ],
+        EXPERIMENTAL_useProjectService: true
     },
     ignorePatterns: [
         '**/*',

@@ -5,7 +5,7 @@ import { formatter } from './languageService';
 
 const deferredMarker = '__klave_deferred__';
 
-class CompilerHost {
+export class CompilerHost {
 
     id = uuid();
     entryFile = -1;

@@ -11,7 +11,8 @@
             ],
             "options": {
                 "lintFilePatterns": [
-                    "libs/pruner/**/*.ts"
+                    "libs/pruner/**/*.ts",
+                    "libs/pruner/package.json"
                 ]
             }
         },

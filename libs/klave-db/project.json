@@ -30,7 +30,8 @@
             ],
             "options": {
                 "lintFilePatterns": [
-                    "libs/klave-db/**/*.ts"
+                    "libs/klave-db/**/*.ts",
+                    "libs/klave-db/package.json"
                 ]
             }
         },

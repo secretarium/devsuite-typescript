@@ -10,7 +10,6 @@
                 "{options.outputPath}"
             ],
             "options": {
-                "buildableProjectDepsInPackageJsonType": "dependencies",
                 "outputPath": "dist/libs/deployer",
                 "main": "libs/deployer/src/index.ts",
                 "tsConfig": "libs/deployer/tsconfig.lib.json",
@@ -33,7 +32,8 @@
             ],
             "options": {
                 "lintFilePatterns": [
-                    "libs/deployer/**/*.ts"
+                    "libs/deployer/**/*.ts",
+                    "libs/deployer/package.json"
                 ]
             }
         },

@@ -83,7 +83,8 @@
             ],
             "options": {
                 "lintFilePatterns": [
-                    "apps/endoscope/**/*.{ts,tsx,js,jsx,json}"
+                    "apps/endoscope/**/*.{ts,tsx,js,jsx,json}",
+                    "apps/endoscope/package.json"
                 ]
             }
         },

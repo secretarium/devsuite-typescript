@@ -8,7 +8,11 @@
             "executor": "@nx/expo:start",
             "options": {
                 "port": 8081
-            }
+            },
+            "dependsOn": [
+                "ensure-symlink",
+                "sync-deps"
+            ]
         },
         "serve": {
             "executor": "nx:run-commands",
@@ -20,13 +24,21 @@
             "executor": "@nx/expo:run",
             "options": {
                 "platform": "ios"
-            }
+            },
+            "dependsOn": [
+                "ensure-symlink",
+                "sync-deps"
+            ]
         },
         "run-android": {
             "executor": "@nx/expo:run",
             "options": {
                 "platform": "android"
-            }
+            },
+            "dependsOn": [
+                "ensure-symlink",
+                "sync-deps"
+            ]
         },
         "build": {
             "executor": "@nx/expo:build",
@@ -52,7 +64,11 @@
         },
         "prebuild": {
             "executor": "@nx/expo:prebuild",
-            "options": {}
+            "options": {},
+            "dependsOn": [
+                "ensure-symlink",
+                "sync-deps"
+            ]
         },
         "install": {
             "executor": "@nx/expo:install",
@@ -67,7 +83,11 @@
             "options": {
                 "platform": "all",
                 "outputDir": "../../dist/apps/pocket"
-            }
+            },
+            "dependsOn": [
+                "ensure-symlink",
+                "sync-deps"
+            ]
         },
         "export-web": {
             "executor": "@nx/expo:export",
@@ -82,7 +102,8 @@
             ],
             "options": {
                 "lintFilePatterns": [
-                    "apps/pocket/**/*.{ts,tsx,js,jsx}"
+                    "apps/pocket/**/*.{ts,tsx,js,jsx}",
+                    "apps/pocket/package.json"
                 ]
             }
         },

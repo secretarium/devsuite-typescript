@@ -2,7 +2,9 @@ import * as fs from 'fs-extra';
 import * as path from 'node:path';
 import * as chalk from 'chalk';
 import * as  pathCompleteExtname from 'path-complete-extname';
-import { createCompiler } from '@klave/compiler';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { createCompiler, type CompilerHost } from '@klave/compiler';
 import { klaveRcConfigurationSchema as schema } from './rc';
 
 // `yarn run` may change the current working dir, then we should use `INIT_CWD` env.
@@ -31,8 +33,8 @@ const compile = () => {
                     console.error(`Compiling ${chalk.green(app.name)} from ${path.join('.', path.relative(CWD, appPath))}...`);
                     fs.mkdirSync(path.join(CWD, '.klave'), { recursive: true });
 
-                    createCompiler().then(compiler => {
-                        compiler.on('message', (message) => {
+                    createCompiler().then((compiler: CompilerHost) => {
+                        compiler.on('message', (message: any) => {
                             // if (message.type === 'start') {
                             //     ...
                             // }

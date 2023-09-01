@@ -25,7 +25,8 @@
             ],
             "options": {
                 "lintFilePatterns": [
-                    "libs/klave-api/**/*.ts"
+                    "libs/klave-api/**/*.ts",
+                    "libs/klave-api/package.json"
                 ]
             }
         },

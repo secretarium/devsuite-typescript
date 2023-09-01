@@ -4,7 +4,9 @@
         "outDir": "../../dist/out-tsc",
         "module": "commonjs",
         "types": [
-            "node"
+            "node",
+            "@nx/react/typings/cssmodule.d.ts",
+            "@nx/react/typings/image.d.ts"
         ]
     },
     "exclude": [

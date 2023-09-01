@@ -80,7 +80,8 @@
             ],
             "options": {
                 "lintFilePatterns": [
-                    "apps/klave/**/*.{ts,tsx,js,jsx}"
+                    "apps/klave/**/*.{ts,tsx,js,jsx}",
+                    "apps/klave/package.json"
                 ]
             }
         },

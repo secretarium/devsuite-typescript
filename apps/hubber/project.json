@@ -51,7 +51,8 @@
             ],
             "options": {
                 "lintFilePatterns": [
-                    "apps/hubber/**/*.ts"
+                    "apps/hubber/**/*.ts",
+                    "apps/hubber/package.json"
                 ]
             }
         },

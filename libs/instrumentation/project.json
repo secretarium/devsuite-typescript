@@ -26,7 +26,8 @@
             ],
             "options": {
                 "lintFilePatterns": [
-                    "libs/instrumentation/**/*.ts"
+                    "libs/instrumentation/**/*.ts",
+                    "libs/instrumentation/package.json"
                 ]
             }
         },

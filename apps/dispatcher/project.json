@@ -55,7 +55,8 @@
             ],
             "options": {
                 "lintFilePatterns": [
-                    "apps/dispatcher/**/*.ts"
+                    "apps/dispatcher/**/*.ts",
+                    "apps/dispatcher/package.json"
                 ]
             }
         },

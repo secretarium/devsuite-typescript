@@ -225,6 +225,8 @@ class Deployer {
                     expiresOn: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14),
                     version: this.operatingConfig[application.name].version,
                     build: after.substring(0, 8),
+                    fqdn: `${application.name.toLocaleLowerCase().replace(/\s/g, '-')}.sta.klave.network`,
+                    set: application.name,
                     branch: this.branch,
                     locations: ['FR'],
                     status: 'deploying',

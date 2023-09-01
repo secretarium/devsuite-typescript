@@ -23,7 +23,8 @@
             "executor": "@nx/linter:eslint",
             "options": {
                 "lintFilePatterns": [
-                    "libs/connector/**/*.{ts,tsx,js,jsx,json}"
+                    "libs/connector/**/*.{ts,tsx,js,jsx,json}",
+                    "libs/connector/package.json"
                 ]
             },
             "outputs": [

@@ -32,18 +32,19 @@
                 }
             ],
             "outputs": [
-                "libs/crypto/vendor"
+                "{projectRoot}/vendor",
+                "{workspaceRoot}/libs/crypto/vendor"
             ],
             "options": {
-                "command": "node tools/scripts/buildMsRCrypto.mjs",
-                "outputPath": "libs/crypto/vendor"
+                "command": "node tools/scripts/buildMsRCrypto.mjs"
             }
         },
         "lint": {
             "executor": "@nx/linter:eslint",
             "options": {
                 "lintFilePatterns": [
-                    "libs/crypto/**/*.{ts,tsx,js,jsx,json}"
+                    "libs/crypto/**/*.{ts,tsx,js,jsx,json}",
+                    "libs/crypto/package.json"
                 ]
             },
             "outputs": [

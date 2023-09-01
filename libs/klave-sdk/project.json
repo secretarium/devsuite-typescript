@@ -10,7 +10,6 @@
                 "{options.outputPath}"
             ],
             "options": {
-                "buildableProjectDepsInPackageJsonType": "dependencies",
                 "outputPath": "dist/libs/klave-sdk",
                 "tsConfig": "libs/klave-sdk/tsconfig.lib.json",
                 "packageJson": "libs/klave-sdk/package.json",
@@ -36,7 +35,8 @@
             ],
             "options": {
                 "lintFilePatterns": [
-                    "libs/klave-sdk/**/*.ts"
+                    "libs/klave-sdk/**/*.ts",
+                    "libs/klave-sdk/package.json"
                 ]
             }
         },
