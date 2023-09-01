@@ -1,6 +1,6 @@
 {
     "name": "@klave/hubber",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "type": "commonjs",
     "license": "MIT",
     "dependencies": {

@@ -1,4 +1,15 @@
 # Changelog
+## [0.1.4](///compare/hubber@0.1.3...hubber@0.1.4) (2023-09-01)
+
+### Dependency Updates
+
+* `klave` updated to version `0.1.3`
+* `klave-compiler` updated to version `0.1.3`
+* `klave-db` updated to version `0.1.3`
+* `providers` updated to version `0.1.3`
+* `instrumentation` updated to version `0.1.3`
+* `klave-api` updated to version `0.1.3`
+* `pruner` updated to version `0.1.3`
 ## [0.1.3](///compare/hubber@0.1.2...hubber@0.1.3) (2023-06-13)
 
 ### Dependency Updates
