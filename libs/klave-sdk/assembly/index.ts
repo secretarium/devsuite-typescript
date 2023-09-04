@@ -71,6 +71,12 @@ declare function get_random_bytes_raw(bytes: ArrayBuffer, size: i32): i32;
 // @ts-ignore: decorator
 @external("env", "https_query")
 declare function https_query_raw(query: ArrayBuffer, result: ArrayBuffer, result_size: i32): i32;
+// @ts-ignore: decorator
+@external("env", "start_recording")
+declare function start_recording(): i32;
+// @ts-ignore: decorator
+@external("env", "stop_recording")
+declare function stop_recording(): i32;
 
 
 
@@ -168,6 +174,17 @@ export class Notifier {
     static sendJson<T = unknown>(message: T): i32 {
         let buf = String.UTF8.encode(JSON.stringify<T>(message), true);
         return runtime_notify(buf);
+    }
+}
+
+export class Subscription {
+
+    static setReplayStart(): i32 {
+        return start_recording();
+    }
+
+    static setReplayStop(): i32 {
+        return stop_recording();
     }
 }
 
