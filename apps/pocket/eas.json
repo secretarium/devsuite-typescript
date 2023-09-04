@@ -7,10 +7,17 @@
     },
     "build": {
         "base": {
+            "node": "18.0.0",
             "env": {
                 "STAGE": "production",
                 "NODE_ENV": "development",
                 "GOOGLE_SERVICES_FILE": "_"
+            },
+            "android": {
+                "image": "ubuntu-22.04-jdk-11-ndk-r21e"
+            },
+            "ios": {
+                "image": "macos-ventura-13.4-xcode-14.3.1"
             }
         },
         "development": {
