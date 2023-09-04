@@ -1,4 +1,21 @@
 # Changelog
+## [0.8.0](///compare/klave-sdk@0.7.0...klave-sdk@0.8.0) (2023-09-04)
+
+### Dependency Updates
+
+* `klave-compiler` updated to version `0.7.0`
+
+### Features
+
+* **sdk:** Add Ledger key unset method abd8959
+* **sdk:** Add subscription marker 8ada39b
+* **sdk:** Switching JSON package + Add new HTTP request prototypes 12d45dc
+
+
+### Bug Fixes
+
+* **sdk,create:** Linking, compilation and target issues d0da049
+
 ## [0.7.0](///compare/klave-sdk@0.6.4...klave-sdk@0.7.0) (2023-08-02)
 
 ### Dependency Updates
