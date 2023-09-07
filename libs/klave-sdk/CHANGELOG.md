@@ -1,4 +1,14 @@
 # Changelog
+## [0.8.1](///compare/klave-sdk@0.8.0...klave-sdk@0.8.1) (2023-09-07)
+
+### Dependency Updates
+
+* `klave-compiler` updated to version `0.8.0`
+
+### Bug Fixes
+
+* Revert change to package.json generation until Nx 17 0d72132
+
 ## [0.8.0](///compare/klave-sdk@0.7.0...klave-sdk@0.8.0) (2023-09-04)
 
 ### Dependency Updates
