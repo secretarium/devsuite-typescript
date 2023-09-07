@@ -161,7 +161,7 @@ export const authRouter = createTRPCRouter({
                 }
             });
 
-            const options = generateAuthenticationOptions({
+            const options = await generateAuthenticationOptions({
                 timeout: 60000,
                 // allowCredentials: user.devices.map(dev => ({
                 //     id: Buffer.from(dev.credentialID),
@@ -302,7 +302,7 @@ export const authRouter = createTRPCRouter({
                 }
             });
 
-            const options = generateRegistrationOptions({
+            const options = await generateRegistrationOptions({
                 rpName: 'Klave',
                 rpID,
                 // We pretend we found a user with this email address

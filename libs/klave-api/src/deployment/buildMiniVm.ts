@@ -1,5 +1,5 @@
 import * as nodePath from 'node:path';
-import { sigstore } from 'sigstore';
+import * as sigstore from 'sigstore';
 import fetch from 'node-fetch';
 import { HttpsProxyAgent } from 'https-proxy-agent';
 import { ErrorObject, serializeError } from 'serialize-error';

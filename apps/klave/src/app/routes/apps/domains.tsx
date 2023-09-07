@@ -5,7 +5,7 @@ import { UilCheckCircle, UilGlobe, UilPlus, UilSpinner, UilTimesCircle, UilTrash
 import api from '../../utils/api';
 import { Domain } from '@prisma/client';
 import { useZodForm } from '../../utils/useZodForm';
-import z from 'zod';
+import { z } from 'zod';
 import { formatTimeAgo } from '../../utils/formatTimeAgo';
 
 type DomainContextProps = {

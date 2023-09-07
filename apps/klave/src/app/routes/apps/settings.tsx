@@ -4,7 +4,7 @@ import * as AlertDialog from '@radix-ui/react-alert-dialog';
 import { UilSpinner, UilTrash } from '@iconscout/react-unicons';
 import api from '../../utils/api';
 import { useZodForm } from '../../utils/useZodForm';
-import z from 'zod';
+import { z } from 'zod';
 import { useEffect } from 'react';
 
 const ApplicationDeletion = () => {

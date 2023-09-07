@@ -1,7 +1,7 @@
 import * as path from 'node:path';
 import type { Context } from 'probot';
 import type { Stats } from 'assemblyscript/dist/asc';
-import { sigstore } from 'sigstore';
+import * as sigstore from 'sigstore';
 import { ErrorObject, serializeError } from 'serialize-error';
 import { Hook, Repo, Application, prisma, Deployment } from '@klave/db';
 import { createCompiler } from '@klave/compiler';
