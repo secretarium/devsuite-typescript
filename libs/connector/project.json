@@ -16,7 +16,10 @@
                 "main": "libs/connector/src/index.ts",
                 "assets": [
                     "libs/connector/*.md"
-                ]
+                ],
+                "generateExportsField": true,
+                "updateBuildableProjectDepsInPackageJson": true,
+                "buildableProjectDepsInPackageJsonType": "dependencies"
             }
         },
         "lint": {

@@ -16,7 +16,10 @@
                 "assets": [
                     "libs/klave-compiler/*.md",
                     "libs/klave-compiler/src/*.mjs"
-                ]
+                ],
+                "generateExportsField": true,
+                "updateBuildableProjectDepsInPackageJson": true,
+                "buildableProjectDepsInPackageJsonType": "dependencies"
             },
             "configurations": {
                 "development": {

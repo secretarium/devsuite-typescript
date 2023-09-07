@@ -20,7 +20,10 @@
                     "libs/klave-sdk/index.ts",
                     "libs/klave-sdk/sdk.json",
                     "libs/klave-sdk/*.md"
-                ]
+                ],
+                "generateExportsField": true,
+                "updateBuildableProjectDepsInPackageJson": true,
+                "buildableProjectDepsInPackageJsonType": "dependencies"
             },
             "configurations": {
                 "development": {

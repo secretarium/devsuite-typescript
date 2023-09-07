@@ -1,13 +1,12 @@
 const jsonRules = {
-    'indent': [
+    indent: [
         'error',
         4,
         {
             SwitchCase: 1,
             ignoredNodes: ['VariableDeclaration[declarations.length=0]']
         }
-    ],
-    '@nx/dependency-checks': 'error'
+    ]
 };
 
 const javascriptRules = {
@@ -95,6 +94,7 @@ module.exports = {
         },
         {
             files: ['*.json'],
+            parser: 'jsonc-eslint-parser',
             extends: ['plugin:json/recommended'],
             rules: jsonRules
         }

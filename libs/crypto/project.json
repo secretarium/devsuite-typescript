@@ -21,7 +21,10 @@
                 "main": "libs/crypto/src/index.ts",
                 "assets": [
                     "libs/crypto/*.md"
-                ]
+                ],
+                "generateExportsField": true,
+                "updateBuildableProjectDepsInPackageJson": true,
+                "buildableProjectDepsInPackageJsonType": "dependencies"
             }
         },
         "build-upstream": {
