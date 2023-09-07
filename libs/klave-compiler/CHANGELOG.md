@@ -1,4 +1,11 @@
 # Changelog
+## [0.2.5](///compare/klave-compiler@0.2.4...klave-compiler@0.2.5) (2023-09-07)
+
+
+### Bug Fixes
+
+* Revert change to package.json generation until Nx 17 0d72132
+
 ## [0.2.4](///compare/klave-compiler@0.2.3...klave-compiler@0.2.4) (2023-09-01)
 
 ## [0.2.3](///compare/klave-compiler@0.2.2...klave-compiler@0.2.3) (2023-08-02)
