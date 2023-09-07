@@ -9,7 +9,7 @@
     },
     "include": [
         "src/**/*.ts",
-        "src/**/*.mjs",
+        "src/**/*.mjs"
     ],
     "exclude": [
         "jest.config.ts",

@@ -13,7 +13,7 @@ class CustomEnvironment extends NodeEnvironment {
     count = 0;
 
     constructor(config: JestEnvironmentConfig, context: EnvironmentContext) {
-        super(config, context)
+        super(config, context);
         const { projectConfig: { rootDir } } = config;
         this.rootDir = rootDir;
     }
@@ -21,10 +21,10 @@ class CustomEnvironment extends NodeEnvironment {
     override async setup() {
         await super.setup();
         const dbName = uuid();
-        ['.env', '.env.local', '.env.test', '.env.test.local'].forEach(env => dotenv.config({ path: path.join(this.rootDir, env), override: true }))
+        ['.env', '.env.local', '.env.test', '.env.test.local'].forEach(env => dotenv.config({ path: path.join(this.rootDir, env), override: true }));
         this.originEnv = process.env;
         this.mongodb = await MongoMemoryServer.create({ instance: { dbName } });
-        const mongoUri = this.mongodb.getUri()
+        const mongoUri = this.mongodb.getUri();
         this.global.process.env = {
             ...this.originEnv,
             NX_EXPRESS_SESSION_SECRETS: 'secret-test-1337',

@@ -1,12 +1,13 @@
 const jsonRules = {
-    indent: [
+    'indent': [
         'error',
         4,
         {
             SwitchCase: 1,
             ignoredNodes: ['VariableDeclaration[declarations.length=0]']
         }
-    ]
+    ],
+    '@typescript-eslint/consistent-type-assertions': 'off'
 };
 
 const javascriptRules = {
@@ -41,7 +42,6 @@ const typescriptRules = {
     ...javascriptRules,
     'no-unused-vars': 'off',
     '@typescript-eslint/no-explicit-any': 'warn',
-    '@typescript-eslint/consistent-type-assertions': 'off',
     '@typescript-eslint/no-unused-vars': [
         'error',
         { args: 'after-used', varsIgnorePattern: '^__unused' }
@@ -53,22 +53,25 @@ module.exports = {
     parserOptions: {
         tsconfigRootDir: __dirname,
         project: [
-            './tsconfig.eslint.json',
-            './{packages,apps,libs}/*-e2e/tsconfig.json',
-            './{packages,apps,libs}/*/tsconfig.e2e.json',
-            './{packages,apps,libs}/*/tsconfig.lib.json',
-            './{packages,apps,libs}/*/tsconfig.app.json',
-            './{packages,apps,libs}/*/tsconfig.spec.json',
-            './{packages,apps,libs}/*/tsconfig.server.json'
+            './tsconfig.eslint.json'
+            // './{packages,apps,libs}/*-e2e/tsconfig.json',
+            // './{packages,apps,libs}/*/tsconfig.e2e.json',
+            // './{packages,apps,libs}/*/tsconfig.lib.json',
+            // './{packages,apps,libs}/*/tsconfig.app.json',
+            // './{packages,apps,libs}/*/tsconfig.spec.json',
+            // './{packages,apps,libs}/*/tsconfig.server.json'
         ],
         EXPERIMENTAL_useProjectService: true
     },
     ignorePatterns: [
-        '**/*',
+        // '**/*',
         '!**/*.json',
         '!**/*.js',
         '!**/*.mjs',
         '!**/*.ts',
+        'dist/**',
+        'tmp/**',
+        'tools/**/_msr*',
         'node_modules/**'
     ],
     plugins: ['@nx', 'json'],
@@ -94,7 +97,6 @@ module.exports = {
         },
         {
             files: ['*.json'],
-            parser: 'jsonc-eslint-parser',
             extends: ['plugin:json/recommended'],
             rules: jsonRules
         }
