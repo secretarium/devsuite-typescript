@@ -33,7 +33,7 @@ export const ActivityRecord: FC<ActivityRecordProps> = ({ activity }) => {
     return null;
 };
 
-export const AppListing: FC = () => {
+export const ActivityRecordListing: FC = () => {
 
     const { appId } = useParams();
     const { data: activitiesList, isLoading: isLoadingActivities } = api.v0.activities.getByApplication.useQuery({ appId: appId || '' });
@@ -79,4 +79,4 @@ export const AppListing: FC = () => {
     </div>;
 };
 
-export default AppListing;
+export default ActivityRecordListing;
