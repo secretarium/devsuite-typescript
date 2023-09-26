@@ -135,6 +135,7 @@ export const reposRouter = createTRPCRouter({
                 owner: repo.owner.login,
                 fullName: repo.full_name,
                 name: repo.name,
+                defaultBranch: repo.default_branch,
                 installationRemoteId: ''
             })).filter(Boolean);
 

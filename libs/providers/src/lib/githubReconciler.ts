@@ -67,6 +67,7 @@ export const githubOps = {
                             name: repo.name,
                             owner: repo.owner.login,
                             fullName: repo.full_name,
+                            defaultBranch: repo.default_branch,
                             private: repo.private,
                             installationPayload: repo as any
                         },

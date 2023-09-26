@@ -89,6 +89,7 @@ model DeployableRepo {
     owner                String
     name                 String
     fullName             String
+    defaultBranch        String?
     installationRemoteId String
     config               String?
     createdAt            DateTime @default(now())
@@ -99,14 +100,15 @@ model DeployableRepo {
 }
 
 model Repo {
-    id           String        @id @default(uuid()) @map("_id")
-    source       CodeSource
-    owner        String
-    name         String
-    config       Json
-    createdAt    DateTime      @default(now())
-    updatedAt    DateTime      @updatedAt
-    applications Application[]
+    id            String        @id @default(uuid()) @map("_id")
+    source        CodeSource
+    owner         String
+    name          String
+    defaultBranch String?
+    config        Json
+    createdAt     DateTime      @default(now())
+    updatedAt     DateTime      @updatedAt
+    applications  Application[]
 
     @@unique([source, owner, name])
 }
@@ -294,6 +296,7 @@ model Repository {
     owner                String
     name                 String
     fullName             String
+    defaultBranch        String?
     private              Boolean
     createdAt            DateTime   @default(now())
     updatedAt            DateTime   @updatedAt

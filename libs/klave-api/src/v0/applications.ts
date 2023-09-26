@@ -71,12 +71,14 @@ export const applicationRouter = createTRPCRouter({
                     },
                     update: {
                         // TODO: Use zod to validate the config
+                        defaultBranch: deployableRepo.defaultBranch,
                         config: JSON.parse(newConfig) as any
                     },
                     create: {
                         source: 'github',
                         owner: deployableRepo.owner,
                         name: deployableRepo.name,
+                        defaultBranch: deployableRepo.defaultBranch,
                         // TODO: Use zod to validate the config
                         config: JSON.parse(newConfig) as any
                     }
@@ -110,7 +112,7 @@ export const applicationRouter = createTRPCRouter({
                     per_page: 2
                 });
 
-                const [afterCommit, beforeCommit] = lastCommits.data;
+                const [afterCommit] = lastCommits.data;
 
                 if (afterCommit === undefined)
                     throw (new Error('There is no commit'));
@@ -127,7 +129,7 @@ export const applicationRouter = createTRPCRouter({
                     commit: {
                         url: afterCommit.html_url,
                         ref: afterCommit.sha, // TODO: check if this is the right ref
-                        before: beforeCommit?.sha,
+                        // before: beforeCommit?.sha,
                         after: afterCommit.sha,
                         forced: true // TODO: check where to get this from
                     },

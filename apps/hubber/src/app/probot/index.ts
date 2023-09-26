@@ -195,6 +195,27 @@ const probotApp = (app: Probot) => {
                     htmlUrl: context.payload.sender.html_url
                 }
             });
+
+        if (context.name === 'repository') {
+            await prisma.repo.updateMany({
+                where: {
+                    source: 'github',
+                    name: context.payload.repository.name,
+                    owner: context.payload.repository.owner.login
+                },
+                data: {
+                    defaultBranch: context.payload.repository.default_branch
+                }
+            });
+            await prisma.deployableRepo.updateMany({
+                where: {
+                    fullName: context.payload.repository.full_name
+                },
+                data: {
+                    defaultBranch: context.payload.repository.default_branch
+                }
+            });
+        }
     });
 };
 

@@ -158,6 +158,7 @@ export const AppSettings: FC = () => {
                 Source: <b>{application.repo.source}</b><br />
                 Owner: <b>{application.repo.owner}</b><br />
                 Name: <b>{application.repo.name}</b><br />
+                Default branch: <b>{application.repo.defaultBranch ?? 'master'}</b><br />
             </p>
         </div>
         <div>
