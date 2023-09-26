@@ -7,6 +7,7 @@ import { Utils } from '@secretarium/connector';
 import * as path from 'node:path';
 import prettyBytes from 'pretty-bytes';
 import BuildMiniVM, { DeploymentContext } from './buildMiniVm';
+import { router } from '../router';
 
 export const deployToSubstrate = async (deploymentContext: DeploymentContext<DeploymentPushPayload>) => {
 
@@ -179,78 +180,108 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
 
             targets.forEach(async target => {
 
-                const deployment = await prisma.deployment.create({
-                    data: {
-                        fqdn: target,
-                        expiresOn: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14),
-                        version: availableApplicationsConfig[application.name]?.version,
-                        set: deploymentSet,
-                        build: context.commit.after.substring(0, 8),
-                        branch: branchName,
-                        locations: ['FR'],
-                        application: {
-                            connect: { id: application.id }
-                        }
-                        // TODO: Make sure we get the push event
-                        // pushEvent
-                    }
-                });
+                let contextualDeploymentId: string | undefined;
 
-                await prisma.activityLog.create({
-                    data: {
-                        class: 'deployment',
-                        application: {
-                            connect: {
-                                id: application.id
-                            }
-                        },
-                        context: {
-                            type: 'start',
-                            payload: {
-                                deploymentId: deployment.id
-                            }
-                        }
-                    }
-                });
-
-                (new Promise((__unusedResolve, reject) => {
-                    setTimeout(reject, 60000);
-                    return prisma.deployment.update({
+                try {
+                    const targetRef = await prisma.deploymentAddress.findFirst({
                         where: {
-                            id: deployment.id
-                        },
-                        data: {
-                            status: 'deploying'
+                            fqdn: target
                         }
                     });
-                })).catch(async () => {
-                    const currentState = await prisma.deployment.findUnique({
+
+                    const previousDeployment = targetRef?.deploymentId ? await prisma.deployment.findFirst({
                         where: {
-                            id: deployment.id
+                            id: targetRef?.deploymentId
                         }
-                    });
-                    if (currentState?.status !== 'deployed' && currentState?.status !== 'errored') {
-                        logger.debug(`Deployment ${deployment.id} timed out`, {
-                            parent: 'dpl'
-                        });
+                    }) : null;
+
+                    if (previousDeployment)
                         await prisma.deployment.update({
+                            where: {
+                                id: previousDeployment.id
+                            },
+                            data: {
+                                status: 'updating'
+                            }
+                        });
+
+                    const deployment = await prisma.deployment.create({
+                        data: {
+                            deploymentAddress: {
+                                create: {
+                                    fqdn: target
+                                }
+                            },
+                            expiresOn: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14),
+                            version: availableApplicationsConfig[application.name]?.version,
+                            set: deploymentSet,
+                            build: context.commit.after.substring(0, 8),
+                            branch: branchName,
+                            locations: ['FR'],
+                            application: {
+                                connect: { id: application.id }
+                            }
+                            // TODO: Make sure we get the push event
+                            // pushEvent
+                        }
+                    });
+
+                    contextualDeploymentId = deployment.id;
+
+                    await prisma.activityLog.create({
+                        data: {
+                            class: 'deployment',
+                            application: {
+                                connect: {
+                                    id: application.id
+                                }
+                            },
+                            context: {
+                                type: 'start',
+                                payload: {
+                                    deploymentId: deployment.id
+                                }
+                            }
+                        }
+                    });
+
+                    (new Promise((__unusedResolve, reject) => {
+                        setTimeout(reject, 60000);
+                        return prisma.deployment.update({
                             where: {
                                 id: deployment.id
                             },
                             data: {
-                                status: 'errored',
-                                buildOutputStdErr: 'Deployment timed out'
+                                status: 'deploying'
                             }
-                        }).catch((reason) => {
-                            logger.debug('Error while updating deployment status to error', {
-                                parent: 'dpl',
-                                reason
-                            });
                         });
-                    }
-                });
+                    })).catch(async () => {
+                        const currentState = await prisma.deployment.findUnique({
+                            where: {
+                                id: deployment.id
+                            }
+                        });
+                        if (currentState?.status !== 'deployed' && currentState?.status !== 'errored') {
+                            logger.debug(`Deployment ${deployment.id} timed out`, {
+                                parent: 'dpl'
+                            });
+                            await prisma.deployment.update({
+                                where: {
+                                    id: deployment.id
+                                },
+                                data: {
+                                    status: 'errored',
+                                    buildOutputStdErr: 'Deployment timed out'
+                                }
+                            }).catch((reason) => {
+                                logger.debug('Error while updating deployment status to error', {
+                                    parent: 'dpl',
+                                    reason
+                                });
+                            });
+                        }
+                    });
 
-                try {
                     logger.debug(`Starting compilation ${deployment.id}`, {
                         parent: 'dpl'
                     });
@@ -266,8 +297,8 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                             ...(packageJson.devDependencies ?? {})
                         }
                     });
-                    const buildResult = await buildVm.build();
 
+                    const buildResult = await buildVm.build();
                     const { stdout, stderr, dependenciesManifest } = buildResult;
 
                     await prisma.deployment.update({
@@ -350,17 +381,8 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                         });
                     }
 
-                    const shouldUpdate = await prisma.deployment.findFirst({
-                        where: {
-                            fqdn: target,
-                            status: {
-                                in: ['deployed', 'deploying']
-                            }
-                        }
-                    });
-
-                    logger.debug(`Registering smart contract: ${target}`);
-                    await scp.newTx('wasm-manager', shouldUpdate !== null ? 'update_smart_contract' : 'register_smart_contract', `klave-deployment-${deployment.id}`, {
+                    logger.debug(`${targetRef ? 'Updating' : 'Registering'} smart contract: ${target}`);
+                    await scp.newTx('wasm-manager', targetRef ? 'update_smart_contract' : 'register_smart_contract', `klave-deployment-${deployment.id}`, {
                         contract: {
                             name: target,
                             own_enclave: false,
@@ -368,7 +390,7 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                             wasm_bytes_b64: wasmB64
                         }
                     }).onExecuted(async () => {
-                        logger.debug(`Successfully registered smart contract: ${target}`);
+                        logger.debug(`Successfully ${targetRef ? 'updated' : 'registered'} smart contract: ${target}`);
                         await prisma.deployment.update({
                             where: {
                                 id: deployment.id
@@ -377,12 +399,23 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                                 status: 'deployed'
                             }
                         });
+                        if (previousDeployment) {
+                            logger.debug(`Deleting previous deployment ${previousDeployment.id} for ${target}`);
+                            const caller = router.v0.deployments.createCaller({
+                                prisma
+                            } as any);
+                            caller.delete({
+                                deploymentId: previousDeployment.id
+                            }).catch((error) => {
+                                logger.debug(`Failure while deleting previous deployment ${previousDeployment.id} for ${target}:, ${error}`);
+                            });
+                        }
                     }).onError(async (error) => {
-                        logger.debug(`Error while registering smart contract ${target}: ${error}`);
-                        if (`${error}`.includes('use register_smart_contract')) {
+                        logger.debug(`Error while ${!targetRef ? 'updating' : 'registering'} smart contract ${target}: ${error}`);
+                        if (`${error}`.includes('use register_smart_contract') || `${error}`.includes('use update_smart_contract')) {
                             // TODO - Remove this when we have a proper way to update smart contracts list with `list_smart_contracts`
-                            logger.debug('Retrying with register_smart_contract...');
-                            await scp.newTx('wasm-manager', 'register_smart_contract', `klave-deployment-${deployment.id}`, {
+                            logger.debug(`Retrying with ${!targetRef ? 'update_smart_contract' : 'register_smart_contract'}...`);
+                            await scp.newTx('wasm-manager', !targetRef ? 'update_smart_contract' : 'register_smart_contract', `klave-deployment-${deployment.id}`, {
                                 contract: {
                                     name: target,
                                     own_enclave: false,
@@ -390,7 +423,7 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                                     wasm_bytes_b64: wasmB64
                                 }
                             }).onExecuted(async () => {
-                                logger.debug(`Successfully registered smart contract: ${target}`);
+                                logger.debug(`Successfully ${!targetRef ? 'updated' : 'registered'} smart contract: ${target}`);
                                 await prisma.deployment.update({
                                     where: {
                                         id: deployment.id
@@ -399,29 +432,62 @@ export const deployToSubstrate = async (deploymentContext: DeploymentContext<Dep
                                         status: 'deployed'
                                     }
                                 });
-                            }).onError((error) => {
-                                logger.debug(`Error while registering smart contract ${target}: ${error}`);
+                                if (previousDeployment) {
+                                    logger.debug(`Deleting previous deployment ${previousDeployment.id} for ${target}`);
+                                    const caller = router.v0.deployments.createCaller({
+                                        prisma
+                                    } as any);
+                                    caller.delete({
+                                        deploymentId: previousDeployment.id
+                                    }).catch((error) => {
+                                        logger.debug(`Failure while deleting previous deployment ${previousDeployment.id} for ${target}: ${error}`);
+                                    });
+                                }
+                            }).onError(async (error) => {
+                                if (previousDeployment) {
+                                    await prisma.deployment.update({
+                                        where: {
+                                            id: previousDeployment.id
+                                        },
+                                        data: {
+                                            status: previousDeployment.status
+                                        }
+                                    });
+                                }
+                                logger.debug(`Error while ${!targetRef ? 'updating' : 'registering'} smart contract ${target}: ${error}`);
                                 // Timeout will eventually error this
                             }).send();
+                        } else {
+                            if (previousDeployment) {
+                                await prisma.deployment.update({
+                                    where: {
+                                        id: previousDeployment.id
+                                    },
+                                    data: {
+                                        status: previousDeployment.status
+                                    }
+                                });
+                            }
+                            // Timeout will eventually error this
                         }
-                        // Timeout will eventually error this
                     }).send();
 
                 } catch (error: any) {
                     logger.debug(`General failure processing ${target}: ${error}`);
                     try {
-                        await prisma.deployment.update({
-                            where: {
-                                id: deployment.id
-                            },
-                            data: {
-                                status: 'errored',
-                                buildOutputErrorObj: {
-                                    message: error.message,
-                                    stack: error.stack
+                        if (contextualDeploymentId)
+                            await prisma.deployment.update({
+                                where: {
+                                    id: contextualDeploymentId
+                                },
+                                data: {
+                                    status: 'errored',
+                                    buildOutputErrorObj: {
+                                        message: error.message,
+                                        stack: error.stack
+                                    }
                                 }
-                            }
-                        });
+                            });
                     } catch (error) {
                         logger.debug(`General failure processing ${target}: ${error}`);
                         // Timeout will eventually error this

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { createTRPCRouter, publicProcedure } from '../trpc';
-import { scp } from '@klave/providers';
+import { logger, scp } from '@klave/providers';
 
 export const deploymentRouter = createTRPCRouter({
     getByApplication: publicProcedure
@@ -15,6 +15,13 @@ export const deploymentRouter = createTRPCRouter({
             return await prisma.deployment.findMany({
                 where: {
                     applicationId: appId
+                },
+                include: {
+                    deploymentAddress: {
+                        select: {
+                            fqdn: true
+                        }
+                    }
                 },
                 orderBy: {
                     createdAt: 'desc'
@@ -32,6 +39,13 @@ export const deploymentRouter = createTRPCRouter({
             const deployment = await prisma.deployment.findUnique({
                 where: {
                     id: deploymentId
+                },
+                include: {
+                    deploymentAddress: {
+                        select: {
+                            fqdn: true
+                        }
+                    }
                 }
             });
 
@@ -59,7 +73,7 @@ export const deploymentRouter = createTRPCRouter({
             deploymentId: z.string()
         }))
         .mutation(async ({ ctx: { prisma }, input: { deploymentId } }) => {
-
+            logger.debug(`Deleting deployment ${deploymentId}`);
             await prisma.deployment.delete({
                 where: {
                     id: deploymentId

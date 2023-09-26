@@ -122,7 +122,7 @@ export const Deployments: FC = () => {
                     earliestCreation: deployment.createdAt
                 };
             return acc;
-        }, {} as Record<string, { deployments: Deployment[], earliestCreation: Date }>);
+        }, {} as Record<string, { deployments: (typeof deploymentList)[number][], earliestCreation: Date }>);
 
         return Object.values(sets ?? {}).sort((a, b) => a.earliestCreation > b.earliestCreation ? -1 : 1);
 
@@ -177,9 +177,11 @@ export const Deployments: FC = () => {
                     return <tr key={setId} className={hasDeploying ? 'stripe-progress' : ''}>
                         <td className={'sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 grid'}>
                             {deployments.map(deployment => {
-                                const { id, fqdn, life, status } = deployment;
+                                const { id, deploymentAddress, life, status } = deployment;
+                                if (!deploymentAddress?.fqdn)
+                                    return null;
                                 return <div key={id} onClick={() => navigate(`./${id}`)} className='mb-3'>
-                                    <span className='font-mono inline-block rounded dark:text-slate-400 dark:bg-slate-800 text-slate-900 bg-slate-100 px-2 py-1 mb-1 whitespace-nowrap hover:cursor-pointer hover:bg-klave-dark-blue hover:text-slate-100'>{fqdn}</span><br />
+                                    <span className='font-mono inline-block rounded dark:text-slate-400 dark:bg-slate-800 text-slate-900 bg-slate-100 px-2 py-1 mb-1 whitespace-nowrap hover:cursor-pointer hover:bg-klave-dark-blue hover:text-slate-100'>{deploymentAddress.fqdn}</span><br />
                                     <span className={`rounded inline-block text-xs px-1 py-0 mr-2 text-white ${life === 'long' ? 'bg-green-600' : 'bg-slate-500'}`}>{life === 'long' ? 'Production' : 'Preview'}</span>
                                     <span className={`rounded inline-block text-xs px-1 py-0 text-white ${status === 'errored' ? 'bg-red-700' : status === 'deployed' ? 'bg-blue-500' : 'bg-stone-300'}`}>{status}</span>
                                     {life === 'short' ? <span className={'inline-block text-xs text-slate-500 px-2'}>Expires {formatTimeAgo(deployment.expiresOn)}</span> : <span></span>}
@@ -250,7 +252,9 @@ export const Deployments: FC = () => {
                 {deploymentSets.map(({ deployments }) => {
                     return <Fragment key={deployments[0]?.set}>
                         {deployments.map(deployment => {
-                            const { id, fqdn, createdAt, life, status, version, build, branch } = deployment;
+                            const { id, deploymentAddress, createdAt, life, status, version, build, branch } = deployment;
+                            if (!deploymentAddress?.fqdn)
+                                return null;
                             return <tr key={id} className={['created', 'deploying', 'terminating'].includes(status) ? 'stripe-progress' : 'hover:bg-slate-50 hover:cursor-pointer'} onClick={() => navigate(`./${id}`)}>
                                 {/*
                                 <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 md:table-cell hidden">
@@ -260,7 +264,7 @@ export const Deployments: FC = () => {
                                 </td>
                                 */}
                                 <td className={'sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800'}>
-                                    <span className='font-mono inline-block rounded dark:text-slate-400 dark:bg-slate-800 text-slate-900 bg-slate-100 px-2 py-1 mb-1 whitespace-nowrap'>{fqdn}</span><br />
+                                    <span className='font-mono inline-block rounded dark:text-slate-400 dark:bg-slate-800 text-slate-900 bg-slate-100 px-2 py-1 mb-1 whitespace-nowrap'>{deploymentAddress.fqdn}</span><br />
                                     <span className={`rounded inline-block text-xs px-1 py-0 mr-2 text-white ${life === 'long' ? 'bg-green-600' : 'bg-slate-500'}`}>{life === 'long' ? 'Production' : 'Preview'}</span>
                                     <span className={`rounded inline-block text-xs px-1 py-0 text-white ${status === 'errored' ? 'bg-red-700' : status === 'deployed' ? 'bg-blue-500' : 'bg-stone-300'}`}>{status}</span>
                                 </td>

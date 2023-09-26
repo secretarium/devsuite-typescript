@@ -6,6 +6,7 @@ import { ErrorObject, serializeError } from 'serialize-error';
 import { Hook, Repo, Application, prisma, Deployment } from '@klave/db';
 import { createCompiler } from '@klave/compiler';
 import { logger, scp } from '@klave/providers';
+import { router } from '@klave/api';
 import { Utils } from '@secretarium/connector';
 import { RepoFs } from './repoFs';
 import GithubFs from './githubFs';
@@ -219,13 +220,45 @@ class Deployer {
         // For each application, we create a deployment
         const deploymentsPromises = this.applications.map(async application => {
 
+            // Compose target
+            const target = `${application.name.toLocaleLowerCase().replace(/\s/g, '-')}.sta.klave.network`;
+
+            // Fetch existing target
+            const targetRef = await prisma.deploymentAddress.findFirst({
+                where: {
+                    fqdn: target
+                }
+            });
+
+            // Store previous deployment
+            const previousDeployment = targetRef?.deploymentId ? await prisma.deployment.findFirst({
+                where: {
+                    id: targetRef?.deploymentId
+                }
+            }) : null;
+
+            // Update the previous deployment to be updating
+            if (previousDeployment)
+                await prisma.deployment.update({
+                    where: {
+                        id: previousDeployment.id
+                    },
+                    data: {
+                        status: 'updating'
+                    }
+                });
+
             // Create the deployment
             const deployment = await prisma.deployment.create({
                 data: {
                     expiresOn: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14),
                     version: this.operatingConfig[application.name].version,
                     build: after.substring(0, 8),
-                    fqdn: `${application.name.toLocaleLowerCase().replace(/\s/g, '-')}.sta.klave.network`,
+                    deploymentAddress: {
+                        create: {
+                            fqdn: target
+                        }
+                    },
                     set: application.name,
                     branch: this.branch,
                     locations: ['FR'],
@@ -336,8 +369,29 @@ class Deployer {
                         status: 'deployed'
                     }
                 });
-            }).onError((error) => {
+                if (previousDeployment) {
+                    logger.debug(`Deleting previous deployment ${previousDeployment.id} for ${target}`);
+                    const caller = router.v0.deployments.createCaller({
+                        prisma
+                    } as any);
+                    caller.delete({
+                        deploymentId: previousDeployment.id
+                    }).catch((error) => {
+                        logger.debug(`Failure while deleting previous deployment ${previousDeployment.id} for ${target}:, ${error}`);
+                    });
+                }
+            }).onError(async (error) => {
                 // Timeout will eventually error this
+                if (previousDeployment) {
+                    await prisma.deployment.update({
+                        where: {
+                            id: previousDeployment.id
+                        },
+                        data: {
+                            status: previousDeployment.status
+                        }
+                    });
+                }
                 console.error('Secretarium failed', error);
             }).send();
 

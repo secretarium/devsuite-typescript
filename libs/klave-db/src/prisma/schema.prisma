@@ -136,6 +136,7 @@ enum DeploymentStatus {
     compiled
     deploying
     deployed
+    updating
     terminating
     terminated
     errored
@@ -148,7 +149,7 @@ enum DeploymentLifespan {
 
 model Deployment {
     id                   String             @id @default(uuid()) @map("_id")
-    fqdn                 String
+    deploymentAddress    DeploymentAddress?
     set                  String
     branch               String?
     version              String?
@@ -173,6 +174,14 @@ model Deployment {
     buildOutputErrorObj  Json?
     dependenciesManifest Json?
     contractFunctions    String[]           @default([])
+}
+
+model DeploymentAddress {
+    id           String     @id @default(uuid()) @map("_id")
+    fqdn         String
+    deployment   Deployment @relation(fields: [deploymentId], references: [id], onDelete: Cascade)
+    deploymentId String     @unique
+    createdAt    DateTime   @default(now())
 }
 
 model Domain {

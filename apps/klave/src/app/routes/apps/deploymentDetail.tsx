@@ -36,8 +36,14 @@ export const AppDeploymentDetail: FC = () => {
             <UilSpinner className='inline-block animate-spin' />
         </>;
 
+    const { deploymentAddress, createdAt, life, status, version, build, branch } = deployment;
 
-    const { fqdn, createdAt, life, status, version, build, branch } = deployment;
+    if (!deploymentAddress)
+        return <>
+            We experienced an issue fetching your deployment.<br />
+        </>;
+
+    const { fqdn } = deploymentAddress;
 
     return <div className="flex flex-col w-full mb-7">
         <div className="flex w-full justify-between">
