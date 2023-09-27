@@ -1,6 +1,8 @@
 {
     "name": "@secretarium/connector",
     "version": "0.13.3",
+    "license": "MIT",
+    "private": false,
     "type": "commonjs",
     "repository": {
         "type": "git",

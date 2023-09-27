@@ -1,8 +1,0 @@
-{
-    "name": "@klave/compiler",
-    "version": "0.2.5",
-    "type": "commonjs",
-    "dependencies": {
-        "typescript": "*"
-    }
-}
