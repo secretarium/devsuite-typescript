@@ -1,4 +1,19 @@
 # Changelog
+## [0.1.5](///compare/hubber@0.1.4...hubber@0.1.5) (2023-09-27)
+
+### Dependency Updates
+
+* `klave` updated to version `0.1.4`
+* `klave-compiler` updated to version `0.1.4`
+* `klave-db` updated to version `0.1.4`
+* `providers` updated to version `0.1.4`
+* `instrumentation` updated to version `0.1.4`
+* `klave-api` updated to version `0.1.4`
+
+### Bug Fixes
+
+* **db,api,klave,providers,hubber:** Target correct default branch and deploy on forced commit 1a6ede1
+
 ## [0.1.4](///compare/hubber@0.1.3...hubber@0.1.4) (2023-09-01)
 
 ### Dependency Updates
