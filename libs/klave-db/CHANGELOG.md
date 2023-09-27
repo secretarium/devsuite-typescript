@@ -1,4 +1,16 @@
 # Changelog
+## [0.3.0](///compare/klave-db@0.2.0...klave-db@0.3.0) (2023-09-27)
+
+
+### Features
+
+* **db,api,klave,deployer:** Add deployment FQDN leaping 221f9a2
+
+
+### Bug Fixes
+
+* **db,api,klave,providers,hubber:** Target correct default branch and deploy on forced commit 1a6ede1
+
 ## [0.2.0](///compare/klave-db@0.1.0...klave-db@0.2.0) (2023-09-01)
 
 
