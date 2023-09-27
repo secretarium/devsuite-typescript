@@ -1,4 +1,11 @@
 # Changelog
+## [0.1.4](///compare/crypto@0.1.3...crypto@0.1.4) (2023-09-27)
+
+
+### Bug Fixes
+
+* Revert change to package.json generation until Nx 17 0d72132
+
 ## [0.1.3](///compare/crypto@0.1.2...crypto@0.1.3) (2023-09-01)
 
 
