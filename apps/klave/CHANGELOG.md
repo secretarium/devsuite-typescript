@@ -1,4 +1,22 @@
 # Changelog
+## [0.4.0](///compare/klave@0.3.0...klave@0.4.0) (2023-09-27)
+
+### Dependency Updates
+
+* `connector` updated to version `0.3.0`
+* `klave-api` updated to version `0.3.0`
+* `crypto` updated to version `0.3.0`
+* `instrumentation` updated to version `0.3.0`
+
+### Features
+
+* **db,api,klave,deployer:** Add deployment FQDN leaping 221f9a2
+
+
+### Bug Fixes
+
+* **db,api,klave,providers,hubber:** Target correct default branch and deploy on forced commit 1a6ede1
+
 ## [0.3.0](///compare/klave@0.2.2...klave@0.3.0) (2023-09-01)
 
 ### Dependency Updates
