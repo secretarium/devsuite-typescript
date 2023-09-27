@@ -1,4 +1,22 @@
 # Changelog
+## [0.5.0](///compare/klave-api@0.4.0...klave-api@0.5.0) (2023-09-27)
+
+### Dependency Updates
+
+* `klave-db` updated to version `0.4.0`
+* `connector` updated to version `0.4.0`
+* `klave-compiler` updated to version `0.4.0`
+* `providers` updated to version `0.4.0`
+
+### Features
+
+* **db,api,klave,deployer:** Add deployment FQDN leaping 221f9a2
+
+
+### Bug Fixes
+
+* **db,api,klave,providers,hubber:** Target correct default branch and deploy on forced commit 1a6ede1
+
 ## [0.4.0](///compare/klave-api@0.3.1...klave-api@0.4.0) (2023-09-01)
 
 ### Dependency Updates
