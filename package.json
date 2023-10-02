@@ -105,7 +105,7 @@
         "@types/sinon-chrome": "2.2.12",
         "@types/supertest": "2.0.13",
         "@typescript-eslint/eslint-plugin": "6.7.3",
-        "@typescript-eslint/parser": "6.7.3",
+        "@typescript-eslint/parser": "6.7.4",
         "babel-jest": "29.7.0",
         "babel-preset-expo": "9.5.2",
         "commitlint": "^17.7.1",
