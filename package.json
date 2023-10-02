@@ -72,7 +72,7 @@
         "@commitlint/config-conventional": "^17.7.0",
         "@commitlint/config-nx-scopes": "^17.6.4",
         "@config-plugins/detox": "6.0.0",
-        "@expo/cli": "0.10.12",
+        "@expo/cli": "0.10.13",
         "@jscutlery/semver": "3.1.0",
         "@nx/cypress": "16.9.1",
         "@nx/detox": "16.9.1",
