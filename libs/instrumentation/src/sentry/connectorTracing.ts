@@ -13,6 +13,7 @@ import { SCP } from '@secretarium/connector';
 
 type ConnectorTracingOptions = {
     connector?: SCP;
+    domains?: string[];
 };
 
 /**
@@ -38,12 +39,14 @@ export class ConnectorTracing implements Integration {
      * Secretarium instance
      */
     private readonly _connector?: SCP;
+    private readonly _domains?: string[];
 
     /**
      * @inheritDoc
      */
     public constructor(options: ConnectorTracingOptions = {}) {
         this._connector = options.connector;
+        this._domains = options.domains;
     }
 
     /**
@@ -61,7 +64,8 @@ export class ConnectorTracing implements Integration {
         }
 
         instrumentSCP(this._connector, {
-            hub: getCurrentHub()
+            hub: getCurrentHub(),
+            domains: this._domains
         });
     }
 }
@@ -77,7 +81,7 @@ function instrumentSCP(connector: SCP, options: {
     trimEnd?: boolean;
 }) {
 
-    const domains = options.domains?.map(d => d.startsWith('.') ? d : `.${d}`) ?? ['.sta.klave.network'];
+    const domains = options.domains?.map(d => d.startsWith('.') ? d : `.${d}`) ?? [];
     (['newTx', 'newQuery'] as const).forEach((method) => {
         const original = connector[method];
         connector[method] = patchConnectorCall(original, {
