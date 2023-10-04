@@ -12,19 +12,6 @@ const jsonRules = {
 
 const javascriptRules = {
     ...jsonRules,
-    '@nx/enforce-module-boundaries': [
-        'error',
-        {
-            enforceBuildableLibDependency: true,
-            allow: [],
-            depConstraints: [
-                {
-                    sourceTag: '*',
-                    onlyDependOnLibsWithTags: ['*']
-                }
-            ]
-        }
-    ],
     'react/style-prop-object': 'off',
     'quotes': ['error', 'single'],
     'quote-props': ['error', 'consistent-as-needed'],
