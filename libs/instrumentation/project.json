@@ -5,19 +5,49 @@
     "projectType": "library",
     "targets": {
         "build": {
-            "executor": "@nx/js:swc",
+            "executor": "@nx/rollup:rollup",
             "outputs": [
                 "{options.outputPath}"
             ],
             "options": {
                 "outputPath": "dist/libs/instrumentation",
-                "tsConfig": "libs/instrumentation/tsconfig.lib.json",
-                "packageJson": "libs/instrumentation/package.json",
                 "main": "libs/instrumentation/src/index.ts",
+                "tsConfig": "libs/instrumentation/tsconfig.lib.json",
                 "assets": [
-                    "libs/instrumentation/*.md"
+                    {
+                        "input": "libs/instrumentation",
+                        "glob": "*.md",
+                        "output": "."
+                    }
+                ],
+                "project": "libs/instrumentation/package.json",
+                "compiler": "swc",
+                "format": [
+                    "cjs",
+                    "esm"
+                ],
+                "external": "all",
+                "generateExportsField": true
+            }
+        },
+        "version": {
+            "executor": "@jscutlery/semver:version",
+            "options": {
+                "preset": "conventional",
+                "trackDeps": true,
+                "changelogHeader": "# Changelog",
+                "tagPrefix": "{projectName}@",
+                "commitMessageFormat": "chore({projectName}): Release version ${version}",
+                "postTargets": [
+                    "instrumentation:build"
                 ]
             }
+        },
+        "publish": {
+            "command": "node tools/scripts/publish.mjs instrumentation {args.ver} {args.tag}",
+            "dependsOn": [
+                "build"
+            ]
         },
         "lint": {
             "executor": "@nx/linter:eslint",
@@ -45,31 +75,6 @@
                     "ci": true,
                     "codeCoverage": true
                 }
-            }
-        },
-        "version": {
-            "executor": "@jscutlery/semver:version",
-            "options": {
-                "preset": "conventional",
-                "trackDeps": true,
-                "changelogHeader": "# Changelog",
-                "tagPrefix": "{projectName}@",
-                "commitMessageFormat": "chore({projectName}): Release version ${version}",
-                "postTargets": [
-                    "instrumentation:build"
-                ]
-            }
-        },
-        "publish": {
-            "dependsOn": [
-                "build"
-            ],
-            "executor": "nx:run-commands",
-            "options": {
-                "cwd": "dist/libs/instrumentation",
-                "commands": [
-                    "yarn publish --access public"
-                ]
             }
         }
     },

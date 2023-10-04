@@ -74,7 +74,7 @@ module.exports = {
         'tools/**/_msr*',
         'node_modules/**'
     ],
-    plugins: ['@nx', 'json'],
+    plugins: ['@nx'],
     overrides: [
         {
             files: ['*.ts', '*.tsx'],
@@ -97,7 +97,8 @@ module.exports = {
         },
         {
             files: ['*.json'],
-            extends: ['plugin:json/recommended'],
+            parser: 'jsonc-eslint-parser',
+            extends: ['plugin:jsonc/recommended-with-json'],
             rules: jsonRules
         }
     ]

@@ -10,21 +10,28 @@
                     "target": "build-upstream"
                 }
             ],
-            "executor": "@nx/js:tsc",
+            "executor": "@nx/rollup:rollup",
             "outputs": [
                 "{options.outputPath}"
             ],
             "options": {
                 "outputPath": "dist/libs/crypto",
-                "tsConfig": "libs/crypto/tsconfig.lib.json",
-                "packageJson": "libs/crypto/package.json",
                 "main": "libs/crypto/src/index.ts",
+                "tsConfig": "libs/crypto/tsconfig.lib.json",
                 "assets": [
-                    "libs/crypto/*.md"
+                    {
+                        "input": "libs/crypto",
+                        "glob": "*.md",
+                        "output": "."
+                    }
                 ],
-                "generateExportsField": true,
-                "updateBuildableProjectDepsInPackageJson": true,
-                "buildableProjectDepsInPackageJsonType": "dependencies"
+                "project": "libs/crypto/package.json",
+                "compiler": "swc",
+                "format": [
+                    "cjs",
+                    "esm"
+                ],
+                "generateExportsField": true
             }
         },
         "build-upstream": {
@@ -35,33 +42,12 @@
                 }
             ],
             "outputs": [
-                "{projectRoot}/vendor",
-                "{workspaceRoot}/libs/crypto/vendor"
+                "{workspaceRoot}/!**",
+                "{workspaceRoot}/tools/scripts",
+                "{projectRoot}/vendor"
             ],
             "options": {
                 "command": "node tools/scripts/buildMsRCrypto.mjs"
-            }
-        },
-        "lint": {
-            "executor": "@nx/linter:eslint",
-            "options": {
-                "lintFilePatterns": [
-                    "libs/crypto/**/*.{ts,tsx,js,jsx,json}",
-                    "libs/crypto/package.json"
-                ]
-            },
-            "outputs": [
-                "{options.outputFile}"
-            ]
-        },
-        "test": {
-            "executor": "@nx/jest:jest",
-            "outputs": [
-                "{workspaceRoot}/coverage/libs/crypto"
-            ],
-            "options": {
-                "jestConfig": "libs/crypto/jest.config.ts",
-                "passWithNoTests": true
             }
         },
         "version": {
@@ -78,15 +64,37 @@
             }
         },
         "publish": {
+            "command": "node tools/scripts/publish.mjs crypto {args.ver} {args.tag}",
             "dependsOn": [
                 "build"
+            ]
+        },
+        "lint": {
+            "executor": "@nx/linter:eslint",
+            "outputs": [
+                "{options.outputFile}"
             ],
-            "executor": "nx:run-commands",
             "options": {
-                "cwd": "dist/libs/crypto",
-                "commands": [
-                    "yarn publish --access public"
+                "lintFilePatterns": [
+                    "libs/crypto/**/*.ts",
+                    "libs/crypto/package.json"
                 ]
+            }
+        },
+        "test": {
+            "executor": "@nx/jest:jest",
+            "outputs": [
+                "{workspaceRoot}/coverage/{projectRoot}"
+            ],
+            "options": {
+                "jestConfig": "libs/crypto/jest.config.ts",
+                "passWithNoTests": true
+            },
+            "configurations": {
+                "ci": {
+                    "ci": true,
+                    "codeCoverage": true
+                }
             }
         }
     },

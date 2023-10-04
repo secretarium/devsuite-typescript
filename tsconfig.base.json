@@ -35,7 +35,7 @@
             "@secretarium/crypto": [
                 "libs/crypto/src/index.ts"
             ],
-            "@secretarium/intrumentation": [
+            "@secretarium/instrumentation": [
                 "libs/instrumentation/src/index.ts"
             ]
         }

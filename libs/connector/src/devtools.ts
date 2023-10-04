@@ -1,4 +1,4 @@
-import packageInfo from '../package.json';
+import * as packageInfo from '../package.json';
 
 if (typeof window !== 'undefined')
     (window as any)['__SECRETARIUM_DEVTOOLS_CONNECTOR__'] = {

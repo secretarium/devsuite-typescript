@@ -22,9 +22,6 @@
         "appsDir": "apps",
         "libsDir": "libs"
     },
-    "cli": {
-        "defaultCollection": "@nx/react"
-    },
     "targetDefaults": {
         "build": {
             "dependsOn": [

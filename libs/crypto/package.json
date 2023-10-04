@@ -3,10 +3,15 @@
     "version": "0.1.4",
     "license": "MIT",
     "private": false,
-    "type": "commonjs",
     "repository": {
         "type": "git",
         "url": "https://github.com/secretarium/devsuite-typescript.git",
         "directory": "libs/crypto"
-    }
+    },
+    "dependencies": {
+        "js-base64": "3.7.5"
+    },
+    "type": "commonjs",
+    "main": "./index.cjs",
+    "module": "./index.js"
 }
