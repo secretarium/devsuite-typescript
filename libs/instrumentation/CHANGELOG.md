@@ -1,4 +1,23 @@
 # Changelog
+## [0.1.4](///compare/instrumentation@0.1.3...instrumentation@0.1.4) (2023-10-05)
+
+### Dependency Updates
+
+* `connector` updated to version `0.1.3`
+
+### ⚠ BREAKING CHANGES
+
+* Remove Klave packages
+
+### Features
+
+* **instrumentation:** Permit domain filter on provided array c1b3a33
+
+
+### Miscellaneous Chores
+
+* Remove Klave packages 6515eea
+
 ## [0.1.3](///compare/instrumentation@0.1.2...instrumentation@0.1.3) (2023-09-27)
 
 ### Dependency Updates
