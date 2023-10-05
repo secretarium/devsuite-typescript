@@ -1,4 +1,18 @@
 # Changelog
+## [0.13.14](///compare/connector@0.13.3...connector@0.13.14) (2023-10-05)
+
+### Dependency Updates
+
+* `crypto` updated to version `0.13.3`
+
+### ⚠ BREAKING CHANGES
+
+* Remove Klave packages
+
+### Miscellaneous Chores
+
+* Remove Klave packages 6515eea
+
 ## [0.13.3](///compare/connector@0.13.2...connector@0.13.3) (2023-09-27)
 
 ### Dependency Updates
