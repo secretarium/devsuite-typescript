@@ -9,7 +9,7 @@
         "directory": "libs/connector"
     },
     "dependencies": {
-        "@secretarium/crypto": "0.1.4",
+        "@secretarium/crypto": "0.1.5",
         "@total-typescript/ts-reset": "0.5.1",
         "ws": "8.14.2"
     },
