@@ -1,5 +1,12 @@
 # Changelog
-## [0.13.14](///compare/connector@0.13.3...connector@0.13.14) (2023-10-05)
+## [0.13.5](///compare/connector@0.13.4...connector@0.13.5) (2023-10-06)
+
+
+### Bug Fixes
+
+* **connector:** Change backing socket targeting 8c6fe7e
+
+## [0.13.4](///compare/connector@0.13.3...connector@0.13.4) (2023-10-05)
 
 ### Dependency Updates
 
