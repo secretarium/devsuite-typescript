@@ -1,4 +1,11 @@
 # Changelog
+## [0.1.5](///compare/instrumentation@0.1.4...instrumentation@0.1.5) (2023-10-06)
+
+
+### Bug Fixes
+
+* **instrumentation:** Target the proper version of connector 9e9a01e
+
 ## [0.1.4](///compare/instrumentation@0.1.3...instrumentation@0.1.4) (2023-10-05)
 
 ### Dependency Updates
