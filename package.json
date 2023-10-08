@@ -137,7 +137,7 @@
         "metro-resolver": "0.76.7",
         "nx": "16.9.1",
         "nx-cloud": "16.4.0",
-        "postcss": "8.4.30",
+        "postcss": "8.4.31",
         "prettier": "^3.0.3",
         "react-refresh": "^0.14.0",
         "react-test-renderer": "18.2.0",
