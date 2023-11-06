@@ -76,7 +76,7 @@
         "@nx/cypress": "16.9.1",
         "@nx/detox": "16.9.1",
         "@nx/esbuild": "16.9.1",
-        "@nx/eslint-plugin": "16.9.1",
+        "@nx/eslint-plugin": "17.0.3",
         "@nx/expo": "16.9.1",
         "@nx/jest": "16.9.1",
         "@nx/js": "16.9.1",
