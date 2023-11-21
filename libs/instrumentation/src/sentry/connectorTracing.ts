@@ -149,14 +149,6 @@ function patchConnectorCall(originalCall: (...args: any[]) => any, options: {
                 stepChild.setStatus('ok');
                 stepChild.finish();
                 stepChild = transaction.startChild({
-                    description: 'Proposal',
-                    op: `${options.short}.proposal`
-                });
-            });
-            result.onProposed(() => {
-                stepChild.setStatus('ok');
-                stepChild.finish();
-                stepChild = transaction.startChild({
                     description: 'Commitment',
                     op: `${options.short}.commitment`
                 });
