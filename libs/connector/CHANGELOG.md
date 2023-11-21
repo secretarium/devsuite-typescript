@@ -1,4 +1,14 @@
 # Changelog
+## [0.14.0](///compare/connector@0.13.5...connector@0.14.0) (2023-11-21)
+
+### Dependency Updates
+
+* `crypto` updated to version `0.13.5`
+
+### Features
+
+* **connector:** Add endpoint and connection status call to SCP 30f945a
+
 ## [0.13.5](///compare/connector@0.13.4...connector@0.13.5) (2023-10-06)
 
 
