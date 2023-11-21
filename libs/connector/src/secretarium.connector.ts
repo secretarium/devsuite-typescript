@@ -24,6 +24,11 @@ type SCPOptions = {
     };
 };
 
+type SCPEndpoint = {
+    url: string;
+    knownTrustedKey: string;
+} | undefined
+
 type ErrorHandler<TData = any> = (error: TData, requestId: string) => void;
 type ResultHandler<TData = any> = (result: TData, requestId: string) => void;
 type NaiveHandler = (requestId: string) => void;
@@ -76,6 +81,7 @@ export class SCP {
     private _requests: { [key: string]: QueryNotificationHandlers | TransactionNotificationHandlers } = {};
     private _session: SCPSession | null = null;
     private _options: SCPOptions;
+    private _endpoint: SCPEndpoint;
 
     constructor(options?: SCPOptions) {
         this._options = options || {};
@@ -180,6 +186,11 @@ export class SCP {
 
     connect(url: string, userKey: Key, knownTrustedKey: Uint8Array | string, protocol: NNG.Protocol = NNG.Protocol.pair1): Promise<void> {
         // if (this._socket && this._socket.state < ConnectionState.closing) this._socket.close();
+
+        this._endpoint = {
+            url,
+            knownTrustedKey: typeof knownTrustedKey === 'string' ? knownTrustedKey : Utils.toBase64(knownTrustedKey)
+        };
 
         this._updateState(ConnectionState.connecting);
         const trustedKey = typeof knownTrustedKey === 'string' ? Uint8Array.from(Utils.fromBase64(knownTrustedKey)) : knownTrustedKey;
@@ -348,6 +359,14 @@ export class SCP {
     onStateChange(handler: (state: ConnectionState) => void): SCP {
         this._onStateChange = handler;
         return this;
+    }
+
+    isConnected(): boolean {
+        return this._connectionState === ConnectionState.secure;
+    }
+
+    getEndpoint(): SCPEndpoint {
+        return this._endpoint;
     }
 
     newQuery(app: string, command: string, requestId: string, args: Record<string, unknown> | string): Query {
