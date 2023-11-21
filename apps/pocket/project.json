@@ -96,7 +96,7 @@
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
+            "executor": "@nx/eslint:lint",
             "outputs": [
                 "{options.outputFile}"
             ],
@@ -113,8 +113,7 @@
                 "{workspaceRoot}/coverage/{projectRoot}"
             ],
             "options": {
-                "jestConfig": "apps/pocket/jest.config.ts",
-                "passWithNoTests": true
+                "jestConfig": "apps/pocket/jest.config.ts"
             }
         }
     },

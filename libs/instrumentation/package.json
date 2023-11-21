@@ -8,13 +8,11 @@
         "url": "https://github.com/secretarium/devsuite-typescript.git",
         "directory": "libs/instrumentation"
     },
+    "type": "commonjs",
     "dependencies": {
         "@secretarium/connector": "0.13.5",
         "@sentry/core": "7.52.1",
         "@sentry/types": "7.52.1",
         "@sentry/utils": "7.52.1"
-    },
-    "type": "commonjs",
-    "main": "./index.cjs",
-    "module": "./index.js"
+    }
 }

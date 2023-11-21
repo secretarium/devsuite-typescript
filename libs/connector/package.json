@@ -8,12 +8,10 @@
         "url": "https://github.com/secretarium/devsuite-typescript.git",
         "directory": "libs/connector"
     },
+    "type": "commonjs",
     "dependencies": {
-        "@secretarium/crypto": "0.1.5",
+        "@secretarium/crypto": "*",
         "@total-typescript/ts-reset": "0.5.1",
         "ws": "8.14.2"
-    },
-    "type": "commonjs",
-    "main": "./index.cjs",
-    "module": "./index.js"
+    }
 }
