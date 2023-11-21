@@ -1,4 +1,14 @@
 # Changelog
+## [0.2.0](///compare/instrumentation@0.1.6...instrumentation@0.2.0) (2023-11-21)
+
+### Dependency Updates
+
+* `connector` updated to version `0.1.6`
+
+### Features
+
+* **instrumentation:** Report endpoint to the telemetry endpoint efefe41
+
 ## [0.1.6](///compare/instrumentation@0.1.5...instrumentation@0.1.6) (2023-10-06)
 
 ### Dependency Updates
