@@ -40,6 +40,9 @@ interface QueryHandlers {
 
 interface TransactionHandlers extends QueryHandlers {
     onAcknowledged: (handler: NaiveHandler) => this;
+    /**
+     * @deprecated onPropose handlers were retired in Secretarium Core 1.0.0
+     */
     onProposed: (handler: NaiveHandler) => this;
     onCommitted: (handler: NaiveHandler) => this;
     onExecuted: (handler: NaiveHandler) => this;
@@ -60,6 +63,9 @@ type QueryNotificationHandlers = NotificationHandlers & {
 
 type TransactionNotificationHandlers = QueryNotificationHandlers & {
     onAcknowledged: NaiveHandler[];
+    /**
+     * @deprecated onPropose handlers were retired in Secretarium Core 1.0.0
+     */
     onProposed: NaiveHandler[];
     onCommitted: NaiveHandler[];
     onExecuted: NaiveHandler[];
@@ -423,6 +429,9 @@ export class SCP {
                 (cbs.onAcknowledged = cbs.onAcknowledged || []).push(x);
                 return tx;
             },
+            /**
+             * @deprecated onPropose handlers were retired in Secretarium Core 1.0.0
+             */
             onProposed: (x) => {
                 (cbs.onProposed = cbs.onProposed || []).push(x);
                 return tx;
