@@ -10,7 +10,7 @@
     },
     "type": "commonjs",
     "dependencies": {
-        "@secretarium/connector": "0.13.5",
+        "@secretarium/connector": "0.14.0",
         "@sentry/core": "7.52.1",
         "@sentry/types": "7.52.1",
         "@sentry/utils": "7.52.1"
