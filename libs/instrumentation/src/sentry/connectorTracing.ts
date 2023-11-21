@@ -104,6 +104,7 @@ function patchConnectorCall(originalCall: (...args: any[]) => any, options: {
     operation: 'transaction' | 'query';
     short: 'tx' | 'q';
 }) {
+    const endpoint = options.connector.getEndpoint();
     return function (...args: any[]) {
         const result = originalCall.call(options.connector, ...args);
         const originalSend = result.send;
@@ -127,6 +128,9 @@ function patchConnectorCall(originalCall: (...args: any[]) => any, options: {
                 trimEnd: options.trimEnd ?? true,
                 tags: {
                     'connector': typeof window !== 'undefined' ? (window as any).__SECRETARIUM_DEVTOOLS_CONNECTOR__.version : typeof global !== 'undefined' ? (global as any).__SECRETARIUM_DEVTOOLS_CONNECTOR__.version : 'unknown',
+                    'endpoint': endpoint?.url,
+                    'endpoint.connected': options.connector.isConnected(),
+                    'endpoint.trusted_key': endpoint?.knownTrustedKey,
                     'contract': host,
                     'contract.name': host,
                     'contract.name.fq': args[0],
