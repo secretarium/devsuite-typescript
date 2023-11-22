@@ -3438,7 +3438,7 @@
     "@sentry/types" "7.77.0"
     "@sentry/utils" "7.77.0"
 
-"@sentry/browser@7.52.0", "@sentry/browser@7.77.0":
+"@sentry/browser@7.52.0", "@sentry/browser@7.77.0", "@sentry/browser@7.81.1":
   version "7.77.0"
   resolved "https://registry.yarnpkg.com/@sentry/browser/-/browser-7.77.0.tgz#155440f1a0d3a1bbd5d564c28d6b0c9853a51d72"
   integrity sha512-nJ2KDZD90H8jcPx9BysQLiQW+w7k7kISCWeRjrEMJzjtge32dmHA8G4stlUTRIQugy5F+73cOayWShceFP7QJQ==
@@ -3522,6 +3522,16 @@
     "@sentry/utils" "7.77.0"
     hoist-non-react-statics "^3.3.2"
 
+"@sentry/react@7.81.1":
+  version "7.81.1"
+  resolved "https://registry.yarnpkg.com/@sentry/react/-/react-7.81.1.tgz#6a94e8e373a5bf27330cea2eb1a603ae0eb0b8ba"
+  integrity sha512-kk0plP/mf8KgVLOiImIpp1liYysmh3Un8uXcVAToomSuHZPGanelFAdP0XhY+0HlWU9KIfxTjhMte1iSwQ8pYw==
+  dependencies:
+    "@sentry/browser" "7.81.1"
+    "@sentry/types" "7.81.1"
+    "@sentry/utils" "7.81.1"
+    hoist-non-react-statics "^3.3.2"
+
 "@sentry/replay@7.77.0":
   version "7.77.0"
   resolved "https://registry.yarnpkg.com/@sentry/replay/-/replay-7.77.0.tgz#21d242c9cd70a7235237216174873fd140b6eb80"
@@ -3532,12 +3542,12 @@
     "@sentry/types" "7.77.0"
     "@sentry/utils" "7.77.0"
 
-"@sentry/types@7.52.0", "@sentry/types@7.52.1", "@sentry/types@7.77.0":
+"@sentry/types@7.52.0", "@sentry/types@7.52.1", "@sentry/types@7.77.0", "@sentry/types@7.81.1":
   version "7.77.0"
   resolved "https://registry.yarnpkg.com/@sentry/types/-/types-7.77.0.tgz#c5d00fe547b89ccde59cdea59143bf145cee3144"
   integrity sha512-nfb00XRJVi0QpDHg+JkqrmEBHsqBnxJu191Ded+Cs1OJ5oPXEW6F59LVcBScGvMqe+WEk1a73eH8XezwfgrTsA==
 
-"@sentry/utils@7.52.0", "@sentry/utils@7.77.0":
+"@sentry/utils@7.52.0", "@sentry/utils@7.77.0", "@sentry/utils@7.81.1":
   version "7.77.0"
   resolved "https://registry.yarnpkg.com/@sentry/utils/-/utils-7.77.0.tgz#1f88501f0b8777de31b371cf859d13c82ebe1379"
   integrity sha512-NmM2kDOqVchrey3N5WSzdQoCsyDkQkiRxExPaNI2oKQ/jMWHs9yt0tSy7otPBcXs0AP59ihl75Bvm1tDRcsp5g==
