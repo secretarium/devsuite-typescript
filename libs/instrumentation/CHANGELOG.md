@@ -1,4 +1,15 @@
 # Changelog
+## [0.2.0](///compare/instrumentation@0.1.6...instrumentation@0.2.0) (2023-11-22)
+
+### Dependency Updates
+
+* `connector` updated to version `0.1.6`
+
+### Features
+
+* **instrumentation:** Provide metrics for encryption time monitoring b63cbbe
+* **instrumentation:** Report endpoint to the telemetry endpoint efefe41
+
 ## [0.2.0](///compare/instrumentation@0.1.6...instrumentation@0.2.0) (2023-11-21)
 
 ### Dependency Updates
