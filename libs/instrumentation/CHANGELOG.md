@@ -1,4 +1,11 @@
 # Changelog
+## [0.4.0](///compare/instrumentation@0.3.0...instrumentation@0.4.0) (2023-11-22)
+
+
+### Features
+
+* **instrumentation:** Provide payload size information in the reporting 600ba8d
+
 ## [0.2.0](///compare/instrumentation@0.1.6...instrumentation@0.2.0) (2023-11-22)
 
 ### Dependency Updates
