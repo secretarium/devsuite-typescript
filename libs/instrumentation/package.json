@@ -9,10 +9,10 @@
         "directory": "libs/instrumentation"
     },
     "type": "commonjs",
-    "dependencies": {
-        "@secretarium/connector": "0.14.0",
-        "@sentry/core": "7.77.0",
-        "@sentry/types": "7.77.0",
-        "@sentry/utils": "7.77.0"
+    "peerDependencies": {
+        "@secretarium/connector": "^0.15.0",
+        "@sentry/core": "^7.77.0",
+        "@sentry/types": "^7.77.0",
+        "@sentry/utils": "^7.77.0"
     }
 }
