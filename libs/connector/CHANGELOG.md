@@ -1,4 +1,20 @@
 # Changelog
+## [0.14.0](///compare/connector@0.13.5...connector@0.14.0) (2023-11-22)
+
+### Dependency Updates
+
+* `crypto` updated to version `0.13.5`
+
+### Features
+
+* **connector:** Add endpoint and connection status call to SCP 30f945a
+* **crypto,connector:** Provide NodeJS Subtle export + Context info 097cc8d
+
+
+### Bug Fixes
+
+* **connector:** Forcefully remove `alg` from imported keys to work on Node Subtle fb950a8
+
 ## [0.14.0](///compare/connector@0.13.5...connector@0.14.0) (2023-11-21)
 
 ### Dependency Updates

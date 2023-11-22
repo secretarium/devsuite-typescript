@@ -1,6 +1,6 @@
 {
     "name": "@secretarium/connector",
-    "version": "0.14.0",
+    "version": "0.15.0",
     "license": "MIT",
     "private": false,
     "repository": {
@@ -10,7 +10,7 @@
     },
     "type": "commonjs",
     "dependencies": {
-        "@secretarium/crypto": "*",
+        "@secretarium/crypto": "~0.2.0",
         "@total-typescript/ts-reset": "0.5.1",
         "ws": "8.14.2"
     }
