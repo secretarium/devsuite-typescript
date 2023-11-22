@@ -375,6 +375,10 @@ export class SCP {
         return this._endpoint;
     }
 
+    getCryptoContext(): { type: string; version?: string } {
+        return (crypto as any).context;
+    }
+
     newQuery(app: string, command: string, requestId: string, args: Record<string, unknown> | string): Query {
         let cbs: Partial<QueryNotificationHandlers> = {};
         const pm = new Promise<Record<string, unknown> | string | void>((resolve, reject) => {
@@ -430,8 +434,8 @@ export class SCP {
                 return tx;
             },
             /**
-             * @deprecated onPropose handlers were retired in Secretarium Core 1.0.0
-             */
+         * @deprecated onPropose handlers were retired in Secretarium Core 1.0.0
+         */
             onProposed: (x) => {
                 (cbs.onProposed = cbs.onProposed || []).push(x);
                 return tx;
@@ -456,6 +460,23 @@ export class SCP {
         return tx;
     }
 
+    private async _prepare(app: string, command: string, requestId: string, args: Record<string, unknown> | string): Promise<Uint8Array> {
+
+        const query = {
+            dcapp: app,
+            function: command,
+            requestId: requestId,
+            args: args
+        };
+
+        this._options.logger?.debug?.('Secretarium sending:', query);
+
+        const data = Utils.encode(JSON.stringify(query));
+        const encrypted = await this._encrypt(data);
+
+        return encrypted;
+    }
+
     async send(app: string, command: string, requestId: string, args: Record<string, unknown> | string): Promise<void> {
         if (!this._socket || !this._session || this._socket.state !== ConnectionState.secure) {
             const z = this._requests[requestId]?.onError;
@@ -465,19 +486,11 @@ export class SCP {
             } else throw new Error(ErrorMessage[ErrorCodes.ENOTCONNT]);
         }
 
-        const query = JSON.stringify({
-            dcapp: app,
-            function: command,
-            requestId: requestId,
-            args: args
-        });
-        const data = Utils.encode(query);
-        const encrypted = await this._encrypt(data);
+        const encrypted = await this._prepare(app, command, requestId, args);
 
-        if (app !== '__local__') {
-            this._options.logger?.debug?.('Secretarium sending:', JSON.parse(query));
+        if (app !== '__local__')
             this._socket.send(encrypted);
-        }
+
     }
 
     close(): SCP {
