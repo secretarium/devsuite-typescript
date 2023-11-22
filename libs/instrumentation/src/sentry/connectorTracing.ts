@@ -10,6 +10,7 @@ import {
 import type { Integration } from '@sentry/types';
 import { logger } from '@sentry/utils';
 import { SCP } from '@secretarium/connector';
+import prettyBytes from 'pretty-bytes';
 
 type ConnectorTracingOptions = {
     connector?: SCP;
@@ -175,6 +176,8 @@ function patchConnectorCall(originalCall: (...args: any[]) => any, options: {
             result.stepChild?.setTag('fibre', fibreTag);
 
             const arrayRes = await originalPrepare.call(options.connector, app, command, requestId, args);
+
+            transaction.setTag('payload.size', prettyBytes(arrayRes.length));
 
             result.stepChild?.setStatus('ok');
             result.stepChild?.finish();

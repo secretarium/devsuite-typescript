@@ -44,6 +44,7 @@
         "expo-splash-screen": "~0.20.5",
         "expo-status-bar": "~1.6.0",
         "js-base64": "3.7.5",
+        "pretty-bytes": "6.1.1",
         "react": "18.2.0",
         "react-dom": "18.2.0",
         "react-hook-form": "7.48.2",
