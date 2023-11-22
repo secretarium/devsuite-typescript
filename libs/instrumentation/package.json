@@ -11,8 +11,8 @@
     "type": "commonjs",
     "dependencies": {
         "@secretarium/connector": "0.14.0",
-        "@sentry/core": "7.52.1",
-        "@sentry/types": "7.52.1",
-        "@sentry/utils": "7.52.1"
+        "@sentry/core": "7.77.0",
+        "@sentry/types": "7.77.0",
+        "@sentry/utils": "7.77.0"
     }
 }
