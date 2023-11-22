@@ -1,4 +1,11 @@
 # Changelog
+## [0.2.0](///compare/crypto@0.1.6...crypto@0.2.0) (2023-11-22)
+
+
+### Features
+
+* **crypto,connector:** Provide NodeJS Subtle export + Context info 097cc8d
+
 ## [0.1.6](///compare/crypto@0.1.5...crypto@0.1.6) (2023-11-21)
 
 ## [0.1.5](///compare/crypto@0.1.4...crypto@0.1.5) (2023-10-05)
