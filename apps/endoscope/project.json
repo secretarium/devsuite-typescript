@@ -77,7 +77,7 @@
             "defaultConfiguration": "development"
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
+            "executor": "@nx/eslint:lint",
             "outputs": [
                 "{options.outputFile}"
             ],
@@ -94,8 +94,7 @@
                 "{workspaceRoot}/coverage/apps/endoscope"
             ],
             "options": {
-                "jestConfig": "apps/endoscope/jest.config.ts",
-                "passWithNoTests": true
+                "jestConfig": "apps/endoscope/jest.config.ts"
             }
         },
         "version": {

@@ -1,4 +1,4 @@
-import type { Hub /*, IdleTransaction, Transaction */ } from '@sentry/core';
+import type { Hub, IdleTransaction/*, Transaction */ } from '@sentry/core';
 import {
     // addTracingExtensions,
     // extractTraceparentData,
@@ -10,9 +10,11 @@ import {
 import type { Integration } from '@sentry/types';
 import { logger } from '@sentry/utils';
 import { SCP } from '@secretarium/connector';
+import prettyBytes from 'pretty-bytes';
 
 type ConnectorTracingOptions = {
     connector?: SCP;
+    domains?: string[];
 };
 
 /**
@@ -38,12 +40,14 @@ export class ConnectorTracing implements Integration {
      * Secretarium instance
      */
     private readonly _connector?: SCP;
+    private readonly _domains?: string[];
 
     /**
      * @inheritDoc
      */
     public constructor(options: ConnectorTracingOptions = {}) {
         this._connector = options.connector;
+        this._domains = options.domains;
     }
 
     /**
@@ -61,7 +65,8 @@ export class ConnectorTracing implements Integration {
         }
 
         instrumentSCP(this._connector, {
-            hub: getCurrentHub()
+            hub: getCurrentHub(),
+            domains: this._domains
         });
     }
 }
@@ -77,7 +82,7 @@ function instrumentSCP(connector: SCP, options: {
     trimEnd?: boolean;
 }) {
 
-    const domains = options.domains?.map(d => d.startsWith('.') ? d : `.${d}`) ?? ['.sta.klave.network'];
+    const domains = options.domains?.map(d => d.startsWith('.') ? d : `.${d}`) ?? [];
     (['newTx', 'newQuery'] as const).forEach((method) => {
         const original = connector[method];
         connector[method] = patchConnectorCall(original, {
@@ -100,96 +105,159 @@ function patchConnectorCall(originalCall: (...args: any[]) => any, options: {
     operation: 'transaction' | 'query';
     short: 'tx' | 'q';
 }) {
+    const endpoint = options.connector.getEndpoint();
+    const cryptoContext = options.connector.getCryptoContext();
     return function (...args: any[]) {
-        const result = originalCall.call(options.connector, ...args);
-        const originalSend = result.send;
-        result.send = () => {
-            let host = args[0];
-            options.domains.forEach(d => host = host.replace(d, ''));
-            const transaction = startIdleTransaction.call(result, options.hub, {
-                name: `SCP /${host}/${args[1]}`,
-                description: `Secretarium ${options.type}`,
-                op: `secretarium.${options.operation}`,
-                metadata: {
-                    request: {
-                        method: 'POST',
-                        host,
-                        hostname: args[0],
-                        url: `/${args[1]}`,
-                        protocol: 'scp'
-                    },
-                    source: 'component'
-                },
-                trimEnd: options.trimEnd ?? true,
-                tags: {
-                    'connector': typeof window !== 'undefined' ? (window as any).__SECRETARIUM_DEVTOOLS_CONNECTOR__.version : typeof global !== 'undefined' ? (global as any).__SECRETARIUM_DEVTOOLS_CONNECTOR__.version : 'unknown',
-                    'contract': host,
-                    'contract.name': host,
-                    'contract.name.fq': args[0],
-                    'contract.route': args[1]
 
-                }
-                // traceId: ...,
-                // parentSampled,
-                // parentSpanId: ...,
-            }, TRACING_DEFAULTS.idleTimeout, TRACING_DEFAULTS.finalTimeout);
-            let stepChild = transaction.startChild({
+        const result = originalCall.call(options.connector, ...args);
+
+        let host = args[0];
+        options.domains.forEach(d => host = host.replace(d, ''));
+        const transaction = startIdleTransaction.call(result, options.hub, {
+            name: `SCP /${host}/${args[1]}`,
+            description: `Secretarium ${options.type}`,
+            op: `secretarium.${options.operation}`,
+            metadata: {
+                request: {
+                    method: 'POST',
+                    host,
+                    hostname: args[0],
+                    url: `/${args[1]}`,
+                    protocol: 'scp'
+                },
+                source: 'component'
+            },
+            trimEnd: options.trimEnd ?? true,
+            tags: {
+                'connector': typeof window !== 'undefined' ? (window as any).__SECRETARIUM_DEVTOOLS_CONNECTOR__.version : typeof global !== 'undefined' ? (global as any).__SECRETARIUM_DEVTOOLS_CONNECTOR__.version : 'unknown',
+                'crypto.type': cryptoContext?.type,
+                'crypto.version': cryptoContext?.version,
+                'endpoint': endpoint?.url,
+                'endpoint.connected': options.connector.isConnected(),
+                'endpoint.trusted_key': endpoint?.knownTrustedKey,
+                'contract': host,
+                'contract.name': host,
+                'contract.name.fq': args[0],
+                'contract.route': args[1]
+
+            }
+            // traceId: ...,
+            // parentSampled,
+            // parentSpanId: ...,
+        }, TRACING_DEFAULTS.idleTimeout, TRACING_DEFAULTS.finalTimeout) as IdleTransaction;
+
+        // Wrap prepare and encrypt
+        if ((options.connector as any).__sentry_sub__encrypt === undefined)
+            (options.connector as any).__sentry_sub__encrypt = (options.connector as any)._encrypt;
+        if ((options.connector as any).__sentry_sub__prepare === undefined)
+            (options.connector as any).__sentry_sub__prepare = (options.connector as any)._prepare;
+
+        const originalEncrypt = (options.connector as any).__sentry_sub__encrypt;
+        const originalPrepare = (options.connector as any).__sentry_sub__prepare;
+
+        (options.connector as any)._encrypt = async function (data: Uint8Array): Promise<Uint8Array> {
+
+            if (result.stepChild?.tags['fibre']) {
+                result.stepChild?.setStatus('ok');
+                result.stepChild?.finish();
+                result.stepChild = result.topChild?.startChild({
+                    description: 'Encrypting',
+                    op: 'prepare.encrypt'
+                });
+            }
+
+            const arrayRes = await originalEncrypt.call(options.connector, data);
+            return arrayRes;
+        };
+
+        (options.connector as any)._prepare = async function (app: string, command: string, requestId: string, args: Record<string, unknown> | string) {
+
+            const fibreTag = Math.random().toString();
+            result.stepChild?.setTag('fibre', fibreTag);
+
+            const arrayRes = await originalPrepare.call(options.connector, app, command, requestId, args);
+
+            transaction.setTag('payload.size', prettyBytes(arrayRes.length));
+
+            result.stepChild?.setStatus('ok');
+            result.stepChild?.finish();
+            result.topChild?.setStatus('ok');
+            result.topChild?.finish();
+
+            result.topChild = transaction.startChild({
+                description: options.type,
+                op: options.short
+            });
+            result.stepChild = result.topChild?.startChild({
                 description: 'Acknowledgement',
                 op: `${options.short}.acknowledgement`
             });
-            result.onAcknowledged(() => {
-                stepChild.setStatus('ok');
-                stepChild.finish();
-                stepChild = transaction.startChild({
-                    description: 'Proposal',
-                    op: `${options.short}.proposal`
-                });
+
+            return arrayRes;
+        };
+
+        // Patch the send function
+        const originalSend = result.send;
+        result.send = async () => {
+
+            result.topChild = transaction.startChild({
+                description: 'Prepare',
+                op: 'prepare'
             });
-            result.onProposed(() => {
-                stepChild.setStatus('ok');
-                stepChild.finish();
-                stepChild = transaction.startChild({
+            result.stepChild = result.topChild.startChild({
+                description: 'Encoding',
+                op: 'prepare.encode'
+            });
+
+            result.onAcknowledged(() => {
+                result.stepChild?.setStatus('ok');
+                result.stepChild?.finish();
+                result.stepChild = result.topChild?.startChild({
                     description: 'Commitment',
                     op: `${options.short}.commitment`
                 });
             });
             result.onCommitted(() => {
-                stepChild.setStatus('ok');
-                stepChild.finish();
-                stepChild = transaction.startChild({
+                result.stepChild?.setStatus('ok');
+                result.stepChild?.finish();
+                result.stepChild = result.topChild?.startChild({
                     description: 'Execution',
                     op: `${options.short}.execution`
                 });
             });
             result.onExecuted(() => {
-                stepChild.setStatus('ok');
-                stepChild.finish();
+                result.stepChild?.setStatus('ok');
+                result.stepChild?.finish();
             });
             result.onResult(() => {
-                const resultTimepoint = transaction.startChild({
+                const resultTimepoint = result.topChild?.startChild({
                     description: 'Result',
                     op: `${options.short}.result`
                 });
-                resultTimepoint.finish();
+                resultTimepoint?.finish();
             });
             result.onError(() => {
-                stepChild.setStatus('internal_error');
-                stepChild.finish();
+                result.stepChild?.setStatus('internal_error');
+                result.stepChild?.finish();
+                result.topChild?.setStatus('internal_error');
+                result.topChild?.finish();
                 transaction.setStatus('internal_error');
                 transaction.finish();
             });
+
             const promise = originalSend();
             return promise.then((res: any) => {
-                if (stepChild.endTimestamp === undefined) {
-                    stepChild.setStatus('ok');
-                    stepChild.finish();
+                if (result.stepChild?.endTimestamp === undefined) {
+                    result.stepChild?.setStatus('ok');
+                    result.stepChild?.finish();
+                }
+                if (result.topChild?.endTimestamp === undefined) {
+                    result.topChild?.setStatus('ok');
+                    result.topChild?.finish();
                 }
                 transaction.setStatus('ok');
                 transaction.finish();
                 return res;
-            }).finally(() => {
-                transaction.setStatus('internal_error');
-                transaction.finish();
             });
         };
         return result;

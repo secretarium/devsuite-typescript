@@ -159,7 +159,9 @@ export default {
                     skipProguard: false,
                     subdomains: ['10.0.2.2', 'localhost']
                 }
-            ]
+            ],
+            'expo-localization',
+            'sentry-expo'
         ]
     }
 };
