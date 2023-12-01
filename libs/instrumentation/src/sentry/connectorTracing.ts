@@ -1,12 +1,6 @@
 import type { Hub, IdleTransaction/*, Transaction */ } from '@sentry/core';
-import {
-    // addTracingExtensions,
-    // extractTraceparentData,
-    // getActiveTransaction,
-    startIdleTransaction,
-    // startTransaction,
-    TRACING_DEFAULTS
-} from '@sentry/core';
+import { addNonEnumerableProperty } from '@sentry/utils';
+import { getActiveSpan, startIdleTransaction, TRACING_DEFAULTS } from '@sentry/core';
 import type { Integration } from '@sentry/types';
 import { logger } from '@sentry/utils';
 import { SCP } from '@secretarium/connector';
@@ -113,10 +107,20 @@ function patchConnectorCall(originalCall: (...args: any[]) => any, options: {
 
         let host = args[0];
         options.domains.forEach(d => host = host.replace(d, ''));
+        const currentSpan = getActiveSpan();
+        const highLevelSpan = currentSpan?.startChild({
+            name: `SCP /${host}/${args[1]}`,
+            description: `Secretarium ${options.type}`,
+            op: `secretarium.${options.operation}`,
+            origin: `auto.scp.instrumentation.${options.operation}`
+        });
         const transaction = startIdleTransaction.call(result, options.hub, {
             name: `SCP /${host}/${args[1]}`,
             description: `Secretarium ${options.type}`,
             op: `secretarium.${options.operation}`,
+            origin: `auto.scp.instrumentation.${options.operation}`,
+            parentSpanId: currentSpan?.spanId,
+            traceId: currentSpan?.traceId,
             metadata: {
                 request: {
                     method: 'POST',
@@ -148,9 +152,9 @@ function patchConnectorCall(originalCall: (...args: any[]) => any, options: {
 
         // Wrap prepare and encrypt
         if ((options.connector as any).__sentry_sub__encrypt === undefined)
-            (options.connector as any).__sentry_sub__encrypt = (options.connector as any)._encrypt;
+            addNonEnumerableProperty(options.connector, '__sentry_sub__encrypt', (options.connector as any)._encrypt);
         if ((options.connector as any).__sentry_sub__prepare === undefined)
-            (options.connector as any).__sentry_sub__prepare = (options.connector as any)._prepare;
+            addNonEnumerableProperty(options.connector, '__sentry_sub__prepare', (options.connector as any)._prepare);
 
         const originalEncrypt = (options.connector as any).__sentry_sub__encrypt;
         const originalPrepare = (options.connector as any).__sentry_sub__prepare;
@@ -257,6 +261,8 @@ function patchConnectorCall(originalCall: (...args: any[]) => any, options: {
                 }
                 transaction.setStatus('ok');
                 transaction.finish();
+                highLevelSpan?.setStatus('ok');
+                highLevelSpan?.finish();
                 return res;
             });
         };
