@@ -1,4 +1,6 @@
 # Changelog
+## [0.16.1](///compare/connector@0.16.0...connector@0.16.1) (2023-12-20)
+
 ## [0.16.0](///compare/connector@0.15.0...connector@0.16.0) (2023-12-20)
 
 
