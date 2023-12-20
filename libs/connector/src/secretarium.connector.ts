@@ -33,12 +33,12 @@ type ErrorHandler<TData = any> = (error: TData, requestId: string) => void;
 type ResultHandler<TData = any> = (result: TData, requestId: string) => void;
 type NaiveHandler = (requestId: string) => void;
 
-interface QueryHandlers {
-    onError: <TData>(handler: ErrorHandler<TData>) => this;
-    onResult: <TData>(handler: ResultHandler<TData>) => this;
+interface QueryHandlers<ResultType = any, ErrorType = any> {
+    onError: (handler: ErrorHandler<ErrorType>) => this;
+    onResult: (handler: ResultHandler<ResultType>) => this;
 }
 
-interface TransactionHandlers extends QueryHandlers {
+interface TransactionHandlers<ResultType = any, ErrorType = any> extends QueryHandlers<ResultType, ErrorType> {
     onAcknowledged: (handler: NaiveHandler) => this;
     /**
      * @deprecated onPropose handlers were retired in Secretarium Core 1.0.0
@@ -48,20 +48,20 @@ interface TransactionHandlers extends QueryHandlers {
     onExecuted: (handler: NaiveHandler) => this;
 }
 
-interface NotificationHandlers {
+interface NotificationHandlers<ResultType = any, ErrorType = any> {
     failed?: boolean;
     promise: {
-        resolve: (o: Record<string, unknown> | string | void) => void;
-        reject: (o: string) => void;
+        resolve: (o: ResultType) => void;
+        reject: (o: ErrorType) => void;
     };
 }
 
-type QueryNotificationHandlers = NotificationHandlers & {
-    onError: ErrorHandler[];
-    onResult: ResultHandler[];
+type QueryNotificationHandlers<ResultType = any, ErrorType = any> = NotificationHandlers<ResultType, ErrorType> & {
+    onError: ErrorHandler<ErrorType>[];
+    onResult: ResultHandler<ResultType>[];
 };
 
-type TransactionNotificationHandlers = QueryNotificationHandlers & {
+type TransactionNotificationHandlers<ResultType = any, ErrorType = any> = QueryNotificationHandlers<ResultType, ErrorType> & {
     onAcknowledged: NaiveHandler[];
     /**
      * @deprecated onPropose handlers were retired in Secretarium Core 1.0.0
@@ -71,12 +71,12 @@ type TransactionNotificationHandlers = QueryNotificationHandlers & {
     onExecuted: NaiveHandler[];
 };
 
-export type Query = QueryHandlers & {
-    send: () => Promise<Record<string, unknown> | string | void>;
+export type Query<ResultType = any, ErrorType = any> = QueryHandlers<ResultType, ErrorType> & {
+    send: () => Promise<ResultType>;
 };
 
-export type Transaction = TransactionHandlers & {
-    send: () => Promise<Record<string, unknown> | string | void>;
+export type Transaction<ResultType = any, ErrorType = any> = TransactionHandlers<ResultType, ErrorType> & {
+    send: () => Promise<ResultType>;
 };
 
 export class SCP {
@@ -379,9 +379,9 @@ export class SCP {
         return (crypto as any).context;
     }
 
-    newQuery(app: string, command: string, requestId: string, args: Record<string, unknown> | string): Query {
-        let cbs: Partial<QueryNotificationHandlers> = {};
-        const pm = new Promise<Record<string, unknown> | string | void>((resolve, reject) => {
+    newQuery<ResultType = any, ErrorType = any>(app: string, command: string, requestId: string, args: Record<string, unknown> | string): Query<ResultType, ErrorType> {
+        let cbs: Partial<QueryNotificationHandlers<ResultType, ErrorType>> = {};
+        const pm = new Promise<ResultType>((resolve, reject) => {
             this._requests[requestId] = cbs = {
                 onError: [],
                 onResult: [],
@@ -391,7 +391,7 @@ export class SCP {
                 }
             };
         });
-        const query: Query = {
+        const query: Query<ResultType, ErrorType> = {
             onError: (x) => {
                 (cbs.onError = cbs.onError || []).push(x);
                 return query;
@@ -408,10 +408,10 @@ export class SCP {
         return query;
     }
 
-    newTx(app: string, command: string, requestId: string, args: Record<string, unknown> | string): Transaction {
-        let cbs: TransactionNotificationHandlers;
-        const pm = new Promise<Record<string, unknown> | string | void>((resolve, reject) => {
-            this._requests[requestId] = cbs = {
+    newTx<ResultType = any, ErrorType = any>(app: string, command: string, requestId: string, args: Record<string, unknown> | string): Transaction<ResultType, ErrorType> {
+        let cbs: Partial<TransactionNotificationHandlers<ResultType, ErrorType>> = {};
+        const pm = new Promise<ResultType>((resolve, reject) => {
+            this._requests[requestId] = (cbs) = {
                 onError: [],
                 onResult: [],
                 onAcknowledged: [],
@@ -424,7 +424,7 @@ export class SCP {
                 }
             };
         });
-        const tx: Transaction = {
+        const tx: Transaction<ResultType, ErrorType> = {
             onError: (x) => {
                 (cbs.onError = cbs.onError || []).push(x);
                 return tx;
