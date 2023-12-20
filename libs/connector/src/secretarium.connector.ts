@@ -379,7 +379,7 @@ export class SCP {
         return (crypto as any).context;
     }
 
-    newQuery<ResultType = any, ErrorType = any>(app: string, command: string, requestId: string, args: Record<string, unknown> | string): Query<ResultType, ErrorType> {
+    newQuery<ResultType = any, ErrorType = any>(app: string, command: string, requestId: string, args?: Record<string, unknown> | string): Query<ResultType, ErrorType> {
         let cbs: Partial<QueryNotificationHandlers<ResultType, ErrorType>> = {};
         const pm = new Promise<ResultType>((resolve, reject) => {
             this._requests[requestId] = cbs = {
@@ -408,7 +408,7 @@ export class SCP {
         return query;
     }
 
-    newTx<ResultType = any, ErrorType = any>(app: string, command: string, requestId: string, args: Record<string, unknown> | string): Transaction<ResultType, ErrorType> {
+    newTx<ResultType = any, ErrorType = any>(app: string, command: string, requestId: string, args?: Record<string, unknown> | string): Transaction<ResultType, ErrorType> {
         let cbs: Partial<TransactionNotificationHandlers<ResultType, ErrorType>> = {};
         const pm = new Promise<ResultType>((resolve, reject) => {
             this._requests[requestId] = (cbs) = {
@@ -460,13 +460,13 @@ export class SCP {
         return tx;
     }
 
-    private async _prepare(app: string, command: string, requestId: string, args: Record<string, unknown> | string): Promise<Uint8Array> {
+    private async _prepare(app: string, command: string, requestId: string, args?: Record<string, unknown> | string): Promise<Uint8Array> {
 
         const query = {
             dcapp: app,
             function: command,
             requestId: requestId,
-            args: args
+            args: args ?? null
         };
 
         this._options.logger?.debug?.('Secretarium sending:', query);
@@ -477,7 +477,7 @@ export class SCP {
         return encrypted;
     }
 
-    async send(app: string, command: string, requestId: string, args: Record<string, unknown> | string): Promise<void> {
+    async send(app: string, command: string, requestId: string, args?: Record<string, unknown> | string): Promise<void> {
         if (!this._socket || !this._session || this._socket.state !== ConnectionState.secure) {
             const z = this._requests[requestId]?.onError;
             if (z) {
