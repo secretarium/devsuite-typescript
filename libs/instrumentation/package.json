@@ -10,9 +10,9 @@
     },
     "type": "commonjs",
     "peerDependencies": {
-        "@secretarium/connector": "^0.15.0",
-        "@sentry/core": "^7.84.0",
-        "@sentry/utils": "^7.84.0",
-        "@sentry/types": "^7.84.0"
+        "@secretarium/connector": "0.16.1",
+        "@sentry/core": "^7.103.0",
+        "@sentry/utils": "^7.103.0",
+        "@sentry/types": "^7.103.0"
     }
 }
