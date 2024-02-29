@@ -1,4 +1,6 @@
 # Changelog
+## [0.2.1](///compare/crypto@0.2.0...crypto@0.2.1) (2024-02-29)
+
 ## [0.2.0](///compare/crypto@0.1.6...crypto@0.2.0) (2023-11-22)
 
 
