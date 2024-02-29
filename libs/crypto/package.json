@@ -8,7 +8,6 @@
         "url": "https://github.com/secretarium/devsuite-typescript.git",
         "directory": "libs/crypto"
     },
-    "type": "commonjs",
     "dependencies": {
         "js-base64": "3.7.7"
     }
