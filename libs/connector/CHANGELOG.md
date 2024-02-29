@@ -1,4 +1,14 @@
 # Changelog
+## [0.17.0](///compare/connector@0.16.1...connector@0.17.0) (2024-02-29)
+
+### Dependency Updates
+
+* `crypto` updated to version `0.16.1`
+
+### Features
+
+* **connector:** Remove requirement for entering server trusted key 5682a45
+
 ## [0.16.1](///compare/connector@0.16.0...connector@0.16.1) (2023-12-20)
 
 ## [0.16.0](///compare/connector@0.15.0...connector@0.16.0) (2023-12-20)
