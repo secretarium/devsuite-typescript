@@ -80,13 +80,7 @@
             "executor": "@nx/eslint:lint",
             "outputs": [
                 "{options.outputFile}"
-            ],
-            "options": {
-                "lintFilePatterns": [
-                    "apps/endoscope/**/*.{ts,tsx,js,jsx,json}",
-                    "apps/endoscope/package.json"
-                ]
-            }
+            ]
         },
         "test": {
             "executor": "@nx/jest:jest",

@@ -25,13 +25,6 @@
             ],
             "cache": true
         },
-        "lint": {
-            "inputs": [
-                "default",
-                "{workspaceRoot}/.eslintrc.json"
-            ],
-            "cache": true
-        },
         "version": {
             "dependsOn": [
                 "^version"
@@ -56,6 +49,13 @@
                     "codeCoverage": true
                 }
             }
+        },
+        "@nx/eslint:lint": {
+            "inputs": [
+                "default",
+                "{workspaceRoot}/.eslintrc.js"
+            ],
+            "cache": true
         }
     },
     "namedInputs": {
@@ -68,7 +68,7 @@
             "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
             "!{projectRoot}/tsconfig.spec.json",
             "!{projectRoot}/jest.config.[jt]s",
-            "!{projectRoot}/.eslintrc.json",
+            "!{projectRoot}/.eslintrc.js",
             "!{projectRoot}/src/test-setup.[jt]s"
         ],
         "sharedGlobals": [

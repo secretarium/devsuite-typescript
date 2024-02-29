@@ -84,12 +84,7 @@
             "executor": "@nx/eslint:lint",
             "outputs": [
                 "{options.outputFile}"
-            ],
-            "options": {
-                "lintFilePatterns": [
-                    "apps/pocket-e2e/**/*.{ts,tsx,js,jsx}"
-                ]
-            }
+            ]
         }
     },
     "tags": [],

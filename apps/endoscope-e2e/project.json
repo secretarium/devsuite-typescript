@@ -21,12 +21,7 @@
             "executor": "@nx/eslint:lint",
             "outputs": [
                 "{options.outputFile}"
-            ],
-            "options": {
-                "lintFilePatterns": [
-                    "apps/endoscope-e2e/**/*.{js,ts,json}"
-                ]
-            }
+            ]
         }
     },
     "tags": [],
