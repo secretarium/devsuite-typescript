@@ -26,7 +26,7 @@ type SCPOptions = {
 
 type SCPEndpoint = {
     url: string;
-    knownTrustedKey: string;
+    knownTrustedKey?: string;
 } | undefined
 
 type ErrorHandler<TData = any> = (error: TData, requestId: string) => void;
@@ -190,16 +190,16 @@ export class SCP {
         return this._socket?.bufferedAmount || 0;
     }
 
-    connect(url: string, userKey: Key, knownTrustedKey: Uint8Array | string, protocol: NNG.Protocol = NNG.Protocol.pair1): Promise<void> {
+    connect(url: string, userKey: Key, knownTrustedKey: Uint8Array | string | undefined = undefined, protocol: NNG.Protocol = NNG.Protocol.pair1): Promise<void> {
         // if (this._socket && this._socket.state < ConnectionState.closing) this._socket.close();
 
         this._endpoint = {
             url,
-            knownTrustedKey: typeof knownTrustedKey === 'string' ? knownTrustedKey : Utils.toBase64(knownTrustedKey)
+            knownTrustedKey: knownTrustedKey ? typeof knownTrustedKey === 'string' ? knownTrustedKey : Utils.toBase64(knownTrustedKey) : undefined
         };
 
         this._updateState(ConnectionState.connecting);
-        const trustedKey = typeof knownTrustedKey === 'string' ? Uint8Array.from(Utils.fromBase64(knownTrustedKey)) : knownTrustedKey;
+        const trustedKey = Uint8Array.from(Utils.fromBase64(this._endpoint.knownTrustedKey ?? Utils.toBase64(Utils.getRandomBytes(64))));
         const socket = (this._socket = new NNG.WS());
         let ecdh: CryptoKeyPair;
         let ecdhPubKeyRaw: Uint8Array;
@@ -279,7 +279,9 @@ export class SCP {
 
                     // Check inheritance from Secretarium knownTrustedKey
                     const knownTrustedKeyPath = serverIdentity.subarray(96);
-                    if (knownTrustedKeyPath.length === 64) {
+                    if (!this._endpoint?.knownTrustedKey)
+                        this._options.logger?.info?.('No knownTrustedKey provided, server identity will not be verified');
+                    else if (knownTrustedKeyPath.length === 64) {
                         if (!Utils.sequenceEqual(trustedKey, knownTrustedKeyPath)) throw new Error(ErrorMessage[ErrorCodes.ETINSRVID]);
                     } else {
                         for (let i = 0; i < knownTrustedKeyPath.length - 64; i = i + 128) {
