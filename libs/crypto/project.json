@@ -18,20 +18,13 @@
                 "outputPath": "dist/libs/crypto",
                 "main": "libs/crypto/src/index.ts",
                 "tsConfig": "libs/crypto/tsconfig.lib.json",
-                "assets": [
-                    {
-                        "input": "libs/crypto",
-                        "glob": "*.md",
-                        "output": "."
-                    }
-                ],
+                "assets": [],
                 "project": "libs/crypto/package.json",
                 "compiler": "swc",
                 "format": [
                     "cjs",
                     "esm"
-                ],
-                "generateExportsField": true
+                ]
             }
         },
         "build-upstream": {
@@ -50,42 +43,12 @@
                 "command": "node tools/scripts/buildMsRCrypto.mjs"
             }
         },
-        "version": {
-            "executor": "@jscutlery/semver:version",
-            "options": {
-                "preset": "conventional",
-                "trackDeps": true,
-                "changelogHeader": "# Changelog",
-                "tagPrefix": "{projectName}@",
-                "commitMessageFormat": "chore({projectName}): Release version ${version}",
-                "postTargets": [
-                    "crypto:build"
-                ]
-            }
-        },
         "publish": {
             "command": "node tools/scripts/publish.mjs crypto {args.ver} {args.tag}",
             "dependsOn": [
                 "build"
             ]
-        },
-        "lint": {
-            "executor": "@nx/eslint:lint",
-            "outputs": [
-                "{options.outputFile}"
-            ]
-        },
-        "test": {
-            "executor": "@nx/jest:jest",
-            "outputs": [
-                "{workspaceRoot}/coverage/{projectRoot}"
-            ],
-            "options": {
-                "jestConfig": "libs/crypto/jest.config.ts"
-            }
         }
     },
-    "tags": [
-        "scope:sdk"
-    ]
+    "tags": []
 }

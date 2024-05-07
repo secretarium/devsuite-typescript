@@ -190,7 +190,7 @@ export class SCP {
         return this._socket?.bufferedAmount || 0;
     }
 
-    connect(url: string, userKey: Key, knownTrustedKey: Uint8Array | string | undefined = undefined, protocol: NNG.Protocol = NNG.Protocol.pair1): Promise<void> {
+    async connect(url: string, userKey: Key, knownTrustedKey: Uint8Array | string | undefined = undefined, protocol: NNG.Protocol = NNG.Protocol.pair1): Promise<void> {
         // if (this._socket && this._socket.state < ConnectionState.closing) this._socket.close();
 
         this._endpoint = {
@@ -211,7 +211,7 @@ export class SCP {
                     reject(ErrorMessage[ErrorCodes.ETIMOCHEL]);
                 }, 3000);
                 socket
-                    .onopen((x) => {
+                    .onopen((x: unknown) => {
                         clearTimeout(tId);
                         resolve(x);
                     })
@@ -238,14 +238,14 @@ export class SCP {
                             reject(ErrorMessage[ErrorCodes.ETIMOCHEL]);
                         }, 3000);
                         socket
-                            .onmessage((x) => {
+                            .onmessage((x: Uint8Array | PromiseLike<Uint8Array>) => {
                                 clearTimeout(tId);
                                 resolve(x);
                             })
                             .send(ecdhPubKeyRaw);
                     });
                 })
-                .then((serverHello: Uint8Array): Promise<Uint8Array> => {
+                .then(async (serverHello: Uint8Array): Promise<Uint8Array> => {
                     const pow = this._computeProofOfWork(serverHello.subarray(0, 32));
                     const clientProofOfWork = Utils.concatBytesArrays([pow, trustedKey]);
                     return new Promise((resolve, reject) => {
@@ -253,7 +253,7 @@ export class SCP {
                             reject(ErrorMessage[ErrorCodes.ETIMOCPOW]);
                         }, 3000);
                         socket
-                            .onmessage((x) => {
+                            .onmessage((x: Uint8Array | PromiseLike<Uint8Array>) => {
                                 clearTimeout(tId);
                                 resolve(x);
                             })
@@ -319,7 +319,7 @@ export class SCP {
                             reject(ErrorMessage[ErrorCodes.ETIMOCPOI]);
                         }, 3000);
                         socket
-                            .onmessage((x) => {
+                            .onmessage((x: Uint8Array | PromiseLike<Uint8Array>) => {
                                 clearTimeout(tId);
                                 resolve(x);
                             })
@@ -334,7 +334,7 @@ export class SCP {
                     const check = await crypto.subtle!.verify({ name: 'ECDSA', hash: { name: 'SHA-256' } }, serverEcdsaPubKey, serverSignedHash, toVerify);
                     if (!check) throw new Error(ErrorMessage[ErrorCodes.ETINSRVPI]);
 
-                    socket.onmessage(async (encrypted) => {
+                    socket.onmessage(async (encrypted: Uint8Array) => {
                         try {
                             const data = await this._decrypt(encrypted);
                             if (!data)
@@ -403,7 +403,7 @@ export class SCP {
                 (cbs.onResult = cbs.onResult || []).push(x);
                 return query;
             },
-            send: () => {
+            send: async () => {
                 this.send(app, command, rid, args);
                 return pm;
             }
@@ -456,7 +456,7 @@ export class SCP {
                 (cbs.onResult = cbs.onResult || []).push(x);
                 return tx;
             }, // for chained tx + query
-            send: () => {
+            send: async () => {
                 this.send(app, command, rid, args);
                 return pm;
             }

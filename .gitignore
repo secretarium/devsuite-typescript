@@ -1,8 +1,8 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
-/dist
-/tmp
+dist
+tmp
 /out-tsc
 
 # dependencies
@@ -22,7 +22,7 @@ node_modules
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
-**/.vscode
+!.vscode/extensions.json
 
 # misc
 /.sass-cache
@@ -32,28 +32,12 @@ node_modules
 npm-debug.log
 yarn-error.log
 testem.log
+/target
+/crates/*/target
 /typings
-/.swc
-.expo/
-*.jks
-*.p8
-*.p12
-*.key
-*.mobileprovision
-*.orig.*
-web-build/
-logs
-.nx
 
 # System Files
 .DS_Store
 Thumbs.db
 
-# Locally scoped env
-.env*local
-
-# Expo artifacts
-apps/pocket-e2e/artifacts
-
-# Next.js
-.next
+.nx/cache

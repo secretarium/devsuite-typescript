@@ -13,33 +13,12 @@
                 "outputPath": "dist/libs/connector",
                 "main": "libs/connector/src/index.ts",
                 "tsConfig": "libs/connector/tsconfig.lib.json",
-                "assets": [
-                    {
-                        "input": "libs/connector",
-                        "glob": "*.md",
-                        "output": "."
-                    }
-                ],
+                "assets": [],
                 "project": "libs/connector/package.json",
                 "compiler": "swc",
                 "format": [
                     "cjs",
                     "esm"
-                ],
-                "external": "all",
-                "generateExportsField": true
-            }
-        },
-        "version": {
-            "executor": "@jscutlery/semver:version",
-            "options": {
-                "preset": "conventional",
-                "trackDeps": true,
-                "changelogHeader": "# Changelog",
-                "tagPrefix": "{projectName}@",
-                "commitMessageFormat": "chore({projectName}): Release version ${version}",
-                "postTargets": [
-                    "connector:build"
                 ]
             }
         },
@@ -48,24 +27,7 @@
             "dependsOn": [
                 "build"
             ]
-        },
-        "lint": {
-            "executor": "@nx/eslint:lint",
-            "outputs": [
-                "{options.outputFile}"
-            ]
-        },
-        "test": {
-            "executor": "@nx/jest:jest",
-            "outputs": [
-                "{workspaceRoot}/coverage/{projectRoot}"
-            ],
-            "options": {
-                "jestConfig": "libs/connector/jest.config.ts"
-            }
         }
     },
-    "tags": [
-        "scope:sdk"
-    ]
+    "tags": []
 }

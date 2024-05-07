@@ -1,14 +1,10 @@
 {
     "extends": [
-        "../../.eslintrc.js"
+        "../../.eslintrc.base.json"
     ],
     "ignorePatterns": [
         "!**/*"
     ],
-    "globals": {
-        "__DEBUG_BUILD__": "readonly",
-        "__SENTRY_DEBUG__": "readonly"
-    },
     "overrides": [
         {
             "files": [
@@ -17,22 +13,7 @@
                 "*.js",
                 "*.jsx"
             ],
-            "rules": {
-                "@nx/enforce-module-boundaries": [
-                    "error",
-                    {
-                        "allow": [],
-                        "depConstraints": [
-                            {
-                                "sourceTag": "*",
-                                "onlyDependOnLibsWithTags": [
-                                    "*"
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            }
+            "rules": {}
         },
         {
             "files": [
@@ -54,14 +35,7 @@
             ],
             "parser": "jsonc-eslint-parser",
             "rules": {
-                "@nx/dependency-checks": [
-                    "error",
-                    {
-                        "ignoredDependencies": [
-                            "pretty-bytes"
-                        ]
-                    }
-                ]
+                "@nx/dependency-checks": "error"
             }
         }
     ]

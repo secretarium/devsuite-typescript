@@ -2,13 +2,16 @@
     "name": "@secretarium/crypto",
     "version": "0.2.1",
     "license": "MIT",
-    "private": false,
     "repository": {
         "type": "git",
         "url": "https://github.com/secretarium/devsuite-typescript.git",
         "directory": "libs/crypto"
     },
+    "type": "module",
+    "main": "./index.cjs",
+    "module": "./index.js",
     "dependencies": {
-        "js-base64": "3.7.7"
+        "vite": "~5.0.0",
+        "@nx/vite": "18.0.8"
     }
 }

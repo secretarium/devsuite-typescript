@@ -1,1 +1,1 @@
-export * from './sentry';
+export * from './lib/instrumentation';

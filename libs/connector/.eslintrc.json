@@ -1,6 +1,6 @@
 {
     "extends": [
-        "../../.eslintrc.js"
+        "../../.eslintrc.base.json"
     ],
     "ignorePatterns": [
         "!**/*"
@@ -13,22 +13,7 @@
                 "*.js",
                 "*.jsx"
             ],
-            "rules": {
-                "@nx/enforce-module-boundaries": [
-                    "error",
-                    {
-                        "allow": [],
-                        "depConstraints": [
-                            {
-                                "sourceTag": "*",
-                                "onlyDependOnLibsWithTags": [
-                                    "*"
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            }
+            "rules": {}
         },
         {
             "files": [

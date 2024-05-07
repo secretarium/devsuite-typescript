@@ -1,5 +1,0 @@
-{
-    "CFBundleDisplayName": "Clé Secretarium",
-    "NSCameraUsageDescription": "Cette application utilise la caméra pour lire les codes-barres Secretarium",
-    "NSFaceIDUsageDescription": "Cette application utilise votre biométrie pour chiffrer vos données"
-}

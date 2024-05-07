@@ -8,4 +8,4 @@ Run `nx build instrumentation` to build the library.
 
 ## Running unit tests
 
-Run `nx test instrumentation` to execute the unit tests via [Jest](https://jestjs.io).
+Run `nx test instrumentation` to execute the unit tests via [Vitest](https://vitest.dev/).

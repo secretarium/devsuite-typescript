@@ -1,0 +1,16 @@
+{
+    "name": "secretarium-crate",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "tags": [
+        "crate"
+    ],
+    "targets": {
+        "build": {
+            "command": "cargo build -p secretarium --target-dir crates/secretarium/target --release",
+            "cache": true,
+            "outputs": [
+                "{projectRoot}/target"
+            ]
+        }
+    }
+}

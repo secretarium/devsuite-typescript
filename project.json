@@ -1,5 +1,5 @@
 {
-    "name": "secretarium",
+    "name": "@klave-platform-next/source",
     "$schema": "node_modules/nx/schemas/project-schema.json",
     "targets": {
         "local-registry": {

@@ -1,18 +1,11 @@
 {
     "name": "@secretarium/instrumentation",
-    "version": "0.5.0",
-    "license": "MIT",
-    "private": false,
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/secretarium/devsuite-typescript.git",
-        "directory": "libs/instrumentation"
+    "version": "0.0.1",
+    "dependencies": {
+        "vite": "~5.0.0",
+        "@nx/vite": "18.0.8"
     },
-    "type": "commonjs",
-    "peerDependencies": {
-        "@secretarium/connector": "0.17.0",
-        "@sentry/core": "^7.103.0",
-        "@sentry/utils": "^7.103.0",
-        "@sentry/types": "^7.103.0"
-    }
+    "type": "module",
+    "main": "./index.cjs",
+    "module": "./index.js"
 }
