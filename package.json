@@ -24,7 +24,7 @@
         "@expo/spawn-async": "1.7.2",
         "@react-native-community/hooks": "3.0.0",
         "@sentry/browser": "^7.114.0",
-        "@sentry/react": "^7.114.0",
+        "@sentry/react": "^8.0.0",
         "@sentry/react-native": "^5.22.2",
         "@total-typescript/ts-reset": "0.5.1",
         "autoprefixer": "10.4.19",
