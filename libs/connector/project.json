@@ -3,6 +3,9 @@
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "libs/connector/src",
     "projectType": "library",
+    "tags": [
+        "scope:sdk"
+    ],
     "targets": {
         "build": {
             "executor": "@nx/rollup:rollup",
@@ -53,13 +56,7 @@
             "executor": "@nx/eslint:lint",
             "outputs": [
                 "{options.outputFile}"
-            ],
-            "options": {
-                "lintFilePatterns": [
-                    "libs/connector/**/*.ts",
-                    "libs/connector/package.json"
-                ]
-            }
+            ]
         },
         "test": {
             "executor": "@nx/jest:jest",
@@ -70,8 +67,5 @@
                 "jestConfig": "libs/connector/jest.config.ts"
             }
         }
-    },
-    "tags": [
-        "scope:sdk"
-    ]
+    }
 }

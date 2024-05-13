@@ -3,6 +3,7 @@
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "apps/pocket/src",
     "projectType": "application",
+    "tags": [],
     "targets": {
         "start": {
             "executor": "@nx/expo:start",
@@ -10,7 +11,6 @@
                 "port": 8081
             },
             "dependsOn": [
-                "ensure-symlink",
                 "sync-deps"
             ]
         },
@@ -26,7 +26,6 @@
                 "platform": "ios"
             },
             "dependsOn": [
-                "ensure-symlink",
                 "sync-deps"
             ]
         },
@@ -36,7 +35,6 @@
                 "platform": "android"
             },
             "dependsOn": [
-                "ensure-symlink",
                 "sync-deps"
             ]
         },
@@ -58,15 +56,10 @@
             "executor": "@nx/expo:sync-deps",
             "options": {}
         },
-        "ensure-symlink": {
-            "executor": "@nx/expo:ensure-symlink",
-            "options": {}
-        },
         "prebuild": {
             "executor": "@nx/expo:prebuild",
             "options": {},
             "dependsOn": [
-                "ensure-symlink",
                 "sync-deps"
             ]
         },
@@ -82,30 +75,20 @@
             "executor": "@nx/expo:export",
             "options": {
                 "platform": "all",
-                "outputDir": "../../dist/apps/pocket"
+                "outputDir": "dist/apps/pocket"
             },
             "dependsOn": [
-                "ensure-symlink",
                 "sync-deps"
+            ],
+            "outputs": [
+                "{options.outputDir}"
             ]
-        },
-        "export-web": {
-            "executor": "@nx/expo:export",
-            "options": {
-                "bundler": "webpack"
-            }
         },
         "lint": {
             "executor": "@nx/eslint:lint",
             "outputs": [
                 "{options.outputFile}"
-            ],
-            "options": {
-                "lintFilePatterns": [
-                    "apps/pocket/**/*.{ts,tsx,js,jsx}",
-                    "apps/pocket/package.json"
-                ]
-            }
+            ]
         },
         "test": {
             "executor": "@nx/jest:jest",
@@ -116,6 +99,5 @@
                 "jestConfig": "apps/pocket/jest.config.ts"
             }
         }
-    },
-    "tags": []
+    }
 }

@@ -1,4 +1,11 @@
 # Changelog
+## [0.5.0](///compare/instrumentation@0.4.0...instrumentation@0.5.0) (2023-12-01)
+
+
+### Features
+
+* **instrumentation:** Graft on existing ambient span if available d23e647
+
 ## [0.4.0](///compare/instrumentation@0.3.0...instrumentation@0.4.0) (2023-11-22)
 
 

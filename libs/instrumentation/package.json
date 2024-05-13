@@ -1,6 +1,6 @@
 {
     "name": "@secretarium/instrumentation",
-    "version": "0.4.0",
+    "version": "0.5.0",
     "license": "MIT",
     "private": false,
     "repository": {
@@ -10,6 +10,6 @@
     },
     "type": "commonjs",
     "peerDependencies": {
-        "@secretarium/connector": "^0.15.0"
+        "@secretarium/connector": "0.17.0"
     }
 }

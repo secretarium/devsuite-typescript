@@ -3,6 +3,10 @@
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "apps/endoscope/src",
     "projectType": "application",
+    "tags": [
+        "scope:ui",
+        "scope:dev"
+    ],
     "targets": {
         "build": {
             "executor": "@nx/webpack:webpack",
@@ -80,13 +84,7 @@
             "executor": "@nx/eslint:lint",
             "outputs": [
                 "{options.outputFile}"
-            ],
-            "options": {
-                "lintFilePatterns": [
-                    "apps/endoscope/**/*.{ts,tsx,js,jsx,json}",
-                    "apps/endoscope/package.json"
-                ]
-            }
+            ]
         },
         "test": {
             "executor": "@nx/jest:jest",
@@ -110,9 +108,5 @@
                 ]
             }
         }
-    },
-    "tags": [
-        "scope:ui",
-        "scope:dev"
-    ]
+    }
 }
