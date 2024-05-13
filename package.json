@@ -67,7 +67,7 @@
     "devDependencies": {
         "@babel/core": "^7.24.5",
         "@babel/preset-react": "^7.24.1",
-        "@commitlint/config-conventional": "^18.6.1",
+        "@commitlint/config-conventional": "^19.2.2",
         "@commitlint/config-nx-scopes": "^18.6.1",
         "@config-plugins/detox": "^8.0.0",
         "@expo/cli": "0.18.10",
