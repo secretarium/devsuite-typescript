@@ -12,12 +12,12 @@
                 "NODE_ENV": "development",
                 "GOOGLE_SERVICES_FILE": "_"
             },
-            "node": "18.0.0",
+            "node": "20.12.2",
             "android": {
-                "image": "ubuntu-22.04-jdk-11-ndk-r21e"
+                "image": "sdk-51"
             },
             "ios": {
-                "image": "macos-ventura-13.4-xcode-14.3.1"
+                "image": "macos-sonoma-14.4-xcode-15.3"
             }
         },
         "development": {

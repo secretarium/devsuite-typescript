@@ -3,6 +3,9 @@
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "libs/crypto/src",
     "projectType": "library",
+    "tags": [
+        "scope:sdk"
+    ],
     "targets": {
         "build": {
             "dependsOn": [
@@ -84,8 +87,5 @@
                 "jestConfig": "libs/crypto/jest.config.ts"
             }
         }
-    },
-    "tags": [
-        "scope:sdk"
-    ]
+    }
 }

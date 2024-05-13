@@ -37,7 +37,12 @@ const typescriptRules = {
 
 module.exports = {
     root: true,
+    env: {
+        node: true,
+        es2021: true
+    },
     parserOptions: {
+        ecmaVersion: 2022,
         tsconfigRootDir: __dirname,
         project: [
             './tsconfig.eslint.json'

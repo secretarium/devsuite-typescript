@@ -3,6 +3,10 @@
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "apps/pocket-e2e/src",
     "projectType": "application",
+    "tags": [],
+    "implicitDependencies": [
+        "pocket"
+    ],
     "targets": {
         "build-ios": {
             "executor": "@nx/detox:build",
@@ -86,9 +90,5 @@
                 "{options.outputFile}"
             ]
         }
-    },
-    "tags": [],
-    "implicitDependencies": [
-        "pocket"
-    ]
+    }
 }

@@ -1,8 +1,12 @@
 const { withNxMetro } = require('@nx/expo');
 const { getDefaultConfig } = require('@expo/metro-config');
+const { getSentryExpoConfig } = require('@sentry/react-native/metro');
 const { mergeConfig } = require('metro-config');
 
 const defaultConfig = getDefaultConfig(__dirname);
+const expoConfig = getSentryExpoConfig(__dirname);
+const compoundConfig = mergeConfig(defaultConfig, expoConfig);
+
 const { assetExts, sourceExts } = defaultConfig.resolver;
 
 /**
@@ -23,7 +27,8 @@ const customConfig = {
     }
 };
 
-module.exports = withNxMetro(mergeConfig(defaultConfig, customConfig), {
+
+module.exports = withNxMetro(mergeConfig(compoundConfig, customConfig), {
     // Change this to true to see debugging info.
     // Useful if you have issues resolving modules
     debug: false,

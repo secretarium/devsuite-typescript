@@ -3,6 +3,10 @@
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "apps/endoscope/src",
     "projectType": "application",
+    "tags": [
+        "scope:ui",
+        "scope:dev"
+    ],
     "targets": {
         "build": {
             "executor": "@nx/webpack:webpack",
@@ -104,9 +108,5 @@
                 ]
             }
         }
-    },
-    "tags": [
-        "scope:ui",
-        "scope:dev"
-    ]
+    }
 }

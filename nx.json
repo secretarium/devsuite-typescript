@@ -1,8 +1,5 @@
 {
     "$schema": "./node_modules/nx/schemas/nx-schema.json",
-    "affected": {
-        "defaultBase": "main"
-    },
     "workspaceLayout": {
         "appsDir": "apps",
         "libsDir": "libs"
@@ -104,5 +101,6 @@
         }
     },
     "defaultProject": "connector",
-    "nxCloudAccessToken": "ZTM5YThjMTctZDdiMS00ZjU1LThjN2ItNTk5ODUxODU0YzllfHJlYWQtd3JpdGU="
+    "nxCloudAccessToken": "ZTM5YThjMTctZDdiMS00ZjU1LThjN2ItNTk5ODUxODU0YzllfHJlYWQtd3JpdGU=",
+    "defaultBase": "main"
 }
