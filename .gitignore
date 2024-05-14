@@ -51,6 +51,8 @@ Thumbs.db
 
 # Locally scoped env
 .env*local
+
+# Expo artifacts
 apps/pocket-e2e/artifacts
 
 # Next.js

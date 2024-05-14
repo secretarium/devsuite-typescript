@@ -1,6 +1,8 @@
-name: Lint
+name: Build
 
 on:
+  push:
+    branches: [main, develop, "fix/*"]
   pull_request:
     branches: [main, develop]
 
@@ -49,7 +51,7 @@ jobs:
       - name: Install repo dependencies
         run: yarn install --network-timeout 1000000 --forzen-lockfile
 
-      - name: Check for lint
+      - name: Build the Dev Suite
         env:
           NODE_OPTIONS: "--max_old_space_size=4096"
-        run:   yarn nx affected --target=lint --parallel=1 --exclude=pocket --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
+        run: yarn nx affected --target=build --parallel=1 --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}

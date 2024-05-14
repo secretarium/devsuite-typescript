@@ -5,6 +5,10 @@
     "ignorePatterns": [
         "!**/*"
     ],
+    "globals": {
+        "__DEBUG_BUILD__": "readonly",
+        "__SENTRY_DEBUG__": "readonly"
+    },
     "overrides": [
         {
             "files": [
@@ -13,7 +17,22 @@
                 "*.js",
                 "*.jsx"
             ],
-            "rules": {}
+            "rules": {
+                "@nx/enforce-module-boundaries": [
+                    "error",
+                    {
+                        "allow": [],
+                        "depConstraints": [
+                            {
+                                "sourceTag": "*",
+                                "onlyDependOnLibsWithTags": [
+                                    "*"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
         },
         {
             "files": [
@@ -28,6 +47,22 @@
                 "*.jsx"
             ],
             "rules": {}
+        },
+        {
+            "files": [
+                "*.json"
+            ],
+            "parser": "jsonc-eslint-parser",
+            "rules": {
+                "@nx/dependency-checks": [
+                    "error",
+                    {
+                        "ignoredDependencies": [
+                            "pretty-bytes"
+                        ]
+                    }
+                ]
+            }
         }
     ]
 }

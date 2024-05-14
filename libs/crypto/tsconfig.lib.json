@@ -8,8 +8,9 @@
         ]
     },
     "include": [
-        "**/*.ts",
-        "vendor/*.js"
+        "src/**/*.ts",
+        "vendor/*.js",
+        "vendor/*.ts"
     ],
     "exclude": [
         "jest.config.ts",

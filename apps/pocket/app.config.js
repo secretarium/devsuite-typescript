@@ -3,6 +3,7 @@ const path = require('path');
 const { version } = require('./package.json');
 const STAGE = process.env.STAGE || 'development';
 const NX_EXPO_PROJECT_ID = process.env.NX_EXPO_PROJECT_ID;
+const NX_SENTRY_URL = process.env.NX_SENTRY_URL;
 const BUILD_NUMBER = parseInt(process.env.GITHUB_RUN_ID || process.env.CI_JOB_ID || process.env.BUILD_NUMBER || 1);
 
 const envConfig = {
@@ -159,7 +160,14 @@ export default {
                     skipProguard: false,
                     subdomains: ['10.0.2.2', 'localhost']
                 }
-            ]
+            ],
+            'expo-router',
+            'expo-localization',
+            ['@sentry/react-native/expo', {
+                url: NX_SENTRY_URL,
+                project: 'pocket-app',
+                organization: 'secretarium'
+            }]
         ]
     }
 };

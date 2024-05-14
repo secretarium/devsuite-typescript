@@ -1,10 +1,12 @@
-
 const { withNxMetro } = require('@nx/expo');
 const { getDefaultConfig } = require('@expo/metro-config');
+const { getSentryExpoConfig } = require('@sentry/react-native/metro');
 const { mergeConfig } = require('metro-config');
-const exclusionList = require('metro-config/src/defaults/exclusionList');
 
 const defaultConfig = getDefaultConfig(__dirname);
+const expoConfig = getSentryExpoConfig(__dirname);
+const compoundConfig = mergeConfig(defaultConfig, expoConfig);
+
 const { assetExts, sourceExts } = defaultConfig.resolver;
 
 /**
@@ -20,14 +22,13 @@ const customConfig = {
     resolver: {
         assetExts: assetExts.filter((ext) => ext !== 'svg'),
         sourceExts: [...sourceExts, 'svg'],
-        blockList: exclusionList([/^(?!.*node_modules).*\/dist\/.*/]),
-        unstable_enableSymlinks: true,
+        blockList: [/^(?!.*node_modules).*\/dist\/.*/],
         unstable_enablePackageExports: true
     }
 };
 
 
-module.exports = withNxMetro(mergeConfig(defaultConfig, customConfig), {
+module.exports = withNxMetro(mergeConfig(compoundConfig, customConfig), {
     // Change this to true to see debugging info.
     // Useful if you have issues resolving modules
     debug: false,
