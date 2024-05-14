@@ -7,24 +7,11 @@ const jsonRules = {
             ignoredNodes: ['VariableDeclaration[declarations.length=0]']
         }
     ],
-    '@nx/dependency-checks': 'error'
+    '@typescript-eslint/consistent-type-assertions': 'off'
 };
 
 const javascriptRules = {
     ...jsonRules,
-    '@nx/enforce-module-boundaries': [
-        'error',
-        {
-            enforceBuildableLibDependency: true,
-            allow: [],
-            depConstraints: [
-                {
-                    sourceTag: '*',
-                    onlyDependOnLibsWithTags: ['*']
-                }
-            ]
-        }
-    ],
     'react/style-prop-object': 'off',
     'quotes': ['error', 'single'],
     'quote-props': ['error', 'consistent-as-needed'],
@@ -42,7 +29,6 @@ const typescriptRules = {
     ...javascriptRules,
     'no-unused-vars': 'off',
     '@typescript-eslint/no-explicit-any': 'warn',
-    '@typescript-eslint/consistent-type-assertions': 'off',
     '@typescript-eslint/no-unused-vars': [
         'error',
         { args: 'after-used', varsIgnorePattern: '^__unused' }
@@ -51,28 +37,36 @@ const typescriptRules = {
 
 module.exports = {
     root: true,
+    env: {
+        node: true,
+        es2021: true
+    },
     parserOptions: {
+        ecmaVersion: 2022,
         tsconfigRootDir: __dirname,
         project: [
-            './tsconfig.eslint.json',
-            './{packages,apps,libs}/*-e2e/tsconfig.json',
-            './{packages,apps,libs}/*/tsconfig.e2e.json',
-            './{packages,apps,libs}/*/tsconfig.lib.json',
-            './{packages,apps,libs}/*/tsconfig.app.json',
-            './{packages,apps,libs}/*/tsconfig.spec.json',
-            './{packages,apps,libs}/*/tsconfig.server.json'
+            './tsconfig.eslint.json'
+            // './{packages,apps,libs}/*-e2e/tsconfig.json',
+            // './{packages,apps,libs}/*/tsconfig.e2e.json',
+            // './{packages,apps,libs}/*/tsconfig.lib.json',
+            // './{packages,apps,libs}/*/tsconfig.app.json',
+            // './{packages,apps,libs}/*/tsconfig.spec.json',
+            // './{packages,apps,libs}/*/tsconfig.server.json'
         ],
         EXPERIMENTAL_useProjectService: true
     },
     ignorePatterns: [
-        '**/*',
+        // '**/*',
         '!**/*.json',
         '!**/*.js',
         '!**/*.mjs',
         '!**/*.ts',
+        'dist/**',
+        'tmp/**',
+        'tools/**/_msr*',
         'node_modules/**'
     ],
-    plugins: ['@nx', 'json'],
+    plugins: ['@nx'],
     overrides: [
         {
             files: ['*.ts', '*.tsx'],
@@ -95,7 +89,8 @@ module.exports = {
         },
         {
             files: ['*.json'],
-            extends: ['plugin:json/recommended'],
+            parser: 'jsonc-eslint-parser',
+            extends: ['plugin:jsonc/recommended-with-json'],
             rules: jsonRules
         }
     ]

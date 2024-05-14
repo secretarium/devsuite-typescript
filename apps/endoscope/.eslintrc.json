@@ -1,8 +1,4 @@
 {
-    "extends": [
-        "plugin:@nx/react",
-        "../../.eslintrc.js"
-    ],
     "ignorePatterns": [
         "!**/*"
     ],
@@ -21,7 +17,22 @@
                 "*.js",
                 "*.jsx"
             ],
-            "rules": {}
+            "rules": {
+                "@nx/enforce-module-boundaries": [
+                    "error",
+                    {
+                        "allow": [],
+                        "depConstraints": [
+                            {
+                                "sourceTag": "*",
+                                "onlyDependOnLibsWithTags": [
+                                    "*"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
         },
         {
             "files": [

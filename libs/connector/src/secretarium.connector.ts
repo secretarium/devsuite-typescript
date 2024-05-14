@@ -24,48 +24,59 @@ type SCPOptions = {
     };
 };
 
+type SCPEndpoint = {
+    url: string;
+    knownTrustedKey?: string;
+} | undefined
+
 type ErrorHandler<TData = any> = (error: TData, requestId: string) => void;
 type ResultHandler<TData = any> = (result: TData, requestId: string) => void;
 type NaiveHandler = (requestId: string) => void;
 
-interface QueryHandlers {
-    onError: <TData>(handler: ErrorHandler<TData>) => this;
-    onResult: <TData>(handler: ResultHandler<TData>) => this;
+interface QueryHandlers<ResultType = any, ErrorType = any> {
+    onError: (handler: ErrorHandler<ErrorType>) => this;
+    onResult: (handler: ResultHandler<ResultType>) => this;
 }
 
-interface TransactionHandlers extends QueryHandlers {
+interface TransactionHandlers<ResultType = any, ErrorType = any> extends QueryHandlers<ResultType, ErrorType> {
     onAcknowledged: (handler: NaiveHandler) => this;
+    /**
+     * @deprecated onPropose handlers were retired in Secretarium Core 1.0.0
+     */
     onProposed: (handler: NaiveHandler) => this;
     onCommitted: (handler: NaiveHandler) => this;
     onExecuted: (handler: NaiveHandler) => this;
 }
 
-interface NotificationHandlers {
+interface NotificationHandlers<ResultType = any, ErrorType = any> {
     failed?: boolean;
     promise: {
-        resolve: (o: Record<string, unknown> | string | void) => void;
-        reject: (o: string) => void;
+        resolve: (o: ResultType) => void;
+        reject: (o: ErrorType) => void;
     };
 }
 
-type QueryNotificationHandlers = NotificationHandlers & {
-    onError: ErrorHandler[];
-    onResult: ResultHandler[];
+type QueryNotificationHandlers<ResultType = any, ErrorType = any> = NotificationHandlers<ResultType, ErrorType> & {
+    onError: ErrorHandler<ErrorType>[];
+    onResult: ResultHandler<ResultType>[];
 };
 
-type TransactionNotificationHandlers = QueryNotificationHandlers & {
+type TransactionNotificationHandlers<ResultType = any, ErrorType = any> = QueryNotificationHandlers<ResultType, ErrorType> & {
     onAcknowledged: NaiveHandler[];
+    /**
+     * @deprecated onPropose handlers were retired in Secretarium Core 1.0.0
+     */
     onProposed: NaiveHandler[];
     onCommitted: NaiveHandler[];
     onExecuted: NaiveHandler[];
 };
 
-export type Query = QueryHandlers & {
-    send: () => Promise<Record<string, unknown> | string | void>;
+export type Query<ResultType = any, ErrorType = any> = QueryHandlers<ResultType, ErrorType> & {
+    send: () => Promise<ResultType>;
 };
 
-export type Transaction = TransactionHandlers & {
-    send: () => Promise<Record<string, unknown> | string | void>;
+export type Transaction<ResultType = any, ErrorType = any> = TransactionHandlers<ResultType, ErrorType> & {
+    send: () => Promise<ResultType>;
 };
 
 export class SCP {
@@ -76,6 +87,7 @@ export class SCP {
     private _requests: { [key: string]: QueryNotificationHandlers | TransactionNotificationHandlers } = {};
     private _session: SCPSession | null = null;
     private _options: SCPOptions;
+    private _endpoint: SCPEndpoint;
 
     constructor(options?: SCPOptions) {
         this._options = options || {};
@@ -178,11 +190,16 @@ export class SCP {
         return this._socket?.bufferedAmount || 0;
     }
 
-    connect(url: string, userKey: Key, knownTrustedKey: Uint8Array | string, protocol: NNG.Protocol = NNG.Protocol.pair1): Promise<void> {
+    connect(url: string, userKey: Key, knownTrustedKey: Uint8Array | string | undefined = undefined, protocol: NNG.Protocol = NNG.Protocol.pair1): Promise<void> {
         // if (this._socket && this._socket.state < ConnectionState.closing) this._socket.close();
 
+        this._endpoint = {
+            url,
+            knownTrustedKey: knownTrustedKey ? typeof knownTrustedKey === 'string' ? knownTrustedKey : Utils.toBase64(knownTrustedKey) : undefined
+        };
+
         this._updateState(ConnectionState.connecting);
-        const trustedKey = typeof knownTrustedKey === 'string' ? Uint8Array.from(Utils.fromBase64(knownTrustedKey)) : knownTrustedKey;
+        const trustedKey = Uint8Array.from(Utils.fromBase64(this._endpoint.knownTrustedKey ?? Utils.toBase64(Utils.getRandomBytes(64))));
         const socket = (this._socket = new NNG.WS());
         let ecdh: CryptoKeyPair;
         let ecdhPubKeyRaw: Uint8Array;
@@ -262,7 +279,9 @@ export class SCP {
 
                     // Check inheritance from Secretarium knownTrustedKey
                     const knownTrustedKeyPath = serverIdentity.subarray(96);
-                    if (knownTrustedKeyPath.length === 64) {
+                    if (!this._endpoint?.knownTrustedKey)
+                        this._options.logger?.info?.('No knownTrustedKey provided, server identity will not be verified');
+                    else if (knownTrustedKeyPath.length === 64) {
                         if (!Utils.sequenceEqual(trustedKey, knownTrustedKeyPath)) throw new Error(ErrorMessage[ErrorCodes.ETINSRVID]);
                     } else {
                         for (let i = 0; i < knownTrustedKeyPath.length - 64; i = i + 128) {
@@ -350,10 +369,23 @@ export class SCP {
         return this;
     }
 
-    newQuery(app: string, command: string, requestId: string, args: Record<string, unknown> | string): Query {
-        let cbs: Partial<QueryNotificationHandlers> = {};
-        const pm = new Promise<Record<string, unknown> | string | void>((resolve, reject) => {
-            this._requests[requestId] = cbs = {
+    isConnected(): boolean {
+        return this._connectionState === ConnectionState.secure;
+    }
+
+    getEndpoint(): SCPEndpoint {
+        return this._endpoint;
+    }
+
+    getCryptoContext(): { type: string; version?: string } {
+        return (crypto as any).context;
+    }
+
+    newQuery<ResultType = any, ErrorType = any>(app: string, command: string, requestId?: string, args?: Record<string, unknown> | string): Query<ResultType, ErrorType> {
+        const rid = requestId ?? `rid-${app}-${command}-${Date.now()}-${Math.floor(Math.random() * 1000000)}}`;
+        let cbs: Partial<QueryNotificationHandlers<ResultType, ErrorType>> = {};
+        const pm = new Promise<ResultType>((resolve, reject) => {
+            this._requests[rid] = cbs = {
                 onError: [],
                 onResult: [],
                 promise: {
@@ -362,7 +394,7 @@ export class SCP {
                 }
             };
         });
-        const query: Query = {
+        const query: Query<ResultType, ErrorType> = {
             onError: (x) => {
                 (cbs.onError = cbs.onError || []).push(x);
                 return query;
@@ -372,17 +404,18 @@ export class SCP {
                 return query;
             },
             send: () => {
-                this.send(app, command, requestId, args);
+                this.send(app, command, rid, args);
                 return pm;
             }
         };
         return query;
     }
 
-    newTx(app: string, command: string, requestId: string, args: Record<string, unknown> | string): Transaction {
-        let cbs: TransactionNotificationHandlers;
-        const pm = new Promise<Record<string, unknown> | string | void>((resolve, reject) => {
-            this._requests[requestId] = cbs = {
+    newTx<ResultType = any, ErrorType = any>(app: string, command: string, requestId?: string, args?: Record<string, unknown> | string): Transaction<ResultType, ErrorType> {
+        const rid = requestId ?? `rid-${app}-${command}-${Date.now()}-${Math.floor(Math.random() * 1000000)}}`;
+        let cbs: Partial<TransactionNotificationHandlers<ResultType, ErrorType>> = {};
+        const pm = new Promise<ResultType>((resolve, reject) => {
+            this._requests[rid] = (cbs) = {
                 onError: [],
                 onResult: [],
                 onAcknowledged: [],
@@ -395,7 +428,7 @@ export class SCP {
                 }
             };
         });
-        const tx: Transaction = {
+        const tx: Transaction<ResultType, ErrorType> = {
             onError: (x) => {
                 (cbs.onError = cbs.onError || []).push(x);
                 return tx;
@@ -404,6 +437,9 @@ export class SCP {
                 (cbs.onAcknowledged = cbs.onAcknowledged || []).push(x);
                 return tx;
             },
+            /**
+         * @deprecated onPropose handlers were retired in Secretarium Core 1.0.0
+         */
             onProposed: (x) => {
                 (cbs.onProposed = cbs.onProposed || []).push(x);
                 return tx;
@@ -421,14 +457,31 @@ export class SCP {
                 return tx;
             }, // for chained tx + query
             send: () => {
-                this.send(app, command, requestId, args);
+                this.send(app, command, rid, args);
                 return pm;
             }
         };
         return tx;
     }
 
-    async send(app: string, command: string, requestId: string, args: Record<string, unknown> | string): Promise<void> {
+    private async _prepare(app: string, command: string, requestId: string, args?: Record<string, unknown> | string): Promise<Uint8Array> {
+
+        const query = {
+            dcapp: app,
+            function: command,
+            requestId: requestId,
+            args: args ?? null
+        };
+
+        this._options.logger?.debug?.('Secretarium sending:', query);
+
+        const data = Utils.encode(JSON.stringify(query));
+        const encrypted = await this._encrypt(data);
+
+        return encrypted;
+    }
+
+    async send(app: string, command: string, requestId: string, args?: Record<string, unknown> | string): Promise<void> {
         if (!this._socket || !this._session || this._socket.state !== ConnectionState.secure) {
             const z = this._requests[requestId]?.onError;
             if (z) {
@@ -437,19 +490,11 @@ export class SCP {
             } else throw new Error(ErrorMessage[ErrorCodes.ENOTCONNT]);
         }
 
-        const query = JSON.stringify({
-            dcapp: app,
-            function: command,
-            requestId: requestId,
-            args: args
-        });
-        const data = Utils.encode(query);
-        const encrypted = await this._encrypt(data);
+        const encrypted = await this._prepare(app, command, requestId, args);
 
-        if (app !== '__local__') {
-            this._options.logger?.debug?.('Secretarium sending:', JSON.parse(query));
+        if (app !== '__local__')
             this._socket.send(encrypted);
-        }
+
     }
 
     close(): SCP {

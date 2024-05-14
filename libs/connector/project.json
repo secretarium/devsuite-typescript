@@ -3,33 +3,35 @@
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "libs/connector/src",
     "projectType": "library",
+    "tags": [
+        "scope:sdk"
+    ],
     "targets": {
         "build": {
-            "executor": "@nx/js:tsc",
+            "executor": "@nx/rollup:rollup",
             "outputs": [
                 "{options.outputPath}"
             ],
             "options": {
                 "outputPath": "dist/libs/connector",
-                "tsConfig": "libs/connector/tsconfig.lib.json",
-                "packageJson": "libs/connector/package.json",
                 "main": "libs/connector/src/index.ts",
+                "tsConfig": "libs/connector/tsconfig.lib.json",
                 "assets": [
-                    "libs/connector/*.md"
-                ]
+                    {
+                        "input": "libs/connector",
+                        "glob": "*.md",
+                        "output": "."
+                    }
+                ],
+                "project": "libs/connector/package.json",
+                "compiler": "swc",
+                "format": [
+                    "cjs",
+                    "esm"
+                ],
+                "external": "all",
+                "generateExportsField": true
             }
-        },
-        "lint": {
-            "executor": "@nx/linter:eslint",
-            "options": {
-                "lintFilePatterns": [
-                    "libs/connector/**/*.{ts,tsx,js,jsx,json}",
-                    "libs/connector/package.json"
-                ]
-            },
-            "outputs": [
-                "{options.outputFile}"
-            ]
         },
         "test": {
             "dependsOn": [
@@ -63,19 +65,16 @@
             }
         },
         "publish": {
+            "command": "node tools/scripts/publish.mjs connector {args.ver} {args.tag}",
             "dependsOn": [
                 "build"
-            ],
-            "executor": "nx:run-commands",
-            "options": {
-                "cwd": "dist/libs/connector",
-                "commands": [
-                    "yarn publish --access public"
-                ]
-            }
+            ]
+        },
+        "lint": {
+            "executor": "@nx/eslint:lint",
+            "outputs": [
+                "{options.outputFile}"
+            ]
         }
-    },
-    "tags": [
-        "scope:sdk"
-    ]
+    }
 }

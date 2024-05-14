@@ -18,7 +18,7 @@ try {
                 stdio: 'ignore'
             });
             console.log('Modify msrcrypto build pipeline...');
-            appendFileSync(resolve(repoLocation, 'gulpfile.js'), gulpTask)
+            appendFileSync(resolve(repoLocation, 'gulpfile.js'), gulpTask);
             console.log('Compile msrcrypto...');
             execSync('npx gulp', {
                 cwd: repoLocation,
@@ -26,8 +26,8 @@ try {
                 // stdio: 'ignore'
             });
             console.log('Copy msrcrypto artifact...');
-            copyFileSync(resolve(repoLocation, 'lib/msrcrypto.min.js'), 'libs/crypto/vendor/msrCrypto.js')
-        })
+            copyFileSync(resolve(repoLocation, 'lib/msrcrypto.min.js'), 'libs/crypto/vendor/msrCrypto.js');
+        });
 } catch (e) {
     console.error(e);
 }
@@ -65,4 +65,4 @@ function compile() {
 }
 
 gulp.task("default", gulp.series(cleanBuild, subtle, compile, format, minifyBundle));
-`
+`;
