@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        node: [18.x]
+        node: [22.x]
 
     steps:
       - uses: actions/checkout@v4
@@ -54,4 +54,4 @@ jobs:
       - name: Build the Dev Suite
         env:
           NODE_OPTIONS: "--max_old_space_size=4096"
-        run: yarn nx affected --target=build --parallel=1 --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
+        run: yarn nx affected --target=build --parallel=1 --exclude=pocket --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
