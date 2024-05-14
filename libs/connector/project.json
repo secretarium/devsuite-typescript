@@ -32,6 +32,14 @@
             ]
         },
         "test": {
+            "dependsOn": [
+                {
+                    "projects": [
+                        "crypto"
+                    ],
+                    "target": "build"
+                }
+            ],
             "executor": "@nx/jest:jest",
             "outputs": [
                 "{workspaceRoot}/coverage/libs/connector"
