@@ -43,6 +43,7 @@ testem.log
 *.orig.*
 web-build/
 logs
+.nx
 
 # System Files
 .DS_Store
