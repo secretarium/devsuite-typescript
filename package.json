@@ -86,6 +86,7 @@
         "@nx/rollup": "19.0.2",
         "@nx/web": "19.0.2",
         "@nx/webpack": "19.0.2",
+        "@pmmmwh/react-refresh-webpack-plugin": "0.5.13",
         "@svgr/webpack": "8.1.0",
         "@swc/cli": "0.3.12",
         "@swc/core": "1.5.5",
