@@ -24,6 +24,11 @@ export default {
     transform: {
         '^.+\\.[tj]s$': ['@swc/jest', swcJestConfig],
     },
+    globals: {
+        // Sentry level 1 debug flag
+        __DEBUG_BUILD__: true,
+        __SENTRY_DEBUG__: true
+    },
     moduleFileExtensions: ['ts', 'js', 'html'],
     testEnvironment: 'node',
     coverageDirectory: '../../coverage/libs/instrumentation',

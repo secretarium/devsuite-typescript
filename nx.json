@@ -1,8 +1,5 @@
 {
     "$schema": "./node_modules/nx/schemas/nx-schema.json",
-    "affected": {
-        "defaultBase": "main"
-    },
     "workspaceLayout": {
         "appsDir": "apps",
         "libsDir": "libs"
@@ -22,13 +19,6 @@
             "inputs": [
                 "default",
                 "^production"
-            ],
-            "cache": true
-        },
-        "lint": {
-            "inputs": [
-                "default",
-                "{workspaceRoot}/.eslintrc.json"
             ],
             "cache": true
         },
@@ -56,6 +46,13 @@
                     "codeCoverage": true
                 }
             }
+        },
+        "@nx/eslint:lint": {
+            "inputs": [
+                "default",
+                "{workspaceRoot}/.eslintrc.js"
+            ],
+            "cache": true
         }
     },
     "namedInputs": {
@@ -68,7 +65,7 @@
             "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
             "!{projectRoot}/tsconfig.spec.json",
             "!{projectRoot}/jest.config.[jt]s",
-            "!{projectRoot}/.eslintrc.json",
+            "!{projectRoot}/.eslintrc.js",
             "!{projectRoot}/src/test-setup.[jt]s"
         ],
         "sharedGlobals": [
@@ -104,5 +101,6 @@
         }
     },
     "defaultProject": "connector",
-    "nxCloudAccessToken": "ZTM5YThjMTctZDdiMS00ZjU1LThjN2ItNTk5ODUxODU0YzllfHJlYWQtd3JpdGU="
+    "nxCloudAccessToken": "ZTM5YThjMTctZDdiMS00ZjU1LThjN2ItNTk5ODUxODU0YzllfHJlYWQtd3JpdGU=",
+    "defaultBase": "main"
 }
