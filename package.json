@@ -62,7 +62,7 @@
         "regenerator-runtime": "0.14.1",
         "tailwindcss": "3.4.3",
         "tslib": "^2.6.2",
-        "ws": "8.17.0"
+        "ws": "8.17.1"
     },
     "devDependencies": {
         "@babel/core": "^7.24.5",
