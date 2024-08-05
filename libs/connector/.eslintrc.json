@@ -35,6 +35,11 @@
                 "*.ts",
                 "*.tsx"
             ],
+            "parserOptions": {
+                "project": [
+                    "libs/connector/tsconfig.*?.json"
+                ]
+            },
             "rules": {}
         },
         {

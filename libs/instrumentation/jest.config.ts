@@ -24,6 +24,7 @@ export default {
     transform: {
         '^.+\\.[tj]s$': ['@swc/jest', swcJestConfig],
     },
+    transformIgnorePatterns: ['node_modules/(?!(jest-)?@swc|pretty-bytes)'],
     globals: {
         // Sentry level 1 debug flag
         __DEBUG_BUILD__: true,

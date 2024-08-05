@@ -39,6 +39,11 @@
                 "*.ts",
                 "*.tsx"
             ],
+            "parserOptions": {
+                "project": [
+                    "libs/instrumentation/tsconfig.*?.json"
+                ]
+            },
             "rules": {}
         },
         {

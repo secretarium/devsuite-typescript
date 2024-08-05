@@ -36,6 +36,7 @@ describe('Connector key', () => {
             const newKey = await Key.importEncryptedKeyPair(envV1Key, '1234');
             expect(newKey).toBeInstanceOf(Key);
         } catch (e) {
+            console.error(e);
             console.error('msrcrypto does not support PKCS8');
         }
     });

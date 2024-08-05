@@ -49,12 +49,14 @@ export class ConnectorTracing implements Integration {
      */
     public setupOnce(_: unknown, getCurrentHub: () => Hub): void {
         if (!this._connector) {
-            __DEBUG_BUILD__ && logger.error('SecretariumConnectorIntegration is missing an SCP instance.');
+            if (__DEBUG_BUILD__)
+                logger.error('SecretariumConnectorIntegration is missing an SCP instance.');
             return;
         }
 
         if (shouldDisableAutoInstrumentation(getCurrentHub)) {
-            __DEBUG_BUILD__ && logger.log('SecretariumConnectorIntegration is skipped because of instrumenter configuration.');
+            if (__DEBUG_BUILD__)
+                logger.log('SecretariumConnectorIntegration is skipped because of instrumenter configuration.');
             return;
         }
 

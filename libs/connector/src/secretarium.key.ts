@@ -137,6 +137,7 @@ export class Key {
             try {
                 decrypted = new Uint8Array(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: iv, tagLength: 128 }, aesKey, encrypted));
             } catch (e) {
+                console.error(e);
                 throw new Error(ErrorMessage[ErrorCodes.EINPASSWD]);
             }
 

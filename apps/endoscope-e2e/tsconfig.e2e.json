@@ -5,13 +5,11 @@
         "outDir": "../../dist/out-tsc",
         "allowJs": true,
         "types": [
-            "node",
-            "jest",
-            "detox"
+            "cypress"
         ]
     },
     "include": [
-        "test-setup.ts",
+        "crypress.config.ts",
         "src/**/*.ts",
         "src/**/*.js"
     ]

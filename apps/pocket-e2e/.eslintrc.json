@@ -14,13 +14,33 @@
                 "*.js",
                 "*.jsx"
             ],
-            "rules": {}
+            "rules": {
+                "@nx/enforce-module-boundaries": [
+                    "error",
+                    {
+                        "allow": [],
+                        "depConstraints": [
+                            {
+                                "sourceTag": "*",
+                                "onlyDependOnLibsWithTags": [
+                                    "*"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
         },
         {
             "files": [
                 "*.ts",
                 "*.tsx"
             ],
+            "parserOptions": {
+                "project": [
+                    "apps/pocket-e2e/tsconfig.*?.json"
+                ]
+            },
             "rules": {}
         },
         {

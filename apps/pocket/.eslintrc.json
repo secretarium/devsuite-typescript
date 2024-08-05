@@ -46,6 +46,11 @@
                 "*.ts",
                 "*.tsx"
             ],
+            "parserOptions": {
+                "project": [
+                    "apps/pocket/tsconfig.*?.json"
+                ]
+            },
             "rules": {}
         },
         {

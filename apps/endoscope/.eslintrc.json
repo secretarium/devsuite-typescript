@@ -42,6 +42,11 @@
                 "*.ts",
                 "*.tsx"
             ],
+            "parserOptions": {
+                "project": [
+                    "apps/endoscope/tsconfig.*?.json"
+                ]
+            },
             "rules": {}
         },
         {

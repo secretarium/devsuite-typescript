@@ -124,6 +124,7 @@ export function decode(octets: Uint8Array, ignoreException = false): string {
             try {
                 string += String.fromCodePoint(codePoint);
             } catch (e) {
+                console.error(e);
                 /* NOOP */
             }
         else string += String.fromCodePoint(codePoint);

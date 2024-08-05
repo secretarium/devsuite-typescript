@@ -13,6 +13,7 @@
         "@secretarium/connector": "0.17.0",
         "@sentry/core": "7.118.0",
         "@sentry/utils": "7.118.0",
-        "@sentry/types": "7.118.0"
+        "@sentry/types": "7.118.0",
+        "pretty-bytes": "6.1.1"
     }
 }
