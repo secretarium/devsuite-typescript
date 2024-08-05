@@ -2,7 +2,7 @@
     "extends": "../../tsconfig.base.json",
     "compilerOptions": {
         "allowJs": true,
-        "module": "commonjs",
+        "module": "esnext",
         "forceConsistentCasingInFileNames": true,
         "strict": true,
         "noImplicitOverride": true,

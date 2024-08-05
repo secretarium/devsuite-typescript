@@ -2,7 +2,7 @@ import path from 'path';
 
 export default {
     displayName: 'endoscope',
-    preset: '../../jest.preset.js',
+    preset: '../../jest.preset.cjs',
     transform: {
         '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': '@nx/react/plugins/jest',
         '^.+\\.[tj]sx?$': [

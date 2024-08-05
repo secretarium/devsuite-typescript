@@ -190,7 +190,7 @@ export class SCP {
         return this._socket?.bufferedAmount || 0;
     }
 
-    connect(url: string, userKey: Key, knownTrustedKey: Uint8Array | string | undefined = undefined, protocol: NNG.Protocol = NNG.Protocol.pair1): Promise<void> {
+    async connect(url: string, userKey: Key, knownTrustedKey: Uint8Array | string | undefined = undefined, protocol: NNG.Protocol = NNG.Protocol.pair1): Promise<void> {
         // if (this._socket && this._socket.state < ConnectionState.closing) this._socket.close();
 
         this._endpoint = {
@@ -245,7 +245,7 @@ export class SCP {
                             .send(ecdhPubKeyRaw);
                     });
                 })
-                .then((serverHello: Uint8Array): Promise<Uint8Array> => {
+                .then(async (serverHello: Uint8Array): Promise<Uint8Array> => {
                     const pow = this._computeProofOfWork(serverHello.subarray(0, 32));
                     const clientProofOfWork = Utils.concatBytesArrays([pow, trustedKey]);
                     return new Promise((resolve, reject) => {
@@ -403,7 +403,7 @@ export class SCP {
                 (cbs.onResult = cbs.onResult || []).push(x);
                 return query;
             },
-            send: () => {
+            send: async () => {
                 this.send(app, command, rid, args);
                 return pm;
             }
@@ -456,7 +456,7 @@ export class SCP {
                 (cbs.onResult = cbs.onResult || []).push(x);
                 return tx;
             }, // for chained tx + query
-            send: () => {
+            send: async () => {
                 this.send(app, command, rid, args);
                 return pm;
             }
