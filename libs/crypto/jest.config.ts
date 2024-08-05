@@ -20,7 +20,7 @@ if (swcJestConfig.swcrc === undefined) {
 
 export default {
     displayName: 'crypto',
-    preset: '../../jest.preset.js',
+    preset: '../../jest.preset.cjs',
     transform: {
         '^.+\\.[tj]s$': ['@swc/jest', swcJestConfig],
     },

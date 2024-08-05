@@ -30,10 +30,6 @@
                 ],
                 "project": "libs/crypto/package.json",
                 "compiler": "swc",
-                "format": [
-                    "cjs",
-                    "esm"
-                ],
                 "generateExportsField": true
             }
         },

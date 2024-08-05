@@ -23,10 +23,6 @@
                 ],
                 "project": "libs/instrumentation/package.json",
                 "compiler": "swc",
-                "format": [
-                    "cjs",
-                    "esm"
-                ],
                 "bundle": true,
                 "generateExportsField": true
             }

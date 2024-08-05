@@ -25,10 +25,6 @@
                 ],
                 "project": "libs/connector/package.json",
                 "compiler": "swc",
-                "format": [
-                    "cjs",
-                    "esm"
-                ],
                 "external": "all",
                 "generateExportsField": true
             }

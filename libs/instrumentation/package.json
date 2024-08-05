@@ -3,12 +3,12 @@
     "version": "0.5.0",
     "license": "MIT",
     "private": false,
+    "type": "module",
     "repository": {
         "type": "git",
         "url": "https://github.com/secretarium/devsuite-typescript.git",
         "directory": "libs/instrumentation"
     },
-    "type": "commonjs",
     "peerDependencies": {
         "@secretarium/connector": "0.17.0",
         "@sentry/core": "7.118.0",

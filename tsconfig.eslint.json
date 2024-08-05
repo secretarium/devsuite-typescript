@@ -9,7 +9,7 @@
         "libs/**"
     ],
     "include": [
-        ".eslintrc.js",
+        ".eslintrc.cjs",
         ".commitlintrc.js",
         "*.js",
         "*.ts",

@@ -34,7 +34,7 @@
             "inputs": [
                 "default",
                 "^production",
-                "{workspaceRoot}/jest.preset.js"
+                "{workspaceRoot}/jest.preset.cjs"
             ],
             "cache": true,
             "options": {
@@ -50,7 +50,7 @@
         "@nx/eslint:lint": {
             "inputs": [
                 "default",
-                "{workspaceRoot}/.eslintrc.js"
+                "{workspaceRoot}/.eslintrc.cjs"
             ],
             "cache": true
         }
@@ -65,7 +65,7 @@
             "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
             "!{projectRoot}/tsconfig.spec.json",
             "!{projectRoot}/jest.config.[jt]s",
-            "!{projectRoot}/.eslintrc.js",
+            "!{projectRoot}/.eslintrc.cjs",
             "!{projectRoot}/src/test-setup.[jt]s"
         ],
         "sharedGlobals": [

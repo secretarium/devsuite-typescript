@@ -2,6 +2,7 @@
     "name": "secretarium",
     "version": "0.0.0",
     "license": "MIT",
+    "type": "module",
     "scripts": {
         "dev-store": "nx run-many --target=serve --projects=hubber,store",
         "dev-scp": "nx run-many --target=serve --projects=endoscope",
@@ -172,8 +173,5 @@
         "**/react": "^18",
         "**/react-dom": "^18",
         "**/typescript": "^5.5.4"
-    },
-    "nx": {
-        "includedScripts": []
     }
 }

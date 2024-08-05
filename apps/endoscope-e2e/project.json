@@ -11,7 +11,7 @@
         "e2e": {
             "executor": "@nx/cypress:cypress",
             "options": {
-                "cypressConfig": "apps/endoscope-e2e/cypress.config.ts",
+                "cypressConfig": "apps/endoscope-e2e/cypress.config.cjs",
                 "devServerTarget": "endoscope:serve:development",
                 "testingType": "e2e"
             },
