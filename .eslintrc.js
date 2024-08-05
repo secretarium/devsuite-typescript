@@ -12,6 +12,19 @@ const jsonRules = {
 
 const javascriptRules = {
     ...jsonRules,
+    '@nx/enforce-module-boundaries': [
+        'error',
+        {
+            enforceBuildableLibDependency: true,
+            allow: [],
+            depConstraints: [
+                {
+                    sourceTag: '*',
+                    onlyDependOnLibsWithTags: ['*']
+                }
+            ]
+        }
+    ],
     'react/style-prop-object': 'off',
     'quotes': ['error', 'single'],
     'quote-props': ['error', 'consistent-as-needed'],
@@ -29,38 +42,32 @@ const typescriptRules = {
     ...javascriptRules,
     'no-unused-vars': 'off',
     '@typescript-eslint/no-explicit-any': 'warn',
+    '@typescript-eslint/no-non-null-assertion': 'error',
     '@typescript-eslint/no-unused-vars': [
         'error',
         { args: 'after-used', varsIgnorePattern: '^__unused' }
-    ]
+    ],
+    '@typescript-eslint/no-floating-promises': 'warn',
+    '@typescript-eslint/promise-function-async': 'warn',
+    '@typescript-eslint/no-misused-promises': 'warn'
 };
 
 module.exports = {
     root: true,
-    env: {
-        node: true,
-        es2021: true
-    },
+    env: { es6: true },
     parserOptions: {
-        ecmaVersion: 2022,
+        ecmaVersion: 2021,
         tsconfigRootDir: __dirname,
-        project: [
-            './tsconfig.eslint.json'
-            // './{packages,apps,libs}/*-e2e/tsconfig.json',
-            // './{packages,apps,libs}/*/tsconfig.e2e.json',
-            // './{packages,apps,libs}/*/tsconfig.lib.json',
-            // './{packages,apps,libs}/*/tsconfig.app.json',
-            // './{packages,apps,libs}/*/tsconfig.spec.json',
-            // './{packages,apps,libs}/*/tsconfig.server.json'
-        ],
-        EXPERIMENTAL_useProjectService: true
+        EXPERIMENTAL_useProjectService: true,
+        warnOnUnsupportedTypeScriptVersion: false
     },
     ignorePatterns: [
-        // '**/*',
+        '**/*',
         '!**/*.json',
         '!**/*.js',
         '!**/*.mjs',
         '!**/*.ts',
+        '!**/*.mts',
         'dist/**',
         'tmp/**',
         'tools/**/_msr*',
@@ -69,9 +76,14 @@ module.exports = {
     plugins: ['@nx'],
     overrides: [
         {
-            files: ['*.ts', '*.tsx'],
+            files: ['*.ts', '*.tsx', '*.mts'],
             extends: ['plugin:@nx/typescript'],
-            rules: typescriptRules
+            rules: typescriptRules,
+            parserOptions: {
+                project: [
+                    './tsconfig.eslint.json'
+                ]
+            }
         },
         {
             files: ['*.js', '*.jsx'],
@@ -83,8 +95,7 @@ module.exports = {
             extends: ['plugin:@nx/javascript'],
             rules: javascriptRules,
             parserOptions: {
-                sourceType: 'module',
-                ecmaVersion: 2021
+                sourceType: 'module'
             }
         },
         {
