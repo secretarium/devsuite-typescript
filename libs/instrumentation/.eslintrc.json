@@ -5,10 +5,6 @@
     "ignorePatterns": [
         "!**/*"
     ],
-    "globals": {
-        "__DEBUG_BUILD__": "readonly",
-        "__SENTRY_DEBUG__": "readonly"
-    },
     "overrides": [
         {
             "files": [
