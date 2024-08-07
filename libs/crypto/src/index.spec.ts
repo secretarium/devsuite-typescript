@@ -5,6 +5,6 @@ describe('Crypto entry', () => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const BaseHandle: any = SecretariumHandle;
 
-        expect(Object.getOwnPropertyNames(BaseHandle).sort()).toEqual(['__esModule', 'default', 'Utils', 'crypto'].sort());
+        expect(Object.getOwnPropertyNames(BaseHandle).sort()).toEqual(['default', 'Utils', 'crypto'].sort());
     });
 });

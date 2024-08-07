@@ -1,5 +1,6 @@
-import msrCrypto from '../vendor/msrCrypto';
+import * as msrCryptoHoist from '../vendor/msrCrypto';
 
+const msrCrypto = msrCryptoHoist.default ?? msrCryptoHoist;
 const selectCrypto = () => {
 
     const windowCrypto = typeof window !== 'undefined' ? window.crypto : undefined;

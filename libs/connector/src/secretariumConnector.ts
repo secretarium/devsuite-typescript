@@ -134,7 +134,7 @@ export const SecretariumConnector: ConnectorConstructor = class SecretariumConne
                 url,
                 trustKey
             };
-        }).filter(Boolean);
+        }).filter(Boolean) as ServerObject[];
     }
 
     private rotateServer() {
