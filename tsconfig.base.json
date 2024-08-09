@@ -40,6 +40,9 @@
             ],
             "@secretarium/instrumentation": [
                 "libs/instrumentation/src/index.ts"
+            ],
+            "@secretarium/pda-api": [
+                "libs/pda-api/src/index.ts"
             ]
         }
     },

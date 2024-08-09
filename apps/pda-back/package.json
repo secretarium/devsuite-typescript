@@ -1,0 +1,6 @@
+{
+    "name": "@secretarium/pda-back",
+    "version": "0.0.1",
+    "license": "MIT",
+    "type": "module"
+}
