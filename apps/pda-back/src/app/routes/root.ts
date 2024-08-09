@@ -38,7 +38,7 @@ export default async function (fastify: FastifyInstance) {
     fastify.get('/ping', async function () {
         return { pong: true };
     });
-    fastify.post('/fido2/attestation/options', function (req, res) {
+    fastify.post('/fido2/attestation/options', async function (req, res) {
 
         checkConnection().then(async () => scp.newTx('personal-data', 'debug/auth/webauthn', undefined, {
             webauthn: 'init-user',
@@ -46,22 +46,27 @@ export default async function (fastify: FastifyInstance) {
             name: (req.body as any).username,
             displayName: (req.body as any).displayName
         }).onExecuted(() => {
-            performCall('register', req, res);
-        }).send().catch((err) => {
+            performCall('register', req, res).catch((err) => {
+                res.send({
+                    status: 'failed',
+                    errorMessage: err.message ?? err ?? ''
+                });
+            });
+        }).send()).catch((err) => {
             res.send({
                 status: 'failed',
                 errorMessage: err.message ?? err ?? ''
             });
-        }));
+        });
     });
-    fastify.post('/fido2/attestation/result', function (req, res) {
-        performCall('register-verify', req, res);
+    fastify.post('/fido2/attestation/result', async function (req, res) {
+        return performCall('register-verify', req, res);
     });
-    fastify.post('/fido2/assertion/options', function (req, res) {
-        performCall('authenticate', req, res);
+    fastify.post('/fido2/assertion/options', async function (req, res) {
+        return performCall('authenticate', req, res);
     });
-    fastify.post('/fido2/assertion/result', function (req, res) {
-        performCall('authenticate-verify', req, res);
+    fastify.post('/fido2/assertion/result', async function (req, res) {
+        return performCall('authenticate-verify', req, res);
     });
 
     // MDS3

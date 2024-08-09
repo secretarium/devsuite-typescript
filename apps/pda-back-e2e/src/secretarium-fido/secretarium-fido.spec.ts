@@ -1,10 +1,16 @@
 import axios from 'axios';
 
 describe('GET /', () => {
-  it('should return a message', async () => {
-    const res = await axios.get(`/`);
+    it('should return a message', async () => {
+        const res = await axios.get('/ping').catch((err) => {
+            console.error(err);
+        });
 
-    expect(res.status).toBe(200);
-    expect(res.data).toEqual({ message: 'Hello API' });
-  });
+        if (!res) {
+            throw new Error('No response');
+        }
+
+        expect(res.status).toBe(200);
+        expect(res.data).toEqual({ pong: true });
+    });
 });
