@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { ErrorMessage, ErrorCodes } from './secretarium.constant';
+import { ErrorMessage, ErrorCodes } from './secretarium.constant.js';
 import crypto, { Utils } from '@secretarium/crypto';
 
 const CURRENT_KEY_VERSION = 2;

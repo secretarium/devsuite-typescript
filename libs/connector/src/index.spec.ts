@@ -1,4 +1,4 @@
-import * as SecretariumHandle from './index';
+import * as SecretariumHandle from './index.js';
 
 describe('Connector entry', () => {
     it('Exports the right shape', () => {

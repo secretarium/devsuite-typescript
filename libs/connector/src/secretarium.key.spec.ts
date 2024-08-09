@@ -1,6 +1,6 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import { Key, EncryptedKeyPairV0, EncryptedKeyPairV2 } from './secretarium.key';
+import { Key, EncryptedKeyPairV0, EncryptedKeyPairV2 } from './secretarium.key.js';
 import { fileURLToPath } from 'node:url';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
