@@ -1,5 +1,5 @@
-import { ConnectionState } from './secretarium.constant';
-import BackingSocket from './secretarium.socket';
+import { ConnectionState } from './secretarium.constant.js';
+import BackingSocket from './secretarium.socket.js';
 
 export enum Protocol {
     pair1 = 'pair1.sp.nanomsg.org',

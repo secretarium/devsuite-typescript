@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { atob, btoa } from 'js-base64';
-import crypto from './secretarium.crypto';
+import crypto from './secretarium.crypto.js';
 
 export function xor(a: Uint8Array, b: Uint8Array): Uint8Array {
     if (a.length !== b.length) throw new Error();

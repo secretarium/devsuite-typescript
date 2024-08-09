@@ -1,14 +1,8 @@
 {
     "extends": "../../tsconfig.base.json",
     "compilerOptions": {
-        "allowJs": true,
         "module": "esnext",
-        "forceConsistentCasingInFileNames": true,
-        "strict": true,
-        "noImplicitOverride": true,
-        "noPropertyAccessFromIndexSignature": true,
-        "noImplicitReturns": true,
-        "noFallthroughCasesInSwitch": true
+        "moduleResolution": "bundler"
     },
     "files": [],
     "include": [],

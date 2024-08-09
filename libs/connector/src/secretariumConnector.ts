@@ -1,6 +1,6 @@
 // import { WebSocketLink, HTTPSLink } from './links';
-import { SCP, Transaction } from './secretarium.connector';
-import { Key } from './secretarium.key';
+import { SCP, Transaction } from './secretarium.connector.js';
+import { Key } from './secretarium.key.js';
 import { Utils } from '@secretarium/crypto';
 import type {
     ConnectorConstructor,
@@ -10,7 +10,7 @@ import type {
     // ConnectorTransport,
     Server,
     ServerObject
-} from './types';
+} from './types.js';
 
 export const SecretariumConnector: ConnectorConstructor = class SecretariumConnector implements Connector {
 
@@ -134,7 +134,7 @@ export const SecretariumConnector: ConnectorConstructor = class SecretariumConne
                 url,
                 trustKey
             };
-        }).filter(Boolean);
+        }).filter(Boolean) as ServerObject[];
     }
 
     private rotateServer() {

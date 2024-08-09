@@ -1,6 +1,11 @@
-import { Key } from './secretarium.key';
-import encV2Key from '../fixtures/enc.v2.json';
-import envV1Key from '../fixtures/enc.v1.json';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+import { Key, EncryptedKeyPairV0, EncryptedKeyPairV2 } from './secretarium.key.js';
+import { fileURLToPath } from 'node:url';
+
+const dirname = path.dirname(fileURLToPath(import.meta.url));
+const encV1Key = JSON.parse(fs.readFileSync(path.join(dirname, '../fixtures/enc.v1.json'), 'utf8')) as EncryptedKeyPairV0;
+const encV2Key = JSON.parse(fs.readFileSync(path.join(dirname, '../fixtures/enc.v2.json'), 'utf8')) as EncryptedKeyPairV2;
 
 describe('Connector key', () => {
     it('Creates a new key from static method', async () => {
@@ -33,7 +38,7 @@ describe('Connector key', () => {
 
     it('Imports sealed key v1', async () => {
         try {
-            const newKey = await Key.importEncryptedKeyPair(envV1Key, '1234');
+            const newKey = await Key.importEncryptedKeyPair(encV1Key, '1234');
             expect(newKey).toBeInstanceOf(Key);
         } catch (e) {
             console.error(e);
@@ -43,7 +48,7 @@ describe('Connector key', () => {
 
     it('Imports sealed key v1 with wrong password', async () => {
         expect.assertions(1);
-        return Key.importEncryptedKeyPair(envV1Key, 'HelloWorld')
+        return Key.importEncryptedKeyPair(encV1Key, 'HelloWorld')
             .then(() => {
                 return;
             })
@@ -53,6 +58,8 @@ describe('Connector key', () => {
     });
 
     it('Imports sealed key v2', async () => {
+        console.log(encV2Key);
+        console.log(JSON.stringify(encV2Key, null, 2));
         const newKey = await Key.importEncryptedKeyPair(encV2Key, 'HelloWorld');
         expect(newKey).toBeInstanceOf(Key);
     });

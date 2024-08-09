@@ -1,12 +1,12 @@
-import { ExpoConfig, ConfigContext } from 'expo/config';
-import fs from 'fs';
-import path from 'path';
+import { ExpoConfig, ConfigContext } from 'expo/config.js';
+import * as fs from 'fs';
+import * as path from 'path';
 import { version } from './package.json';
 
-const STAGE = process.env['STAGE'] || 'development';
-const EXPO_PROJECT_ID = process.env['NX_EXPO_PROJECT_ID'] ?? process.env['EXPO_PUBLIC_PROJECT_ID'];
-const BUILD_NUMBER = parseInt(process.env['GITHUB_RUN_ID'] || process.env['CI_JOB_ID'] || process.env['BUILD_NUMBER'] || '1');
-const SENTRY_DSN_URL = process.env['NX_SENTRY_DSN'] ?? process.env['NX_SENTRY_URL'] ?? process.env['EXPO_PUBLIC_SENTRY_DSN'] ?? process.env['EXPO_PUBLIC_SENTRY_URL'] ?? process.env['SENTRY_DSN'] ?? process.env['SENTRY_URL'];
+const STAGE = process.env.STAGE || 'development';
+const EXPO_PROJECT_ID = process.env.NX_EXPO_PROJECT_ID ?? process.env.EXPO_PUBLIC_PROJECT_ID;
+const BUILD_NUMBER = parseInt(process.env.GITHUB_RUN_ID || process.env.CI_JOB_ID || process.env.BUILD_NUMBER || '1');
+const SENTRY_DSN_URL = process.env.NX_SENTRY_DSN ?? process.env.NX_SENTRY_URL ?? process.env.EXPO_PUBLIC_SENTRY_DSN ?? process.env.EXPO_PUBLIC_SENTRY_URL ?? process.env.SENTRY_DSN ?? process.env.SENTRY_URL;
 const sentryUrl = SENTRY_DSN_URL ? new URL(SENTRY_DSN_URL) : undefined;
 
 const envConfig = {
@@ -59,7 +59,7 @@ const config = envConfig[STAGE as keyof typeof envConfig];
 let googleServicesFile: string | undefined = path.join(__dirname, 'google-services.json');
 const googleEnvProvenance = `GOOGLE_FCM_CONFIG_${STAGE}`.toUpperCase();
 
-if (process.env['CI'] && process.env[googleEnvProvenance]) {
+if (process.env.CI && process.env[googleEnvProvenance]) {
 
     const googleServicesEnv = process.env[googleEnvProvenance].split(',').reduce((prev, current) => {
         const entry = current.split('=');
@@ -72,7 +72,7 @@ if (process.env['CI'] && process.env[googleEnvProvenance]) {
     });
 
     const googleServicesFileContent = fs.readFileSync(path.join(__dirname, 'google-services.base.json'), 'utf-8');
-    const googleServicesFileTransform = googleServicesFileContent.replace(/(<.*?>)/g, match => {
+    const googleServicesFileTransform = googleServicesFileContent.replace(/(<.*?>)/g, (match) => {
         return googleServicesEnv[match as keyof typeof googleServicesEnv];
     });
 

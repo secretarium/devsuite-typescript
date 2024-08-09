@@ -1,4 +1,4 @@
-const cypress = require('cypress')
+const cypress = require('cypress');
 const cypressPreset = require('@nx/cypress/plugins/cypress-preset');
 
 const cypressJsonConfig = {

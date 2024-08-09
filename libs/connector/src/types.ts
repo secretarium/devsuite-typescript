@@ -1,4 +1,4 @@
-import type { Transaction } from './secretarium.connector';
+import type { Transaction } from './secretarium.connector.js';
 
 interface Nameable {
     displayName?: string;

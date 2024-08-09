@@ -215,26 +215,28 @@ function patchConnectorCall(originalCall: (...args: any[]) => any, options: {
                 op: 'prepare.encode'
             });
 
-            result.onAcknowledged(() => {
-                result.stepChild?.setStatus('ok');
-                result.stepChild?.finish();
-                result.stepChild = result.topChild?.startChild({
-                    description: 'Commitment',
-                    op: `${options.short}.commitment`
+            if (options.operation === 'transaction') {
+                result.onAcknowledged(() => {
+                    result.stepChild?.setStatus('ok');
+                    result.stepChild?.finish();
+                    result.stepChild = result.topChild?.startChild({
+                        description: 'Commitment',
+                        op: `${options.short}.commitment`
+                    });
                 });
-            });
-            result.onCommitted(() => {
-                result.stepChild?.setStatus('ok');
-                result.stepChild?.finish();
-                result.stepChild = result.topChild?.startChild({
-                    description: 'Execution',
-                    op: `${options.short}.execution`
+                result.onCommitted(() => {
+                    result.stepChild?.setStatus('ok');
+                    result.stepChild?.finish();
+                    result.stepChild = result.topChild?.startChild({
+                        description: 'Execution',
+                        op: `${options.short}.execution`
+                    });
                 });
-            });
-            result.onExecuted(() => {
-                result.stepChild?.setStatus('ok');
-                result.stepChild?.finish();
-            });
+                result.onExecuted(() => {
+                    result.stepChild?.setStatus('ok');
+                    result.stepChild?.finish();
+                });
+            }
             result.onResult(() => {
                 const resultTimepoint = result.topChild?.startChild({
                     description: 'Result',

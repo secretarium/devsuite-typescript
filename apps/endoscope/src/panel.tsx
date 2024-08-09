@@ -1,17 +1,17 @@
 import { StrictMode } from 'react';
-import * as ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 
 import { DevtoolMainPanel } from './app/DevtoolMainPanel';
 
-const containerElement = document.getElementById('root');
-const applicationElement = (
-    <StrictMode>
-        <BrowserRouter>
-            <DevtoolMainPanel />
-        </BrowserRouter>
-    </StrictMode>
-);
-
-const container = (ReactDOM as any).createRoot(containerElement);
-container.render(applicationElement);
+const rootElement = document.getElementById('root');
+if (rootElement && !rootElement?.innerHTML) {
+    const root = createRoot(rootElement);
+    root.render(
+        <StrictMode>
+            <BrowserRouter>
+                <DevtoolMainPanel />
+            </BrowserRouter>
+        </StrictMode>
+    );
+}

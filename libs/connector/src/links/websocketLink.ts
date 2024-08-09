@@ -1,4 +1,4 @@
-import type { ConnectorLink, LinkConstructor, Server } from '../types';
+import type { ConnectorLink, LinkConstructor, Server } from '../types.js';
 
 export const WebSocketLink: LinkConstructor = class WebSocketLink implements ConnectorLink {
     public _;

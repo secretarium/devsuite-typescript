@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import * as NNG from './nng.websocket';
-import { Key } from './secretarium.key';
-import { ErrorCodes, Secrets, ConnectionState, ErrorMessage } from './secretarium.constant';
+import * as NNG from './nng.websocket.js';
+import { Key } from './secretarium.key.js';
+import { ErrorCodes, Secrets, ConnectionState, ErrorMessage } from './secretarium.constant.js';
 import crypto, { Utils } from '@secretarium/crypto';
 
 class SCPSession {

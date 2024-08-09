@@ -65,18 +65,21 @@ module.exports = {
         '**/*',
         '!**/*.json',
         '!**/*.js',
-        '!**/*.mjs',
+        '!**/*.cjs',
         '!**/*.ts',
-        '!**/*.mts',
         'dist/**',
         'tmp/**',
         'tools/**/_msr*',
         'node_modules/**'
     ],
     plugins: ['@nx'],
+    globals: {
+        __DEBUG_BUILD__: 'readonly',
+        __SENTRY_DEBUG__: 'readonly'
+    },
     overrides: [
         {
-            files: ['*.ts', '*.tsx', '*.mts'],
+            files: ['*.ts', '*.tsx'],
             extends: ['plugin:@nx/typescript'],
             rules: typescriptRules,
             parserOptions: {
@@ -86,9 +89,12 @@ module.exports = {
             }
         },
         {
-            files: ['*.js', '*.jsx'],
+            files: ['*.js', '*.cjs', '*.jsx'],
             extends: ['plugin:@nx/javascript'],
-            rules: javascriptRules
+            rules: {
+                ...javascriptRules,
+                '@typescript-eslint/no-require-imports': 'off'
+            }
         },
         {
             files: ['*.mjs'],
