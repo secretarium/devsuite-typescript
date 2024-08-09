@@ -1,4 +1,4 @@
-import * as Utils from './secretarium.utils';
+import * as Utils from './secretarium.utils.js';
 
 describe('Connector Utils', () => {
     it('Presents utils functions', async () => {

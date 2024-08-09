@@ -26,7 +26,7 @@ try {
                 // stdio: 'ignore'
             });
             console.log('Copy msrcrypto artifact...');
-            copyFileSync(resolve(repoLocation, 'lib/msrcrypto.min.js'), 'libs/crypto/vendor/msrCrypto.js');
+            copyFileSync(resolve(repoLocation, 'lib/msrcrypto.min.js'), 'libs/crypto/vendor/msrCrypto.cjs');
         });
 } catch (e) {
     console.error(e);
