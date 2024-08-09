@@ -1,4 +1,4 @@
-import path from 'path';
+import * as path from 'node:path';
 
 export default {
     displayName: 'endoscope',
@@ -12,5 +12,5 @@ export default {
     },
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
     coverageDirectory: '../../coverage/apps/endoscope',
-    setupFiles: [path.resolve(__dirname, 'jest/setupFile')]
+    setupFiles: [path.resolve(__dirname, 'jest/setupFile.cjs')]
 };
