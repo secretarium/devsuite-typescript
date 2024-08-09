@@ -2,9 +2,10 @@
     "compileOnSave": false,
     "compilerOptions": {
         "rootDir": ".",
+        "allowJs": false,
         "sourceMap": true,
         "declaration": false,
-        "moduleResolution": "node",
+        "esModuleInterop": false,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "noFallthroughCasesInSwitch": true,
@@ -15,15 +16,17 @@
         "noUnusedParameters": true,
         "noUncheckedIndexedAccess": true,
         "importHelpers": true,
-        "target": "es2022",
-        "module": "esnext",
+        "target": "esnext",
+        "module": "node16",
+        "moduleResolution": "node16",
         "lib": [
-            "es2017",
+            "esnext",
             "dom"
         ],
         "skipLibCheck": true,
         "skipDefaultLibCheck": true,
         "forceConsistentCasingInFileNames": true,
+        "noPropertyAccessFromIndexSignature": false,
         "resolveJsonModule": true,
         "strict": true,
         "strictNullChecks": true,
@@ -41,6 +44,7 @@
         }
     },
     "include": [
+        "reset.d.ts",
         "package.json"
     ],
     "exclude": [
