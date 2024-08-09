@@ -11,23 +11,25 @@ const ECode = observer(() => {
     const [scpClient, initPromise] = useSecretariumClient();
     const state = sessionState.get();
 
-    const verify = useCallback(async () => {
-        if (!state.token)
-            return;
-        await initPromise;
-        await scpClient.newTx<VerificationResponse>('personal-data', 'auth/authenticate', undefined, { token: state.token.text, challenge })
-            .onResult(result => {
-                sessionState.set({
-                    ...state,
-                    token: tokenParser(result.token),
-                    currentTotpSeed: result.seedTotp
-                    // loginStep: 'totp'
-                });
-            })
-            .onError(err => {
-                setError(err);
-            })
-            .send();
+    const verify = useCallback(() => {
+        void (async () => {
+            if (!state.token)
+                return;
+            await initPromise;
+            await scpClient.newTx<VerificationResponse>('personal-data', 'auth/authenticate', undefined, { token: state.token.text, challenge })
+                .onResult(result => {
+                    sessionState.set({
+                        ...state,
+                        token: tokenParser(result.token),
+                        currentTotpSeed: result.seedTotp
+                        // loginStep: 'totp'
+                    });
+                })
+                .onError(err => {
+                    setError(err);
+                })
+                .send();
+        })();
     }, [challenge]);
 
     const cancel = useCallback(() => {
@@ -68,7 +70,14 @@ export const Route = createLazyFileRoute('/login/ecode')({
 
 if (import.meta.vitest) {
 
-    const { it, expect, beforeEach } = import.meta.vitest;
+    const { it, expect, beforeEach, vi } = import.meta.vitest;
+
+    vi.mock('../../utils/secretarium', async () => {
+        return {
+            useSecretariumClient: () => ([{}, Promise.resolve()])
+        };
+    });
+
     let render: typeof import('@testing-library/react').render;
 
     beforeEach(async () => {

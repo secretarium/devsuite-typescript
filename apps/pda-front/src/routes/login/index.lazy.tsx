@@ -12,25 +12,27 @@ const Login = observer(() => {
     const [scpClient, initPromise] = useSecretariumClient();
     const state = sessionState.get();
 
-    const authenticate = useCallback(async () => {
-        setError(undefined);
-        if (!state || !email)
-            return;
-        await initPromise;
-        await scpClient.newTx<AuthenticationResponse>('personal-data', 'auth/authenticate', undefined, { email })
-            .onResult(result => {
-                sessionState.set({
-                    ...state,
-                    token: tokenParser(result.token),
-                    selectedAccount: email,
-                    currentTotpSeed: null
-                    // loginStep: 'ecode'
-                });
-            })
-            .onError(err => {
-                setError(err);
-            })
-            .send();
+    const authenticate = useCallback(() => {
+        void (async () => {
+            setError(undefined);
+            if (!state || !email)
+                return;
+            await initPromise;
+            await scpClient.newTx<AuthenticationResponse>('personal-data', 'auth/authenticate', undefined, { email })
+                .onResult(result => {
+                    sessionState.set({
+                        ...state,
+                        token: tokenParser(result.token),
+                        selectedAccount: email,
+                        currentTotpSeed: null
+                        // loginStep: 'ecode'
+                    });
+                })
+                .onError(err => {
+                    setError(err);
+                })
+                .send();
+        })();
     }, [email]);
 
     // const cancel = useCallback(() => {
@@ -71,7 +73,14 @@ export const Route = createLazyFileRoute('/login/')({
 
 if (import.meta.vitest) {
 
-    const { it, expect, beforeEach } = import.meta.vitest;
+    const { it, expect, beforeEach, vi } = import.meta.vitest;
+
+    vi.mock('../../utils/secretarium', async () => {
+        return {
+            useSecretariumClient: () => ([{}, Promise.resolve()])
+        };
+    });
+
     let render: typeof import('@testing-library/react').render;
 
     beforeEach(async () => {
