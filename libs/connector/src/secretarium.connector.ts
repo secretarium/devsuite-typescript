@@ -27,7 +27,7 @@ type SCPOptions = {
 type SCPEndpoint = {
     url: string;
     knownTrustedKey?: string;
-} | undefined
+} | undefined;
 
 type ErrorHandler<TData = any> = (error: TData, requestId: string) => void;
 type ResultHandler<TData = any> = (result: TData, requestId: string) => void;

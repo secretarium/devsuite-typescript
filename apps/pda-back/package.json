@@ -2,5 +2,14 @@
     "name": "@secretarium/pda-back",
     "version": "0.0.1",
     "license": "MIT",
-    "type": "module"
+    "type": "module",
+    "dependencies": {
+        "@fastify/helmet": "11.1.1",
+        "@fastify/rate-limit": "9.1.0",
+        "@fastify/sensible": "5.6.0",
+        "@fastify/websocket": "10.0.1",
+        "@secretarium/connector": "0.17.0",
+        "fastify": "4.28.1",
+        "git-rev-sync": "3.0.2"
+    }
 }

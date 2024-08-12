@@ -5,7 +5,7 @@ type TOTPQrCodeProps = {
     appName: string;
     username: string;
     otpSecret: string;
-}
+};
 
 export const TOTPQrCode: FC<TOTPQrCodeProps> = ({ appName, username, otpSecret }) => {
 

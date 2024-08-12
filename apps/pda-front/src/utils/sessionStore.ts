@@ -32,12 +32,12 @@ export type Account = {
 
 export type AuthenticationResponse = {
     token: string;
-}
+};
 
 export type VerificationResponse = {
     token: string;
     seedTotp: string;
-}
+};
 
 export const tokenParser = (token: string) => {
     const binToken = Utils.fromBase64(token);

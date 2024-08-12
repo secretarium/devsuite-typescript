@@ -1,5 +1,5 @@
 import Fastify, { FastifyInstance } from 'fastify';
-import { app } from './app';
+import { app } from './app.js';
 
 describe('GET /', () => {
     let server: FastifyInstance;
@@ -12,7 +12,7 @@ describe('GET /', () => {
     it('should respond with a message', async () => {
         const response = await server.inject({
             method: 'GET',
-            url: '/',
+            url: '/'
         });
 
         expect(response.json()).toEqual({ message: 'Hello API' });

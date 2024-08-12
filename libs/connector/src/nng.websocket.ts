@@ -2,7 +2,7 @@ import { ConnectionState } from './secretarium.constant.js';
 import BackingSocket from './secretarium.socket.js';
 
 export enum Protocol {
-    pair1 = 'pair1.sp.nanomsg.org',
+    pair1 = 'pair1.sp.nanomsg.org'
     // todo: add other ones
 }
 

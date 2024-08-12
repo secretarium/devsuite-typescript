@@ -47,7 +47,7 @@
         }
     },
     "include": [
-        "reset.d.ts",
+        "*.ts",
         "package.json"
     ],
     "exclude": [

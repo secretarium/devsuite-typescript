@@ -35,14 +35,14 @@ interface State<ResultType, ErrorType> {
     refetch: () => void;
 }
 
-type Cache<T> = { [url: string]: Array<T> }
+type Cache<T> = { [url: string]: Array<T> };
 
 // discriminated union type
 type Action<ResultType, ErrorType> =
     | { type: 'reset' }
     | { type: 'loading' }
     | { type: 'fetched'; payload: Array<ResultType> }
-    | { type: 'error'; payload: Array<Error | ErrorType> }
+    | { type: 'error'; payload: Array<Error | ErrorType> };
 
 type SecretariumQueryOptions = {
     app: string;
@@ -50,7 +50,7 @@ type SecretariumQueryOptions = {
     key?: Key;
     args?: string | Record<string, unknown>;
     live?: boolean;
-}
+};
 
 const initConnection = async (options: Pick<SecretariumQueryOptions, 'key'> = {}) => {
 
