@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { BroadcastChannel, createLeaderElection, BroadcastChannelOptions, LeaderElector } from 'broadcast-channel';
 import * as NNG from './nng.websocket.js';
 import { Key } from './secretarium.key.js';
 import { ErrorCodes, Secrets, ConnectionState, ErrorMessage } from './secretarium.constant.js';
 import crypto, { Utils } from '@secretarium/crypto';
+import { version } from '../package.json';
 
 class SCPSession {
     iv: Uint8Array;
@@ -22,6 +24,8 @@ type SCPOptions = {
         warn?: (...message: any[]) => void;
         error?: (...message: any[]) => void;
     };
+    broadcastChannel?: boolean;
+    broadcastChannelOptions?: BroadcastChannelOptions;
 };
 
 type SCPEndpoint = {
@@ -79,7 +83,13 @@ export type Transaction<ResultType = any, ErrorType = any> = TransactionHandlers
     send: () => Promise<ResultType>;
 };
 
+type LocalMessage = {
+    type: 'request' | 'response';
+    data: Uint8Array;
+};
+
 export class SCP {
+
     private _socket: NNG.WS | null = null;
     private _connectionState = ConnectionState.closed;
     private _onStateChange: ((state: ConnectionState) => void) | null = null;
@@ -88,9 +98,38 @@ export class SCP {
     private _session: SCPSession | null = null;
     private _options: SCPOptions;
     private _endpoint: SCPEndpoint;
+    private _broadcastChannel: BroadcastChannel<LocalMessage> | null = null;
+    private _broadcastElector: LeaderElector | null = null;
 
     constructor(options?: SCPOptions) {
         this._options = options || {};
+        if (!this._options.broadcastChannel)
+            this._options.broadcastChannel = false;
+        if (this._options.broadcastChannel !== false) {
+            const { hostname, port, protocol } = window?.location ?? {}
+            this._broadcastChannel = new BroadcastChannel(`__SCP_BChannel_${hostname}_${port ?? (protocol.includes('https') ? 443 : 80)}_${version}`, this._options.broadcastChannelOptions);
+            this._options.logger?.debug?.(`Secretarium broadcast: channel ${this._broadcastChannel.name} (${this._broadcastChannel.id}) created via ${this._broadcastChannel.type} API`);
+            this._broadcastChannel.onmessage = async (ev) => {
+                if (ev.type === 'response' && !await this.isBroadcastLeader()) {
+                    const json = Utils.decode(ev.data);
+                    await this._notify(json);
+                }
+            }
+            this._broadcastElector = createLeaderElection(this._broadcastChannel, {
+                fallbackInterval: 100,
+                responseTime: 100
+            })
+            this._broadcastElector.onduplicate = () => {
+                this._options.logger?.debug?.(`Secretarium broadcast: duplicate leader detected`);
+                this._broadcastElector?.die();
+            }
+            console.log('tutu', this._broadcastElector)
+            this._broadcastElector.awaitLeadership().then(() => {
+                this._options.logger?.debug?.(`Secretarium broadcast: leader elected`);
+            }).catch((e) => {
+                this._options.logger?.error?.(`Secretarium broadcast: leader election failed: ${e}`);
+            });
+        }
         this.reset();
     }
 
@@ -127,7 +166,7 @@ export class SCP {
         return new Uint8Array(await crypto.subtle!.decrypt({ name: 'AES-GCM', iv: iv, tagLength: 128 }, this._session.cryptoKey, data.subarray(16)));
     }
 
-    private _notify(json: string): void {
+    private async _notify(json: string): Promise<void> {
         try {
             const o = JSON.parse(json) as any;
             this._options.logger?.debug?.('Secretarium received:', o);
@@ -190,7 +229,31 @@ export class SCP {
         return this._socket?.bufferedAmount || 0;
     }
 
+    async isBroadcastLeader() {
+        if (!this._broadcastChannel)
+            return true;
+        if (!this._broadcastElector)
+            return false;
+        const hasLeader = await this._broadcastElector.hasLeader();
+        this._options.logger?.debug?.(`Secretarium broadcast: hasLeader (${hasLeader})`);
+        this._options.logger?.debug?.(`Secretarium broadcast: isLeader (${this._broadcastElector.isLeader})`);
+        if (hasLeader)
+            return this._broadcastElector.isLeader;
+        else
+            return this._broadcastElector.awaitLeadership().then(() => {
+                this._options.logger?.debug?.(`Secretarium broadcast: leader elected`);
+                if (!this._broadcastElector)
+                    return false;
+                return this._broadcastElector.isLeader;
+            });
+    }
+
     async connect(url: string, userKey: Key, knownTrustedKey: Uint8Array | string | undefined = undefined, protocol: NNG.Protocol = NNG.Protocol.pair1): Promise<void> {
+
+        if (!await this.isBroadcastLeader()) {
+            console.log('this is not the leader');
+            return;
+        }
         // if (this._socket && this._socket.state < ConnectionState.closing) this._socket.close();
 
         this._endpoint = {
@@ -340,7 +403,13 @@ export class SCP {
                             if (!data)
                                 return;
                             const json = Utils.decode(data);
-                            this._notify(json);
+                            if (await this.isBroadcastLeader()) {
+                                await this._notify(json);
+                                this._broadcastChannel?.postMessage({
+                                    type: 'response',
+                                    data
+                                })
+                            }
                         } catch (e: any) {
                             console.error(e.name, e);
                         }
@@ -381,7 +450,7 @@ export class SCP {
         return (crypto as any).context;
     }
 
-    newQuery<ResultType = any, ErrorType = any>(app: string, command: string, requestId?: string, args?: Record<string, unknown> | string): Query<ResultType, ErrorType> {
+    newQuery<ResultType = any, ErrorType = any>(app: string, command: string, requestId?: string | null, args?: Record<string, unknown> | string): Query<ResultType, ErrorType> {
         const rid = requestId ?? `rid-${app}-${command}-${Date.now()}-${Math.floor(Math.random() * 1000000)}}`;
         let cbs: Partial<QueryNotificationHandlers<ResultType, ErrorType>> = {};
         const pm = new Promise<ResultType>((resolve, reject) => {
@@ -411,7 +480,7 @@ export class SCP {
         return query;
     }
 
-    newTx<ResultType = any, ErrorType = any>(app: string, command: string, requestId?: string, args?: Record<string, unknown> | string): Transaction<ResultType, ErrorType> {
+    newTx<ResultType = any, ErrorType = any>(app: string, command: string, requestId?: string | null, args?: Record<string, unknown> | string): Transaction<ResultType, ErrorType> {
         const rid = requestId ?? `rid-${app}-${command}-${Date.now()}-${Math.floor(Math.random() * 1000000)}}`;
         let cbs: Partial<TransactionNotificationHandlers<ResultType, ErrorType>> = {};
         const pm = new Promise<ResultType>((resolve, reject) => {
@@ -464,14 +533,12 @@ export class SCP {
         return tx;
     }
 
-    private async _prepare(app: string, command: string, requestId: string, args?: Record<string, unknown> | string): Promise<Uint8Array> {
-
-        const query = {
-            dcapp: app,
-            function: command,
-            requestId: requestId,
-            args: args ?? null
-        };
+    private async _prepare(query: {
+        dcapp: string;
+        function: string;
+        requestId: string;
+        args: Record<string, unknown> | string | null
+    }): Promise<Uint8Array> {
 
         this._options.logger?.debug?.('Secretarium sending:', query);
 
@@ -482,19 +549,35 @@ export class SCP {
     }
 
     async send(app: string, command: string, requestId: string, args?: Record<string, unknown> | string): Promise<void> {
-        if (!this._socket || !this._session || this._socket.state !== ConnectionState.secure) {
-            const z = this._requests[requestId]?.onError;
-            if (z) {
-                z.forEach((cb) => cb(ErrorMessage[ErrorCodes.ENOTCONNT], requestId));
-                return;
-            } else throw new Error(ErrorMessage[ErrorCodes.ENOTCONNT]);
+
+        const query = {
+            dcapp: app,
+            function: command,
+            requestId: requestId,
+            args: args ?? null
+        };
+
+        if (await this.isBroadcastLeader()) {
+
+            if (!this._socket || !this._session || this._socket.state !== ConnectionState.secure) {
+                const z = this._requests[requestId]?.onError;
+                if (z) {
+                    z.forEach((cb) => cb(ErrorMessage[ErrorCodes.ENOTCONNT], requestId));
+                    return;
+                } else throw new Error(ErrorMessage[ErrorCodes.ENOTCONNT]);
+            }
+
+            const encrypted = await this._prepare(query);
+
+            if (app !== '__local__') {
+                this._socket.send(encrypted);
+            }
         }
 
-        const encrypted = await this._prepare(app, command, requestId, args);
-
-        if (app !== '__local__')
-            this._socket.send(encrypted);
-
+        this._broadcastChannel?.postMessage({
+            type: 'request',
+            data: Utils.encode(JSON.stringify(query))
+        });
     }
 
     close(): SCP {
