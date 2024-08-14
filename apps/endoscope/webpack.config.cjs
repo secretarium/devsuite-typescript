@@ -10,6 +10,10 @@ module.exports = composePlugins(
 
         config.entry.panel = [path.resolve(__dirname, 'src/panel.tsx')];
 
+        // TODO - There is a problem with module federation and the script type
+        // https://github.com/angular-architects/module-federation-plugin/issues/96#issuecomment-977872267
+        config.output.scriptType = 'text/javascript';
+
         if (config.devServer)
             config.devServer.devMiddleware.writeToDisk = true;
 
@@ -21,6 +25,14 @@ module.exports = composePlugins(
                 template: path.resolve(options.root, options.index)
             })
         );
+
+        console.log(config.module.rules?.forEach(rule => {
+            rule?.oneOf?.forEach(oneOf => {
+                oneOf?.use?.forEach(use => {
+                    console.log(use);
+                });
+            });
+        }));
 
         return config;
     }

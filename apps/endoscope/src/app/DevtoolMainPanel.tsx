@@ -7,7 +7,7 @@ export const DevtoolMainPanel = () => {
     const [reactHooksVersion, setSecretariumVersion] = useState<string>();
 
     useEffect(() => {
-        chrome.devtools?.panels.create('Secretarium', '', 'panel.html', function (/*panel*/) {
+        chrome.devtools?.panels.create('Secretarium', 'icons/128-tabicon.png', 'panel.html', function (/*panel*/) {
             // panel.onShown.
             // ((window: Window) => window.document.getElementsByTagName('body')[0].innerHTML = 'Blah');
             // code invoked on panel creation
@@ -19,16 +19,16 @@ export const DevtoolMainPanel = () => {
         chrome.devtools.inspectedWindow.eval('window.__SECRETARIUM_DEVTOOLS_CONNECTOR__', (connector?: any, exceptionInfo?: unknown) => {
             setConnectorVersion(connector?.version);
             if (exceptionInfo)
-                console.error(exceptionInfo);
+                console.error(exceptionInfo.toString());
         });
         chrome.devtools.inspectedWindow.eval('window.__SECRETARIUM_DEVTOOLS_REACT__', (reactHooks?: any, exceptionInfo?: unknown) => {
             setSecretariumVersion(reactHooks?.version);
             if (exceptionInfo)
-                console.error(exceptionInfo);
+                console.error(exceptionInfo.toString());
         });
     });
 
-    return <div className='flex h-full items-center justify-center'>
+    return <div className='flex h-full items-center justify-center p-2'>
         <div className='p-4'>
             <div className='container'>
                 Current connected versions<br />
