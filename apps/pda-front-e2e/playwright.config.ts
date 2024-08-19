@@ -4,7 +4,7 @@ import { workspaceRoot } from '@nx/devkit';
 import { fileURLToPath } from 'node:url';
 
 // For CI, you may want to set BASE_URL to the deployed application.
-const baseURL = process.env.BASE_URL || 'http://localhost:3380';
+const baseURL = process.env['BASE_URL'] || 'http://localhost:4300';
 
 /**
  * Read environment variables from file.
@@ -25,7 +25,7 @@ export default defineConfig({
     },
     /* Run your local dev server before starting the tests */
     webServer: {
-        command: 'yarn nx serve pda-front',
+        command: 'yarn nx run pda-front:preview',
         url: baseURL,
         reuseExistingServer: !process.env.CI,
         cwd: workspaceRoot
