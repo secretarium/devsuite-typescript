@@ -2553,16 +2553,6 @@
     tmp "^0.0.33"
     tslib "^2.4.0"
 
-"@expo/eas-build-job@1.0.129":
-  version "1.0.129"
-  resolved "https://registry.yarnpkg.com/@expo/eas-build-job/-/eas-build-job-1.0.129.tgz#c5d7a8d87d0265d622222a3ae10b6ff91f0c287e"
-  integrity sha512-4afSML5IxhBNW1iLu5dQ8rfe4RlXFCAnjXaVhag/Y2Z4l+TmN30C27ff8qfxUDaa/5G+8D9ru3xl4L3JV906Tg==
-  dependencies:
-    "@expo/logger" "1.0.117"
-    joi "^17.13.1"
-    semver "^7.6.2"
-    zod "^3.23.8"
-
 "@expo/eas-build-job@1.0.130":
   version "1.0.130"
   resolved "https://registry.yarnpkg.com/@expo/eas-build-job/-/eas-build-job-1.0.130.tgz#698de0139d14cd339f9d0f37ad40a86f1e9acbc8"
@@ -2573,13 +2563,13 @@
     semver "^7.6.2"
     zod "^3.23.8"
 
-"@expo/eas-json@10.2.3":
-  version "10.2.3"
-  resolved "https://registry.yarnpkg.com/@expo/eas-json/-/eas-json-10.2.3.tgz#e3a134d33729ed5246e8fd080ffa967179c77509"
-  integrity sha512-vRaZRle3Mg9BxietQxO7LUPOH2o1wNwl+sCFt5qFTTBvCdLzD74wwA/OlgPt699JS6GEPVb8RelmgtR9widilw==
+"@expo/eas-json@10.2.4":
+  version "10.2.4"
+  resolved "https://registry.yarnpkg.com/@expo/eas-json/-/eas-json-10.2.4.tgz#3903df46dd5ff60a7558fd95ba3a1d454b6d3ae9"
+  integrity sha512-NccoYUvrJazaDiDRLckQXyhJVGWQ8JnrKIn4G1GS7siZYWUemUrgtHk4fZ/AP3ywJMGlroANgsS84jqNUO5fnQ==
   dependencies:
     "@babel/code-frame" "7.23.5"
-    "@expo/eas-build-job" "1.0.129"
+    "@expo/eas-build-job" "1.0.130"
     chalk "4.1.2"
     env-string "1.0.1"
     fs-extra "11.2.0"
@@ -2842,12 +2832,12 @@
   dependencies:
     cross-spawn "^7.0.3"
 
-"@expo/steps@1.0.129":
-  version "1.0.129"
-  resolved "https://registry.yarnpkg.com/@expo/steps/-/steps-1.0.129.tgz#c91f8758d10b9f78e68dab988730980f3a4dcf6f"
-  integrity sha512-OIzKuOP6UZ/WmwwdVrNsgUTi41zdkAojCD+2cQufWZIsP62FiNEvtB+OqqDAQ/nznRPD4dj5UJzf0+gofmiQsg==
+"@expo/steps@1.0.130":
+  version "1.0.130"
+  resolved "https://registry.yarnpkg.com/@expo/steps/-/steps-1.0.130.tgz#91e05e7387f674d7c27cc610fa558e6cc2fb7ac1"
+  integrity sha512-ZWjrPGj8rzPVDSwxhWi2i2FWIkKUZmJCNfs0p9DSPqdUOADg7XIFSqxefxBeygZ0R2dJMEjRQA8Gz0mqjFIkiQ==
   dependencies:
-    "@expo/eas-build-job" "1.0.129"
+    "@expo/eas-build-job" "1.0.130"
     "@expo/logger" "1.0.117"
     "@expo/spawn-async" "^1.7.2"
     arg "^5.0.2"
@@ -10489,10 +10479,10 @@ duplexify@^4.1.2:
     readable-stream "^3.1.1"
     stream-shift "^1.0.2"
 
-eas-cli@10.2.3:
-  version "10.2.3"
-  resolved "https://registry.yarnpkg.com/eas-cli/-/eas-cli-10.2.3.tgz#72830abf5331194f4d1fa22196d9299a6ca0f8bd"
-  integrity sha512-muDmdCFfPgJI6aqk2hkRRvQsZJ7qp0nR1Z2xg1KfjFdmHerwjGzP6Cjhia9sP0633+Mdk2G0ehvH/wCcueY1Lw==
+eas-cli@10.2.4:
+  version "10.2.4"
+  resolved "https://registry.yarnpkg.com/eas-cli/-/eas-cli-10.2.4.tgz#869edd3056ca7d40929c87aa93664350fac86dcb"
+  integrity sha512-xqMGkVt3STGQmht1QESvkAGylBGehi109YDdQi8ltTulgLCiFEdwZZszPbmmUAtdGu1qIXtkEOIw1gy4PH9xxQ==
   dependencies:
     "@expo/apple-utils" "1.7.1"
     "@expo/code-signing-certificates" "0.0.5"
@@ -10500,7 +10490,7 @@ eas-cli@10.2.3:
     "@expo/config-plugins" "7.8.4"
     "@expo/config-types" "50.0.0"
     "@expo/eas-build-job" "1.0.130"
-    "@expo/eas-json" "10.2.3"
+    "@expo/eas-json" "10.2.4"
     "@expo/json-file" "8.2.37"
     "@expo/logger" "1.0.117"
     "@expo/multipart-body-parser" "1.1.0"
@@ -10514,7 +10504,7 @@ eas-cli@10.2.3:
     "@expo/results" "1.0.0"
     "@expo/rudder-sdk-node" "1.1.1"
     "@expo/spawn-async" "1.7.0"
-    "@expo/steps" "1.0.129"
+    "@expo/steps" "1.0.130"
     "@expo/timeago.js" "1.0.0"
     "@oclif/core" "^1.26.2"
     "@oclif/plugin-autocomplete" "^2.3.10"
@@ -11499,10 +11489,10 @@ expo-image-loader@~4.7.0:
   resolved "https://registry.yarnpkg.com/expo-image-loader/-/expo-image-loader-4.7.0.tgz#d403106822de80bda12d644c82b7a3b7983c0f0b"
   integrity sha512-cx+MxxsAMGl9AiWnQUzrkJMJH4eNOGlu7XkLGnAXSJrRoIiciGaKqzeaD326IyCTV+Z1fXvIliSgNW+DscvD8g==
 
-expo-image@~1.12.13:
-  version "1.12.13"
-  resolved "https://registry.yarnpkg.com/expo-image/-/expo-image-1.12.13.tgz#82a8263c4c2bae3be70241e304c28e5b74956d23"
-  integrity sha512-Dmuc5qmkIsl1nFj8C3Ux3wL2bN4QYW4dM9fkGA8kYiP5Fxf1lT36ldkHk2O2lPFRSFJDvLxT8Tz+7GTko5fzwQ==
+expo-image@~1.12.14:
+  version "1.12.14"
+  resolved "https://registry.yarnpkg.com/expo-image/-/expo-image-1.12.14.tgz#8ae2e855003fa08516b32134a6a8028a5b523d7f"
+  integrity sha512-sPjinoPngbJeWPRzMiEx/iDgGytCywSrY0IDaoGBRc0gIxU9L7XtFkCWnm3OG0bZtZyU4PFiSswNVkL2zCQG8w==
 
 expo-json-utils@~0.13.0:
   version "0.13.1"
