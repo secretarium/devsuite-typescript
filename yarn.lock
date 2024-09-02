@@ -6204,10 +6204,10 @@
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-2.0.0.tgz#f544a148d3ab35801c1f633a7441fd87c2e484bf"
   integrity sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==
 
-"@total-typescript/ts-reset@0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@total-typescript/ts-reset/-/ts-reset-0.6.0.tgz#7285618e1e61157f74edd4cb42b0a8cc8b76f6e0"
-  integrity sha512-HWZnkM+5z3INAUZMohVXvX8/vm9sjmfmV2NRAswvv5WsU2m+OZsHAVZ0fl8xf2QH9kyPkinghVW6g3DOQ2xt5Q==
+"@total-typescript/ts-reset@0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@total-typescript/ts-reset/-/ts-reset-0.6.1.tgz#aebb29b6a79bb404e4cf618da6a392c94ed73a45"
+  integrity sha512-cka47fVSo6lfQDIATYqb/vO1nvFfbPw7uWLayIXIhGETj0wcOOlrlkobOMDNQOFr9QOafegUPq13V2+6vtD7yg==
 
 "@trpc/client@11.0.0-rc.498":
   version "11.0.0-rc.498"
