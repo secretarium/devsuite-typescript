@@ -6066,10 +6066,10 @@
   dependencies:
     "@tanstack/query-core" "5.53.3"
 
-"@tanstack/react-router@1.52.3":
-  version "1.52.3"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-router/-/react-router-1.52.3.tgz#c2989ac38fbc82d1500093d7354b8cf59947df1c"
-  integrity sha512-tMKYAVXFHBAafCWlRtr9WbGlyuXsE8EuB2NP38GjIX+FYtuJmyEUngA6+QCCk67XOl/ZthYzgN6U2FBH0csqwA==
+"@tanstack/react-router@1.56.1":
+  version "1.56.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-router/-/react-router-1.56.1.tgz#1938f7c5e12b0a20ce8edb023badd4584039a1ba"
+  integrity sha512-8YnALxpgYYw7SF6q6oNgq6xKUpR9RJ+to0GE5RW1hzWFFGaJ3wXnew4P8nyu9XnQxbh+PUhTQugboabLUyeefw==
   dependencies:
     "@tanstack/history" "1.51.7"
     "@tanstack/react-store" "^0.5.5"
