@@ -3349,10 +3349,10 @@
   resolved "https://registry.yarnpkg.com/@kwsites/promise-deferred/-/promise-deferred-1.1.1.tgz#8ace5259254426ccef57f3175bc64ed7095ed919"
   integrity sha512-GaHYm+c0O9MjZRu0ongGBRbinu8gVAMd2UZjji6jVmqKtZluZnptXGWhz1E8j8D2HJ3f/yMxKAUC0b+57wncIw==
 
-"@legendapp/state@3.0.0-alpha.29":
-  version "3.0.0-alpha.29"
-  resolved "https://registry.yarnpkg.com/@legendapp/state/-/state-3.0.0-alpha.29.tgz#3f181bebf19636090dfea091721e74e525ac458f"
-  integrity sha512-fdrNyZjSFlf997DhOkPbbz15JU7l5++MXw0K9YPAUDBH0xj/Nn4BfgjWqFRojsAyZM2B8QqsIiO61P8HVYRBrg==
+"@legendapp/state@3.0.0-alpha.38":
+  version "3.0.0-alpha.38"
+  resolved "https://registry.yarnpkg.com/@legendapp/state/-/state-3.0.0-alpha.38.tgz#4d6682d7b3fcd200f95ca3416c1c370b7adda4fe"
+  integrity sha512-qpJZZHic0Lwxgz7uOMEv7uJS2kBnK5NeiZQ8q5aGjuR9FjeuJT5ycctIKA1U1TF6MuqQ9c5/usp/ROSKtFW2BQ==
   dependencies:
     use-sync-external-store "^1.2.2"
 

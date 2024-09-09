@@ -23,7 +23,7 @@
     "dependencies": {
         "@expo/metro-config": "^0.18.11",
         "@expo/spawn-async": "1.7.2",
-        "@legendapp/state": "3.0.0-alpha.29",
+        "@legendapp/state": "3.0.0-alpha.38",
         "@react-native-community/hooks": "3.0.0",
         "@sentry/browser": "^7.119.0",
         "@sentry/node": "^7.119.0",
