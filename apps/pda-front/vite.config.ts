@@ -31,9 +31,7 @@ export default defineConfig({
         routesDirectory: path.join(__dirname, 'src/routes'),
         generatedRouteTree: path.join(__dirname, './src/routeTree.gen.ts'),
         enableRouteGeneration: true,
-        experimental: {
-            enableCodeSplitting: true
-        }
+        autoCodeSplitting: true
     })],
 
     // Uncomment this if you are using workers.

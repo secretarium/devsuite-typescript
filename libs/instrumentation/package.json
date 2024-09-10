@@ -10,10 +10,6 @@
         "directory": "libs/instrumentation"
     },
     "peerDependencies": {
-        "@secretarium/connector": "0.17.0",
-        "@sentry/core": "7.119.0",
-        "@sentry/utils": "7.119.0",
-        "@sentry/types": "7.119.0",
-        "pretty-bytes": "6.1.1"
+        "@secretarium/connector": "0.17.0"
     }
 }
