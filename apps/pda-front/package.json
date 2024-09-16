@@ -5,21 +5,21 @@
     "type": "module",
     "dependencies": {
         "@legendapp/state": "3.0.0-alpha.38",
-        "@nx/vite": "19.6.5",
+        "@nx/vite": "19.7.3",
         "@secretarium/connector": "0.17.0",
         "@secretarium/crypto": "0.2.1",
         "@secretarium/instrumentation": "0.5.0",
         "@secretarium/pda-api": "0.0.1",
-        "@tailwindcss/vite": "4.0.0-alpha.23",
-        "@tanstack/react-router": "1.56.5",
-        "@tanstack/router-devtools": "1.56.5",
-        "@tanstack/router-vite-plugin": "1.56.4",
+        "@tailwindcss/vite": "4.0.0-alpha.24",
+        "@tanstack/react-router": "1.57.15",
+        "@tanstack/router-devtools": "1.57.15",
+        "@tanstack/router-vite-plugin": "1.57.15",
         "@testing-library/react": "16.0.1",
         "@vitejs/plugin-react-swc": "^3.7.0",
         "git-rev-sync": "3.0.2",
         "qrcode.react": "4.0.1",
-        "react": "19.0.0-rc-e56f4ae3-20240830",
-        "react-dom": "19.0.0-rc-e56f4ae3-20240830",
+        "react": "19.0.0-rc-206df66e-20240912",
+        "react-dom": "19.0.0-rc-206df66e-20240912",
         "vite": "^5.4.0"
     }
 }
