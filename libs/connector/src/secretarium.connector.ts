@@ -106,7 +106,7 @@ export class SCP {
         if (!this._options.broadcastChannel)
             this._options.broadcastChannel = false;
         if (this._options.broadcastChannel !== false) {
-            const { hostname, port, protocol } = window?.location ?? {}
+            const { hostname, port, protocol } = window?.location ?? {};
             this._broadcastChannel = new BroadcastChannel(`__SCP_BChannel_${hostname}_${port ?? (protocol.includes('https') ? 443 : 80)}_${version}`, this._options.broadcastChannelOptions);
             this._options.logger?.debug?.(`Secretarium broadcast: channel ${this._broadcastChannel.name} (${this._broadcastChannel.id}) created via ${this._broadcastChannel.type} API`);
             this._broadcastChannel.onmessage = async (ev) => {
@@ -114,18 +114,18 @@ export class SCP {
                     const json = Utils.decode(ev.data);
                     await this._notify(json);
                 }
-            }
+            };
             this._broadcastElector = createLeaderElection(this._broadcastChannel, {
                 fallbackInterval: 100,
                 responseTime: 100
-            })
+            });
             this._broadcastElector.onduplicate = () => {
-                this._options.logger?.debug?.(`Secretarium broadcast: duplicate leader detected`);
+                this._options.logger?.debug?.('Secretarium broadcast: duplicate leader detected');
                 this._broadcastElector?.die();
-            }
-            console.log('tutu', this._broadcastElector)
+            };
+            console.log('tutu', this._broadcastElector);
             this._broadcastElector.awaitLeadership().then(() => {
-                this._options.logger?.debug?.(`Secretarium broadcast: leader elected`);
+                this._options.logger?.debug?.('Secretarium broadcast: leader elected');
             }).catch((e) => {
                 this._options.logger?.error?.(`Secretarium broadcast: leader election failed: ${e}`);
             });
@@ -241,7 +241,7 @@ export class SCP {
             return this._broadcastElector.isLeader;
         else
             return this._broadcastElector.awaitLeadership().then(() => {
-                this._options.logger?.debug?.(`Secretarium broadcast: leader elected`);
+                this._options.logger?.debug?.('Secretarium broadcast: leader elected');
                 if (!this._broadcastElector)
                     return false;
                 return this._broadcastElector.isLeader;
@@ -408,7 +408,7 @@ export class SCP {
                                 this._broadcastChannel?.postMessage({
                                     type: 'response',
                                     data
-                                })
+                                });
                             }
                         } catch (e: any) {
                             console.error(e.name, e);

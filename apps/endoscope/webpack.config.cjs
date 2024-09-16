@@ -26,14 +26,6 @@ module.exports = composePlugins(
             })
         );
 
-        console.log(config.module.rules?.forEach(rule => {
-            rule?.oneOf?.forEach(oneOf => {
-                oneOf?.use?.forEach(use => {
-                    console.log(use);
-                });
-            });
-        }));
-
         return config;
     }
 );

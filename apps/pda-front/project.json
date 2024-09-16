@@ -53,7 +53,10 @@
                 "production": {
                     "buildTarget": "pda-front:build:production"
                 }
-            }
+            },
+            "dependsOn": [
+                "build"
+            ]
         },
         "test": {
             "executor": "@nx/vite:test",

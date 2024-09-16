@@ -10,10 +10,9 @@ declare global {
 export default async function () {
     // Start services that that the app needs to run (e.g. database, docker-compose, etc.).
     console.log('\nStarting up the backend...\n');
-    console.log(process.cwd());
 
     let shouldPrintProcessOutput = true;
-    globalThis.__RUNNING_BACKEND__ = exec('yarn nx serve pda-back --configuration=production --watch=false');
+    globalThis.__RUNNING_BACKEND__ = exec('y arn nx serve pda-back --configuration=production --watch=false');
     globalThis.__RUNNING_BACKEND__.on('error', (err) => {
         console.error(err);
     });
@@ -35,7 +34,6 @@ export default async function () {
                     await axios.get('http://localhost:3000/ping').then((result) => {
                         axios.defaults.baseURL = 'http://localhost:3000';
                         console.log('Backend is up and running');
-                        console.log(result.data);
                         if (result.status === 200)
                             resolve();
                     });
