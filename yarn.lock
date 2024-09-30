@@ -2058,7 +2058,7 @@
     tunnel-agent "^0.6.0"
     uuid "^8.3.2"
 
-"@cypress/request@^3.0.1":
+"@cypress/request@^3.0.4":
   version "3.0.5"
   resolved "https://registry.yarnpkg.com/@cypress/request/-/request-3.0.5.tgz#d893a6e68ce2636c085fcd8d7283c3186499ba63"
   integrity sha512-v+XHd9XmWbufxF1/bTaVm2yhbxY+TB4YtWRqF2zaXBlDNMkls34KiATz0AVDLavL3iB6bQk9/7n3oY1EoLSWGA==
@@ -9811,7 +9811,7 @@ cssstyle@^2.3.0:
   dependencies:
     cssom "~0.3.6"
 
-cssstyle@^4.0.1:
+cssstyle@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/cssstyle/-/cssstyle-4.1.0.tgz#161faee382af1bafadb6d3867a92a19bcb4aea70"
   integrity sha512-h66W1URKpBS5YMI/V8PyXvTMFT8SupJ1IzoIV8IeBC/ji8WVmrO8dGlTi+2dh6whmdk6BiKJLD/ZBkhWbcg6nA==
@@ -9823,12 +9823,12 @@ csstype@^3.0.2:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.1.3.tgz#d80ff294d114fb0e6ac500fbf85b60137d7eff81"
   integrity sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==
 
-cypress@13.14.2:
-  version "13.14.2"
-  resolved "https://registry.yarnpkg.com/cypress/-/cypress-13.14.2.tgz#4237eb7b26de2baeaa1f01e585f965d88fca7f39"
-  integrity sha512-lsiQrN17vHMB2fnvxIrKLAjOr9bPwsNbPZNrWf99s4u+DVmCY6U+w7O3GGG9FvP4EUVYaDu+guWeNLiUzBrqvA==
+cypress@13.15.0:
+  version "13.15.0"
+  resolved "https://registry.yarnpkg.com/cypress/-/cypress-13.15.0.tgz#5eca5387ef34b2e611cfa291967c69c2cd39381d"
+  integrity sha512-53aO7PwOfi604qzOkCSzNlWquCynLlKE/rmmpSPcziRH6LNfaDUAklQT6WJIsD8ywxlIy+uVZsnTMCCQVd2kTw==
   dependencies:
-    "@cypress/request" "^3.0.1"
+    "@cypress/request" "^3.0.4"
     "@cypress/xvfb" "^1.2.4"
     "@types/sinonjs__fake-timers" "8.1.1"
     "@types/sizzle" "^2.3.2"
@@ -10204,15 +10204,15 @@ detect-port@^1.5.1:
     address "^1.0.1"
     debug "4"
 
-detox-copilot@^0.0.0:
-  version "0.0.0"
-  resolved "https://registry.yarnpkg.com/detox-copilot/-/detox-copilot-0.0.0.tgz#646b1df5b992b547dd8373618d325f8ac2e709a6"
-  integrity sha512-BasCw/JXlplL1UZfe19xJYT0i0JU4tdGPWutsmybGy6166Jvj2ryikbgoE1ls44F+41p9Y0Yei0cdBC7KawXeQ==
+detox-copilot@^0.0.9:
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/detox-copilot/-/detox-copilot-0.0.9.tgz#cc1ddd869868987d3527c93d2604b5d66f3c8466"
+  integrity sha512-Wk2fuisD8EH+349b0ysNWvZ7UEsThAChbYFlLqOR1jWkDaonEvgf6IOUlmxjvyTl9ENtl8ckd1U7k94yCBYwqw==
 
-detox@20.26.2:
-  version "20.26.2"
-  resolved "https://registry.yarnpkg.com/detox/-/detox-20.26.2.tgz#0535e99dd91482943be001df6c501f228bd9dd58"
-  integrity sha512-pJU8WHD7GuoGlCuDzZxCD784mQfOO/ihRxe2/EebnesniWnV6FOwbC+32J1kGivhAdyvvPawfMQ7PoD4FwkxfA==
+detox@20.27.2:
+  version "20.27.2"
+  resolved "https://registry.yarnpkg.com/detox/-/detox-20.27.2.tgz#aa22a146b968b6e5f78687557081cf32d26ca066"
+  integrity sha512-cC6S40v7ix+uA5jYzG8eazSs7YtOWgc2aCwWLZIIzfE5Kvo0gfHgtqeRhrYWCMZaj/irKKs39h2B070oNQOIrA==
   dependencies:
     ajv "^8.6.3"
     bunyan "^1.8.12"
@@ -10220,7 +10220,7 @@ detox@20.26.2:
     caf "^15.0.1"
     chalk "^4.0.0"
     child-process-promise "^2.2.0"
-    detox-copilot "^0.0.0"
+    detox-copilot "^0.0.9"
     execa "^5.1.1"
     find-up "^5.0.0"
     fs-extra "^11.0.0"
@@ -14514,12 +14514,12 @@ jsdom@^20.0.0:
     ws "^8.11.0"
     xml-name-validator "^4.0.0"
 
-jsdom@~25.0.0:
-  version "25.0.0"
-  resolved "https://registry.yarnpkg.com/jsdom/-/jsdom-25.0.0.tgz#d1612b4ddab85af56821b2f731e15faae135f4e1"
-  integrity sha512-OhoFVT59T7aEq75TVw9xxEfkXgacpqAhQaYgP9y/fDqWQCMB/b1H66RfmPm/MaeaAIU9nDwMOVTlPN51+ao6CQ==
+jsdom@~25.0.1:
+  version "25.0.1"
+  resolved "https://registry.yarnpkg.com/jsdom/-/jsdom-25.0.1.tgz#536ec685c288fc8a5773a65f82d8b44badcc73ef"
+  integrity sha512-8i7LzZj7BF8uplX+ZyOlIz86V6TAsSs+np6m1kpW9u0JWi4z/1t+FzcK1aek+ybTnAC4KhBL4uXCNT0wcUIeCw==
   dependencies:
-    cssstyle "^4.0.1"
+    cssstyle "^4.1.0"
     data-urls "^5.0.0"
     decimal.js "^10.4.3"
     form-data "^4.0.0"
@@ -14532,7 +14532,7 @@ jsdom@~25.0.0:
     rrweb-cssom "^0.7.1"
     saxes "^6.0.0"
     symbol-tree "^3.2.4"
-    tough-cookie "^4.1.4"
+    tough-cookie "^5.0.0"
     w3c-xmlserializer "^5.0.0"
     webidl-conversions "^7.0.0"
     whatwg-encoding "^3.1.1"
@@ -20358,6 +20358,18 @@ tinyspy@^3.0.0:
   resolved "https://registry.yarnpkg.com/tinyspy/-/tinyspy-3.0.2.tgz#86dd3cf3d737b15adcf17d7887c84a75201df20a"
   integrity sha512-n1cw8k1k0x4pgA2+9XrOkFydTerNcJ1zWCO5Nn9scWHTD+5tp8dghT2x1uduQePZTZgd3Tupf+x9BxJjeJi77Q==
 
+tldts-core@^6.1.48:
+  version "6.1.48"
+  resolved "https://registry.yarnpkg.com/tldts-core/-/tldts-core-6.1.48.tgz#efa7dc689b9757d1d4326b787cd992f10a16b2fb"
+  integrity sha512-3gD9iKn/n2UuFH1uilBviK9gvTNT6iYwdqrj1Vr5mh8FuelvpRNaYVH4pNYqUgOGU4aAdL9X35eLuuj0gRsx+A==
+
+tldts@^6.1.32:
+  version "6.1.48"
+  resolved "https://registry.yarnpkg.com/tldts/-/tldts-6.1.48.tgz#bfef97f407fe73f1a88db8e0f6905378e9a348c0"
+  integrity sha512-SPbnh1zaSzi/OsmHb1vrPNnYuwJbdWjwo5TbBYYMlTtH3/1DSb41t8bcSxkwDmmbG2q6VLPVvQc7Yf23T+1EEw==
+  dependencies:
+    tldts-core "^6.1.48"
+
 tmp@^0.0.33:
   version "0.0.33"
   resolved "https://registry.yarnpkg.com/tmp/-/tmp-0.0.33.tgz#6d34335889768d21b2bcda0aa277ced3b1bfadf9"
@@ -20410,7 +20422,7 @@ totalist@^3.0.0:
   resolved "https://registry.yarnpkg.com/totalist/-/totalist-3.0.1.tgz#ba3a3d600c915b1a97872348f79c127475f6acf8"
   integrity sha512-sf4i37nQ2LBx4m3wB74y+ubopq6W/dIzXg0FDGjsYnZHVa1Da8FH853wlL2gtUhg+xJXjfk3kUZS3BRoQeoQBQ==
 
-tough-cookie@^4.1.2, tough-cookie@^4.1.3, tough-cookie@^4.1.4:
+tough-cookie@^4.1.2, tough-cookie@^4.1.3:
   version "4.1.4"
   resolved "https://registry.yarnpkg.com/tough-cookie/-/tough-cookie-4.1.4.tgz#945f1461b45b5a8c76821c33ea49c3ac192c1b36"
   integrity sha512-Loo5UUvLD9ScZ6jh8beX1T6sO1w2/MpCRpEP7V280GKMVUQ0Jzar2U3UJPsrdbziLEMMhu3Ujnq//rhiFuIeag==
@@ -20419,6 +20431,13 @@ tough-cookie@^4.1.2, tough-cookie@^4.1.3, tough-cookie@^4.1.4:
     punycode "^2.1.1"
     universalify "^0.2.0"
     url-parse "^1.5.3"
+
+tough-cookie@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/tough-cookie/-/tough-cookie-5.0.0.tgz#6b6518e2b5c070cf742d872ee0f4f92d69eac1af"
+  integrity sha512-FRKsF7cz96xIIeMZ82ehjC3xW2E+O2+v11udrDYewUbszngYhsGa8z6YUMMzO9QJZzzyd0nGGXnML/TReX6W8Q==
+  dependencies:
+    tldts "^6.1.32"
 
 tr46@^3.0.0:
   version "3.0.0"
