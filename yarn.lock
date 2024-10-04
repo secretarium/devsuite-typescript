@@ -18399,6 +18399,11 @@ react@19.0.0-rc-0751fac7-20241002:
   resolved "https://registry.yarnpkg.com/react/-/react-19.0.0-rc-0751fac7-20241002.tgz#c27ad296f1749edc9e1727b4941bb095cb9349ed"
   integrity sha512-qbwgll2JbsH16OHaNhbUtS55eyjgf9f1i682crOjcHLns9pyFvPjeiJIztBnhAk9GVS26ZiI00O2oA8AV/FGDA==
 
+react@19.0.0-rc.0:
+  version "19.0.0-rc.0"
+  resolved "https://registry.yarnpkg.com/react/-/react-19.0.0-rc.0.tgz#9f1e9965c30948b472adcf5ba5184413375e4a40"
+  integrity sha512-8nrDCl5uE54FHeKqKrEO0TS+10bT4cxutJGb2okiJc0FHMQ6I3FeItaqly/1nbijlhSO3HmAVyPIexIQQWYAtQ==
+
 read-cache@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/read-cache/-/read-cache-1.0.0.tgz#e664ef31161166c9751cdbe8dbcf86b5fb58f774"
