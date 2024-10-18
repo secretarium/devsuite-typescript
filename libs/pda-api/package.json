@@ -3,10 +3,10 @@
     "version": "0.0.1",
     "type": "module",
     "dependencies": {
-        "@sentry/node": "^7.119.1",
+        "@sentry/node": "^7.119.2",
         "@swc/helpers": "0.5.13",
-        "@trpc/server": "11.0.0-rc.553",
-        "express": "4.21.0",
+        "@trpc/server": "11.0.0-rc.586",
+        "express": "4.21.1",
         "superjson": "2.2.1"
     }
 }
