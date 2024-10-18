@@ -1,0 +1,22 @@
+diff --git a/node_modules/git-rev-sync/index.js b/node_modules/git-rev-sync/index.js
+index e0d0eea..703bf47 100644
+--- a/node_modules/git-rev-sync/index.js
++++ b/node_modules/git-rev-sync/index.js
+@@ -92,7 +92,7 @@ function long(dir) {
+     return b.substr(10);
+   }
+ 
+-  var gitDir = _getGitDirectory(dir);
++  var gitDir = _getGitDirectory(dir).replace(/\\/g, "/");
+   var gitRootDir = gitDir.indexOf('.git/worktrees/') > 0 ?
+     gitDir.replace(/\.git\/worktrees\/.+$/, '.git') :
+     gitDir;
+@@ -106,7 +106,7 @@ function long(dir) {
+     // the ref is stored in the packfile (.git/packed-refs). Fall back to
+     // looking up the hash here.
+     var refToFind = ['refs', 'heads', b].join('/');
+-    var packfileContents = fs.readFileSync(path.resolve(gitDir, 'packed-refs'), 'utf8');
++    var packfileContents = fs.readFileSync(path.resolve(gitRootDir, 'packed-refs'), 'utf8');
+     var packfileRegex = new RegExp('(.*) ' + escapeStringRegexp(refToFind));
+     ref = packfileRegex.exec(packfileContents)[1];
+   }

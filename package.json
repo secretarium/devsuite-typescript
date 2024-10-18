@@ -16,7 +16,7 @@
         "format-check": "nx format:check --all",
         "format-fix": "nx format --all",
         "preinstall": "node ./tools/scripts/hintYarn.js",
-        "postinstall": "is-ci || husky",
+        "postinstall": "is-ci || husky && patch-package",
         "prepare": "is-ci || husky"
     },
     "private": true,
@@ -178,7 +178,9 @@
         "jsdom": "~25.0.1",
         "lint-staged": "15.2.10",
         "nx": "20.0.2",
+        "patch-package": "^8.0.0",
         "postcss": "8.4.47",
+        "postinstall-postinstall": "^2.1.0",
         "prettier": "^3.3.3",
         "react-refresh": "^0.14.2",
         "react-test-renderer": "18.3.1",
