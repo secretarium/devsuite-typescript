@@ -2717,7 +2717,7 @@
     "@types/bunyan" "^1.8.11"
     bunyan "^1.8.15"
 
-"@expo/metro-config@0.18.11", "@expo/metro-config@^0.18.11", "@expo/metro-config@~0.18.10":
+"@expo/metro-config@0.18.11", "@expo/metro-config@^0.18.11", "@expo/metro-config@~0.18.11":
   version "0.18.11"
   resolved "https://registry.yarnpkg.com/@expo/metro-config/-/metro-config-0.18.11.tgz#22e82d92fb9d94ac760cc8b3bff48e6f32b4f032"
   integrity sha512-/uOq55VbSf9yMbUO1BudkUM2SsGW1c5hr9BnhIqYqcsFv0Jp5D3DtJ4rljDKaUeNLbwr6m7pqIrkSMq5NrYf4Q==
@@ -5170,7 +5170,7 @@
   resolved "https://registry.yarnpkg.com/@sentry/babel-plugin-component-annotate/-/babel-plugin-component-annotate-2.20.1.tgz#204c63ed006a048f48f633876e1b8bacf87a9722"
   integrity sha512-4mhEwYTK00bIb5Y9UWIELVUfru587Vaeg0DQGswv4aIRHIiMKLyNqCEejaaybQ/fNChIZOKmvyqXk430YVd7Qg==
 
-"@sentry/browser@7.119.1", "@sentry/browser@7.119.2", "@sentry/browser@^7.119.1", "@sentry/browser@^7.119.2":
+"@sentry/browser@7.119.1", "@sentry/browser@7.119.2", "@sentry/browser@^7.119.2":
   version "7.119.2"
   resolved "https://registry.yarnpkg.com/@sentry/browser/-/browser-7.119.2.tgz#9fb1c2cb8e32e8ebfe82c7d7fe3801dc147424b1"
   integrity sha512-Wb2RzCsJBTNCmS9KPmbVyV5GGzFXjFdUThAN9xlnN5GgemMBwdQjGu/tRYr8yJAVsRb0EOFH8IuJBNKKNnO49g==
@@ -5238,7 +5238,7 @@
     "@sentry/cli-win32-i686" "2.37.0"
     "@sentry/cli-win32-x64" "2.37.0"
 
-"@sentry/core@7.119.1", "@sentry/core@7.119.2", "@sentry/core@^7.119.0":
+"@sentry/core@7.119.1", "@sentry/core@7.119.2", "@sentry/core@^7.119.2":
   version "7.119.2"
   resolved "https://registry.yarnpkg.com/@sentry/core/-/core-7.119.2.tgz#03f7b0e220fdf3c45b35aac2cc413e2e34434cc2"
   integrity sha512-hQr3d2yWq/2lMvoyBPOwXw1IHqTrCjOsU1vYKhAa6w9vGbJZFGhKGGE2KEi/92c3gqGn+gW/PC7cV6waCTDuVA==
@@ -5246,7 +5246,7 @@
     "@sentry/types" "7.119.2"
     "@sentry/utils" "7.119.2"
 
-"@sentry/hub@7.119.0", "@sentry/hub@^7.119.1":
+"@sentry/hub@7.119.0", "@sentry/hub@^7.119.2":
   version "7.119.2"
   resolved "https://registry.yarnpkg.com/@sentry/hub/-/hub-7.119.2.tgz#f37c05d37e8047e2c068186b596f522e52c08713"
   integrity sha512-46lPDuEtVDjXJ29H6+HHi/UIn3VbxNcPrp9Bf/3K/cRHQCm/oHomaHolX3mtDO+nByEqjoQmkcSJs6VgYqUuOA==
@@ -5255,7 +5255,7 @@
     "@sentry/types" "7.119.2"
     "@sentry/utils" "7.119.2"
 
-"@sentry/integrations@7.119.0", "@sentry/integrations@7.119.2", "@sentry/integrations@^7.119.1":
+"@sentry/integrations@7.119.0", "@sentry/integrations@7.119.2", "@sentry/integrations@^7.119.2":
   version "7.119.2"
   resolved "https://registry.yarnpkg.com/@sentry/integrations/-/integrations-7.119.2.tgz#50d85b361e20c7f4d532a09b3a4e6783fcdc37e0"
   integrity sha512-dCuXKvbUE3gXVVa696SYMjlhSP6CxpMH/gl4Jk26naEB8Xjsn98z/hqEoXLg6Nab73rjR9c/9AdKqBbwVMHyrQ==
@@ -5265,7 +5265,7 @@
     "@sentry/utils" "7.119.2"
     localforage "^1.8.1"
 
-"@sentry/node@^7.119.1", "@sentry/node@^7.119.2":
+"@sentry/node@^7.119.2":
   version "7.119.2"
   resolved "https://registry.yarnpkg.com/@sentry/node/-/node-7.119.2.tgz#00e82ac0930a068a9538f255b11bdc3b0d98f776"
   integrity sha512-TPNnqxh+Myooe4jTyRiXrzrM2SH08R4+nrmBls4T7lKp2E5R/3mDSe/YTn5rRcUt1k1hPx1NgO/taG0DoS5cXA==
@@ -5291,7 +5291,7 @@
     "@sentry/types" "7.119.1"
     "@sentry/utils" "7.119.1"
 
-"@sentry/react@7.119.1", "@sentry/react@^7.119.1", "@sentry/react@^7.119.2":
+"@sentry/react@7.119.1", "@sentry/react@^7.119.2":
   version "7.119.2"
   resolved "https://registry.yarnpkg.com/@sentry/react/-/react-7.119.2.tgz#b950b7ecfb18df4b5910655d05e888b18e7c543f"
   integrity sha512-fE48R/mtb/bpc4/YVvKurKSAZ0ueUI5Ma0cVSr/Fi09rFdGwLRMcweM1UydREO/ILiyt8FezyZg7L20VAp4/TQ==
@@ -5312,12 +5312,12 @@
     "@sentry/types" "7.119.2"
     "@sentry/utils" "7.119.2"
 
-"@sentry/types@7.119.1", "@sentry/types@7.119.2", "@sentry/types@^7.119.1":
+"@sentry/types@7.119.1", "@sentry/types@7.119.2", "@sentry/types@^7.119.2":
   version "7.119.2"
   resolved "https://registry.yarnpkg.com/@sentry/types/-/types-7.119.2.tgz#e4c6b94ff868f45d6c0ed0f3f3e90e115d8be5cc"
   integrity sha512-ydq1tWsdG7QW+yFaTp0gFaowMLNVikIqM70wxWNK+u98QzKnVY/3XTixxNLsUtnAB4Y+isAzFhrc6Vb5GFdFeg==
 
-"@sentry/utils@7.119.1", "@sentry/utils@7.119.2", "@sentry/utils@^7.119.1":
+"@sentry/utils@7.119.1", "@sentry/utils@7.119.2", "@sentry/utils@^7.119.2":
   version "7.119.2"
   resolved "https://registry.yarnpkg.com/@sentry/utils/-/utils-7.119.2.tgz#a2abd8f3c070ac7d7a7bb32bce2cc27b5c34098f"
   integrity sha512-TLdUCvcNgzKP0r9YD7tgCL1PEUp42TObISridsPJ5rhpVGQJvpr+Six0zIkfDUxerLYWZoK8QMm9KgFlPLNQzA==
@@ -6626,17 +6626,7 @@
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-1.0.6.tgz#628effeeae2064a1b4e79f78e81d87b7e5fc7b50"
   integrity sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==
 
-"@types/express-serve-static-core@*", "@types/express-serve-static-core@^5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@types/express-serve-static-core/-/express-serve-static-core-5.0.0.tgz#91f06cda1049e8f17eeab364798ed79c97488a1c"
-  integrity sha512-AbXMTZGt40T+KON9/Fdxx0B2WK5hsgxcfXJLr5bFpZ7b4JCex2WyQPTEKdXqfHiY5nKKBScZ7yCoO6Pvgxfvnw==
-  dependencies:
-    "@types/node" "*"
-    "@types/qs" "*"
-    "@types/range-parser" "*"
-    "@types/send" "*"
-
-"@types/express-serve-static-core@^4.17.33":
+"@types/express-serve-static-core@*", "@types/express-serve-static-core@^4", "@types/express-serve-static-core@^4.17.33":
   version "4.19.6"
   resolved "https://registry.yarnpkg.com/@types/express-serve-static-core/-/express-serve-static-core-4.19.6.tgz#e01324c2a024ff367d92c66f48553ced0ab50267"
   integrity sha512-N4LZ2xG7DatVqhCZzOGb1Yi5lMbXSZcmdLDe9EzSndPV2HpWYWzRbaerl2n27irrm94EPpprqa8KpskPT085+A==
@@ -6646,17 +6636,7 @@
     "@types/range-parser" "*"
     "@types/send" "*"
 
-"@types/express@*", "@types/express@^5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@types/express/-/express-5.0.0.tgz#13a7d1f75295e90d19ed6e74cab3678488eaa96c"
-  integrity sha512-DvZriSMehGHL1ZNLzi6MidnsDhUZM/x2pRdDIKdwbUNqqwHxMlRdkxtn6/EPKyqKpHqTl/4nRZsRNLpZxZRpPQ==
-  dependencies:
-    "@types/body-parser" "*"
-    "@types/express-serve-static-core" "^5.0.0"
-    "@types/qs" "*"
-    "@types/serve-static" "*"
-
-"@types/express@^4.17.21":
+"@types/express@*", "@types/express@^4", "@types/express@^4.17.21":
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/@types/express/-/express-4.17.21.tgz#c26d4a151e60efe0084b23dc3369ebc631ed192d"
   integrity sha512-ejlPM315qwLpaQlQDTjPdsUFSc6ZsP4AN6AlWnogPjQ7CVi7PYF3YVz+CY3jE2pwYf7E/7HlDAN0rV2GxTG0HQ==
