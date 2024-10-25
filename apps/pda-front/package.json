@@ -4,22 +4,22 @@
     "license": "MIT",
     "type": "module",
     "dependencies": {
-        "@legendapp/state": "3.0.0-beta.12",
-        "@nx/vite": "20.0.2",
+        "@legendapp/state": "3.0.0-beta.13",
+        "@nx/vite": "20.0.5",
         "@secretarium/connector": "0.17.0",
         "@secretarium/crypto": "0.2.1",
         "@secretarium/instrumentation": "0.5.0",
         "@secretarium/pda-api": "0.0.1",
-        "@tailwindcss/vite": "4.0.0-alpha.28",
-        "@tanstack/react-router": "1.70.1",
-        "@tanstack/router-devtools": "1.70.1",
-        "@tanstack/router-vite-plugin": "1.69.1",
+        "@tailwindcss/vite": "4.0.0-alpha.30",
+        "@tanstack/react-router": "1.76.1",
+        "@tanstack/router-devtools": "1.76.1",
+        "@tanstack/router-vite-plugin": "1.76.0",
         "@testing-library/react": "16.0.1",
         "@vitejs/plugin-react-swc": "^3.7.1",
         "git-rev-sync": "3.0.2",
-        "qrcode.react": "4.0.1",
-        "react": "19.0.0-rc-bf7e210c-20241017",
-        "react-dom": "19.0.0-rc-bf7e210c-20241017",
-        "vite": "^5.4.9"
+        "qrcode.react": "4.1.0",
+        "react": "19.0.0-rc-1631855f-20241023",
+        "react-dom": "19.0.0-rc-1631855f-20241023",
+        "vite": "^5.4.10"
     }
 }
