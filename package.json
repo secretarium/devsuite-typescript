@@ -30,7 +30,7 @@
         "autoprefixer": "10.4.19",
         "chalk": "^5.3.0",
         "core-js": "3.37.0",
-        "expo": "51.0.4",
+        "expo": "52.0.24",
         "expo-barcode-scanner": "~13.0.1",
         "expo-build-properties": "~0.12.1",
         "expo-camera": "~15.0.7",
