@@ -190,7 +190,7 @@ export class SCP {
         return this._socket?.bufferedAmount || 0;
     }
 
-    connect(url: string, userKey: Key, knownTrustedKey: Uint8Array | string | undefined = undefined, protocol: NNG.Protocol = NNG.Protocol.pair1): Promise<void> {
+    connect(url = 'wss://on.klave.network', userKey: Key | undefined = undefined, knownTrustedKey: Uint8Array | string | undefined = undefined, protocol: NNG.Protocol = NNG.Protocol.pair1): Promise<void> {
         // if (this._socket && this._socket.state < ConnectionState.closing) this._socket.close();
 
         this._endpoint = {
@@ -304,6 +304,8 @@ export class SCP {
                     const key = symmetricKey.subarray(0, 16);
                     const cryptoKey = await crypto.subtle!.importKey('raw', key, { name: 'AES-GCM' }, false, ['encrypt', 'decrypt']);
                     this._session = new SCPSession(iv, cryptoKey);
+
+                    if (userKey === undefined) userKey = await Key.createKey();
 
                     const cryptoKeyPair = userKey.getCryptoKeyPair();
                     const publicKeyRaw = await userKey.getRawPublicKey();
