@@ -61,7 +61,7 @@ const googleEnvProvenance = `GOOGLE_FCM_CONFIG_${STAGE}`.toUpperCase();
 
 if (process.env.CI && process.env[googleEnvProvenance]) {
 
-    const googleServicesEnv = process.env[googleEnvProvenance].split(',').reduce((prev, current) => {
+    const googleServicesEnv = (process.env[googleEnvProvenance] as string).split(',').reduce((prev, current) => {
         const entry = current.split('=');
         return {
             ...prev,
@@ -167,6 +167,7 @@ export default (context: ConfigContext): ExpoConfig => {
                     subdomains: ['10.0.2.2', 'localhost']
                 }
             ],
+            'expo-secure-store',
             'expo-router',
             'expo-localization',
             [

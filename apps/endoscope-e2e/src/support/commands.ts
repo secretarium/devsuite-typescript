@@ -10,7 +10,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 declare namespace Cypress {
-    // eslint-disable-next-line @/no-unused-vars
+    // eslint-disable-next-line
     interface Chainable<Subject> {
         inspect(): void;
     }

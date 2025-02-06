@@ -58,8 +58,6 @@ describe('Connector key', () => {
     });
 
     it('Imports sealed key v2', async () => {
-        console.log(encV2Key);
-        console.log(JSON.stringify(encV2Key, null, 2));
         const newKey = await Key.importEncryptedKeyPair(encV2Key, 'HelloWorld');
         expect(newKey).toBeInstanceOf(Key);
     });
