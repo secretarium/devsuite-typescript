@@ -1,5 +1,7 @@
-import { ConnectorTracing } from './connectorTracing';
+import { ConnectorTracing as ConnectorTracingV8, connectorTracingIntegration } from './v8/connectorTracing';
 
 export const Sentry = {
-    ConnectorTracing
+    ConnectorTracing: ConnectorTracingV8,
+    ConnectorTracingV8,
+    connectorTracingIntegration
 };

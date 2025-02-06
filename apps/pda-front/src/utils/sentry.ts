@@ -3,7 +3,6 @@ import * as SecretariumInstruments from '@secretarium/instrumentation';
 import { scpClient as scpClient } from './secretarium';
 
 Sentry.init({
-
     dsn: import.meta.env['VITE_KLAVE_SENTRY_DSN'],
     release: `klave@${import.meta.env['VITE_REPO_VERSION']}`,
     environment: ['localhost', '::', '127.0.0.1'].includes(window.location.hostname) ? 'development' : window.location.hostname,
@@ -12,7 +11,8 @@ Sentry.init({
             enableHTTPTimings: true,
             enableLongTask: true
         }),
-        new SecretariumInstruments.Sentry.ConnectorTracing({
+        Sentry.browserProfilingIntegration(),
+        SecretariumInstruments.Sentry.connectorTracingIntegration({
             connector: scpClient,
             domains: ['.klave.network']
         }),
@@ -22,5 +22,8 @@ Sentry.init({
     // We recommend adjusting this value in production, or using tracesSampler for finer control
     tracesSampleRate: 1.0,
     replaysOnErrorSampleRate: 1.0,
-    replaysSessionSampleRate: 1.0
+    replaysSessionSampleRate: 1.0,
+
+    // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
+    tracePropagationTargets: ['localhost', /localhost/]
 });

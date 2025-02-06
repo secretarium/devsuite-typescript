@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
 import type { Hub, IdleTransaction/*, Transaction */ } from '@sentry/core';
 import { addNonEnumerableProperty } from '@sentry/utils';
 import { getActiveSpan, startIdleTransaction, TRACING_DEFAULTS } from '@sentry/core';
