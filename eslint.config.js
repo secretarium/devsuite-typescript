@@ -35,7 +35,12 @@ const javascriptRules = {
     '@/no-trailing-spaces': 'error',
     '@/no-unused-vars': [
         'error',
-        { args: 'after-used', varsIgnorePattern: '^__unused' }
+        {
+            args: 'after-used',
+            varsIgnorePattern: '^__unused',
+            caughtErrorsIgnorePattern: '^__unused',
+            destructuredArrayIgnorePattern: '^_u'
+        }
     ],
     '@nx/enforce-module-boundaries': [
         'error',
@@ -61,6 +66,7 @@ const javascriptRules = {
 const typescriptRules = {
     ...javascriptRules,
     '@typescript-eslint/no-explicit-any': 'warn',
+    '@typescript-eslint/no-unused-vars': javascriptRules['@/no-unused-vars'],
     '@typescript-eslint/no-non-null-assertion': 'error',
     '@typescript-eslint/no-floating-promises': 'warn',
     '@typescript-eslint/promise-function-async': 'warn',
@@ -77,6 +83,7 @@ const base = [
             'dist/',
             'tmp/',
             'tools/**/_msr*',
+            '**/routeTree.gen.ts',
             '**/.expo',
             '**/node_modules/**',
             '**/vendor/',
@@ -202,7 +209,14 @@ for (const folder of projectsFolders) {
             },
             rules: {
                 ...jsonRules,
-                '@nx/dependency-checks': folder !== '.' ? 'error' : 'off'
+                '@nx/dependency-checks': rootFolder !== '' ? ['warn', {
+                    checkObsoleteDependencies: false,
+                    includeTransitiveDependencies: false,
+                    ignoredDependencies: [
+                        '@total-typescript/ts-reset',
+                        'git-rev-sync'
+                    ]
+                }] : 'off'
             }
         },
 
