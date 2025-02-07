@@ -4824,7 +4824,7 @@
   dependencies:
     "@react-native/codegen" "0.75.5"
 
-"@react-native/babel-preset@0.76.6", "@react-native/babel-preset@^0.75.4":
+"@react-native/babel-preset@0.76.6", "@react-native/babel-preset@0.76.7", "@react-native/babel-preset@^0.75.4":
   version "0.75.5"
   resolved "https://registry.yarnpkg.com/@react-native/babel-preset/-/babel-preset-0.75.5.tgz#e137328d496f40e1f4bf1ac8a238d80c5c45c440"
   integrity sha512-VEJvWUu2zg9PacO6RL3n10TQ05IdbTIKiCpRAulexSAZZamURelX8Ko9VbWpIP0Wg/zFyYoDwsKOhCe+rFfhvA==
@@ -8721,10 +8721,10 @@ babel-preset-current-node-syntax@^1.0.0:
     "@babel/plugin-syntax-private-property-in-object" "^7.14.5"
     "@babel/plugin-syntax-top-level-await" "^7.14.5"
 
-babel-preset-expo@12.0.6, babel-preset-expo@~12.0.6:
-  version "12.0.6"
-  resolved "https://registry.yarnpkg.com/babel-preset-expo/-/babel-preset-expo-12.0.6.tgz#2f39fe421d5ba9a0ce74dcd918a458c62c6601da"
-  integrity sha512-az3H7gDVo0wxNBAFES8h5vLLWE8NPGkD9g5P962hDEOqZUdyPacb9MOzicypeLmcq9zQWr6E3iVtEHoNagCTTQ==
+babel-preset-expo@12.0.7, babel-preset-expo@~12.0.6:
+  version "12.0.7"
+  resolved "https://registry.yarnpkg.com/babel-preset-expo/-/babel-preset-expo-12.0.7.tgz#3fa0527ee28bb8302039541b2cbca023c692c178"
+  integrity sha512-XT2ZOnonTU343eRnd/UBuqYLxmaB47g+RtLMANMsj/j9XL2kkTk3a6yepLbV4BrACaTf2ddiBZDi+BQ0lgjVaw==
   dependencies:
     "@babel/plugin-proposal-decorators" "^7.12.9"
     "@babel/plugin-transform-export-namespace-from" "^7.22.11"
@@ -8732,7 +8732,7 @@ babel-preset-expo@12.0.6, babel-preset-expo@~12.0.6:
     "@babel/plugin-transform-parameters" "^7.22.15"
     "@babel/preset-react" "^7.22.15"
     "@babel/preset-typescript" "^7.23.0"
-    "@react-native/babel-preset" "0.76.6"
+    "@react-native/babel-preset" "0.76.7"
     babel-plugin-react-native-web "~0.19.13"
     react-refresh "^0.14.2"
 
