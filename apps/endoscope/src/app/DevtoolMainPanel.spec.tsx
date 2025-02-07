@@ -20,6 +20,6 @@ describe('DevtoolMainPanel', () => {
             </BrowserRouter>
         );
 
-        expect(getByText(/Current connected versions/gi)).toBeTruthy();
+        expect(getByText(/Current connected versions/i)).toBeTruthy();
     });
 });

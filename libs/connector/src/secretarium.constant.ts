@@ -26,7 +26,7 @@ export enum ErrorCodes {
     EKEYNOTEC,
     EXORNOTSS,
     EKEYNOTSL,
-    EECDHGENF,
+    EECDHGENF
 }
 
 export const ErrorMessage: Record<ErrorCodes, string> = {
@@ -59,7 +59,7 @@ export enum ConnectionState {
     connecting,
     secure,
     closing,
-    closed,
+    closed
 }
 
 export const ConnectionStateMessage: Record<ConnectionState, string> = {

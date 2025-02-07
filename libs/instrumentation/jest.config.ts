@@ -20,10 +20,11 @@ if (swcJestConfig.swcrc === undefined) {
 
 export default {
     displayName: 'instrumentation',
-    preset: '../../jest.preset.js',
+    preset: '../../jest.preset.cjs',
     transform: {
         '^.+\\.[tj]s$': ['@swc/jest', swcJestConfig],
     },
+    transformIgnorePatterns: ['node_modules/(?!(jest-)?@swc|pretty-bytes)'],
     globals: {
         // Sentry level 1 debug flag
         __DEBUG_BUILD__: true,

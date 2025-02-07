@@ -10,6 +10,10 @@ jobs:
   build:
     runs-on: ${{ matrix.os }}
 
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.NX_CACHE_AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.NX_CACHE_AWS_SECRET_ACCESS_KEY }}
+
     strategy:
       matrix:
         os: [ubuntu-latest]
@@ -21,14 +25,14 @@ jobs:
           fetch-depth: 0
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
-        uses: nrwl/nx-set-shas@v3
+        uses: nrwl/nx-set-shas@v4
 
       - run: |
           echo "Nx base: ${{ env.NX_BASE }}"
           echo "Git head: ${{ env.NX_HEAD }}"
 
       - name: Use Node.js ${{ matrix.node }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
           cache: yarn

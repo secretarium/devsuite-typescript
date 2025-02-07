@@ -9,8 +9,8 @@
     },
     "include": [
         "src/**/*.ts",
-        "vendor/*.js",
-        "vendor/*.ts"
+        "vendor/*.ts",
+        "vendor/msrCrypto.d.cts"
     ],
     "exclude": [
         "jest.config.ts",

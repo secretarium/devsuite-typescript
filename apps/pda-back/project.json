@@ -1,0 +1,55 @@
+{
+    "name": "pda-back",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "apps/pda-back/src",
+    "projectType": "application",
+    "tags": [],
+    "targets": {
+        "build": {
+            "executor": "@nx/esbuild:esbuild",
+            "outputs": [
+                "{options.outputPath}"
+            ],
+            "defaultConfiguration": "production",
+            "options": {
+                "platform": "node",
+                "outputPath": "dist/apps/pda-back",
+                "bundle": true,
+                "main": "apps/pda-back/src/main.ts",
+                "tsConfig": "apps/pda-back/tsconfig.app.json",
+                "assets": [
+                    "apps/pda-back/src/assets"
+                ],
+                "generatePackageJson": true,
+                "esbuildConfig": "apps/pda-back/esbuild.config.cjs"
+            },
+            "configurations": {
+                "development": {},
+                "production": {
+                    "generateLockfile": true
+                }
+            }
+        },
+        "serve": {
+            "executor": "@nx/js:node",
+            "defaultConfiguration": "development",
+            "options": {
+                "buildTarget": "pda-back:build"
+            },
+            "configurations": {
+                "development": {
+                    "buildTarget": "pda-back:build:development"
+                },
+                "production": {
+                    "buildTarget": "pda-back:build:production"
+                }
+            }
+        },
+        "docker-build": {
+            "dependsOn": [
+                "build"
+            ],
+            "command": "docker build -f apps/pda-back/Dockerfile . -t pda-back"
+        }
+    }
+}

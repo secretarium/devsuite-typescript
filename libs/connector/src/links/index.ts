@@ -1,2 +1,2 @@
-export { WebSocketLink } from './websocketLink';
-export { HTTPSLink } from './httpsLink';
+export { WebSocketLink } from './websocketLink.js';
+export { HTTPSLink } from './httpsLink.js';

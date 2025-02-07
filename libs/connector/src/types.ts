@@ -1,4 +1,4 @@
-import type { Transaction } from './secretarium.connector';
+import type { Transaction } from './secretarium.connector.js';
 
 interface Nameable {
     displayName?: string;
@@ -26,7 +26,7 @@ export type ServerObject = {
     name?: string;
     cluster?: string;
     kem?: 'rsa' | 'kyber'
-}
+};
 
 export type Server = ConnectionString | ServerObject;
 
@@ -42,7 +42,7 @@ export type ConnectorOptions = {
 } | {
     connection?: never;
     connections?: Array<Server>;
-})
+});
 
 export interface Connector {
     version: string;

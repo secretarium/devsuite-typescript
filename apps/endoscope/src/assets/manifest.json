@@ -4,7 +4,7 @@
     "description": "Adds Secretarium debugging tools to the Developer Tools.",
     "version": "0.0.1",
     "version_name": "0.0.1",
-    "minimum_chrome_version": "90",
+    "minimum_chrome_version": "110",
     "icons": {
         "16": "icons/16-production.png",
         "32": "icons/32-production.png",
@@ -23,25 +23,24 @@
             "matches": [
                 "https://*.secretarium.com/*",
                 "https://*.secretarium.org/*",
-                "https://*.secretarium.tech/*"
+                "https://*.secretarium.tech/*",
+                "https://*.klave.com/*",
+                "https://*.klave.network/*"
             ]
         }
     ],
-    "__background": {
-        "service_worker": "build/background.js"
-    },
     "host_permissions": [
         "file:///*",
         "http://*/*",
         "https://*/*"
     ],
-    "__content_scripts": [
+    "content_scripts": [
         {
             "matches": [
                 "<all_urls>"
             ],
             "js": [
-                "build/injectGlobalHook.js"
+                "injectGlobalHook.js"
             ],
             "run_at": "document_start"
         }

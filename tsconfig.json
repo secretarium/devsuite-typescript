@@ -1,0 +1,18 @@
+{
+    "extends": "./tsconfig.eslint.json",
+    "compilerOptions": {
+        "noEmit": true
+    },
+    "exclude": [
+        "node_modules/**",
+        "apps/**",
+        "libs/**"
+    ],
+    "include": [
+        ".eslintrc.cjs",
+        ".commitlintrc.js",
+        "*.js",
+        "*.ts",
+        "tools/**/*.{js,mjs,ts,mts,json}"
+    ]
+}
