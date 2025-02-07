@@ -9,7 +9,7 @@
  */
 
 import { readCachedProjectGraph } from '@nrwl/devkit';
-import { execSync } from 'child_process';
+import { execFileSync } from 'child_process';
 import { readFileSync, writeFileSync } from 'fs';
 import chalk from 'chalk';
 
@@ -60,4 +60,4 @@ try {
 }
 
 // Execute "npm publish" to publish
-execSync(`npm publish --access public --tag ${tag}`);
+execFileSync('npm', ['publish', '--access', 'public', '--tag', tag]);
