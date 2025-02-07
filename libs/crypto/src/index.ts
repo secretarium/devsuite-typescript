@@ -1,5 +1,5 @@
-export * as Utils from './secretarium.utils';
-import crypto from './secretarium.crypto';
+export * as Utils from './secretarium.utils.js';
+import crypto from './secretarium.crypto.js';
 
 export default crypto;
 export { crypto };

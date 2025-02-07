@@ -1,0 +1,12 @@
+{
+    "name": "@secretarium/pda-api",
+    "version": "0.0.1",
+    "type": "module",
+    "dependencies": {
+        "@sentry/node": "^9.0.0-alpha.2",
+        "@swc/helpers": "0.5.15",
+        "@trpc/server": "11.0.0-rc.741",
+        "express": "4.21.2",
+        "superjson": "2.2.2"
+    }
+}

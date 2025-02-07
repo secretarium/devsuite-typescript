@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { atob, btoa } from 'js-base64';
-import crypto from './secretarium.crypto';
+import crypto from './secretarium.crypto.js';
 
 export function xor(a: Uint8Array, b: Uint8Array): Uint8Array {
     if (a.length !== b.length) throw new Error();
@@ -124,6 +124,7 @@ export function decode(octets: Uint8Array, ignoreException = false): string {
             try {
                 string += String.fromCodePoint(codePoint);
             } catch (e) {
+                console.error(e);
                 /* NOOP */
             }
         else string += String.fromCodePoint(codePoint);

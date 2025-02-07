@@ -10,6 +10,10 @@ jobs:
   build:
     runs-on: ${{ matrix.os }}
 
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.NX_CACHE_AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.NX_CACHE_AWS_SECRET_ACCESS_KEY }}
+
     strategy:
       matrix:
         os: [ubuntu-latest]
@@ -21,14 +25,14 @@ jobs:
           fetch-depth: 0
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
-        uses: nrwl/nx-set-shas@v3
+        uses: nrwl/nx-set-shas@v4
 
       - run: |
           echo "Nx base: ${{ env.NX_BASE }}"
           echo "Git head: ${{ env.NX_HEAD }}"
 
       - name: Use Node.js ${{ matrix.node }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
           cache: yarn
@@ -50,6 +54,29 @@ jobs:
 
       - name: Install repo dependencies
         run: yarn install --network-timeout 1000000 --forzen-lockfile
+
+      - name: Get installed Playwright version
+        id: playwright-version
+        run: echo "PLAYWRIGHT_VERSION=$(node -e "console.log(require('@playwright/test/package.json').version)")" >> $GITHUB_ENV
+
+      - name: Cache Playwright binaries
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: |
+            ~/.cache/ms-playwright
+            **/node_modules/playwright
+          key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
+
+      - name: Install Playwright with dependencies
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: yarn playwright install --with-deps
+
+      - name: Install Playwright's dependencies
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: yarn playwright install-deps
 
       - name: Unit test the Dev Suite
         env:

@@ -26,7 +26,7 @@ try {
                 // stdio: 'ignore'
             });
             console.log('Copy msrcrypto artifact...');
-            copyFileSync(resolve(repoLocation, 'lib/msrcrypto.min.js'), 'libs/crypto/vendor/msrCrypto.js');
+            copyFileSync(resolve(repoLocation, 'lib/msrcrypto.min.js'), 'libs/crypto/vendor/msrCrypto.cjs');
         });
 } catch (e) {
     console.error(e);
@@ -53,14 +53,14 @@ const secretariumBuild = [
     "scripts/ecdh.js",
     "scripts/ecdsa.js",
     "scripts/subtle.js",
-    "scripts/bundleTail.js",
-    "scripts/subtle/promises.js"
+    "scripts/bundleTail.js"
 ];
 
 function compile() {
     return gulp.src(fullBuild)
         .pipe(concat("msrcrypto.js"))
         .pipe(replace(/(Sometimes the result[\\s\\S]*?array \\) {)[\\s\\S]*?(return msrcryptoUtilities)/m, '$1$2'))
+        .pipe(replace(/(if \\(typeof define)/, 'if (typeof root === "undefined") { if (typeof self !== "undefined") root = self; else if (typeof globalThis !== "undefined") root = globalThis; else if (typeof window !== "undefined") root = window;} $1'))
         .pipe(gulp.dest("lib"));
 }
 

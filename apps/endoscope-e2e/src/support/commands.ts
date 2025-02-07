@@ -10,15 +10,15 @@
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 declare namespace Cypress {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line
     interface Chainable<Subject> {
         inspect(): void;
     }
 }
 //
 // -- This is a parent command --
-Cypress.Commands.add('inspect', () => {
-    console.log('Custom command example: Inspect');
+Cypress.Commands.overwrite('intercept', () => {
+    console.log('Custom command example: Intercept');
 });
 //
 // -- This is a child command --

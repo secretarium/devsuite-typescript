@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { ErrorMessage, ErrorCodes } from './secretarium.constant';
+import { ErrorMessage, ErrorCodes } from './secretarium.constant.js';
 import crypto, { Utils } from '@secretarium/crypto';
 
 const CURRENT_KEY_VERSION = 2;
@@ -51,7 +51,7 @@ export class Key {
         const iv = Utils.getRandomBytes(12);
         const weakPwd = Utils.encode(pwd);
         const strongPwd = await Utils.hash(Utils.concatBytes(salt, weakPwd));
-        const key = await crypto.subtle!.importKey('raw', strongPwd, { name: 'AES-GCM' }, false, ['encrypt', 'decrypt']);
+        const key = await crypto.subtle.importKey('raw', strongPwd, { name: 'AES-GCM' }, false, ['encrypt', 'decrypt']);
         const keyPair = await this.exportKey();
         const data = Utils.encode(
             JSON.stringify({
@@ -59,7 +59,7 @@ export class Key {
                 privateKey: keyPair.privateKey
             })
         );
-        const encrypted = new Uint8Array(await crypto.subtle!.encrypt({ name: 'AES-GCM', iv: iv, tagLength: 128 }, key, data));
+        const encrypted = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv: iv, tagLength: 128 }, key, data));
 
         this._exportableEncryptedKey = {
             version: CURRENT_KEY_VERSION,
@@ -75,8 +75,8 @@ export class Key {
         if (!this._exportableKey)
             this._exportableKey = {
                 version: CURRENT_KEY_VERSION,
-                publicKey: await crypto.subtle!.exportKey('jwk', this._cryptoKeyPair.publicKey!),
-                privateKey: await crypto.subtle!.exportKey('jwk', this._cryptoKeyPair.privateKey!)
+                publicKey: await crypto.subtle.exportKey('jwk', this._cryptoKeyPair.publicKey!),
+                privateKey: await crypto.subtle.exportKey('jwk', this._cryptoKeyPair.privateKey!)
             };
         return this._exportableKey;
     }
@@ -87,7 +87,7 @@ export class Key {
     }
 
     async getRawPublicKey(): Promise<Uint8Array> {
-        if (!this._rawPublicKey) this._rawPublicKey = new Uint8Array(await crypto.subtle!.exportKey('raw', this._cryptoKeyPair.publicKey!)).subarray(1);
+        if (!this._rawPublicKey) this._rawPublicKey = new Uint8Array(await crypto.subtle.exportKey('raw', this._cryptoKeyPair.publicKey!)).subarray(1);
         return this._rawPublicKey;
     }
 
@@ -96,12 +96,12 @@ export class Key {
     }
 
     static async createKey(): Promise<Key> {
-        return new Key(await crypto.subtle!.generateKey({ name: 'ECDSA', namedCurve: 'P-256' }, true, ['sign', 'verify']));
+        return new Key(await crypto.subtle.generateKey({ name: 'ECDSA', namedCurve: 'P-256' }, true, ['sign', 'verify']));
     }
 
     static async importKey(exportableKey: ClearKeyPair): Promise<Key> {
-        const publicKey = await crypto.subtle!.importKey('jwk', exportableKey.publicKey, { name: 'ECDSA', namedCurve: 'P-256' }, true, ['verify']);
-        const privateKey = await crypto.subtle!.importKey('jwk', exportableKey.privateKey, { name: 'ECDSA', namedCurve: 'P-256' }, true, ['sign']);
+        const publicKey = await crypto.subtle.importKey('jwk', exportableKey.publicKey, { name: 'ECDSA', namedCurve: 'P-256' }, true, ['verify']);
+        const privateKey = await crypto.subtle.importKey('jwk', exportableKey.privateKey, { name: 'ECDSA', namedCurve: 'P-256' }, true, ['sign']);
 
         return new Key({
             publicKey,
@@ -115,8 +115,8 @@ export class Key {
         const x = Utils.toBase64(pubKeyRaw.subarray(0, 32), true).split('=')[0];
         const y = Utils.toBase64(pubKeyRaw.subarray(32), true).split('=')[0];
         const d = Utils.toBase64(priKeyRaw, true).split('=')[0];
-        const publicKey = await crypto.subtle!.importKey('jwk', { crv: 'P-256', kty: 'EC', x: x, y: y }, { name: 'ECDSA', namedCurve: 'P-256' }, true, ['verify']);
-        const privateKey = await crypto.subtle!.importKey('jwk', { crv: 'P-256', kty: 'EC', x: x, y: y, d: d }, { name: 'ECDSA', namedCurve: 'P-256' }, true, ['sign']);
+        const publicKey = await crypto.subtle.importKey('jwk', { crv: 'P-256', kty: 'EC', x: x, y: y }, { name: 'ECDSA', namedCurve: 'P-256' }, true, ['verify']);
+        const privateKey = await crypto.subtle.importKey('jwk', { crv: 'P-256', kty: 'EC', x: x, y: y, d: d }, { name: 'ECDSA', namedCurve: 'P-256' }, true, ['sign']);
 
         return new Key({
             publicKey,
@@ -131,12 +131,13 @@ export class Key {
             const encrypted = Utils.fromBase64(inputKeyPair.data);
             const weakpwd = Utils.encode(pwd);
             const strongPwd = await Utils.hash(Utils.concatBytes(salt, weakpwd));
-            const aesKey = await crypto.subtle!.importKey('raw', strongPwd, { name: 'AES-GCM' }, false, ['encrypt', 'decrypt']);
+            const aesKey = await crypto.subtle.importKey('raw', strongPwd, { name: 'AES-GCM' }, false, ['encrypt', 'decrypt']);
 
             let decrypted: Uint8Array;
             try {
-                decrypted = new Uint8Array(await crypto.subtle!.decrypt({ name: 'AES-GCM', iv: iv, tagLength: 128 }, aesKey, encrypted));
+                decrypted = new Uint8Array(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: iv, tagLength: 128 }, aesKey, encrypted));
             } catch (e) {
+                console.error(e);
                 throw new Error(ErrorMessage[ErrorCodes.EINPASSWD]);
             }
 
@@ -153,8 +154,8 @@ export class Key {
                     data: encryptedKey.encryptedKeys ?? encryptedKey.encryptedKeyPair ?? ''
                 });
 
-                const publicKey = await crypto.subtle!.importKey('raw', decrypted.subarray(0, 65), { name: 'ECDSA', namedCurve: 'P-256' }, true, ['verify']);
-                const privateKey = await crypto.subtle!.importKey('pkcs8', decrypted.subarray(65), { name: 'ECDSA', namedCurve: 'P-256' }, true, ['sign']);
+                const publicKey = await crypto.subtle.importKey('raw', decrypted.subarray(0, 65), { name: 'ECDSA', namedCurve: 'P-256' }, true, ['verify']);
+                const privateKey = await crypto.subtle.importKey('pkcs8', decrypted.subarray(65), { name: 'ECDSA', namedCurve: 'P-256' }, true, ['sign']);
                 const newKey = new Key({
                     publicKey,
                     privateKey
@@ -168,8 +169,8 @@ export class Key {
                 const obj = JSON.parse(Utils.decode(decrypted)) as any;
                 delete obj.publicKey.alg;
                 delete obj.privateKey.alg;
-                const publicKey = await crypto.subtle!.importKey('jwk', obj.publicKey, { name: 'ECDSA', namedCurve: 'P-256' }, true, ['verify']);
-                const privateKey = await crypto.subtle!.importKey('jwk', obj.privateKey, { name: 'ECDSA', namedCurve: 'P-256' }, true, ['sign']);
+                const publicKey = await crypto.subtle.importKey('jwk', obj.publicKey, { name: 'ECDSA', namedCurve: 'P-256' }, true, ['verify']);
+                const privateKey = await crypto.subtle.importKey('jwk', obj.privateKey, { name: 'ECDSA', namedCurve: 'P-256' }, true, ['sign']);
 
                 return new Key(
                     {

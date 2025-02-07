@@ -1,0 +1,29 @@
+{
+    "name": "@secretarium/pda-front",
+    "version": "0.0.1",
+    "license": "MIT",
+    "type": "module",
+    "dependencies": {
+        "@legendapp/state": "3.0.0-beta.26",
+        "@nx/vite": "20.4.1",
+        "@secretarium/connector": "0.17.0",
+        "@secretarium/crypto": "0.2.1",
+        "@secretarium/instrumentation": "0.5.0",
+        "@secretarium/pda-api": "0.0.1",
+        "@sentry/react": "^8.54.0",
+        "@tailwindcss/vite": "4.0.4",
+        "@tanstack/react-router": "1.99.8",
+        "@tanstack/router-devtools": "1.99.8",
+        "@tanstack/router-vite-plugin": "1.99.8",
+        "@testing-library/react": "16.2.0",
+        "@trpc/client": "11.0.0-rc.741",
+        "@trpc/react-query": "11.0.0-rc.741",
+        "@vitejs/plugin-react-swc": "^3.7.2",
+        "git-rev-sync": "3.0.2",
+        "qrcode.react": "4.2.0",
+        "react": "19.0.0",
+        "react-dom": "19.0.0",
+        "superjson": "2.2.2",
+        "vite": "^6.1.0"
+    }
+}

@@ -35,8 +35,7 @@
                     "apps/endoscope/src/styles.css"
                 ],
                 "scripts": [],
-                "webpackConfig": "apps/endoscope/webpack.config",
-                "isolatedConfig": true
+                "webpackConfig": "apps/endoscope/webpack.config.cjs"
             },
             "configurations": {
                 "production": {

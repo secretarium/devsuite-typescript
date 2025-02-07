@@ -1,16 +1,17 @@
 {
     "name": "@secretarium/connector",
     "version": "0.17.0",
-    "license": "MIT",
     "private": false,
     "repository": {
         "type": "git",
         "url": "https://github.com/secretarium/devsuite-typescript.git",
         "directory": "libs/connector"
     },
+    "license": "MIT",
+    "type": "module",
     "dependencies": {
-        "@secretarium/crypto": "~0.2.0",
-        "@total-typescript/ts-reset": "0.5.1",
-        "ws": "8.17.1"
+        "@secretarium/crypto": "~0.2.1",
+        "broadcast-channel": "7.0.0",
+        "ws": "8.18.0"
     }
 }
