@@ -17,7 +17,7 @@ declare namespace Cypress {
 }
 //
 // -- This is a parent command --
-Cypress.Commands.add('intercept', () => {
+Cypress.Commands.overwrite('intercept', () => {
     console.log('Custom command example: Intercept');
 });
 //
