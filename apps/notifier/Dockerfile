@@ -16,7 +16,7 @@ RUN addgroup --system notifier && \
 
 COPY dist/apps/notifier notifier
 RUN chown -R notifier:notifier .
-RUN cd notifier && yarn install
+RUN cd notifier && yarn install --no-cache && yarn cache clean
 
 EXPOSE 3000
 
