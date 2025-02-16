@@ -27,7 +27,7 @@ type MinimumData = {
 };
 
 type NotificationPush = MinimumData & {
-    request?: PushRequest['data']
+    request?: PushRequest;
     hasValidSignature: boolean;
 };
 

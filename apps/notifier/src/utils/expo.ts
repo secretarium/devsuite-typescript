@@ -1,12 +1,12 @@
-import { Expo, ExpoPushToken, ExpoPushMessage } from 'expo-server-sdk';
+import { Expo, ExpoPushMessage } from 'expo-server-sdk';
 import { z } from 'zod';
 import { receiptCollection, ticketCollection } from './mongo';
 
 export const PushRequestSchema = z.object({
-    data: z.array(z.object({
-        pushToken: z.custom<ExpoPushToken>((value) => typeof value === 'string' && value.length > 0),
+    version: z.string(),
+    data: z.object({
         messages: z.array(z.custom<ExpoPushMessage>())
-    })),
+    }),
     signature_b64: z.string().optional()
 });
 

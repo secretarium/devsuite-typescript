@@ -34,10 +34,9 @@ export async function app(fastify: FastifyInstance) {
             if (typeof content !== 'string')
                 return await res.status(400).send({ ok: false });
 
-            const { data } = PushRequestSchema.parse(content);
-
+            const input = PushRequestSchema.parse(content);
             const pushInsert = await pushCollection.insertOne({
-                request: data,
+                request: input,
                 createdAt: new Date().toISOString(),
                 hasValidSignature: false
             });
@@ -52,18 +51,7 @@ export async function app(fastify: FastifyInstance) {
                 }
             });
 
-            const messages = [];
-            for (const clientLoad of data) {
-                for (const message of clientLoad.messages) {
-                    messages.push({
-                        to: clientLoad.pushToken,
-                        sound: 'default',
-                        body: message.body,
-                        data: message.data
-                    });
-                }
-            }
-
+            const messages = input.data.messages ?? [];
             const chunks = expo.chunkPushNotifications(messages);
             for (const chunk of chunks) {
                 try {
