@@ -147,16 +147,14 @@ export default (context: ConfigContext): ExpoConfig => {
                 projectId: EXPO_PROJECT_ID
             }
         },
+        newArchEnabled: true,
         plugins: [
             [
                 'expo-build-properties',
                 {
                     android: {
                         enableProguardInReleaseBuilds: true,
-                        newArchEnabled: true
-                    },
-                    ios: {
-                        newArchEnabled: true
+                        enableShrinkResourcesInReleaseBuilds: true
                     }
                 }
             ],
