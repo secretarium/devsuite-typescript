@@ -23,7 +23,7 @@
     },
     "dependencies": {
         "@expo/metro-config": "^0.19.9",
-        "@nx/expo": "20.4.1",
+        "@nx/expo": "20.5.0",
         "@sentry/react-native": "~6.3.0",
         "@testing-library/jest-native": "5.4.3",
         "expo": "52.0.30",
