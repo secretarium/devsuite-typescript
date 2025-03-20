@@ -34,7 +34,7 @@ export class WS {
         return this._socket?.bufferedAmount || 0;
     }
 
-    private _addHop(data: Uint8Array): Uint8Array {
+    private _addHop(data: Uint8Array) {
         const c = new Uint8Array(4 + data.length);
         c.set([0, 0, 0, 1], 0);
         c.set(data, 4);
