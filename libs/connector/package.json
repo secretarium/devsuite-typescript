@@ -10,7 +10,7 @@
     "license": "MIT",
     "type": "module",
     "dependencies": {
-        "@secretarium/crypto": "~0.2.1",
+        "@secretarium/crypto": "0.2.0",
         "broadcast-channel": "7.0.0",
         "ws": "8.18.1"
     }
