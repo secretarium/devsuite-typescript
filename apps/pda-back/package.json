@@ -9,7 +9,7 @@
         "@fastify/sensible": "6.0.3",
         "@fastify/websocket": "11.0.2",
         "@secretarium/connector": "0.17.0",
-        "fastify": "5.2.1",
+        "fastify": "5.2.2",
         "git-rev-sync": "3.0.2"
     }
 }
