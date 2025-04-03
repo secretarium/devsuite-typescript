@@ -12,7 +12,7 @@ export default async function () {
     console.log('\nStarting up the backend...\n');
 
     let shouldPrintProcessOutput = true;
-    globalThis.__RUNNING_BACKEND__ = exec('y arn nx serve pda-back --configuration=production --watch=false');
+    globalThis.__RUNNING_BACKEND__ = exec('yarn nx serve pda-back --configuration=production --watch=false');
     globalThis.__RUNNING_BACKEND__.on('error', (err) => {
         console.error(err);
     });

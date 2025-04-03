@@ -11,7 +11,7 @@
     "type": "module",
     "peerDependencies": {
         "@secretarium/connector": "0.17.0",
-        "@sentry/core": "^7 || ^8",
+        "@sentry/core": "9.0.0-alpha.2",
         "@sentry/types": "^7 || ^8",
         "@sentry/utils": "^7 || ^8",
         "pretty-bytes": "^5 || ^6"
