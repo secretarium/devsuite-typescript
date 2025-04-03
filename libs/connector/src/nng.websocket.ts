@@ -96,7 +96,7 @@ export class WS {
             const frameSize = chunkSize + 20 + offset;
             let partialData = new Uint8Array(frameSize);
 
-            if (this._requiresHop) partialData = this._addHop(partialData);
+            if (this._requiresHop) partialData.set([0, 0, 0, 1], 0);
 
             // Magic header `chunk${chunkNumber}/${chunksCount}`
             partialData.set([99, 104, 117, 110, 107, 0, 47, chunksCount], offset);
@@ -114,7 +114,7 @@ export class WS {
                 // Tagging the chunk number
                 partialData[offset + 5] = chunkNumber;
                 partialData.set(data.slice(chunkSize * chunkNumber, chunkSize * (chunkNumber + 1)), offset + 20);
-                this._socket?.send(data);
+                this._socket?.send(partialData);
             }
         } else {
             if (this._requiresHop) data = this._addHop(data);
