@@ -1,4 +1,10 @@
 # Changelog
+## [0.18.0](///compare/connector@0.16.0...connector@0.18.0) (2025-04-07)
+
+### Features
+
+* **connector:** Adding chunking mechanics for large payload 5726a0ee
+
 ## [0.17.0](///compare/connector@0.16.1...connector@0.17.0) (2024-02-29)
 
 ### Dependency Updates
@@ -12,7 +18,6 @@
 ## [0.16.1](///compare/connector@0.16.0...connector@0.16.1) (2023-12-20)
 
 ## [0.16.0](///compare/connector@0.15.0...connector@0.16.0) (2023-12-20)
-
 
 ### Features
 
@@ -29,7 +34,6 @@
 * **connector:** Add endpoint and connection status call to SCP 30f945a
 * **crypto,connector:** Provide NodeJS Subtle export + Context info 097cc8d
 
-
 ### Bug Fixes
 
 * **connector:** Forcefully remove `alg` from imported keys to work on Node Subtle fb950a8
@@ -45,7 +49,6 @@
 * **connector:** Add endpoint and connection status call to SCP 30f945a
 
 ## [0.13.5](///compare/connector@0.13.4...connector@0.13.5) (2023-10-06)
-
 
 ### Bug Fixes
 
@@ -80,11 +83,13 @@
 ### Dependency Updates
 
 * `crypto` updated to version `0.13.1`
+
 ## [0.13.1](///compare/connector@0.13.0...connector@0.13.1) (2023-06-01)
 
 ### Dependency Updates
 
 * `crypto` updated to version `0.1.2`
+
 ## [0.13.0](///compare/connector@0.12.4...connector@0.13.0) (2023-05-16)
 
 ### Dependency Updates

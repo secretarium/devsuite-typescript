@@ -1,5 +1,6 @@
 import { ConnectionState } from './secretarium.constant.js';
 import BackingSocket from './secretarium.socket.js';
+import { Utils } from '@secretarium/crypto';
 
 export enum Protocol {
     pair1 = 'pair1.sp.nanomsg.org'
@@ -33,14 +34,14 @@ export class WS {
         return this._socket?.bufferedAmount || 0;
     }
 
-    private _addHop(data: Uint8Array): Uint8Array {
+    private _addHop(data: Uint8Array) {
         const c = new Uint8Array(4 + data.length);
         c.set([0, 0, 0, 1], 0);
         c.set(data, 4);
         return c;
     }
 
-    connect(url: string, protocol: Protocol): WS {
+    connect(url: string, protocol: Protocol = Protocol.pair1): WS {
         try {
             const s = new BackingSocket(url, [protocol]);
             s.binaryType = 'arraybuffer';
@@ -85,9 +86,40 @@ export class WS {
         return this;
     }
 
-    send(data: Uint8Array): WS {
-        if (this._requiresHop) data = this._addHop(data);
-        this._socket?.send(data);
+    send(data: Uint8Array, chunkSize = 524288): WS {
+
+        const length = data.length;
+        if (length > chunkSize) {
+
+            const chunksCount = Math.floor((length - 1) / chunkSize + 1);
+            const offset = this._requiresHop ? 4 : 0;
+            const frameSize = chunkSize + 20 + offset;
+            const partialData = new Uint8Array(frameSize);
+
+            if (this._requiresHop) partialData.set([0, 0, 0, 1], 0);
+
+            // Magic header `chunk${chunkNumber}/${chunksCount}`
+            partialData.set([99, 104, 117, 110, 107, 0, 47, chunksCount], offset);
+
+            // Add total length of the data frame
+            const totalLength = new Uint8Array(4);
+            for (let i = 0; i < 4; i++)     totalLength[3 - i] = (length >> (i * 8)) & 0xff;
+            partialData.set(totalLength, offset + 8);
+
+            // Add a random id to differentiate messages (probably not necessary)
+            partialData.set(Utils.getRandomBytes(8), offset + 12);
+
+            // Sending the data
+            for (let chunkNumber = 0; chunkNumber < chunksCount; chunkNumber++) {
+                // Tagging the chunk number
+                partialData[offset + 5] = chunkNumber;
+                partialData.set(data.slice(chunkSize * chunkNumber, chunkSize * (chunkNumber + 1)), offset + 20);
+                this._socket?.send(partialData);
+            }
+        } else {
+            if (this._requiresHop) data = this._addHop(data);
+            this._socket?.send(data);
+        }
         return this;
     }
 

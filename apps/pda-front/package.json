@@ -6,7 +6,7 @@
     "dependencies": {
         "@legendapp/state": "3.0.0-beta.26",
         "@nx/vite": "20.4.1",
-        "@secretarium/connector": "0.17.0",
+        "@secretarium/connector": "0.18.0",
         "@secretarium/crypto": "0.2.1",
         "@secretarium/instrumentation": "0.5.0",
         "@secretarium/pda-api": "0.0.1",
