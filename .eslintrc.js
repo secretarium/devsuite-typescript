@@ -37,8 +37,14 @@ const typescriptRules = {
 
 module.exports = {
     root: true,
+    env: {
+        es6: true
+    },
     parserOptions: {
+        ecmaVersion: 2022,
+        sourceType: 'module',
         tsconfigRootDir: __dirname,
+        warnOnUnsupportedTypeScriptVersion: false,
         project: [
             './tsconfig.eslint.json'
             // './{packages,apps,libs}/*-e2e/tsconfig.json',
@@ -79,7 +85,7 @@ module.exports = {
             rules: javascriptRules,
             parserOptions: {
                 sourceType: 'module',
-                ecmaVersion: 2021
+                ecmaVersion: 2022
             }
         },
         {
