@@ -10,6 +10,6 @@
     },
     "type": "commonjs",
     "dependencies": {
-        "js-base64": "3.7.5"
+        "js-base64": "3.7.7"
     }
 }
