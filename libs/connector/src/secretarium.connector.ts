@@ -311,7 +311,7 @@ export class SCP {
 
                 // Check inheritance from Secretarium knownTrustedKey
                 const knownTrustedKeyPath = serverIdentity.subarray(96);
-                console.log('knownTrustedKeyPath', knownTrustedKeyPath, this._endpoint);
+
                 if (!this._endpoint?.knownTrustedKey)
                     this._options.logger?.info?.('No knownTrustedKey provided, server identity will not be verified');
                 else if (knownTrustedKeyPath.length === 64) {
@@ -392,7 +392,7 @@ export class SCP {
     async connect(url: string, userKey: Key, knownTrustedKey: Uint8Array | string | undefined = undefined): Promise<void> {
 
         if (!await this.isBroadcastLeader()) {
-            console.log('this is not the leader');
+            console.log('This connector instance is not the leader');
             return;
         }
 
