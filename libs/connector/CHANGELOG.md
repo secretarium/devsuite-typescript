@@ -1,4 +1,6 @@
 # Changelog
+## [0.19.1](https://github.com/secretarium/devsuite-typescript/compare/connector@0.19.0...connector@0.19.1) (2025-05-02)
+
 ## [0.19.0](https://github.com/secretarium/devsuite-typescript/compare/connector@0.18.0...connector@0.19.0) (2025-05-02)
 
 
