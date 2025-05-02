@@ -1,4 +1,26 @@
 # Changelog
+## [0.3.0](https://github.com/secretarium/devsuite-typescript/compare/crypto@0.2.1...crypto@0.3.0) (2025-05-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* Moving to pure ESM repo
+
+### Features
+
+* **connector:** Adding chunking mechanics for large payload ([5726a0e](https://github.com/secretarium/devsuite-typescript/commit/5726a0ee8bb50a1c8942e365a9b5d4ac0175686e))
+* **connector:** Adding gateway detection handling ([0be1c96](https://github.com/secretarium/devsuite-typescript/commit/0be1c968733b65301d58608ea15d52d9d07ba04e))
+
+
+### Bug Fixes
+
+* **crypto,connector:** Ensure compatibility with ESM ([9bfdea6](https://github.com/secretarium/devsuite-typescript/commit/9bfdea6ec6f31a9783c4501165586be30300c9c7))
+
+
+### Miscellaneous Chores
+
+* Moving to pure ESM repo ([0c9c230](https://github.com/secretarium/devsuite-typescript/commit/0c9c2301e3a8c009872cf3d5afee290f1ad3eb44))
+
 ## [0.2.1](///compare/crypto@0.2.0...crypto@0.2.1) (2024-02-29)
 
 ## [0.2.0](///compare/crypto@0.1.6...crypto@0.2.0) (2023-11-22)
