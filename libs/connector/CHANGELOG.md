@@ -1,4 +1,28 @@
 # Changelog
+## [0.19.0](https://github.com/secretarium/devsuite-typescript/compare/connector@0.18.0...connector@0.19.0) (2025-05-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* Moving to pure ESM repo
+
+### Features
+
+* **connector:** Adding chunking support for large payloads ([fefed41](https://github.com/secretarium/devsuite-typescript/commit/fefed41e2c95243ec90cddb7cc58d69fad7d073f))
+* **connector:** Adding gateway detection handling ([0be1c96](https://github.com/secretarium/devsuite-typescript/commit/0be1c968733b65301d58608ea15d52d9d07ba04e))
+* **connector:** Implement experimental support for local broadcast channels ([aebd266](https://github.com/secretarium/devsuite-typescript/commit/aebd266ae25c5a1462f639e2e8eeaf914fd9c32f))
+
+
+### Bug Fixes
+
+* **connector:** Fix payload chunking algo ([e203b1c](https://github.com/secretarium/devsuite-typescript/commit/e203b1c5f81acf30211df2e995769065664f6d48))
+* **crypto,connector:** Ensure compatibility with ESM ([9bfdea6](https://github.com/secretarium/devsuite-typescript/commit/9bfdea6ec6f31a9783c4501165586be30300c9c7))
+
+
+### Miscellaneous Chores
+
+* Moving to pure ESM repo ([0c9c230](https://github.com/secretarium/devsuite-typescript/commit/0c9c2301e3a8c009872cf3d5afee290f1ad3eb44))
+
 ## [0.18.0](///compare/connector@0.16.0...connector@0.18.0) (2025-04-07)
 
 ### Features
