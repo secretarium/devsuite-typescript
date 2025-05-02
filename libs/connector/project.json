@@ -23,6 +23,9 @@
                         "output": "."
                     }
                 ],
+                "format": [
+                    "esm"
+                ],
                 "project": "libs/connector/package.json",
                 "compiler": "swc",
                 "external": "all",

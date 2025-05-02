@@ -16,6 +16,7 @@ updates:
       lint:
         patterns:
           - "eslint*"
+          - "@eslint/*"
           - "@typescript-eslint/*"
       dev:
         patterns:
@@ -52,6 +53,12 @@ updates:
         patterns:
           - "babel*"
           - "@babel/*"
+      vite:
+        patterns:
+          - "@vitejs/"
+          - "@vitest/*"
+          - "vite"
+          - "vitest"
       types:
         patterns:
           - "@types/*"

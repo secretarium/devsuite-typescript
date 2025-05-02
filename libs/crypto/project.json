@@ -28,6 +28,9 @@
                         "output": "."
                     }
                 ],
+                "format": [
+                    "esm"
+                ],
                 "project": "libs/crypto/package.json",
                 "compiler": "swc",
                 "generateExportsField": true
