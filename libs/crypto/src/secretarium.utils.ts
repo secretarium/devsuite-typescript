@@ -139,7 +139,8 @@ export function encode(s: string): Uint8Array {
     let i = 0;
     while (i < length) {
         const codePoint = s.codePointAt(i);
-        if (!codePoint) return new Uint8Array(octets);
+        if (codePoint === undefined)
+            return new Uint8Array(octets);
         let c = 0;
         let bits = 0;
         if (codePoint <= 0x0000007f) {
