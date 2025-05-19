@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+
 import { BroadcastChannel, createLeaderElection, BroadcastChannelOptions, LeaderElector } from 'broadcast-channel';
 import * as NNG from './nng.websocket.js';
 import { Key } from './secretarium.key.js';
@@ -106,8 +106,8 @@ export class SCP {
     private _appSessionId: string | null = null;
     private _appNodeId: string | null = null;
     private _userKey: Key | null = null;
-    private _appConnectionAction: Map<string, Promise<void>> = new Map();
-    private _connectionInfo: {
+    private readonly _appConnectionAction: Map<string, Promise<void>> = new Map();
+    private readonly _connectionInfo: {
         protocol: string;
         protocolVersion: string;
         server?: string;
@@ -121,8 +121,7 @@ export class SCP {
 
     constructor(options?: SCPOptions) {
         this._options = options || {};
-        if (!this._options.broadcastChannel)
-            this._options.broadcastChannel = false;
+        this._options.broadcastChannel ??= false;
         if (this._options.broadcastChannel !== false) {
             const { hostname, port, protocol } = window?.location ?? {};
             this._broadcastChannel = new BroadcastChannel(`__SCP_BChannel_${hostname}_${port ?? (protocol.includes('https') ? 443 : 80)}_${version}`, this._options.broadcastChannelOptions);
@@ -150,7 +149,7 @@ export class SCP {
         this.reset();
     }
 
-    reset(options?: SCPOptions): SCP {
+    reset(options?: SCPOptions): this {
         if (this._socket && this._socket.state > ConnectionState.closing) this._socket.close();
 
         this._options = options || this._options || {};
@@ -185,7 +184,7 @@ export class SCP {
 
     private async _notify(json: string): Promise<void> {
         try {
-            const o = JSON.parse(json) as any;
+            const o = JSON.parse(json);
             this._options.logger?.debug?.('Secretarium received:', o);
             if (!!o && o.requestId) {
                 const x = this._requests[o.requestId];
@@ -243,7 +242,7 @@ export class SCP {
     }
 
     get bufferedAmount(): number {
-        return this._socket?.bufferedAmount || 0;
+        return this._socket?.bufferedAmount ?? 0;
     }
 
     async isBroadcastLeader() {
@@ -273,7 +272,7 @@ export class SCP {
         const ecdh = await crypto.subtle.generateKey({ name: 'ECDH', namedCurve: 'P-256' }, true, ['deriveBits']);
         if (!ecdh.publicKey) return Promise.reject(ErrorMessage[ErrorCodes.EECDHGENF]);
         const trustedKey = Uint8Array.from(Utils.fromBase64(this._endpoint.knownTrustedKey ?? Utils.toBase64(Utils.getRandomBytes(64))));
-        const ecdhPubKeyRaw = new Uint8Array(await crypto.subtle!.exportKey('raw', ecdh.publicKey)).subarray(1);
+        const ecdhPubKeyRaw = new Uint8Array(await crypto.subtle.exportKey('raw', ecdh.publicKey)).subarray(1);
         return new Promise<Uint8Array>((resolve, reject) => {
             const tId = setTimeout(() => {
                 reject(ErrorMessage[ErrorCodes.ETIMOCHEL]);
@@ -501,6 +500,14 @@ export class SCP {
         return this._connectionInfo;
     }
 
+    getSessionInfo() {
+        return {
+            sessionId: this._appSessionId,
+            nodeId: this._appNodeId,
+            gatewaySessionId: this._gatewaySessionId
+        };
+    }
+
     async connect(url: string, userKey: Key, knownTrustedKey: Uint8Array | string | undefined = undefined): Promise<void> {
 
         if (!await this.isBroadcastLeader()) {
@@ -509,9 +516,12 @@ export class SCP {
         }
 
         this._endpoint = {
-            url,
-            knownTrustedKey: knownTrustedKey ? typeof knownTrustedKey === 'string' ? knownTrustedKey : Utils.toBase64(knownTrustedKey) : undefined
+            url
         };
+
+        if (knownTrustedKey)
+            this._endpoint.knownTrustedKey = typeof knownTrustedKey === 'string' ? knownTrustedKey : Utils.toBase64(knownTrustedKey);
+
 
         this._updateState(ConnectionState.connecting);
         this._socket = new NNG.WS();
@@ -548,12 +558,12 @@ export class SCP {
         });
     }
 
-    onError(handler: (err: string) => void): SCP {
+    onError(handler: (err: string) => void): this {
         this._onError = handler;
         return this;
     }
 
-    onStateChange(handler: (state: ConnectionState) => void): SCP {
+    onStateChange(handler: (state: ConnectionState) => void): this {
         this._onStateChange = handler;
         return this;
     }
@@ -585,11 +595,11 @@ export class SCP {
         });
         const query: Query<ResultType, ErrorType> = {
             onError: (x) => {
-                (cbs.onError = cbs.onError || []).push(x);
+                cbs.onError = (cbs.onError ?? []).concat([x]);
                 return query;
             },
             onResult: (x) => {
-                (cbs.onResult = cbs.onResult || []).push(x);
+                cbs.onResult = (cbs.onResult ?? []).concat([x]);
                 return query;
             },
             send: async () => {
@@ -619,30 +629,30 @@ export class SCP {
         });
         const tx: Transaction<ResultType, ErrorType> = {
             onError: (x) => {
-                (cbs.onError = cbs.onError || []).push(x);
+                cbs.onError = (cbs.onError ?? []).concat([x]);
                 return tx;
             },
             onAcknowledged: (x) => {
-                (cbs.onAcknowledged = cbs.onAcknowledged || []).push(x);
+                cbs.onAcknowledged = (cbs.onAcknowledged ?? []).concat([x]);
                 return tx;
             },
             /**
              * @deprecated onPropose handlers were retired in Secretarium Core 1.0.0
              */
             onProposed: (x) => {
-                (cbs.onProposed = cbs.onProposed || []).push(x);
+                cbs.onProposed = (cbs.onProposed ?? []).concat([x]);
                 return tx;
             },
             onCommitted: (x) => {
-                (cbs.onCommitted = cbs.onCommitted || []).push(x);
+                cbs.onCommitted = (cbs.onCommitted ?? []).concat([x]);
                 return tx;
             },
             onExecuted: (x) => {
-                (cbs.onExecuted = cbs.onExecuted || []).push(x);
+                cbs.onExecuted = (cbs.onExecuted ?? []).concat([x]);
                 return tx;
             },
             onResult: (x) => {
-                (cbs.onResult = cbs.onResult || []).push(x);
+                cbs.onResult = (cbs.onResult ?? []).concat([x]);
                 return tx;
             }, // for chained tx + query
             send: async () => {
@@ -680,10 +690,8 @@ export class SCP {
             return Promise.reject(ErrorMessage[ErrorCodes.ENOTCONNT]);
 
         let appConnectionAttemptResover: Parameters<ConstructorParameters<typeof Promise<void>>[0]>[0];
-        // let appConnectionAttemptRejecter: Parameters<ConstructorParameters<typeof Promise<void>>[0]>[1]
         const appConnectionAttempt = new Promise<void>((resolve) => {
             appConnectionAttemptResover = resolve;
-            // appConnectionAttemptRejecter = reject;
         });
         this._appConnectionAction.set(app, appConnectionAttempt);
 
@@ -787,7 +795,7 @@ export class SCP {
         });
     }
 
-    close(): SCP {
+    close(): this {
         if (this._socket) this._socket.close();
         return this;
     }
