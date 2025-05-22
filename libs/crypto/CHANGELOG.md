@@ -1,4 +1,11 @@
 # Changelog
+## [0.4.0](https://github.com/secretarium/devsuite-typescript/compare/crypto@0.3.0...crypto@0.4.0) (2025-05-22)
+
+
+### Features
+
+* **crypto,connector:** Adding support for Gateway connection ([e4b5eda](https://github.com/secretarium/devsuite-typescript/commit/e4b5edae80480600bb96f803f533babefe29935c))
+
 ## [0.3.0](https://github.com/secretarium/devsuite-typescript/compare/crypto@0.2.1...crypto@0.3.0) (2025-05-02)
 
 
