@@ -239,8 +239,7 @@ export function useSecretariumQuery<ResultType = unknown, ErrorType = unknown>(o
                 await scpClient.newTx<ResultType, ErrorType>(app, route, `klave-deployment-${Math.random().toString().replaceAll('.', '')}`, args ?? {})
                     .onResult((result) => {
 
-                        if (!dataCache.current[cacheKey])
-                            dataCache.current[cacheKey] = [];
+                        dataCache.current[cacheKey] ??= [];
 
                         if (cancelRequest.current)
                             return;
@@ -250,8 +249,7 @@ export function useSecretariumQuery<ResultType = unknown, ErrorType = unknown>(o
 
                     }).onError((error) => {
 
-                        if (!errorsCache.current[cacheKey])
-                            errorsCache.current[cacheKey] = [];
+                        errorsCache.current[cacheKey] ??= [];
 
                         if (cancelRequest.current)
                             return;
