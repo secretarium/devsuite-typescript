@@ -55,6 +55,7 @@
         "**/jest-util": "^30",
         "**/jest-validate": "^30",
         "**/jest-watch-typeahead": "^3",
+        "**/koa": "^2.16",
         "**/metro": "^0.82",
         "**/metro-config": "^0.82",
         "**/metro-core": "^0.82",
