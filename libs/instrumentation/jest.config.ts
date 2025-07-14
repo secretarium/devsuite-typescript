@@ -1,9 +1,13 @@
-/* eslint-disable */
 import { readFileSync } from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // Reading the SWC compilation config and remove the "exclude"
 // for the test files to be compiled by SWC
-const { exclude: _, ...swcJestConfig } = JSON.parse(
+const { exclude: __unusedExclude, ...swcJestConfig } = JSON.parse(
     readFileSync(`${__dirname}/.swcrc`, 'utf-8')
 );
 
@@ -22,7 +26,7 @@ export default {
     displayName: 'instrumentation',
     preset: '../../jest.preset.cjs',
     transform: {
-        '^.+\\.[tj]s$': ['@swc/jest', swcJestConfig],
+        '^.+\\.[tj]s$': ['@swc/jest', swcJestConfig]
     },
     transformIgnorePatterns: ['node_modules/(?!(jest-)?@swc|pretty-bytes)'],
     globals: {
@@ -32,5 +36,5 @@ export default {
     },
     moduleFileExtensions: ['ts', 'js', 'html'],
     testEnvironment: 'node',
-    coverageDirectory: '../../coverage/libs/instrumentation',
+    coverageDirectory: '../../coverage/libs/instrumentation'
 };

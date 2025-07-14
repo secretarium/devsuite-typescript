@@ -1,9 +1,14 @@
-/* eslint-disable */
 import { readFileSync } from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+//get __dirname in ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // Reading the SWC compilation config and remove the "exclude"
 // for the test files to be compiled by SWC
-const { exclude: _, ...swcJestConfig } = JSON.parse(
+const { exclude: __unusedExclude, ...swcJestConfig } = JSON.parse(
     readFileSync(`${__dirname}/.swcrc`, 'utf-8')
 ) as any;
 
@@ -22,9 +27,9 @@ export default {
     displayName: 'connector',
     preset: '../../jest.preset.cjs',
     transform: {
-        '^.+\\.[tj]s$': ['@swc/jest', swcJestConfig],
+        '^.+\\.[tj]s$': ['@swc/jest', swcJestConfig]
     },
     moduleFileExtensions: ['ts', 'js', 'html'],
     testEnvironment: 'node',
-    coverageDirectory: '../../coverage/libs/connector',
+    coverageDirectory: '../../coverage/libs/connector'
 };

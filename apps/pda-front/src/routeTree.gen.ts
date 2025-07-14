@@ -10,79 +10,33 @@
 
 import { createFileRoute } from '@tanstack/react-router'
 
-// Import Routes
+import { Route as rootRouteImport } from './routes/__root'
 
-import { Route as rootRoute } from './routes/__root'
+const IndexLazyRouteImport = createFileRoute('/')()
+const LoginIndexLazyRouteImport = createFileRoute('/login/')()
+const LoginTotpLazyRouteImport = createFileRoute('/login/totp')()
+const LoginEcodeLazyRouteImport = createFileRoute('/login/ecode')()
 
-// Create Virtual Routes
-
-const IndexLazyImport = createFileRoute('/')()
-const LoginIndexLazyImport = createFileRoute('/login/')()
-const LoginTotpLazyImport = createFileRoute('/login/totp')()
-const LoginEcodeLazyImport = createFileRoute('/login/ecode')()
-
-// Create/Update Routes
-
-const IndexLazyRoute = IndexLazyImport.update({
+const IndexLazyRoute = IndexLazyRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
-
-const LoginIndexLazyRoute = LoginIndexLazyImport.update({
+const LoginIndexLazyRoute = LoginIndexLazyRouteImport.update({
   id: '/login/',
   path: '/login/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any).lazy(() => import('./routes/login/index.lazy').then((d) => d.Route))
-
-const LoginTotpLazyRoute = LoginTotpLazyImport.update({
+const LoginTotpLazyRoute = LoginTotpLazyRouteImport.update({
   id: '/login/totp',
   path: '/login/totp',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any).lazy(() => import('./routes/login/totp.lazy').then((d) => d.Route))
-
-const LoginEcodeLazyRoute = LoginEcodeLazyImport.update({
+const LoginEcodeLazyRoute = LoginEcodeLazyRouteImport.update({
   id: '/login/ecode',
   path: '/login/ecode',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any).lazy(() => import('./routes/login/ecode.lazy').then((d) => d.Route))
-
-// Populate the FileRoutesByPath interface
-
-declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/login/ecode': {
-      id: '/login/ecode'
-      path: '/login/ecode'
-      fullPath: '/login/ecode'
-      preLoaderRoute: typeof LoginEcodeLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/login/totp': {
-      id: '/login/totp'
-      path: '/login/totp'
-      fullPath: '/login/totp'
-      preLoaderRoute: typeof LoginTotpLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/login/': {
-      id: '/login/'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginIndexLazyImport
-      parentRoute: typeof rootRoute
-    }
-  }
-}
-
-// Create and export the route tree
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
@@ -90,22 +44,19 @@ export interface FileRoutesByFullPath {
   '/login/totp': typeof LoginTotpLazyRoute
   '/login': typeof LoginIndexLazyRoute
 }
-
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/login/ecode': typeof LoginEcodeLazyRoute
   '/login/totp': typeof LoginTotpLazyRoute
   '/login': typeof LoginIndexLazyRoute
 }
-
 export interface FileRoutesById {
-  __root__: typeof rootRoute
+  __root__: typeof rootRouteImport
   '/': typeof IndexLazyRoute
   '/login/ecode': typeof LoginEcodeLazyRoute
   '/login/totp': typeof LoginTotpLazyRoute
   '/login/': typeof LoginIndexLazyRoute
 }
-
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths: '/' | '/login/ecode' | '/login/totp' | '/login'
@@ -114,12 +65,44 @@ export interface FileRouteTypes {
   id: '__root__' | '/' | '/login/ecode' | '/login/totp' | '/login/'
   fileRoutesById: FileRoutesById
 }
-
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   LoginEcodeLazyRoute: typeof LoginEcodeLazyRoute
   LoginTotpLazyRoute: typeof LoginTotpLazyRoute
   LoginIndexLazyRoute: typeof LoginIndexLazyRoute
+}
+
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexLazyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login/': {
+      id: '/login/'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginIndexLazyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login/totp': {
+      id: '/login/totp'
+      path: '/login/totp'
+      fullPath: '/login/totp'
+      preLoaderRoute: typeof LoginTotpLazyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login/ecode': {
+      id: '/login/ecode'
+      path: '/login/ecode'
+      fullPath: '/login/ecode'
+      preLoaderRoute: typeof LoginEcodeLazyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+  }
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -128,35 +111,6 @@ const rootRouteChildren: RootRouteChildren = {
   LoginTotpLazyRoute: LoginTotpLazyRoute,
   LoginIndexLazyRoute: LoginIndexLazyRoute,
 }
-
-export const routeTree = rootRoute
+export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.tsx",
-      "children": [
-        "/",
-        "/login/ecode",
-        "/login/totp",
-        "/login/"
-      ]
-    },
-    "/": {
-      "filePath": "index.lazy.tsx"
-    },
-    "/login/ecode": {
-      "filePath": "login/ecode.lazy.tsx"
-    },
-    "/login/totp": {
-      "filePath": "login/totp.lazy.tsx"
-    },
-    "/login/": {
-      "filePath": "login/index.lazy.tsx"
-    }
-  }
-}
-ROUTE_MANIFEST_END */

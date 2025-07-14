@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
     displayName: 'pda-back-e2e',
     preset: '../../jest.preset.cjs',
@@ -10,10 +9,10 @@ export default {
         '^.+\\.[tj]s$': [
             'ts-jest',
             {
-                tsconfig: '<rootDir>/tsconfig.e2e.json',
-            },
-        ],
+                tsconfig: '<rootDir>/tsconfig.e2e.json'
+            }
+        ]
     },
     moduleFileExtensions: ['ts', 'js', 'html'],
-    coverageDirectory: '../../coverage/pda-back-e2e',
+    coverageDirectory: '../../coverage/pda-back-e2e'
 };

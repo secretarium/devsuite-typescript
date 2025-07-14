@@ -8,8 +8,8 @@ export function xor(a: Uint8Array, b: Uint8Array): Uint8Array {
 }
 
 export function incrementBy(src: Uint8Array, offset: Uint8Array): Uint8Array {
-    const inc = Uint8Array.from(src),
-        szDiff = src.length - offset.length;
+    const inc = Uint8Array.from(src);
+    const szDiff = src.length - offset.length;
 
     for (let j = offset.length - 1; j >= 0; j--) {
         for (let i = j + szDiff, o = offset[j]; i >= 0; i--) {
@@ -139,7 +139,8 @@ export function encode(s: string): Uint8Array {
     let i = 0;
     while (i < length) {
         const codePoint = s.codePointAt(i);
-        if (!codePoint) return new Uint8Array(octets);
+        if (codePoint === undefined)
+            return new Uint8Array(octets);
         let c = 0;
         let bits = 0;
         if (codePoint <= 0x0000007f) {

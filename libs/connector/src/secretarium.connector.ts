@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+
 import { BroadcastChannel, createLeaderElection, BroadcastChannelOptions, LeaderElector } from 'broadcast-channel';
 import * as NNG from './nng.websocket.js';
 import { Key } from './secretarium.key.js';
@@ -26,6 +26,7 @@ type SCPOptions = {
     };
     broadcastChannel?: boolean;
     broadcastChannelOptions?: BroadcastChannelOptions;
+    gatewayTimeout?: number;
 };
 
 type SCPEndpoint = {
@@ -100,11 +101,27 @@ export class SCP {
     private _endpoint: SCPEndpoint;
     private _broadcastChannel: BroadcastChannel<LocalMessage> | null = null;
     private _broadcastElector: LeaderElector | null = null;
+    private _viaGateway = false;
+    private _gatewaySessionId: string | null = null;
+    private _appSessionId: string | null = null;
+    private _appNodeId: string | null = null;
+    private _userKey: Key | null = null;
+    private readonly _appConnectionAction: Map<string, Promise<void>> = new Map();
+    private readonly _connectionInfo: {
+        protocol: string;
+        protocolVersion: string;
+        server?: string;
+        serverVersion?: string;
+        serverComment?: string;
+    } = {
+        protocol: 'SCP',
+        protocolVersion: '1.0.0',
+        serverComment: 'legacy'
+    };
 
     constructor(options?: SCPOptions) {
         this._options = options || {};
-        if (!this._options.broadcastChannel)
-            this._options.broadcastChannel = false;
+        this._options.broadcastChannel ??= false;
         if (this._options.broadcastChannel !== false) {
             const { hostname, port, protocol } = window?.location ?? {};
             this._broadcastChannel = new BroadcastChannel(`__SCP_BChannel_${hostname}_${port ?? (protocol.includes('https') ? 443 : 80)}_${version}`, this._options.broadcastChannelOptions);
@@ -123,7 +140,6 @@ export class SCP {
                 this._options.logger?.debug?.('Secretarium broadcast: duplicate leader detected');
                 this._broadcastElector?.die();
             };
-            console.log('tutu', this._broadcastElector);
             this._broadcastElector.awaitLeadership().then(() => {
                 this._options.logger?.debug?.('Secretarium broadcast: leader elected');
             }).catch((e) => {
@@ -133,7 +149,7 @@ export class SCP {
         this.reset();
     }
 
-    reset(options?: SCPOptions): SCP {
+    reset(options?: SCPOptions): this {
         if (this._socket && this._socket.state > ConnectionState.closing) this._socket.close();
 
         this._options = options || this._options || {};
@@ -155,7 +171,7 @@ export class SCP {
             throw new Error(ErrorMessage[ErrorCodes.ESCPNOTRE]);
         const ivOffset = Utils.getRandomBytes(16);
         const iv = Utils.incrementBy(this._session.iv, ivOffset).subarray(0, 12);
-        const encrypted = new Uint8Array(await crypto.subtle!.encrypt({ name: 'AES-GCM', iv: iv, tagLength: 128 }, this._session.cryptoKey, data));
+        const encrypted = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv: iv, tagLength: 128 }, this._session.cryptoKey, data));
         return Utils.concatBytes(ivOffset, encrypted);
     }
 
@@ -163,12 +179,12 @@ export class SCP {
         if (!this._session)
             throw new Error(ErrorMessage[ErrorCodes.ESCPNOTRD]);
         const iv = Utils.incrementBy(this._session.iv, data.subarray(0, 16)).subarray(0, 12);
-        return new Uint8Array(await crypto.subtle!.decrypt({ name: 'AES-GCM', iv: iv, tagLength: 128 }, this._session.cryptoKey, data.subarray(16)));
+        return new Uint8Array(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: iv, tagLength: 128 }, this._session.cryptoKey, data.subarray(16)));
     }
 
     private async _notify(json: string): Promise<void> {
         try {
-            const o = JSON.parse(json) as any;
+            const o = JSON.parse(json);
             this._options.logger?.debug?.('Secretarium received:', o);
             if (!!o && o.requestId) {
                 const x = this._requests[o.requestId];
@@ -226,7 +242,7 @@ export class SCP {
     }
 
     get bufferedAmount(): number {
-        return this._socket?.bufferedAmount || 0;
+        return this._socket?.bufferedAmount ?? 0;
     }
 
     async isBroadcastLeader() {
@@ -248,33 +264,276 @@ export class SCP {
             });
     }
 
-    async connect(url: string, userKey: Key, knownTrustedKey: Uint8Array | string | undefined = undefined, protocol: NNG.Protocol = NNG.Protocol.pair1): Promise<void> {
+    async _performServerNegotiation(): Promise<void> {
+
+        if (!this._endpoint) return Promise.reject(ErrorMessage[ErrorCodes.ENOTCONNT]);
+
+        let serverEcdsaPubKey: CryptoKey;
+        const ecdh = await crypto.subtle.generateKey({ name: 'ECDH', namedCurve: 'P-256' }, true, ['deriveBits']);
+        if (!ecdh.publicKey) return Promise.reject(ErrorMessage[ErrorCodes.EECDHGENF]);
+        const trustedKey = Uint8Array.from(Utils.fromBase64(this._endpoint.knownTrustedKey ?? Utils.toBase64(Utils.getRandomBytes(64))));
+        const ecdhPubKeyRaw = new Uint8Array(await crypto.subtle.exportKey('raw', ecdh.publicKey)).subarray(1);
+        return new Promise<Uint8Array>((resolve, reject) => {
+            const tId = setTimeout(() => {
+                reject(ErrorMessage[ErrorCodes.ETIMOCHEL]);
+            }, 3000);
+            this._socket
+                ?.onmessage((x) => {
+                    clearTimeout(tId);
+                    resolve(x);
+                })
+                .send(ecdhPubKeyRaw);
+        })
+            .then(async (serverHello: Uint8Array): Promise<Uint8Array> => {
+                const pow = this._computeProofOfWork(serverHello.subarray(0, 32));
+                const clientProofOfWork = Utils.concatBytesArrays([pow, trustedKey]);
+                return new Promise((resolve, reject) => {
+                    const tId = setTimeout(() => {
+                        reject(ErrorMessage[ErrorCodes.ETIMOCPOW]);
+                    }, 3000);
+                    this._socket
+                        ?.onmessage((x) => {
+                            clearTimeout(tId);
+                            resolve(x);
+                        })
+                        .send(clientProofOfWork);
+                });
+            })
+            .then(async (serverIdentity: Uint8Array): Promise<Uint8Array> => {
+                const preMasterSecret = serverIdentity.subarray(0, 32);
+                const serverEcdhPubKey = await crypto.subtle.importKey(
+                    'raw',
+                    Utils.concatBytes(/*uncompressed*/ Uint8Array.from([4]), serverIdentity.subarray(32, 96)),
+                    { name: 'ECDH', namedCurve: 'P-256' },
+                    false,
+                    []
+                );
+                serverEcdsaPubKey = await crypto.subtle.importKey(
+                    'raw',
+                    Utils.concatBytes(/*uncompressed*/ Uint8Array.from([4]), serverIdentity.subarray(serverIdentity.length - 64)),
+                    { name: 'ECDSA', namedCurve: 'P-256' },
+                    false,
+                    ['verify']
+                );
+
+                // Check inheritance from Secretarium knownTrustedKey
+                const knownTrustedKeyPath = serverIdentity.subarray(96);
+
+                if (!this._endpoint?.knownTrustedKey)
+                    this._options.logger?.info?.('No knownTrustedKey provided, server identity will not be verified');
+                else if (knownTrustedKeyPath.length === 64) {
+                    if (!Utils.sequenceEqual(trustedKey, knownTrustedKeyPath)) throw new Error(ErrorMessage[ErrorCodes.ETINSRVID]);
+                } else {
+                    for (let i = 0; i < knownTrustedKeyPath.length - 64; i = i + 128) {
+                        const key = knownTrustedKeyPath.subarray(i, 64);
+                        const proof = knownTrustedKeyPath.subarray(i + 64, 64);
+                        const keyChild = knownTrustedKeyPath.subarray(i + 128, 64);
+                        const ecdsaKey = await crypto.subtle.importKey('raw', Utils.concatBytes(/*uncompressed*/ Uint8Array.from([4]), key), { name: 'ECDSA', namedCurve: 'P-256' }, false, [
+                            'verify'
+                        ]);
+                        if (!(await crypto.subtle.verify({ name: 'ECDSA', hash: { name: 'SHA-256' } }, ecdsaKey, proof, keyChild))) throw new Error(`${ErrorMessage[ErrorCodes.ETINSRVIC]}${i}`);
+                    }
+                }
+
+                if (!ecdh.privateKey) return Promise.reject(ErrorMessage[ErrorCodes.EECDHGENF]);
+
+                const commonSecret = await crypto.subtle.deriveBits({ name: 'ECDH', namedCurve: 'P-256', public: serverEcdhPubKey } as any, ecdh.privateKey, 256);
+                const sha256Common = new Uint8Array(await crypto.subtle.digest({ name: 'SHA-256' }, commonSecret));
+                const symmetricKey = Utils.xor(preMasterSecret, sha256Common);
+                const iv = symmetricKey.subarray(16);
+                const key = symmetricKey.subarray(0, 16);
+                const cryptoKey = await crypto.subtle.importKey('raw', key, { name: 'AES-GCM' }, false, ['encrypt', 'decrypt']);
+                this._session = new SCPSession(iv, cryptoKey);
+
+                if (!this._userKey) throw new Error(ErrorMessage[ErrorCodes.ETINUSRKY]);
+                const cryptoKeyPair = this._userKey.getCryptoKeyPair();
+                const publicKeyRaw = await this._userKey.getRawPublicKey();
+
+                if (!cryptoKeyPair?.privateKey || !publicKeyRaw) throw new Error(ErrorMessage[ErrorCodes.ETINUSRKY]);
+
+                const nonce = Utils.getRandomBytes(32);
+                const signedNonce = new Uint8Array(await crypto.subtle.sign({ name: 'ECDSA', hash: { name: 'SHA-256' } }, cryptoKeyPair.privateKey, nonce));
+                const clientProofOfIdentity = Utils.concatBytesArrays([nonce, ecdhPubKeyRaw, publicKeyRaw, signedNonce]);
+
+                const encryptedClientProofOfIdentity = await this._encrypt(clientProofOfIdentity);
+                return new Promise((resolve, reject) => {
+                    const tId = setTimeout(() => {
+                        reject(ErrorMessage[ErrorCodes.ETIMOCPOI]);
+                    }, 3000);
+                    this._socket
+                        ?.onmessage((x) => {
+                            clearTimeout(tId);
+                            resolve(x);
+                        })
+                        .send(encryptedClientProofOfIdentity);
+                });
+            })
+            .then(async (serverProofOfIdentityEncrypted: Uint8Array): Promise<void> => {
+                const serverProofOfIdentity = await this._decrypt(serverProofOfIdentityEncrypted);
+                const welcome = Utils.encode(Secrets.SRTWELCOME);
+                const toVerify = Utils.concatBytes(serverProofOfIdentity.subarray(0, 32), welcome);
+                const serverSignedHash = serverProofOfIdentity.subarray(32, 96);
+                const check = await crypto.subtle.verify({ name: 'ECDSA', hash: { name: 'SHA-256' } }, serverEcdsaPubKey, serverSignedHash, toVerify);
+                if (!check) throw new Error(ErrorMessage[ErrorCodes.ETINSRVPI]);
+            }).catch((e: Error) => {
+                console.error(e.name, e);
+            });
+    }
+
+    async _performGatewayConnection(): Promise<void> {
+
+        new Promise((resolve, reject) => {
+            const tId = setTimeout(() => {
+                reject(ErrorMessage[ErrorCodes.ETIMOCHEG]);
+            }, 3000);
+            this._socket
+                ?.onmessage((x) => {
+                    clearTimeout(tId);
+                    resolve(x);
+                })
+                .send(Utils.encode(JSON.stringify({
+                    type: 'hello'
+                })));
+        }).then((sessionResponse) => {
+            try {
+                const data = JSON.parse(Utils.decode(sessionResponse as Uint8Array));
+                this._gatewaySessionId = data.gateway_session_id;
+
+                // TODO: With the gateway, we need to wait for the application to connect
+                // This is therefore not a good representation of the connection state
+                this._updateState(ConnectionState.secure);
+            } catch (error: unknown) {
+                this._options.logger?.error?.('Secretarium: Error when parsing gateway session response', error);
+                this._updateState(ConnectionState.closed);
+            }
+        });
+
+    }
+
+    async _performDirectConnection(): Promise<void> {
+
+        return this._performServerNegotiation()
+            .then(() => {
+                this._socket?.onmessage(async (encrypted) => {
+                    try {
+                        const data = await this._decrypt(encrypted);
+                        if (!data)
+                            return;
+                        const json = Utils.decode(data);
+                        if (await this.isBroadcastLeader()) {
+                            await this._notify(json);
+                            this._broadcastChannel?.postMessage({
+                                type: 'response',
+                                data
+                            });
+                        }
+                    } catch (e: any) {
+                        console.error(e.name, e);
+                    }
+                });
+
+                this._updateState(ConnectionState.secure);
+            });
+    }
+
+    async _performClusterNegotiation() {
+
+        if (!this._endpoint) return Promise.reject(ErrorMessage[ErrorCodes.ENOTCONNT]);
+        if (!this._socket) return Promise.reject(ErrorMessage[ErrorCodes.ENOTCONNT]);
+
+        this._socket
+            .onerror(() => {
+                this._updateState(ConnectionState.closed);
+            })
+            .onclose(() => {
+                this._updateState(ConnectionState.closed);
+            });
+
+        return new Promise<{
+            withGateway: boolean;
+        }>((resolve) => {
+            const tId = setTimeout(() => {
+                resolve({
+                    withGateway: false
+                });
+            }, this._options.gatewayTimeout ?? 1000);
+            this._socket
+                ?.onmessage((x) => {
+                    try {
+                        clearTimeout(tId);
+                        const protocol = Utils.decode(x);
+                        const protoParse = /(KSCP)-([0-9.]+)-([\S]*?)_([0-9.]+) *(.*)/.exec(protocol);
+                        if (!protoParse || protoParse.length !== 6)
+                            return resolve({
+                                withGateway: false
+                            });
+                        this._options.logger?.debug?.('Secretarium: Protocol', protocol);
+                        if (protoParse[3] === 'gateway') {
+                            this._connectionInfo.protocol = protoParse[1] ?? '';
+                            this._connectionInfo.protocolVersion = protoParse[2] ?? '';
+                            this._connectionInfo.server = protoParse[3];
+                            this._connectionInfo.serverVersion = protoParse[4];
+                            this._connectionInfo.serverComment = protoParse[5];
+                            resolve({
+                                withGateway: true
+                            });
+                        }
+                    } catch (error: unknown) {
+                        this._options.logger?.error?.('Secretarium: Error when parsing protocol', error);
+                    }
+                    resolve({
+                        withGateway: false
+                    });
+                });
+            // .connect(url)
+        }).then(async (res: { withGateway: boolean }) => {
+            if (res.withGateway) {
+                this._viaGateway = true;
+                return this._performGatewayConnection();
+            }
+            this._viaGateway = false;
+            return this._performDirectConnection();
+        });
+    }
+
+    getConnectionInfo() {
+        return this._connectionInfo;
+    }
+
+    getSessionInfo() {
+        return {
+            sessionId: this._appSessionId,
+            nodeId: this._appNodeId,
+            gatewaySessionId: this._gatewaySessionId
+        };
+    }
+
+    async connect(url: string, userKey: Key, knownTrustedKey: Uint8Array | string | undefined = undefined): Promise<void> {
 
         if (!await this.isBroadcastLeader()) {
-            console.log('this is not the leader');
+            console.log('This connector instance is not the leader');
             return;
         }
-        // if (this._socket && this._socket.state < ConnectionState.closing) this._socket.close();
 
         this._endpoint = {
-            url,
-            knownTrustedKey: knownTrustedKey ? typeof knownTrustedKey === 'string' ? knownTrustedKey : Utils.toBase64(knownTrustedKey) : undefined
+            url
         };
 
+        if (knownTrustedKey)
+            this._endpoint.knownTrustedKey = typeof knownTrustedKey === 'string' ? knownTrustedKey : Utils.toBase64(knownTrustedKey);
+
+
         this._updateState(ConnectionState.connecting);
-        const trustedKey = Uint8Array.from(Utils.fromBase64(this._endpoint.knownTrustedKey ?? Utils.toBase64(Utils.getRandomBytes(64))));
-        const socket = (this._socket = new NNG.WS());
-        let ecdh: CryptoKeyPair;
-        let ecdhPubKeyRaw: Uint8Array;
-        let serverEcdsaPubKey: CryptoKey;
+        this._socket = new NNG.WS();
+        this._userKey = userKey;
 
         return new Promise((resolve, reject) => {
             new Promise((resolve, reject) => {
                 const tId = setTimeout(() => {
                     reject(ErrorMessage[ErrorCodes.ETIMOCHEL]);
                 }, 3000);
-                socket
-                    .onopen((x) => {
+                this._socket
+                    ?.onopen((x) => {
                         clearTimeout(tId);
                         resolve(x);
                     })
@@ -282,145 +541,16 @@ export class SCP {
                     .onerror(reject)
                     // This sometimes gets swallowed by `onerror`
                     .onclose(reject)
-                    .connect(url, protocol);
+                    .connect(url);
             })
-                .then(async (): Promise<Uint8Array> => {
-                    socket
-                        .onerror(() => {
-                            this._updateState(ConnectionState.closed);
-                        })
-                        .onclose(() => {
-                            this._updateState(ConnectionState.closed);
-                        });
-
-                    ecdh = await crypto.subtle!.generateKey({ name: 'ECDH', namedCurve: 'P-256' }, true, ['deriveBits']);
-                    if (!ecdh.publicKey) return Promise.reject(ErrorMessage[ErrorCodes.EECDHGENF]);
-                    ecdhPubKeyRaw = new Uint8Array(await crypto.subtle!.exportKey('raw', ecdh.publicKey)).subarray(1);
-                    return new Promise((resolve, reject) => {
-                        const tId = setTimeout(() => {
-                            reject(ErrorMessage[ErrorCodes.ETIMOCHEL]);
-                        }, 3000);
-                        socket
-                            .onmessage((x) => {
-                                clearTimeout(tId);
-                                resolve(x);
-                            })
-                            .send(ecdhPubKeyRaw);
-                    });
-                })
-                .then(async (serverHello: Uint8Array): Promise<Uint8Array> => {
-                    const pow = this._computeProofOfWork(serverHello.subarray(0, 32));
-                    const clientProofOfWork = Utils.concatBytesArrays([pow, trustedKey]);
-                    return new Promise((resolve, reject) => {
-                        const tId = setTimeout(() => {
-                            reject(ErrorMessage[ErrorCodes.ETIMOCPOW]);
-                        }, 3000);
-                        socket
-                            .onmessage((x) => {
-                                clearTimeout(tId);
-                                resolve(x);
-                            })
-                            .send(clientProofOfWork);
-                    });
-                })
-                .then(async (serverIdentity: Uint8Array): Promise<Uint8Array> => {
-                    const preMasterSecret = serverIdentity.subarray(0, 32);
-                    const serverEcdhPubKey = await crypto.subtle!.importKey(
-                        'raw',
-                        Utils.concatBytes(/*uncompressed*/ Uint8Array.from([4]), serverIdentity.subarray(32, 96)),
-                        { name: 'ECDH', namedCurve: 'P-256' },
-                        false,
-                        []
-                    );
-                    serverEcdsaPubKey = await crypto.subtle!.importKey(
-                        'raw',
-                        Utils.concatBytes(/*uncompressed*/ Uint8Array.from([4]), serverIdentity.subarray(serverIdentity.length - 64)),
-                        { name: 'ECDSA', namedCurve: 'P-256' },
-                        false,
-                        ['verify']
-                    );
-
-                    // Check inheritance from Secretarium knownTrustedKey
-                    const knownTrustedKeyPath = serverIdentity.subarray(96);
-                    if (!this._endpoint?.knownTrustedKey)
-                        this._options.logger?.info?.('No knownTrustedKey provided, server identity will not be verified');
-                    else if (knownTrustedKeyPath.length === 64) {
-                        if (!Utils.sequenceEqual(trustedKey, knownTrustedKeyPath)) throw new Error(ErrorMessage[ErrorCodes.ETINSRVID]);
-                    } else {
-                        for (let i = 0; i < knownTrustedKeyPath.length - 64; i = i + 128) {
-                            const key = knownTrustedKeyPath.subarray(i, 64);
-                            const proof = knownTrustedKeyPath.subarray(i + 64, 64);
-                            const keyChild = knownTrustedKeyPath.subarray(i + 128, 64);
-                            const ecdsaKey = await crypto.subtle!.importKey('raw', Utils.concatBytes(/*uncompressed*/ Uint8Array.from([4]), key), { name: 'ECDSA', namedCurve: 'P-256' }, false, [
-                                'verify'
-                            ]);
-                            if (!(await crypto.subtle!.verify({ name: 'ECDSA', hash: { name: 'SHA-256' } }, ecdsaKey, proof, keyChild))) throw new Error(`${ErrorMessage[ErrorCodes.ETINSRVIC]}${i}`);
-                        }
-                    }
-
-                    if (!ecdh.privateKey) return Promise.reject(ErrorMessage[ErrorCodes.EECDHGENF]);
-
-                    const commonSecret = await crypto.subtle!.deriveBits({ name: 'ECDH', namedCurve: 'P-256', public: serverEcdhPubKey } as any, ecdh.privateKey, 256);
-                    const sha256Common = new Uint8Array(await crypto.subtle!.digest({ name: 'SHA-256' }, commonSecret));
-                    const symmetricKey = Utils.xor(preMasterSecret, sha256Common);
-                    const iv = symmetricKey.subarray(16);
-                    const key = symmetricKey.subarray(0, 16);
-                    const cryptoKey = await crypto.subtle!.importKey('raw', key, { name: 'AES-GCM' }, false, ['encrypt', 'decrypt']);
-                    this._session = new SCPSession(iv, cryptoKey);
-
-                    const cryptoKeyPair = userKey.getCryptoKeyPair();
-                    const publicKeyRaw = await userKey.getRawPublicKey();
-                    if (!userKey || !cryptoKeyPair?.privateKey || !publicKeyRaw) throw new Error(ErrorMessage[ErrorCodes.ETINUSRKY]);
-
-                    const nonce = Utils.getRandomBytes(32);
-                    const signedNonce = new Uint8Array(await crypto.subtle!.sign({ name: 'ECDSA', hash: { name: 'SHA-256' } }, cryptoKeyPair.privateKey, nonce));
-                    const clientProofOfIdentity = Utils.concatBytesArrays([nonce, ecdhPubKeyRaw, publicKeyRaw, signedNonce]);
-
-                    const encryptedClientProofOfIdentity = await this._encrypt(clientProofOfIdentity);
-                    return new Promise((resolve, reject) => {
-                        const tId = setTimeout(() => {
-                            reject(ErrorMessage[ErrorCodes.ETIMOCPOI]);
-                        }, 3000);
-                        socket
-                            .onmessage((x) => {
-                                clearTimeout(tId);
-                                resolve(x);
-                            })
-                            .send(encryptedClientProofOfIdentity);
-                    });
-                })
-                .then(async (serverProofOfIdentityEncrypted: Uint8Array): Promise<void> => {
-                    const serverProofOfIdentity = await this._decrypt(serverProofOfIdentityEncrypted);
-                    const welcome = Utils.encode(Secrets.SRTWELCOME);
-                    const toVerify = Utils.concatBytes(serverProofOfIdentity.subarray(0, 32), welcome);
-                    const serverSignedHash = serverProofOfIdentity.subarray(32, 96);
-                    const check = await crypto.subtle!.verify({ name: 'ECDSA', hash: { name: 'SHA-256' } }, serverEcdsaPubKey, serverSignedHash, toVerify);
-                    if (!check) throw new Error(ErrorMessage[ErrorCodes.ETINSRVPI]);
-
-                    socket.onmessage(async (encrypted) => {
-                        try {
-                            const data = await this._decrypt(encrypted);
-                            if (!data)
-                                return;
-                            const json = Utils.decode(data);
-                            if (await this.isBroadcastLeader()) {
-                                await this._notify(json);
-                                this._broadcastChannel?.postMessage({
-                                    type: 'response',
-                                    data
-                                });
-                            }
-                        } catch (e: any) {
-                            console.error(e.name, e);
-                        }
-                    });
-
-                    this._updateState(ConnectionState.secure);
+                .then(async () => {
+                    await this._performClusterNegotiation();
                     resolve();
                 })
+
                 .catch((e: Error) => {
                     this._updateState(ConnectionState.closing);
-                    socket.close();
+                    this._socket?.close();
                     this._updateState(ConnectionState.closed);
                     const error: string = e.message ?? (e as any).type ?? e.toString();
                     reject(`${ErrorMessage[ErrorCodes.EUNABLCON]}${error}`);
@@ -428,12 +558,12 @@ export class SCP {
         });
     }
 
-    onError(handler: (err: string) => void): SCP {
+    onError(handler: (err: string) => void): this {
         this._onError = handler;
         return this;
     }
 
-    onStateChange(handler: (state: ConnectionState) => void): SCP {
+    onStateChange(handler: (state: ConnectionState) => void): this {
         this._onStateChange = handler;
         return this;
     }
@@ -465,11 +595,11 @@ export class SCP {
         });
         const query: Query<ResultType, ErrorType> = {
             onError: (x) => {
-                (cbs.onError = cbs.onError || []).push(x);
+                cbs.onError = (cbs.onError ?? []).concat([x]);
                 return query;
             },
             onResult: (x) => {
-                (cbs.onResult = cbs.onResult || []).push(x);
+                cbs.onResult = (cbs.onResult ?? []).concat([x]);
                 return query;
             },
             send: async () => {
@@ -499,30 +629,30 @@ export class SCP {
         });
         const tx: Transaction<ResultType, ErrorType> = {
             onError: (x) => {
-                (cbs.onError = cbs.onError || []).push(x);
+                cbs.onError = (cbs.onError ?? []).concat([x]);
                 return tx;
             },
             onAcknowledged: (x) => {
-                (cbs.onAcknowledged = cbs.onAcknowledged || []).push(x);
+                cbs.onAcknowledged = (cbs.onAcknowledged ?? []).concat([x]);
                 return tx;
             },
             /**
-         * @deprecated onPropose handlers were retired in Secretarium Core 1.0.0
-         */
+             * @deprecated onPropose handlers were retired in Secretarium Core 1.0.0
+             */
             onProposed: (x) => {
-                (cbs.onProposed = cbs.onProposed || []).push(x);
+                cbs.onProposed = (cbs.onProposed ?? []).concat([x]);
                 return tx;
             },
             onCommitted: (x) => {
-                (cbs.onCommitted = cbs.onCommitted || []).push(x);
+                cbs.onCommitted = (cbs.onCommitted ?? []).concat([x]);
                 return tx;
             },
             onExecuted: (x) => {
-                (cbs.onExecuted = cbs.onExecuted || []).push(x);
+                cbs.onExecuted = (cbs.onExecuted ?? []).concat([x]);
                 return tx;
             },
             onResult: (x) => {
-                (cbs.onResult = cbs.onResult || []).push(x);
+                cbs.onResult = (cbs.onResult ?? []).concat([x]);
                 return tx;
             }, // for chained tx + query
             send: async () => {
@@ -548,6 +678,90 @@ export class SCP {
         return encrypted;
     }
 
+    private async _connectSocketToApp(app: string): Promise<void> {
+
+        if (this._appConnectionAction.has(app)) {
+            await this._appConnectionAction.get(app);
+            this._appConnectionAction.delete(app);
+            return;
+        }
+
+        if (!this._socket || this._socket.state !== ConnectionState.secure)
+            return Promise.reject(ErrorMessage[ErrorCodes.ENOTCONNT]);
+
+        let appConnectionAttemptResover: Parameters<ConstructorParameters<typeof Promise<void>>[0]>[0];
+        const appConnectionAttempt = new Promise<void>((resolve) => {
+            appConnectionAttemptResover = resolve;
+        });
+        this._appConnectionAction.set(app, appConnectionAttempt);
+
+        return new Promise<Uint8Array>((resolve, reject) => {
+            const tId = setTimeout(() => {
+                reject(ErrorMessage[ErrorCodes.ETIMOAHEL]);
+            }, 3000);
+            this._socket
+                ?.onmessage((x) => {
+                    clearTimeout(tId);
+                    resolve(x);
+                })
+                .send(Utils.encode(JSON.stringify({
+                    type: 'connect',
+                    app_id: app
+                })));
+        }).then(async (appConnectResponse) => {
+            try {
+                const data = JSON.parse(Utils.decode(appConnectResponse));
+                if (!data || data.type === 'error')
+                    return Promise.reject(`${ErrorMessage[ErrorCodes.EUNABLCOA]}${data.message?.trim() ?? 'Unknown cause'}`);
+                this._appSessionId = data.session_id;
+                this._appNodeId = data.node;
+                this._socket?.onWrap((message) => {
+                    const sendMessage = {
+                        type: 'send',
+                        session_id: this._appSessionId,
+                        payload: Utils.toBase64(message)
+                    };
+                    return Utils.encode(JSON.stringify(sendMessage));
+                });
+                this._socket?.onUnwrap((message) => {
+                    const unwrappedMessage = JSON.parse(Utils.decode(message));
+                    const encrypted = Utils.fromBase64(unwrappedMessage.payload);
+                    return encrypted;
+                });
+                await this._performServerNegotiation();
+                this._socket?.onmessage(async (encrypted) => {
+                    try {
+                        const data = await this._decrypt(encrypted);
+                        if (!data)
+                            return;
+                        const json = Utils.decode(data);
+                        if (await this.isBroadcastLeader()) {
+                            await this._notify(json);
+                            this._broadcastChannel?.postMessage({
+                                type: 'response',
+                                data
+                            });
+                        }
+                    } catch (e: any) {
+                        console.error(e.name, e);
+                    }
+                });
+                appConnectionAttemptResover();
+            } catch (error: unknown) {
+                this._options.logger?.error?.('Secretarium: Error when establishing app connection', error);
+            }
+        });
+    }
+
+    private async _getConnectedSocket(app: string): Promise<NNG.WS | null> {
+        if (this._viaGateway)
+            await this._connectSocketToApp(app);
+
+        if (!this._socket || !this._session || this._socket.state !== ConnectionState.secure)
+            return null;
+        return this._socket;
+    }
+
     async send(app: string, command: string, requestId: string, args?: Record<string, unknown> | string): Promise<void> {
 
         const query = {
@@ -559,7 +773,8 @@ export class SCP {
 
         if (await this.isBroadcastLeader()) {
 
-            if (!this._socket || !this._session || this._socket.state !== ConnectionState.secure) {
+            const destinationSocket = await this._getConnectedSocket(app);
+            if (!destinationSocket) {
                 const z = this._requests[requestId]?.onError;
                 if (z) {
                     z.forEach((cb) => cb(ErrorMessage[ErrorCodes.ENOTCONNT], requestId));
@@ -570,7 +785,7 @@ export class SCP {
             const encrypted = await this._prepare(query);
 
             if (app !== '__local__') {
-                this._socket.send(encrypted);
+                destinationSocket.send(encrypted);
             }
         }
 
@@ -580,7 +795,7 @@ export class SCP {
         });
     }
 
-    close(): SCP {
+    close(): this {
         if (this._socket) this._socket.close();
         return this;
     }
