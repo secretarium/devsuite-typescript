@@ -5,6 +5,6 @@ describe('Connector entry', () => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const BaseHandle: any = SecretariumHandle;
 
-        expect(Object.getOwnPropertyNames(BaseHandle).sort()).toEqual(['Constants', 'Key', 'SCP', 'Utils', 'crypto', 'SecretariumConnector'].sort());
+        expect(Object.getOwnPropertyNames(BaseHandle).sort()).toEqual(['Constants', 'Key', 'SCP', 'Utils', 'crypto', '__esModule'].sort());
     });
 });

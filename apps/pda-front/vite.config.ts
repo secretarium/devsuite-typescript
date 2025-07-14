@@ -2,7 +2,7 @@
 import { defineConfig, searchForWorkspaceRoot } from 'vite';
 import path from 'node:path';
 import tailwindcss from '@tailwindcss/vite';
-import { TanStackRouterVite } from '@tanstack/router-vite-plugin';
+import { tanstackRouter } from '@tanstack/router-vite-plugin';
 import react from '@vitejs/plugin-react-swc';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 import git from 'git-rev-sync';
@@ -27,7 +27,7 @@ export default defineConfig({
         host: 'localhost'
     },
 
-    plugins: [react(), nxViteTsPaths(), tailwindcss(), TanStackRouterVite({
+    plugins: [react(), nxViteTsPaths(), tailwindcss(), tanstackRouter({
         routesDirectory: path.join(__dirname, 'src/routes'),
         generatedRouteTree: path.join(__dirname, './src/routeTree.gen.ts'),
         enableRouteGeneration: true,

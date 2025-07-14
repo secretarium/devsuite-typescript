@@ -1,10 +1,14 @@
-/* eslint-disable */
 import * as path from 'node:path';
 import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // Reading the SWC compilation config and remove the "exclude"
 // for the test files to be compiled by SWC
-const { exclude: _, ...swcJestConfig } = JSON.parse(
+const { exclude: __unusedExclude, ...swcJestConfig } = JSON.parse(
     readFileSync(`${__dirname}/.swcrc`, 'utf-8')
 ) as any;
 
@@ -14,7 +18,7 @@ if (swcJestConfig.swcrc === undefined) {
     swcJestConfig.swcrc = false;
 }
 
-swcJestConfig.jsc.transform.react = { runtime: 'automatic' }
+swcJestConfig.jsc.transform.react = { runtime: 'automatic' };
 
 console.log(JSON.stringify(swcJestConfig, null, 2));
 // Uncomment if using global setup/teardown files being transformed via swc
@@ -26,7 +30,7 @@ export default {
     displayName: 'endoscope',
     preset: '../../jest.preset.cjs',
     transform: {
-        '^.+\\.[tj]sx?$': ['@swc/jest', swcJestConfig],
+        '^.+\\.[tj]sx?$': ['@swc/jest', swcJestConfig]
     },
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'html'],
     testEnvironment: 'jsdom',

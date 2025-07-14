@@ -1,5 +1,10 @@
 import { readFileSync } from 'fs';
 import type { Options } from '@swc/core';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // Reading the SWC compilation config and remove the "exclude"
 // for the test files to be compiled by SWC
