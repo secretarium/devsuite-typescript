@@ -33,7 +33,7 @@ jobs:
 
       - name: Publish artifacts
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKENTOKEN }}
         run: nx show projects | grep -F -x '`echo ${{ env.GITHUB_REF_NAME }} | cut -d'@' -f1`' | xargs -I '{}' yarn nx publish {} --configuration=production --parallel=1
         # run: npm publish --provenance
 

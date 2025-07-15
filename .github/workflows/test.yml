@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [main, develop]
 
+permissions:
+  contents: read
+  actions: read
+  pull-requests: read
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -25,7 +30,7 @@ jobs:
           fetch-depth: 0
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
-        uses: nrwl/nx-set-shas@v4
+        uses: nrwl/nx-set-shas@dbe0650947e5f2c81f59190a38512cf49126fe6b # v4.3.0
 
       - run: |
           echo "Nx base: ${{ env.NX_BASE }}"
