@@ -171,7 +171,7 @@
         "@svgr/webpack": "8.1.0",
         "@swc-node/register": "~1.10.10",
         "@swc/cli": "0.7.8",
-        "@swc/core": "1.12.14",
+        "@swc/core": "1.13.1",
         "@swc/helpers": "0.5.17",
         "@swc/jest": "0.2.39",
         "@tailwindcss/postcss": "4.1.11",
@@ -207,7 +207,7 @@
         "cypress": "14.5.1",
         "detox": "20.40.2",
         "eas-cli": "16.15.0",
-        "esbuild": "0.25.6",
+        "esbuild": "0.25.8",
         "esbuild-node-externals": "1.18.0",
         "eslint": "9.31.0",
         "eslint-config-prettier": "10.1.5",
@@ -250,7 +250,7 @@
         "verdaccio": "^6.1.5",
         "vite": "^7.0.4",
         "vitest": "^3.2.4",
-        "webpack": "^5.100.1"
+        "webpack": "^5.100.2"
     },
     "expo": {
         "install": {
