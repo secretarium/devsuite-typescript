@@ -1753,20 +1753,7 @@
     "@babel/parser" "^7.27.2"
     "@babel/types" "^7.27.1"
 
-"@babel/traverse--for-generate-function-map@npm:@babel/traverse@^7.25.3":
-  version "7.28.0"
-  resolved "https://registry.yarnpkg.com/@babel/traverse/-/traverse-7.28.0.tgz#518aa113359b062042379e333db18380b537e34b"
-  integrity sha512-mGe7UK5wWyh0bKRfupsUchrQGqvDbZDbKJw+kcRGSmdHVYrv+ltd0pnpDTVpiTqnaBru9iEvA8pz8W46v0Amwg==
-  dependencies:
-    "@babel/code-frame" "^7.27.1"
-    "@babel/generator" "^7.28.0"
-    "@babel/helper-globals" "^7.28.0"
-    "@babel/parser" "^7.28.0"
-    "@babel/template" "^7.27.2"
-    "@babel/types" "^7.28.0"
-    debug "^4.3.1"
-
-"@babel/traverse@^7.16.0", "@babel/traverse@^7.23.7", "@babel/traverse@^7.25.3", "@babel/traverse@^7.27.1", "@babel/traverse@^7.27.3", "@babel/traverse@^7.27.7", "@babel/traverse@^7.28.0":
+"@babel/traverse--for-generate-function-map@npm:@babel/traverse@^7.25.3", "@babel/traverse@^7.16.0", "@babel/traverse@^7.23.7", "@babel/traverse@^7.25.3", "@babel/traverse@^7.27.1", "@babel/traverse@^7.27.3", "@babel/traverse@^7.27.7", "@babel/traverse@^7.28.0":
   version "7.28.0"
   resolved "https://registry.yarnpkg.com/@babel/traverse/-/traverse-7.28.0.tgz#518aa113359b062042379e333db18380b537e34b"
   integrity sha512-mGe7UK5wWyh0bKRfupsUchrQGqvDbZDbKJw+kcRGSmdHVYrv+ltd0pnpDTVpiTqnaBru9iEvA8pz8W46v0Amwg==
@@ -5176,12 +5163,26 @@
   dependencies:
     "@sentry/core" "9.38.0"
 
+"@sentry-internal/browser-utils@9.44.0":
+  version "9.44.0"
+  resolved "https://registry.yarnpkg.com/@sentry-internal/browser-utils/-/browser-utils-9.44.0.tgz#1bb9cfe7bcc0e5f87c060133e2e3f0b9d7ab6e06"
+  integrity sha512-ySIXxq3xq2lhY/XPMLUtaUd6HghJUsz+S5GksuRCxv6exY6mRMjsbm7VhcAEPmY4IrhsXjnEzCONP+M7pzAc3A==
+  dependencies:
+    "@sentry/core" "9.44.0"
+
 "@sentry-internal/feedback@9.38.0":
   version "9.38.0"
   resolved "https://registry.yarnpkg.com/@sentry-internal/feedback/-/feedback-9.38.0.tgz#dc816c819dbacb0ff3dcfe863e9f3bc06a687b93"
   integrity sha512-vDVufE9WLqHCmUL2sa3nIKz5ARaBdaqCG+b9/hwkmkLnqaQUBiHE+ArxoYuc2toWqaELxSHcMDp2ajkeDBQeLA==
   dependencies:
     "@sentry/core" "9.38.0"
+
+"@sentry-internal/feedback@9.44.0":
+  version "9.44.0"
+  resolved "https://registry.yarnpkg.com/@sentry-internal/feedback/-/feedback-9.44.0.tgz#1fe4fe83e42122b4bba31ac8882b0a15371a347a"
+  integrity sha512-ptA74gXPU7qV9eBuz2UUyFv+BroMrVMZD58eIG3IkRu93mAH0dhJiKmd1rhlWheXfhFhiw82WdNH9sTQj7++GA==
+  dependencies:
+    "@sentry/core" "9.44.0"
 
 "@sentry-internal/replay-canvas@9.38.0":
   version "9.38.0"
@@ -5191,6 +5192,14 @@
     "@sentry-internal/replay" "9.38.0"
     "@sentry/core" "9.38.0"
 
+"@sentry-internal/replay-canvas@9.44.0":
+  version "9.44.0"
+  resolved "https://registry.yarnpkg.com/@sentry-internal/replay-canvas/-/replay-canvas-9.44.0.tgz#9a580a53eb7721eec6a5b4b0d233150378de3b71"
+  integrity sha512-JTRBlKsd46tz/bE6FE8bRsapteWwBt+4eviYZlE6Wn/QSirYOqEniibhJ8GIUIpUmHpkrvNAfIRaKJ4tXYaqGQ==
+  dependencies:
+    "@sentry-internal/replay" "9.44.0"
+    "@sentry/core" "9.44.0"
+
 "@sentry-internal/replay@9.38.0":
   version "9.38.0"
   resolved "https://registry.yarnpkg.com/@sentry-internal/replay/-/replay-9.38.0.tgz#a14470dafc79ead02f75da0b019961e1d3ca2b91"
@@ -5199,12 +5208,20 @@
     "@sentry-internal/browser-utils" "9.38.0"
     "@sentry/core" "9.38.0"
 
+"@sentry-internal/replay@9.44.0":
+  version "9.44.0"
+  resolved "https://registry.yarnpkg.com/@sentry-internal/replay/-/replay-9.44.0.tgz#0fd0b1f5c682113c97584cca0094879751953064"
+  integrity sha512-IVRbONKaoxcDItpcXV9wpNCL+T5iMnTLJv2glMULMnqU4nplhBynxjSyng1s/rpTU4PwwYYIgwkb4Z0GMIYPlg==
+  dependencies:
+    "@sentry-internal/browser-utils" "9.44.0"
+    "@sentry/core" "9.44.0"
+
 "@sentry/babel-plugin-component-annotate@3.5.0":
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/@sentry/babel-plugin-component-annotate/-/babel-plugin-component-annotate-3.5.0.tgz#1b0d01f903b725da876117d551610085c3dd21c7"
   integrity sha512-s2go8w03CDHbF9luFGtBHKJp4cSpsQzNVqgIa9Pfa4wnjipvrK6CxVT4icpLA3YO6kg5u622Yoa5GF3cJdippw==
 
-"@sentry/browser@8.54.0", "@sentry/browser@9.38.0", "@sentry/browser@^9", "@sentry/browser@^9.38.0":
+"@sentry/browser@8.54.0", "@sentry/browser@9.38.0", "@sentry/browser@9.44.0", "@sentry/browser@^9":
   version "9.38.0"
   resolved "https://registry.yarnpkg.com/@sentry/browser/-/browser-9.38.0.tgz#b3a5c317afa1d66dcb4cf0ca618ba9835b5469a6"
   integrity sha512-ZUIeU+3VUD3BntYgB2DkhBD6N9oybsuk1+U7yK1ezHIw/nvkPILcH6MZgPs0Km0RcWWozMUDSbdZNud9/isYmw==
@@ -5214,6 +5231,17 @@
     "@sentry-internal/replay" "9.38.0"
     "@sentry-internal/replay-canvas" "9.38.0"
     "@sentry/core" "9.38.0"
+
+"@sentry/browser@^9.44.0":
+  version "9.44.0"
+  resolved "https://registry.yarnpkg.com/@sentry/browser/-/browser-9.44.0.tgz#e5db81fd0508b24dc71335b443c31efc15422098"
+  integrity sha512-QhZds04ta8m1SGN8jpF22kFu2SyM2FcHM2tFBaFuYTK6b7ouBII6YpYLhXulZvF+xl/pxnYsXHgyeTJ5JseITg==
+  dependencies:
+    "@sentry-internal/browser-utils" "9.44.0"
+    "@sentry-internal/feedback" "9.44.0"
+    "@sentry-internal/replay" "9.44.0"
+    "@sentry-internal/replay-canvas" "9.44.0"
+    "@sentry/core" "9.44.0"
 
 "@sentry/cli-darwin@2.47.0":
   version "2.47.0"
@@ -5275,7 +5303,7 @@
     "@sentry/cli-win32-i686" "2.47.0"
     "@sentry/cli-win32-x64" "2.47.0"
 
-"@sentry/core@8.54.0", "@sentry/core@9.38.0", "@sentry/core@^9":
+"@sentry/core@8.54.0", "@sentry/core@9.38.0", "@sentry/core@9.44.0", "@sentry/core@^9":
   version "9.38.0"
   resolved "https://registry.yarnpkg.com/@sentry/core/-/core-9.38.0.tgz#8055bb856b1f0fc799040cbd34d1f6c6b3883ad3"
   integrity sha512-dUwSv1VXDfsrcY69a/cgZNDsFal6iYOf0C4T+/ylpmgYp5SVe3vQK+2FLXUMuvgnOf+kHO6IeW0RhnhSyUflmA==
@@ -5289,7 +5317,16 @@
     "@sentry/opentelemetry" "9.38.0"
     import-in-the-middle "^1.14.2"
 
-"@sentry/node@^9", "@sentry/node@^9.38.0":
+"@sentry/node-core@9.44.0":
+  version "9.44.0"
+  resolved "https://registry.yarnpkg.com/@sentry/node-core/-/node-core-9.44.0.tgz#d918f2275a33b4c3896cbbe9dd7bbbbc7422853f"
+  integrity sha512-M6HOcA73WWzRuhqw4Fd2dqv9zEsvMteSNYOguTexIQCT2pzk1srACrt4uFfLY01s9FIKjw+tjrQfTbni2adv7Q==
+  dependencies:
+    "@sentry/core" "9.44.0"
+    "@sentry/opentelemetry" "9.44.0"
+    import-in-the-middle "^1.14.2"
+
+"@sentry/node@^9":
   version "9.38.0"
   resolved "https://registry.yarnpkg.com/@sentry/node/-/node-9.38.0.tgz#b5effcff1e8278027d3e4b534595f06237bd1595"
   integrity sha512-OhfRTge6hncSehrTBHpnz5R66OWRd8WMKn6ZoS0nwBmTfREjPkNRfOADIUqEElfyuaNj+gWsqTM1/E915pnZew==
@@ -5330,12 +5367,60 @@
     import-in-the-middle "^1.14.2"
     minimatch "^9.0.0"
 
+"@sentry/node@^9.44.0":
+  version "9.44.0"
+  resolved "https://registry.yarnpkg.com/@sentry/node/-/node-9.44.0.tgz#b9952dd3a16b4e360358042f525dc9840cc7a280"
+  integrity sha512-rU96Q7q7hL4s328z9zFS+ZRK6eHnLFjYbH8XHCxAxGFDLyg9kpkR5to9PjoI+QVPZ/LYAE+Xw0wStoMjWMCFsA==
+  dependencies:
+    "@opentelemetry/api" "^1.9.0"
+    "@opentelemetry/context-async-hooks" "^1.30.1"
+    "@opentelemetry/core" "^1.30.1"
+    "@opentelemetry/instrumentation" "^0.57.2"
+    "@opentelemetry/instrumentation-amqplib" "^0.46.1"
+    "@opentelemetry/instrumentation-connect" "0.43.1"
+    "@opentelemetry/instrumentation-dataloader" "0.16.1"
+    "@opentelemetry/instrumentation-express" "0.47.1"
+    "@opentelemetry/instrumentation-fs" "0.19.1"
+    "@opentelemetry/instrumentation-generic-pool" "0.43.1"
+    "@opentelemetry/instrumentation-graphql" "0.47.1"
+    "@opentelemetry/instrumentation-hapi" "0.45.2"
+    "@opentelemetry/instrumentation-http" "0.57.2"
+    "@opentelemetry/instrumentation-ioredis" "0.47.1"
+    "@opentelemetry/instrumentation-kafkajs" "0.7.1"
+    "@opentelemetry/instrumentation-knex" "0.44.1"
+    "@opentelemetry/instrumentation-koa" "0.47.1"
+    "@opentelemetry/instrumentation-lru-memoizer" "0.44.1"
+    "@opentelemetry/instrumentation-mongodb" "0.52.0"
+    "@opentelemetry/instrumentation-mongoose" "0.46.1"
+    "@opentelemetry/instrumentation-mysql" "0.45.1"
+    "@opentelemetry/instrumentation-mysql2" "0.45.2"
+    "@opentelemetry/instrumentation-pg" "0.51.1"
+    "@opentelemetry/instrumentation-redis-4" "0.46.1"
+    "@opentelemetry/instrumentation-tedious" "0.18.1"
+    "@opentelemetry/instrumentation-undici" "0.10.1"
+    "@opentelemetry/resources" "^1.30.1"
+    "@opentelemetry/sdk-trace-base" "^1.30.1"
+    "@opentelemetry/semantic-conventions" "^1.34.0"
+    "@prisma/instrumentation" "6.11.1"
+    "@sentry/core" "9.44.0"
+    "@sentry/node-core" "9.44.0"
+    "@sentry/opentelemetry" "9.44.0"
+    import-in-the-middle "^1.14.2"
+    minimatch "^9.0.0"
+
 "@sentry/opentelemetry@9.38.0":
   version "9.38.0"
   resolved "https://registry.yarnpkg.com/@sentry/opentelemetry/-/opentelemetry-9.38.0.tgz#494d5e79c17764e5ee603426b648f8089f95b616"
   integrity sha512-Oa0kk4EiBMwCvHS5ZI50M/SMNfGM9ztsmedFEfpS+mZz8y9C5Artd0ukGK4OAYcSBggNVQkhmmhWbwpNnRNQiw==
   dependencies:
     "@sentry/core" "9.38.0"
+
+"@sentry/opentelemetry@9.44.0":
+  version "9.44.0"
+  resolved "https://registry.yarnpkg.com/@sentry/opentelemetry/-/opentelemetry-9.44.0.tgz#cc8bcb4162d224e5f1604dd875efeecda4b8baf2"
+  integrity sha512-OeMiVoLqEXtpYE2VBAGmhK4GfbUa5ivDtL+AF4B+cR+NZkqZFlnA7ItquVfAa2Jd45TIyueEK8yjan5hluQYJQ==
+  dependencies:
+    "@sentry/core" "9.44.0"
 
 "@sentry/react-native@~6.17.0":
   version "6.17.0"
@@ -5350,13 +5435,22 @@
     "@sentry/types" "8.54.0"
     "@sentry/utils" "8.54.0"
 
-"@sentry/react@8.54.0", "@sentry/react@^9", "@sentry/react@^9.38.0":
+"@sentry/react@8.54.0", "@sentry/react@^9":
   version "9.38.0"
   resolved "https://registry.yarnpkg.com/@sentry/react/-/react-9.38.0.tgz#bd417f88330bfa522e5664740a9f22c3d0e380b1"
   integrity sha512-MGnrzEJdwCEhGnQrFvljCGM+19agsC5ONAExRM+TuCVjeDJ/ifegZ4eEUyaGHt7YyjAUszddSbWbpEBUg2zBvQ==
   dependencies:
     "@sentry/browser" "9.38.0"
     "@sentry/core" "9.38.0"
+    hoist-non-react-statics "^3.3.2"
+
+"@sentry/react@^9.44.0":
+  version "9.44.0"
+  resolved "https://registry.yarnpkg.com/@sentry/react/-/react-9.44.0.tgz#0b7a48d9e9d4c52be03ca8ca2057ff79d369626c"
+  integrity sha512-dyWS5VTkLVId55Xs4Hq3C7dQoiFd5xBJ98r+1Yyjcp25yJvdTTpfDU3tZ+Qx8oWeg84bm5bECihgTvLC7rXusQ==
+  dependencies:
+    "@sentry/browser" "9.44.0"
+    "@sentry/core" "9.44.0"
     hoist-non-react-statics "^3.3.2"
 
 "@sentry/types@8.54.0", "@sentry/types@^9":
@@ -20131,16 +20225,7 @@ string-length@^6.0.0:
   dependencies:
     strip-ansi "^7.1.0"
 
-"string-width-cjs@npm:string-width@^4.2.0":
-  version "4.2.3"
-  resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
-  integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
-  dependencies:
-    emoji-regex "^8.0.0"
-    is-fullwidth-code-point "^3.0.0"
-    strip-ansi "^6.0.1"
-
-string-width@^4.0.0, string-width@^4.1.0, string-width@^4.2.0, string-width@^4.2.3:
+"string-width-cjs@npm:string-width@^4.2.0", string-width@^4.0.0, string-width@^4.1.0, string-width@^4.2.0, string-width@^4.2.3:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
   integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
@@ -20249,7 +20334,7 @@ string_decoder@~1.1.1:
   dependencies:
     safe-buffer "~5.1.0"
 
-"strip-ansi-cjs@npm:strip-ansi@^6.0.1":
+"strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
@@ -20262,13 +20347,6 @@ strip-ansi@^5.2.0:
   integrity sha512-DuRs1gKbBqsMKIZlrffwlug8MHkcnpjs5VPmL1PAh+mA30U0DTotfDZ0d2UUsXpPmPmMMJ6W773MaA3J+lbiWA==
   dependencies:
     ansi-regex "^4.1.0"
-
-strip-ansi@^6.0.0, strip-ansi@^6.0.1:
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
-  integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
-  dependencies:
-    ansi-regex "^5.0.1"
 
 strip-ansi@^7.0.1, strip-ansi@^7.1.0:
   version "7.1.0"
@@ -21871,16 +21949,7 @@ wordwrap@^1.0.0:
   resolved "https://registry.yarnpkg.com/wordwrap/-/wordwrap-1.0.0.tgz#27584810891456a4171c8d0226441ade90cbcaeb"
   integrity sha512-gvVzJFlPycKc5dZN4yPkP8w7Dc37BtP1yczEneOb4uq34pXZcvrtRTmWV8W+Ume+XCxKgbjM+nevkyFPMybd4Q==
 
-"wrap-ansi-cjs@npm:wrap-ansi@^7.0.0":
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
-  integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==
-  dependencies:
-    ansi-styles "^4.0.0"
-    string-width "^4.1.0"
-    strip-ansi "^6.0.0"
-
-wrap-ansi@7.0.0, wrap-ansi@^7.0.0:
+"wrap-ansi-cjs@npm:wrap-ansi@^7.0.0", wrap-ansi@7.0.0, wrap-ansi@^7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
   integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==
