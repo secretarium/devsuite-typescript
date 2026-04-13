@@ -234,7 +234,7 @@
         "prettier": "^3.6.2",
         "react-refresh": "^0.17.0",
         "react-test-renderer": "19.1.0",
-        "simple-git": "3.28.0",
+        "simple-git": "3.36.0",
         "sinon-chrome": "3.0.1",
         "swc-loader": "0.2.6",
         "tailwindcss": "4.1.11",
