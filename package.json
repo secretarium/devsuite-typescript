@@ -133,8 +133,8 @@
         "zod": "4.0.5"
     },
     "devDependencies": {
-        "@babel/core": "^7.28.0",
-        "@babel/preset-react": "^7.27.1",
+        "@babel/core": "^7.29.7",
+        "@babel/preset-react": "^7.29.7",
         "@commitlint/config-conventional": "^19.8.1",
         "@commitlint/config-nx-scopes": "^19.8.1",
         "@config-plugins/detox": "^11.0.0",
