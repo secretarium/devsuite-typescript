@@ -243,7 +243,7 @@
         "typescript": "^5.8.3",
         "verdaccio": "^6.1.5",
         "vite": "^7.0.4",
-        "vitest": "^3.2.4",
+        "vitest": "^5.0.0",
         "webpack": "^5.100.1"
     }
 }
